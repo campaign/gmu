@@ -1,0 +1,165 @@
+/* Style Sheet for webapp.html*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline
+}
+
+body {
+    line-height: 1；
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(250, 250, 250)), to(rgb(222, 222, 222)));
+    height: 100%;
+}
+
+ol, ul {
+    list-style: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+    vertical-align: middle
+}
+
+q, blockquote {
+    quotes: none
+}
+
+q:before, q:after, blockquote:before, blockquote:after {
+    content: "";
+    content: none
+}
+
+a img {
+    border: none
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+    display: block
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+#app-header {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(38, 147, 223)), to(rgb(23, 117, 181)));
+    color: rgb(255, 255, 255);
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align: center;
+    -webkit-box-pack: left;
+    border-top: solid 1px #222;
+    border-bottom: solid 1px #222;
+    height: 10%;
+    font: bold 30px arial, sans-serif;
+}
+
+#app-header-tag{
+    padding-left: 20px
+}
+
+#footer {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(30, 30, 30)), to(rgb(0, 0, 0)));
+    height: 60px;
+}
+
+.demo-items-header {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(221, 221, 221)), to(rgb(191, 191, 191)));
+    border-top: solid 1px #CCC;
+    border-bottom: solid 1px #999;
+    color: rgb(128, 128, 128);
+    text-shadow: rgba(255, 255, 255, 0.25) 1px 1px 0;
+    height: 20px;
+}
+
+.demo-item {
+    height: 200px;
+    width: 200px;
+    margin: auto;
+    border-right:1px;
+    -webkit-border-radius: 200px;
+    border: 2px solid #7f7f7f;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(250, 250, 250)), to(rgb(222, 222, 222)));
+    display: -webkit-box;
+    -webkit-box-orient:horizontal;
+    -webkit-box-align:center;
+    -webkit-box-pack:center;
+    text-decoration: none;
+    -webkit-box-shadow:2px 2px 5px #b3b3b3;
+}
+.special-item{
+    background: -webkit-linear-gradient(bottom, rgb(128,38,104) 22%, rgb(171,36,117) 61%) !important;
+
+}
+.special-desc{
+    color:white !important;
+}
+
+.item-container{
+    -webkit-box-flex:1
+}
+
+.demo-items-line{
+    display: -webkit-box;
+    -webkit-box-orient:horizontal;
+    padding-top: 10px;
+    padding-bottom: 10px
+}
+
+.demo-item div{
+   vertical-align: top;
+    width: 80px;
+    height: 57px;
+    padding-left: 10px;
+    padding-top: 20px;
+    color:rgb(23, 117, 181)
+}
+
+.demo-item div h2{
+    font-family:  arial;
+    font-size:16px;
+    width: 100px;
+    padding-bottom: 10px;
+    font-weight: bold
+}
+
+.demo-item div p{
+    font-family:  "华文细黑";
+    font-size:12px;
+    width: 100px;
+    padding-bottom: 10px
+}
+
+.demo-item img{
+    width:57px;
+    height:57px ;
+    display: inline-block;
+}
+
+@media all and (orientation:portrait) {
+    #footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+}

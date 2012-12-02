@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>iscroll性能测试</title>
+	<script src="iscroll.js" type="text/javascript"></script>
+	<style type="text/css" media="all">
+		.news-item {
+			height: 78px;
+			padding: 8px 8px 10px;
+			border-bottom: 1px solid #E7E7E7;
+		}
+		.news-pic {
+			float: right;
+			margin-left: 6px;
+			margin-top: 2px;
+		}
+		.news-pic img {
+			display: block;
+			border: 1px solid #E7E7E7;
+			height: 73px;
+			width: 73px;
+		}
+		.news-info {
+			padding-top: .25em;
+			color: #969696;
+			font-size: .75em;
+		}
+		#wrapper{height: 200px;border: 2px solid #8FBC8F;position: relative;}
+		ul{margin:0;padding:0;}
+		ul li{line-height: 30px;border-bottom: 1px solid #FF69B4;}
+	</style>
+</head>
+<body>
+<div id="wrapper">
+	<div id="iscroller">
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+		<div class="news-item">
+			<div class="news-pic"><img src="http://t3.baidu.com/it/u=http%3A%2F%2Fbigtu.eastday.com%2Fimg%2F201206%2F20%2F19%2F2536306123355346671.jpg&amp;fm=34"></div>
+			<div class="news-content"><h3>中学违规收费 为逃检查组织烧书</h3><p>堆在锅炉房地上的各种练习册等待焚烧。东北网记者 张强 翻拍 学生躺在即将被焚烧的书边拍照。东北网记者</p></div>
+			<div class="news-info"><span class="news-resource">来源：东方网</span><span class="news-time">2小时前</span></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	new iScroll('wrapper', {
+		bounce: false,
+		vScrollbar: false,
+		momentum: true
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+.ui-toolbar {
+    border: #d2d2d2 solid 1px;
+    border-width: 1px 0;
+    background: #f4f4f4; 
+}
+
+.ui-toolbar .ui-toolbar-view {
+    position: relative;
+    height: 100%;
+    height: 43px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.ui-toolbar .ui-toolbar-title {
+    position: relative;
+    top: 12px;
+}
+
+.ui-toolbar .ui-toolbar-backbtn {
+    width: 52px;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    background: url("toolbar_icons.png") 0px -591.5px no-repeat;
+    -webkit-background-size: cover;
+    position: absolute;
+    left: 20px;
+    top: 6px;
+    text-indent: 5px;
+    cursor: pointer;
+}
+
+.ui-toolbar .ui-toolbar-toolscon {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    color: #fff;
+}
+
+.ui-toolbar .ui-toolbar-backbtn:hover {
+    background-position: 0px -641.5px;
+}
+
+.blue, .blue .ui-toolbar {
+    border-top: #2469c9 solid 1px;
+    border-bottom: #0045a5 solid 1px;
+    color: #fff;
+    background: #2773dc;
+}
+
+.blue .ui-toolbar-backbtn {
+    border: 1px solid #135cbe;
+    background: #2d7ded;
+}
+
+.blue .ui-toolbar-backbtn:hover {
+    background: #0f5fd0;
+}
+
+.cssloaded{
+    width: 20px
+}

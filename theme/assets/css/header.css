@@ -1,0 +1,22 @@
+.app-header {
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(38, 147, 223)), to(rgb(23, 117, 181)));
+    color: rgb(255, 255, 255);
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align: center;
+    -webkit-box-pack: left;
+    border-top: solid 1px #222;
+    border-bottom: solid 1px #222;
+    position: relative;
+    z-index: 10;
+    height: 100%
+}
+
+.app-header-tag {
+    text-shadow: rgba(25, 25, 25, 0.5) 2px 2px 0;
+    font-weight: bold;
+    font-size: 20px;
+    font-family:Helvetica,"BBAlpha Sans",sans-serif;
+    width:100%
+}
+

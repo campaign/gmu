@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>temp</title>
+    <script type="text/javascript" src="../third-party/iscroll/iscroll.js"></script>
+    <style type="text/css">
+        html, body{
+            margin: 0;
+        }
+        #a{
+            position: absolute;
+            display: -webkit-box;
+            -webkit-box-orient:vertical;
+            width:100%;
+            height:100%;
+            background-color: red;
+        }
+        #b{
+            -webkit-box-flex:1;
+            background-color: yellow;
+            display: -webkit-box;
+            -webkit-box-orient:vertical
+        }
+        #c{
+            height:40px;
+            background-color: blue;
+        }
+        #d{
+            height:40px;
+            background-color: purple;
+        }
+        #e{
+            -webkit-box-flex:1;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="a">
+    <div id="b">
+        <div id="d"></div>
+        <div id="e"></div>
+    </div>
+    <div id="c"></div>
+</div>
+</body>
+</html>
