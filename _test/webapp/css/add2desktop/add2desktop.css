@@ -1,7 +1,8 @@
-/** add2desktop */
+
 .ui-add2desktop {
     position: fixed;
     bottom: 12px;
+    display: none;
     left: 50%;
     width:178px;
     height: 55px;
@@ -12,7 +13,6 @@
     background: #494949;
     border-radius: 2px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
-    display: none;
 }
 .ui-add2desktop img {
     display: block;
@@ -33,6 +33,7 @@
     padding-top:6px;
     font-weight: bold;
 }
+
 .ui-add2desktop-icon-new {
     margin:0 2px;
     display: inline-block;
@@ -57,6 +58,7 @@
     height: 40px;
     width: 40px;
     cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .ui-add2desktop-close b {
     position: absolute;
