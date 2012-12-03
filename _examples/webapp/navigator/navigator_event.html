@@ -204,6 +204,8 @@
         if (/http:\/\/[A-Za-z0-9\.-]{3,}\.[A-Za-z]{3}/.test(e.data.href)) {
             e.preventDefault();
             $('#result').html('链接类型tab选中操作被阻止<br />data-type:'+ $(e.data).attr('data-type')+'<br />data-id:'+$(e.data).attr('data-id'));
+        }else {
+            $('#result').html('data-type:'+ $(e.data).attr('data-type')+'<br />data-id:'+$(e.data).attr('data-id'));
         }
     });
 
