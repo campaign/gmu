@@ -93,7 +93,7 @@
                 $el.children('ul').addClass('ui-navigator-list');
             }
             $el.find('a').each(function (i) {
-                $(this).hasClass('cur') && defTab === 0 && (data.defTab = i);
+                defTab === 0 ? $(this).hasClass('cur') && (data.defTab = i) : $(this).removeClass('cur');    //处理同时defTab和写cur class的情况
             });
         },
         _init: function () {
