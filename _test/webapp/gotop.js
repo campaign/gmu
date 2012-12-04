@@ -104,8 +104,8 @@ test("no iScrollInstance", function(){
 	    setTimeout(function(){
 	        ok(ua.isShown(gotop._el[0]), "The gotop shows");
 	        ok(Math.abs(window.pageYOffset - 1000) <= 1, "The pageYOffset is right");
-	        equals(gotop._el.offset().left, $("html").offset().width - 40 - 10, "The gotop left is right");
-	        equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 40 - 10, "The gotop top is right");
+	        equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
+	        equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 10, "The gotop top is right");
 	        ua.click(gotop._el[0]); //click gotop
 	        setTimeout(function(){
 	             equals(window.pageYOffset, 0, "scroll to top");
@@ -150,8 +150,8 @@ test("iScrollInstance", function(){
     		setTimeout(function(){
     			approximateEqual($("#scroller").offset().top, $("#thelist").offset().top - 1000, "The page scrolled");
     	        ok(ua.isShown(gotop._el[0]), "The gotop shows");
-    	        equals(gotop._el.offset().left, $("html").offset().width - 40 - 10, "The gotop left is right");
-    	        equals(gotop._el.offset().top, window.innerHeight - 40 - 10, "The gotop top is right"); //位置相对于整个页面没有变
+    	        equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
+    	        equals(gotop._el.offset().top, window.innerHeight - 50 - 10, "The gotop top is right"); //位置相对于整个页面没有变
     	        ua.click(gotop._el[0]); //click gotop
     	    }, 300);
     	}, 400);
@@ -163,12 +163,12 @@ test("show() & hide()", function(){
 	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {});
 	gotop.show();
 	ok(ua.isShown(gotop._el[0]), "The gotop shows");
-	equals(gotop._el.offset().height, 40, "The gotop height is right");
-	equals(gotop._el.offset().width, 40, "The gotop width is right");
-	equals(gotop._el.offset().left, $("html").offset().width - 40 - 10, "The gotop left is right");
-	equals(gotop._el.offset().top, document.documentElement.clientHeight - 40 - 10, "The gotop top is right");
-	equals(gotop._el.css("background-position"), "50% 50%", "The position is right");
-	equals(gotop._el.css("-webkit-background-size"), "18px 15px", "The position is right");
+	equals(gotop._el.offset().height, 50, "The gotop height is right");
+	equals(gotop._el.offset().width, 50, "The gotop width is right");
+	equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
+	equals(gotop._el.offset().top, document.documentElement.clientHeight - 50 - 10, "The gotop top is right");
+	equals(gotop._el.find('div').css("background-position"), "50% 50%", "The position is right");
+	equals(gotop._el.find('div').css("-webkit-background-size"), "18px 15px", "The position is right");
 	gotop.hide();
 	ok(!ua.isShown(gotop._el[0]), "The gotop hides");
 	gotop.destroy();
@@ -191,8 +191,8 @@ test("basic operations", function(){
 			setTimeout(function(){
 				ok(ua.isShown(gotop._el[0]), "The gotop shows");
 				ok(Math.abs(window.pageYOffset - 1000) <= 1, "The pageYOffset is right");
-				equals(gotop._el.offset().left, $("html").offset().width - 40 - 8, "The gotop left is right");
-				equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 40 - 8, "The gotop top is right"); //window.innerHeight表示的是加上控制台的页面高度
+				equals(gotop._el.offset().left, $("html").offset().width - 50 - 8, "The gotop left is right");
+				equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 8, "The gotop top is right"); //window.innerHeight表示的是加上控制台的页面高度
 				ta.touchmove(document); //touchmove and then scroll
                 ok(!ua.isShown(gotop._el[0]), "The gotop hides");
                 window.scrollTo(0, 1000);
@@ -200,8 +200,8 @@ test("basic operations", function(){
                 setTimeout(function(){
                     ok(ua.isShown(gotop._el[0]), "The gotop shows");
                     ok(Math.abs(window.pageYOffset - 1000) <= 1, "The pageYOffset is right");
-                    equals(gotop._el.offset().left, $("html").offset().width - 40 - 8, "The gotop left is right");
-                    equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 40 - 8, "The gotop top is right");
+                    equals(gotop._el.offset().left, $("html").offset().width - 50 - 8, "The gotop left is right");
+                    equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 8, "The gotop top is right");
                     ua.click(gotop._el[0]); //click gotop
                     setTimeout(function(){
                         equals(window.pageYOffset, 0, "scroll to top");
@@ -247,8 +247,8 @@ test("fix && ortchange 转屏", function(){
             setTimeout(function(){
                 approximateEqual(w.pageYOffset, 200, "window scrolled");
                 ok(ua.isShown(gotop._el[0]), "The gotop shows");
-                equals(gotop._el.offset().left, 300 - 10 - 40, "The left is right");
-                equals(gotop._el.offset().top, w.pageYOffset + 150 - 10 - 40, "The top is right");
+                equals(gotop._el.offset().left, 300 - 10 - 50, "The left is right");
+                equals(gotop._el.offset().top, w.pageYOffset + 150 - 10 - 50, "The top is right");
                 $(f).css({width:150, height:300});
                 w.$("body").css("height", 300);
                 ta.trigger("ortchange");
@@ -259,8 +259,8 @@ test("fix && ortchange 转屏", function(){
                     setTimeout(function(){
                     	approximateEqual(w.pageYOffset, 400, "window scrolled");
                         ok(ua.isShown(gotop._el[0]), "The gotop shows");
-                        equals(gotop._el.offset().left, 150 - 10 - 40, "The left is right");
-                        equals(gotop._el.offset().top, w.pageYOffset + 300 - 10 - 40, "The top is right");
+                        equals(gotop._el.offset().left, 150 - 10 - 50, "The left is right");
+                        equals(gotop._el.offset().top, w.pageYOffset + 300 - 10 - 50, "The top is right");
                         gotop.destroy();
                         me.finish();
                     }, 500);
