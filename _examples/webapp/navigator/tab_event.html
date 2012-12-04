@@ -76,10 +76,12 @@
         }                                                                  //option方式时，默认选中tab的select事件也会触发
     });
 
-    $('#before-tabselect').navigator().on('beforetabselect', function (e) {     //beforetabselect事件
+    $('#before-tabselect').navigator().on('beforetabselect', function (e,elem) {     //beforetabselect事件
         if (/http:\/\/[A-Za-z0-9\.-]{3,}\.[A-Za-z]{3}/.test(e.data.href)) {
             e.preventDefault();
             $('#result').html('链接tab选中操作被阻止');
+        } else {
+            $('#result').html('第'+ elem.index + '个tab被选中');
         }
     });
     //]]>
