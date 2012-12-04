@@ -262,8 +262,40 @@
          */
         debounce: function(delay, fn, t) {
             return fn === undefined ? $.throttle(250, delay, false) : $.throttle(delay, fn, t === undefined ? false : t !== false);
-        }
+        },
 
+        location : function(successCB, errorCB, options){
+            //获取地图提供的js api
+            $.ajaxJSONP({
+                url: 'http://api.map.baidu.com/api?v=1.4&callback=?',
+                success: function(){
+                    window.navigator.geolocation
+                        ? window.navigator.geolocation.getCurrentPosition(handleSuccess, handleError, $.extend({
+                        enableHighAccuracy : true
+                    }, options))
+                        : (errorCB && errorCB("浏览器不支持html5来获取地理位置信息"))
+                }
+            })
+            function handleSuccess(position){
+                //获取当前手机经纬度坐标，并将其转化成百度坐标
+                var lng = position.coords.longitude,
+                    lat = position.coords.latitude,
+                    xyUrl = "http://api.map.baidu.com/ag/coord/convert?from=2&to=4&x=" + lng + "&y=" + lat + '&callback=?'
+                $.ajaxJSONP({
+                    url: xyUrl,
+                    success: function(data){
+                        var gc = new BMap.Geocoder()
+                        gc.getLocation(new BMap.Point(data.x, data.y), function(rs){	//data.x data.y为加密后的百度坐标，传入Point后可解析成详细地址
+                            successCB && successCB(rs)
+                        })
+                    }
+                })
+            }
+
+            function handleError(){
+                errorCB && errorCB(arguments)
+            }
+        }
     });
 
     /**
