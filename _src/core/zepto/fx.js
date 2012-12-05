@@ -43,6 +43,31 @@
     return this.anim(properties, duration, ease, callback)
   }
 
+  $.fn.animateFrom = function(properties, duration, ease, callback){
+    if ($.isObject(duration))
+      ease = duration.easing, callback = duration.complete, duration = duration.duration
+    if (duration) duration = duration / 1000
+
+    var oldProperties = {}, transforms, $this = $(this)
+    $.extend(true, oldProperties, properties)
+    for(var key in properties) {
+      if (supportedTransforms.test(key)) {
+        transforms || (transforms = [])
+        transforms.push(key + '(' + properties[key] + ')')
+        delete oldProperties[key]
+        delete properties[key]
+      } else {
+          properties[key] = $this.css(key)
+      }
+    }
+    if (transforms) {
+        oldProperties[prefix + 'transform'] = transforms.join(' ')
+        properties[prefix + 'transform'] = $this.css(prefix + 'transform')//transforms.join(' ')
+    }
+    $this.css(oldProperties)
+    return this.anim(properties, duration, ease, callback)
+  }
+
   $.fn.anim = function(properties, duration, ease, callback){
     var transforms, cssProperties = {}, key, that = this, wrappedCallback, endEvent = $.fx.transitionEnd
     if (duration === undefined) duration = 0.4
