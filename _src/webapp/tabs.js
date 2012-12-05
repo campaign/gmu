@@ -199,7 +199,7 @@
             var data = this._data, eventHandler = this._eventHandler;
             data._nav.off('click', eventHandler).children().highlight();
             data.swipe && data._content.off('swipeLeft swipeRight', eventHandler);
-            return this.$super();
+            return this.$super('destroy');
         }
 
         /**

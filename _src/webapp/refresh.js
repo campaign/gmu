@@ -44,6 +44,7 @@
 
             data.$upElem = $el.find('.ui-refresh-up');
             data.$downElem = $el.find('.ui-refresh-down');
+            $el.addClass('ui-refresh');
             return me;
         },
 

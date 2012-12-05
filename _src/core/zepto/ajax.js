@@ -77,6 +77,11 @@
   function empty() {}
 
   $.ajaxJSONP = function(options){
+      /**
+       * added by chenluyang
+       * @reason 直接调用jsonp时补全所需参数
+       */
+    for (key in $.ajaxSettings) if (options[key] === undefined) options[key] = $.ajaxSettings[key]
     var callbackName = 'jsonp' + (++jsonpID),
       script = document.createElement('script'),
       abort = function(){
@@ -85,11 +90,10 @@
         ajaxComplete('abort', xhr, options)
       },
       xhr = { abort: abort }, abortTimeout
-
-    if (options.error) script.onerror = function() {
-      xhr.abort()
-      options.error()
-    }
+      if (options.error) script.onerror = function() {
+        xhr.abort()
+        options.error()
+      }
 
     window[callbackName] = function(data){
       clearTimeout(abortTimeout)
