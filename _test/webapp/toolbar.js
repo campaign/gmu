@@ -8,29 +8,30 @@ module('plugin/webapp/toolbar', {
 });
 
 test("el(zepto)", function() {
-	expect(14);
+	expect(15);
 	stop();
-	ua.loadcss(["reset.css", "webapp/toolbar/toolbar.css"], function() {
+	ua.loadcss(["reset.css", "webapp/toolbar/toolbar.css","webapp/toolbar/toolbar.default.css"], function() {
 		setTimeout(function() {
 			var toolbar = $.ui.toolbar($('<div class="ui-toolbar"></div>'), {
 			 });
 			equals(toolbar._el.css("display"), "block", "The toolbar shows");
-			equals(toolbar._data.titleText, "标题", "The _data titleText is right");
-			equals(toolbar._data.buttonText, "返回", "The _data buttonText is right");
+			equals(toolbar._data.title, "", "The _data titleis right");
+			equals(toolbar._data.backButtonText, "返回", "The _data buttonText is right");
+            equals(toolbar._data.backButtonHref, "", "The _data buttonText is right");
 			equals(toolbar._data.container, undefined, "The _data container is right");
-			equals(toolbar._data.tools, undefined, "The _data tools is right");
+			equals(toolbar._data.btns, "", "The _data tools is right");
 			
 			equals(toolbar._el.parent().attr("tagName").toLowerCase(), "body", "The container is body");
-			equals(toolbar._el.attr("class"), "ui-toolbar-container", "The el class is right");
+			equals(toolbar._el.attr("class"), "ui-toolbar", "The el class is right");
 			
 			equals(toolbar._el.offset().left, $("body").offset().left, "The left is right");
 			equals(toolbar._el.offset().top, $(".ui-toolbar").offset().top, "The top is right");
 			equals(toolbar._el.offset().width, $("body").offset().width, "The width is right");
-			equals(toolbar._el.offset().height, 45, "The width is right");
+			equals(toolbar._el.offset().height, 42, "The height is right");
 			
 			equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "返回", "The buttonText is right");
-			equals(toolbar._el.find(".ui-toolbar-title").text(), "标题", "The titleText is right");
-			equals(toolbar._el.find(".ui-toolbar-toolscon").children().length, 0 , "The tools are right");
+			equals(toolbar._el.find(".ui-toolbar-title").text(), null, "The title is right");
+			equals(toolbar._el.find(".ui-toolbar-right").children().length, 0 , "The btns are right");
 			
 			toolbar.destroy();
 			start();
@@ -55,27 +56,25 @@ test("el(selector)", function(){
 });
 
 test("container & cls", function(){
-	expect(2);
+	expect(1);
 	var div = document.createElement("div");
 	$(div).attr("class", "container");
 	document.body.appendChild(div);
 	var toolbar = $.ui.toolbar({
-		 container: '.container',
-		 cls: 'myclass'
+		 container: '.container'
 	 });
 	equals(toolbar._el.parent().attr("class"), "container", "The container is right");
-	equals(toolbar._el.attr("class"), "ui-toolbar myclass", "The el class is right");
 	toolbar.destroy();
 	$(".container").remove();
 });
 
 test("full setup", function() {
-	expect(15);
+	expect(14);
 	$container.html('<div id="toolbar" class="ui-toolbar" data-mode="true">\
-		<div class="ui-toolbar-view">\
-        	<a class="ui-toolbar-backbtn"></a>\
-			<span class="ui-toolbar-title"></span>\
-			<div class="ui-toolbar-toolscon">\
+		<div class="ui-toolbar-wrap">\
+        	<div class="ui-toolbar-left"><a class="ui-toolbar-backbtn">首页</a></div>\
+			<h2 class="ui-toolbar-title">标题</h2>\
+			<div class="ui-toolbar-right">\
 				<button class="ui-button ui-button-text-only fontsize" style="-webkit-tap-highlight-color: rgba(255, 255, 255, 0);">\
 					<span class="ui-button-text">click me</span>\
 				</button>\
@@ -83,47 +82,43 @@ test("full setup", function() {
 		</div>\
 	</div>');
 	var toolbar = $('#toolbar').toolbar({
-		cls: "cls",
-		buttonText: "buttonText",
-		titleText: "titleText",
-		buttonClick: function(){
-			ok(true, "The buttonClick is clicked");
+		backButtonText: "buttonText",
+		title: "titleText",
+        backButtonClick: function(){
+			ok(true, "The button is clicked");
 		}
 	}).toolbar('this');
 	equals(toolbar._el.css("display"), "block", "The toolbar shows");
-	equals(toolbar._data.titleText, "titleText", "The _data titleText is right");
-	equals(toolbar._data.buttonText, "buttonText", "The _data buttonText is right");
+	equals(toolbar._data.title, "titleText", "The _data titleText is right");
+	equals(toolbar._data.backButtonText, "buttonText", "The _data buttonText is right");
 	equals(toolbar._data.container, undefined, "The _data container is right");
-	equals(toolbar._data.tools, undefined, "The _data tools is right");
-	
+	equals(toolbar._data.btns, "", "The _data btns is right");
+
 	equals(toolbar._el.parent().attr("class"), "ui-toolbar-container", "The container is body");
-	equals(toolbar._el.attr("class"), "ui-toolbar cls", "The el class is right");
-	
+	equals(toolbar._el.attr("class"), "ui-toolbar", "The el class is right");
+
 	equals(toolbar._el.offset().left, $("body").offset().left, "The left is right");
 	equals(toolbar._el.offset().top, $(".ui-toolbar").offset().top, "The top is right");
 	equals(toolbar._el.offset().width, $("body").offset().width, "The width is right");
-	equals(toolbar._el.offset().height, 45, "The width is right");
-	
-	equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "buttonText", "The buttonText is right");
-	equals(toolbar._el.find(".ui-toolbar-title").text(), "titleText", "The titleText is right");
-	equals(toolbar._el.find(".ui-toolbar-toolscon").children().length, 1 , "The tools are right");
-	
+	equals(toolbar._el.offset().height, 42, "The height is right");
+
+	equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "首页", "The buttonText is right");
+	equals(toolbar._el.find(".ui-toolbar-title").text(), "标题", "The titleText is right");
+	equals(toolbar._el.find(".ui-toolbar-right").children().length, 1 , "The tools are right");
+
 	ua.click(toolbar._el.find('.ui-toolbar-backbtn')[0]);
 	toolbar.destroy();
 });
 
 test("simple setup", function() {
 	expect(2);
-	$container.html('<div class="ui-toolbar-container">\
-		<div id="toolbar">\
+	$container.html('<div id="toolbar">\
 			<span>back</span>\
 			<h1>测试标题</h1>\
-			<a class="recommend">字体</a>\
-			<a class="fontsize">选择</a>\
-		</div>\
-	</div>');
-	var toolbar = $('#toolbar').toolbar().toolbar('this');
-	
+			<a>字体</a>\
+			<a>选择</a>\
+		</div>');
+	var toolbar = $('#toolbar').toolbar('this');
 	toolbar.hide();
 	ok(!ua.isShown(toolbar._el[0]), "The toolbar hides");
 	toolbar.show();
@@ -131,12 +126,12 @@ test("simple setup", function() {
 	toolbar.destroy();
 });
 
-test("titleText", function() {
+test("title", function() {
 	expect(2);
 	var toolbar = $.ui.toolbar({
-		titleText: '工具栏标题'
+		title: '工具栏标题'
 	});
-	equals(toolbar._data.titleText, "工具栏标题", "The _data titleText is right");
+	equals(toolbar._data.title, "工具栏标题", "The _data titleText is right");
 	equals($(".ui-toolbar-title", toolbar._el).html(), "工具栏标题", "The titleText is right");
 	toolbar.destroy();
 });
@@ -144,9 +139,9 @@ test("titleText", function() {
 test("buttonText", function() {
 	expect(2);
 	var toolbar = $.ui.toolbar({
-		buttonText: '取消'
+        backButtonText: '取消'
 	});
-	equals(toolbar._data.buttonText, "取消", "The _data buttonText is right");
+	equals(toolbar._data.backButtonText, "取消", "The _data buttonText is right");
 	equals($(".ui-toolbar-backbtn", toolbar._el).html(), "取消", "The buttonText is right");
 	toolbar.destroy();
 });
@@ -155,7 +150,7 @@ test("buttonClick", function() {
 	expect(1);
 	var toolbar = $.ui.toolbar({
 		container: '.ui-toolbar-container',
-		buttonClick: function() {
+        backButtonClick: function() {
 			ok(true, "The buttonClick is called");
 		}
 	});
@@ -178,13 +173,62 @@ test("show(), hide(), toggle()", function() {
 	equals(toolbar._el.css("display"), "block", "The toolbar shows");
 	toolbar.destroy();
 });
-
+test('window scroll(fix)', function() {
+    expect(16);
+    stop();
+    var w = window.top;
+    ua.loadcss(["reset.css", "webapp/toolbar/toolbar.css", "webapp/toolbar/toolbar.default.css"], function(){
+        var s2 = w.document.createElement("script");
+        s2.src = "../../../_test/fet/bin/import.php?f=core/zepto.ui,core/zepto.extend,core/zepto.fix,core/zepto.highlight,core/zepto.iscroll,core/zepto.ui,webapp/toolbar";
+        w.document.head.appendChild(s2);
+        s2.onload = function(){
+            var html = "";
+            for(var i = 0; i < 80; i++){
+                html += "<br />";
+            }
+            w.$("body").append(html);
+            w.scrollTo(0, 200);
+            setTimeout(function(){
+                var toolbar = w.$.ui.toolbar();
+                toolbar.root().fix({top:0, left:0});
+                equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                equals(toolbar._el.height() , 42 , "the height is ok");
+                approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
+                equals(toolbar._el.offset(true).top, 0, 'the pos is right');
+                w.scrollTo(0, 300);
+                ta.scrollStop(w);
+                setTimeout(function(){
+                    equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                    equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                    equals(toolbar._el.height() , 42 , "the height is ok");
+                    ok(Math.abs(w.pageYOffset - 300) <= 1, "The pageYOffset is " + w.pageYOffset);
+                    equals(toolbar._el.offset().top-300,0, 'the pos is right');
+                    approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
+                    w.scrollTo(0,0);
+                    ta.scrollStop(w);
+                    setTimeout(function(){
+                        equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                        equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                        equals(toolbar._el.height() , 42 , "the height is ok");
+                        equals(toolbar._el.offset().top, 0, 'the pos is right');
+                        approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
+                        w.$("br").remove();
+                        toolbar.destroy();
+                        $(s2).remove();
+                        start();
+                    },200);
+                },200);
+            }, 200);
+        };
+    }, w);
+});
 test("destroy()", function() {
 	expect(3);
 	var l1 = ua.eventLength();
 	var toolbar = $.ui.toolbar({
 		container: '.ui-toolbar-container',
-		titleText: '工具栏标题'
+		title: '工具栏标题'
 	});
 	toolbar.destroy();
 	var a = 0;
