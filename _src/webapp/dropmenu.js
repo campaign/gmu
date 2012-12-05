@@ -322,7 +322,7 @@
             $('.ui-dropmenu-items li a', this._el).highlight();
             data.autoClose && $(document).off('tap.tabsautoclose');
             $(window).off('ortchange', eventHandler);
-            return this.$super();
+            return this.$super('destroy');
         }
 
         /**
