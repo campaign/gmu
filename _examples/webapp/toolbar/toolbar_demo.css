@@ -17,12 +17,12 @@ body {height: 2000px;}
     display: inline-block;
     height: 30px;
     width:34px;
-    background: url("../../../assets/webapp/toolbar/toolbar_icons.png") no-repeat;
+    background: url(toolbar_icons.png) no-repeat;
     -webkit-background-size: 52px 672px;
     background-position: 4px -156px;
 }
 .ui-toolbar .ui-toolbar-toolscon .ui-button-icon-only .ui-icon {
-    background: url("../../../assets/webapp/toolbar/toolbar_icons.png") no-repeat;
+    background: url(toolbar_icons.png) no-repeat;
     -webkit-background-size: 52px 672px;
 }
 .ui-toolbar .ui-toolbar-toolscon .ui-icon-recommend {

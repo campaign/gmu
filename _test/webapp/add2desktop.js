@@ -1,4 +1,4 @@
-module("plugin/webapp/add2desktop", {
+module("webapp/add2desktop", {
       setup:function(){
           $("body").append("<div id='container' ></div>");
       } ,
@@ -10,19 +10,13 @@ module("plugin/webapp/add2desktop", {
 var canShow = !$.browser.uc && !$.browser.qq && !$.browser.chrome;
 
 if($.os.ios && canShow){
-    test("",function(){
-        stop();
-        ua.loadcss(["reset.css", "webapp/add2desktop/add2desktop.css"], function(){
-           start();
-        });
-    });
 	test("no el * no container & icon", function() {
-		expect(10);
+		expect(9);
 		stop();
         window.localStorage.removeItem("_gmu_adddesktop_key");
 		ua.loadcss(["reset.css", "webapp/add2desktop/add2desktop.css"], function(){
 				var add2desktop = $.ui.add2desktop({
-                    content: '<img src="' + upath + 'css/add2desktop/icon.png"/><p>先点击<span class="ui-add2desktop-icon"></span>，<br />再"添加至主屏幕"</p>',
+                    icon: upath + 'css/add2desktop/icon.png"/>',
 					init: function(){
                         equals(this._el.parent()[0].tagName.toLowerCase(), "body", "The container is right");
                         equals(this._el.attr("class"), "ui-add2desktop", "The el is right");
@@ -117,7 +111,7 @@ if($.os.ios && canShow){
 	});
 
     test("事件 beforeShow & show & ofterHide & init",function(){
-        expect(6);
+        expect(5);
         stop();
         var  i =0;
         var flag = true,
@@ -129,18 +123,15 @@ if($.os.ios && canShow){
                     flag || e.preventDefault();
                     (i++ ==0) && ok(true,"The beforeshow has trigger")
                 },
-                show:function() {
-                    (i++ == 1) && ok(true, "The onshow is trigger");
-                },
                 afterhide:function(){
-                    (i++ == 2) && ok(true, "The afterhide is trigger");
+                    (i++ == 1) && ok(true, "The afterhide is trigger");
                 }
             });
         setTimeout(function(){
             ok(ua.isShown(add2desktop._el[0]), "The add2desktop shows");
             add2desktop.hide();
             setTimeout(function(){
-                ok(!ua.isShown(add2desktop._el[0]), "The add2desktop beforeshow triggered");
+                ok(!ua.isShown(add2desktop._el[0]), "The add2desktop hides");
                 add2desktop.destroy();
                 start();
             },100);
@@ -173,19 +164,15 @@ if($.os.ios && canShow){
         expect(3);
         stop();
         window.localStorage.removeItem("_gmu_adddesktop_key");
-        var add2desktop = $.ui.add2desktop({
-            show:function(){
-                var me = this;
-                ok(ua.isShown(me._el[0]), "The add2desktop shows");
-                ua.click(me.root().find('.ui-add2desktop-close').get(0));
-                setTimeout(function(){
-                    ok(!ua.isShown(me._el[0]), "The add2desktop hide");
-                    ok(me.key(),"The lcoalStorage exist") ;
-                    me.destroy();
-                    start();
-                })
-            }
-        });
+        var add2desktop = $.ui.add2desktop();
+        ok(ua.isShown(add2desktop._el[0]), "The add2desktop shows");
+        ua.click(add2desktop.root().find('.ui-add2desktop-close').get(0));
+        setTimeout(function(){
+            ok(!ua.isShown(add2desktop._el[0]), "The add2desktop hide");
+            ok(add2desktop.key(),"The lcoalStorage exist") ;
+            add2desktop.destroy();
+            start();
+        })
     });
 
 	test('window scroll(fix)', function() {
@@ -194,7 +181,7 @@ if($.os.ios && canShow){
 	    var w = window.top;
         ua.loadcss(["reset.css", "webapp/add2desktop/add2desktop.css"], function(){
             var s2 = w.document.createElement("script");
-            s2.src = "../../../_test/fet/bin/import.php?f=core/zepto,core/zepto.core,core/zepto.support,core/zepto.event,core/zepto.fix,core/zepto.fx,core/zepto.highlight,core/zepto.iscroll,core/zepto.ui,webapp/button,webapp/dialog,webapp/navigator,webapp/add2desktop";
+            s2.src = "../../../_test/fet/bin/import.php?f=core/zepto.ui,core/zepto.extend,core/zepto.fix,core/zepto.highlight,core/zepto.iscroll,core/zepto.ui,webapp/button,webapp/dialog,webapp/navigator,webapp/add2desktop";
             w.document.head.appendChild(s2);
    		    s2.onload = function(){
    		    	var html = "";
@@ -280,7 +267,7 @@ if($.os.ios && canShow){
     test("setup 创建模式" ,function() {
         expect(8);
         stop();
-        $("body").append('<div id="add2" style="display: none;"><img src="../../../assets/webapp/add2desktop/icon.png"/><p>先点击<span class="ui-add2desktop-icon"></span>，<br />再"添加至主屏幕"</p></div>');
+        $("body").append('<div id="add2" style="display: none;"><img src="../../../assets/webapp/add2desktop/icon.png"/></div>');
         window.localStorage.removeItem("_gmu_adddesktop_key");
         var add2desktop =  $('#add2').add2desktop('this');
         setTimeout(function(){
