@@ -157,13 +157,10 @@ var Zepto = (function() {
      *  }
      */
   zepto.Z = function(dom, selector) {
-    var _pro = $.extend({isZ:true,selector:selector||''}, $.fn);
-       dom = dom || []
-    if(!isWp){
-      dom.__proto__ = _pro
-    }else{
-      $.extend(dom,_pro)
-    }
+    dom = dom || []
+    isWp ? $.extend(dom, $.fn) : (dom.__proto__ = arguments.callee.prototype)
+    dom.selector = selector || ''
+    dom.isZ = true
     return dom
   }
 
