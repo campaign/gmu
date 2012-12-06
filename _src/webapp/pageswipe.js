@@ -3,7 +3,7 @@
  * @file
  * @name Pageswipe
  * @desc 切换页面内容和索引
- * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.iscroll.js
+ * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.iscroll.js,core/zepto.fix.js
  */
 
 
@@ -39,8 +39,8 @@
         _setup: function(mode) {
             var me = this,
                 root = me.root(),
-                children = root.find('div');
-            root.addClass('pageswipe_window').append($('<div class="pageswipe_wheel"></div>').append(children.first().addClass('pageswipe_content')).append(children.last().addClass('pageswipe_index')));
+                children = root.children('div');
+            root.addClass('ui-pageswipe').append($('<div class="ui-pageswipe-wheel"></div>').append(children.first().addClass('ui-pageswipe-content')).append(children.last().addClass('ui-pageswipe-index')));
         },
 
         _init: function() {
@@ -48,9 +48,9 @@
                 root = me.root(),
                 _width = root.width(),
                 _end = _width - me.data('iconWidth'),
-                _wheel = root.find('.pageswipe_wheel'),
-                _content = root.find('.pageswipe_content'),
-                _index = root.find('.pageswipe_index'),
+                _wheel = root.find('.ui-pageswipe-wheel'),
+                _content = root.find('.ui-pageswipe-content'),
+                _index = root.find('.ui-pageswipe-index'),
                 _toolbar = $(me.data('toolbar')).fix({top:0}).find('div').get(0),
                 _eventHandler = $.proxy(me._eventHandler, me);
             _index.width(_end);
@@ -65,7 +65,7 @@
                 _toolbar:       _toolbar
             });
             me.on('destroy', function() {
-                me.off().root().remove();
+                $(window).off('ortchange', _eventHandler);
             });
             return me;
         },

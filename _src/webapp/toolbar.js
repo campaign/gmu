@@ -55,7 +55,6 @@
                 var right = me.root().find('.ui-toolbar-right');
                $(o.btns).each(function(i, item) { right.append(item) });
             }
-            me.data('backButtonHref') || me.root().find('.ui-toolbar-backbtn').click(me.data('backButtonClick'));
         },
 
         _setup: function(mode) {
@@ -78,8 +77,7 @@
                         else right.append(item);
                     });
                 }
-                var backBtn = left.children().first().addClass('ui-toolbar-backbtn');
-                backBtn.is('a') || backBtn.tap(me.data('backButtonClick'));
+                left.children().first().addClass('ui-toolbar-backbtn');
                 me.data('btns') && $(me.data('btns')).each(function(i, item) { right.append(item) });
                 me.data('container') && root.appendTo(me.data('container'));
             }
@@ -88,8 +86,8 @@
         _init: function() {
             var me = this,
                 root = me.root(),
-                o = me._data;
-            if(o.useFix){
+                backbtn = root.find('.ui-toolbar-backbtn');
+            if(me.data('useFix')){
                 var placeholder = $('<div class="ui-toolbar-placeholder"></div>').height(root.offset().height).
                     insertBefore(root).append(root).append(root.clone().css({'z-index': -1, position: 'absolute',top: 0})),
                     top = root.offset(true).top;
@@ -97,7 +95,7 @@
                     document.body.scrollTop > top ? root.css({position:'fixed', top: 0}) : root.css('position', '');
                 });
             }
-            me.root().find('.ui-toolbar-backbtn').highlight('ui-state-hover');
+            backbtn.highlight('ui-state-hover').is('a') || backbtn.click(me.data('backButtonClick'));
             return me;
         },
 

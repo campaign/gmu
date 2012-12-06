@@ -507,7 +507,7 @@
      */
     /** dispatch scrollStop */
     function _registerScrollStop(){
-        $(window).on('scroll', $.debounce(200, function() {
+        $(window).on('scroll', $.debounce(80, function() {
             $(document).trigger('scrollStop');
         }, false));
     }
