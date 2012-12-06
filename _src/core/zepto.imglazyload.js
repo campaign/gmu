@@ -13,8 +13,9 @@
      * - ''placeHolder''     {String}:              (可选, 默认值:\'\')图片显示前的占位符
      * - ''container''       {Array|Selector}:      (可选, 默认值:window)图片延迟加载容器
      * - ''threshold''       {Array|Selector}:      (可选, 默认值:0)阀值，为正值则提前加载
-     * - ''dataName''        {String}:             (可选, 默认值:data-url)图片url名称
-     * - ''eventName''        {String}:             (可选, 默认值:scrollStop)绑定事件方式
+     * - ''dataName''        {String}:              (可选, 默认值:data-url)图片url名称
+     * - ''eventName''       {String}:              (可选, 默认值:scrollStop)绑定事件方式
+     * - ''startload''       {Function}             (可选, 默认值:null)开始加载前的事件，该事件作为参数，不是trigger的
      *
      * **events**
      * - ''startload'' 开始加载图片
@@ -34,7 +35,8 @@
                 container:window,
                 urlName:'data-url',
                 placeHolder:'',
-                eventName:'scrollStop'
+                eventName:'scrollStop',
+                startload: null
             }, opts),
             $container = $(opts.container),
             cTop = $container.scrollTop(),
@@ -52,7 +54,7 @@
 
         function _load(div) {
             var $div = $(div), $img;
-            $div.trigger('startload');
+            $.isFunction(opts.startload) && opts.startload.call($div);
             $img = $('<img />').on('load',function () {
                 $div.trigger('loadcomplete').replaceWith($img);
                 $img.off('load');
