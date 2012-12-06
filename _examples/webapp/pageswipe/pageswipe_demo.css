@@ -24,6 +24,7 @@
     color: #fff;
     text-decoration: none;
     cursor: pointer;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 #left_content {
     padding: 80px 10px 10px;
