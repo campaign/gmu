@@ -106,6 +106,8 @@ class GMU2FIS {
             }
         }
 
+
+
         if(!empty($component['css'])){
             $css = $component['css'];
             $cssContent = $this->getFileConetent($css['relativePath'], 'css');
@@ -132,7 +134,7 @@ class GMU2FIS {
                     }
                 }
                 $path = $component['widget'].'.'.$theme.'/'.(!empty($component['plugin'])?$component['component'].'/':'');
-                $this->renderCss($path, !empty($component['plugin'])?$component['component'].'.css':$component['widget'].'.'.$theme.'.css', $cssContent, $css['path']);
+                $this->renderCss($path, !empty($component['plugin'])?$component['component'].'.css':$component['widget'].'.'.$theme.'.css', $cssContent, $this->cssDir.'/'.$file);
             }
         }
     }
@@ -229,7 +231,7 @@ class GMU2FIS {
         }
 
         $themes = array();
-        $themeRE = '/(?:\/|^)'.$info['component'].'\.(default|blue|dark)\.css$/i';
+        $themeRE = '/(?:\/|^)'.$info['widget'].(!empty($info['plugin'])?'.'.$info['plugin']:'').'\.(default|blue|dark)\.css$/i';
         $files = self::rScandir($this->cssDir.'/'.$this->type.'/'.$info['widget'], $themeRE);
         foreach($files as $file){
             if(preg_match($themeRE, $file, $m)){

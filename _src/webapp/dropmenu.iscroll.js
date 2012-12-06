@@ -2,7 +2,7 @@
  * @file
  * @name Dropmenu － 内滚插件
  * @short Dropmenu.iscroll
- * @import webapp/dropmenu.js
+ * @import webapp/dropmenu.js, core/zepto.iscroll.js
  */
 (function($, undefined){
     $.ui.dropmenu.register(function(){

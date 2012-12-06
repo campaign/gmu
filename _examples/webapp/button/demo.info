@@ -1,0 +1,8 @@
+{
+  name: 'Button',
+  description: '按钮',
+  group: 'Components',
+  icon: 'button.png',
+  main: 'button.html',
+  weight: 0
+}

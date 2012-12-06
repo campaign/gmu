@@ -1,7 +1,7 @@
 (function(undefined){
     var script = document.getElementById('bootstrap'),
         use = script.getAttribute('data-use'),
-        page = script.getAttribute('data-page').split(','),
+        page = (script.getAttribute('data-page')||'').split(','),
         theme = script.getAttribute('data-theme'),
         path = script.getAttribute('data-path') || '../../load.php',
         requires = ['webapp/button.js', 'webapp/dropmenu.js', 'webapp/toolbar.js'],
@@ -88,7 +88,7 @@
         node = document.createElement('header');
         document.body.insertBefore(node, document.body.firstElementChild);
 
-        btn = page.length ? $.ui.button({
+        btn = page.length && page[0] ? $.ui.button({
             label: '切换'
         }).root() : '';
         toolbar = $.ui.toolbar({
