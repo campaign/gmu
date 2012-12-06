@@ -28,7 +28,6 @@
      */
     $.fn.imglazyload = function (opts) {
         var pedding = $.slice(this),
-            loading = [],
             splice = Array.prototype.splice,
             opts = $.extend({
                 threshold:0,
@@ -44,7 +43,7 @@
                 init:function (top, height) {    //初始条件
                     return cTop >= top - opts.threshold - cHeight && cTop <= top + height + cHeight;
                 },
-                default:function (top, height) {      //每次滚动时发生变化，滚动条件
+                'default':function (top, height) {      //每次滚动时发生变化，滚动条件
                     var cTop = $container.scrollTop(),
                         cHeight = $container.height();
                     return cTop >= top - opts.threshold - cHeight && cTop <= top + height + cHeight;
@@ -70,7 +69,7 @@
             for (i = pedding.length; i--;) {
                 $image = $(div = pedding[i]);
                 offset = $image.offset();
-                detect[type || 'default'](offset.top, offset.height) && (loading.concat(splice.call(pedding, i, 1)), _load(div));
+                detect[type || 'default'](offset.top, offset.height) && (splice.call(pedding, i, 1), _load(div));
             }
         }
 
