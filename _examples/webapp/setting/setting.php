@@ -34,7 +34,7 @@ $arr = array(
         "description" => '',
         "group" => 'Components',
         "icon" => 'gotop.png',
-        "href" => 'gotop/dropmenu.html',
+        "href" => 'gotop/gotop.html',
     ),
     'imglazyload' => array(
         "name" => 'Image lazy load',
