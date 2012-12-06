@@ -13,7 +13,7 @@ var Zepto = (function() {
        * added by chenluyang
        * @reason 判断是否为ie10
        */
-    isWp = document.__proto__ ? 0 : 1,
+    isWp = document.__proto__ ? false : true,
 
     // Used by `$.zepto.init` to wrap elements, text/comment nodes, document,
     // and document fragment node types.
@@ -129,13 +129,10 @@ var Zepto = (function() {
      *  }
      */
   zepto.Z = function(dom, selector) {
-    var _pro = $.extend({isZ:true,selector:selector||''}, $.fn);
-       dom = dom || []
-    if(!isWp){
-      dom.__proto__ = _pro
-    }else{
-      $.extend(dom,_pro)
-    }
+    dom = dom || []
+    isWp ? $.extend(dom, $.fn) : (dom.__proto__ = arguments.callee.prototype)
+    dom.selector = selector || ''
+    dom.isZ = true
     return dom
   }
 
