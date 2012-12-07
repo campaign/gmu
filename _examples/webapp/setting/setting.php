@@ -83,7 +83,7 @@ $arr = array(
         "description" => '',
         "group" => 'Components',
         "icon" => 'suggestion.png',
-        "href" => 'suggestion/suggestion.html',
+        "href" => 'suggestion/suggestion_setup.html',
     ),
     'tabs' => array(
         "name" => 'Tabs',

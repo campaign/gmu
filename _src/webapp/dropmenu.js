@@ -257,24 +257,25 @@
         },
 
         _eventHandler:function (e) {
-            var match, data = this._data, el, itemData, eventData, _prevented, cTarget;
+            var me = this, match, data = this._data, el, itemData, eventData, _prevented;
             switch (e.type) {
                 case 'ortchange':
-                    data._isShow && this.show(data._actBtn);
+                    data._parentOffset = this._getParentOffset();//TRACE FEBASE-658 转屏后，parentOffset不对了，要重新计算一次。
+                    data._isShow && me._el.css(me._caculate(data._actBtn));
                     break;
                 case 'mousedown':
                 case 'touchstart':
                     data._isShow && data.autoClose && !this._isFromSelf(e.target) && this.hide();
                     break;
                 default:
-                    el = this._el.get(0);
+                    el = me._el.get(0);
                     if((match = $(e.target).closest('.ui-dropmenu-items li', el)) && match.length){
                         eventData = $.Event('itemClick', {target:match[0]});
                         eventData.data = itemData = data.items[match.index()];//获取data.items中对应的item.
-                        _prevented = itemData && itemData.click && itemData.click.apply(this, [eventData].concat(itemData)) === false;//如果item中有click则先调用item.click
-                        (_prevented = _prevented || eventData.defaultPrevented ) || this.trigger(eventData, itemData);//如果item.click返回的是false,或者在里面调用了e.preventDefault(). itemClick事件就不派送了。
+                        _prevented = itemData && itemData.click && itemData.click.apply(me, [eventData].concat(itemData)) === false;//如果item中有click则先调用item.click
+                        (_prevented = _prevented || eventData.defaultPrevented ) || me.trigger(eventData, itemData);//如果item.click返回的是false,或者在里面调用了e.preventDefault(). itemClick事件就不派送了。
                         (_prevented || eventData.defaultPrevented ) && e.preventDefault();//如果itemClick中的事件有被阻止就把本来的click给阻止掉，这样a连接就不会跳转了。
-                    } else this.toggle();
+                    } else me.toggle();
             }
         },
 
