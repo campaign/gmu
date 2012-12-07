@@ -60,12 +60,6 @@
     top: 2px;
     margin-left: 0;
 }
-.ui-dropmenu.ui-alignleft .ui-dropmenu-arrow {
-    left: 25%;
-}
-.ui-dropmenu.ui-alignright .ui-dropmenu-arrow {
-    left: 75%;
-}
 
 /**垂直的dropmenu*/
 .ui-dropmenu.ui-horizontal {
