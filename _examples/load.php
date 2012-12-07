@@ -80,10 +80,23 @@ function fixImagePath($cssFile){
     if(!$basepath) {
         if(!isset($_SERVER['HTTP_REFERER']))return $content;
         $basepath = $_SERVER['HTTP_REFERER'];
-        //$basepath = 'http://127.0.0.1/mobile/gmu/_examples/webapp/dialog/dialog.html';
+        $basepath = preg_replace('/http(?:s?):\/\/[^\/]+/', '', $basepath);
 
-        $basepath = parse_url($basepath);
-        $basepath = dirname($_SERVER['DOCUMENT_ROOT'].$basepath['path']);
+        $env = array();
+
+        if ( strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) === 0 ) {
+            $env['SCRIPT_NAME'] = $_SERVER['SCRIPT_NAME']; //Without URL rewrite
+        } else {
+            $env['SCRIPT_NAME'] = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']) ); //With URL rewrite
+        }
+        $env['PATH_INFO'] = substr_replace($_SERVER['REQUEST_URI'], '', 0, strlen($env['SCRIPT_NAME']));
+        if ( strpos($env['PATH_INFO'], '?') !== false ) {
+            $env['PATH_INFO'] = substr_replace($env['PATH_INFO'], '', strpos($env['PATH_INFO'], '?')); //query string is not removed automatically
+        }
+        $env['SCRIPT_NAME'] = rtrim($env['SCRIPT_NAME'], '/');
+        $env['PATH_INFO'] = '/' . ltrim($env['PATH_INFO'], '/');
+
+        $basepath = dirname(realpath(dirname(__FILE__).'/../'.getRelativePath($basepath, $env['PATH_INFO'])));
     }
 
     preg_match_all('/url\((([\'"]?)(?!data)([^\'"]+?)\2)\)/im', $content, $m);
@@ -120,14 +133,14 @@ function getRelativePath($path, $relativePath){
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
 $js = isset($_REQUEST['js']) ? $_REQUEST['js'] : '';
 $theme = isset($_REQUEST['theme']) ? $_REQUEST['theme'] : '';
-$baseUrl = isset($_REQUEST['base']) ? $_REQUEST['base'] : '../../../_src/';
+$baseUrl = isset($_REQUEST['base']) ? $_REQUEST['base'] : '../../_src/';
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
 $baseDir = dirname(dirname(__FILE__)).'/_src/';
 $cssDir = dirname(dirname(__FILE__)).'/assets/';
 
 $allowedTypes = array('webapp', 'pad', 'core');
 if (!in_array($type, $allowedTypes)) {
-	$type = current($allowedTypes);
+    $type = current($allowedTypes);
 }
 
 $js = preg_replace("/ +/", "", $js);
@@ -149,12 +162,12 @@ _gennerateFile($files, $alljs, $allCss);
 
 if($mode){
     header("Content-type: text/xml");
-	$xml = '<?xml version="1.0" encoding="UTF-8" ?>'."\n";
+    $xml = '<?xml version="1.0" encoding="UTF-8" ?>'."\n";
     $xml .= '<root>';
     $xml .= '<jses>';
-	foreach($alljs as $key => $val) {
+    foreach($alljs as $key => $val) {
         $xml .= '<js name="'.$key.'"><![CDATA['.$val.']]></js>';
-	}
+    }
     $xml .='</jses>';
     $xml .= '<csses>';
     foreach($allCss as $val) {
@@ -162,12 +175,12 @@ if($mode){
     }
     $xml .='</csses>';
     $xml .= '</root>';
-	echo $xml;
-	return;
+    echo $xml;
+    return;
 }
 
 header('Content-Type: application/javascript');
 ?>
 <?php foreach($alljs as $key => $val):?>
-	document.write('<script type="text/javascript" name="<?php echo $key?>" src="<?php echo $baseUrl.$key?>"></script>');
+document.write('<script type="text/javascript" name="<?php echo $key?>" src="<?php echo $baseUrl.$key?>"></script>');
 <?php endforeach; ?>

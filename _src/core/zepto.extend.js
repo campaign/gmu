@@ -180,7 +180,6 @@
          *
          * @grammar $.throttle(delay, fn) ⇒ function
          * @name $.throttle
-         * @since v1.0.4+
          * @example var touchmoveHander = function(){
          *     //....
          * }
@@ -250,7 +249,6 @@
          *
          * @grammar $.debounce(delay, fn[, at_begin]) ⇒ function
          * @name $.debounce
-         * @since v1.0.4+
          * @example var touchmoveHander = function(){
          *     //....
          * }
