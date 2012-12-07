@@ -122,8 +122,6 @@
                         me.trigger('scrollend', e);
                     }
                 }));
-
-
                 return me;
             },
             _setShadow:function () {
@@ -187,11 +185,11 @@
                 iScroll.refresh();
                 data._$navWrapper.width(iScroll.wrapperW - iScroll.wrapperOffsetLeft);
             },
-            switchTo: function (index, isDef) {
+            switchTo: function (index, isDef, e) {
                 var me = this,
                     data = me._data;
 
-                me.switchToOrg(index);
+                me.switchToOrg(index, isDef, e);
                 if (!data._$tabList.eq(index).hasClass('ui-navigator-fix')) {
                     var $fixElemLeft = data._$fixElemLeft,
                         index = index - ($fixElemLeft.length ? $fixElemLeft.length : 0),    //若存在左fix的元素，则滑动的tab的index需相应减去fix tab数量
