@@ -4,13 +4,13 @@ header("Content-type: text/html; charset=utf-8");
 
 //collect demos
 $setting = require_once('./setting/setting.php');
-
+$components = array();
 foreach ($setting as $item) {
-    empty($item->group) || ($item->group = 'Components');
-    if (empty($components[$item->group])) {
-        $components[$item->group] = array();
+    empty($item['group']) || ($item['group'] = 'Components');
+    if (empty($components[$item['group']])) {
+        $components[$item['group']] = array();
     }
-    $components[$item->group][] = (Array)$item;
+    $components[$item['group']][] = $item;
 }
 ?><!doctype html>
 <html>
@@ -111,13 +111,15 @@ foreach ($setting as $item) {
     (function ($) {
         var headerHeight = $('header').height(), wrap = $('#wrap');
 
+        window.scrollTo(0, 1);
+
         $('.thelist ul li').highlight('ui-state-hover');
 
         function _refresh() {
             wrap.height($(window).height() - headerHeight).iScroll('refresh');
         }
 
-        $(window).on('ort_change', _refresh);
+        $(window).on('ortchange', _refresh);
         wrap.iScroll();
         _refresh();
     })(Zepto);
