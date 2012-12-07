@@ -12,39 +12,7 @@
 
 
     <script>
-        var click = function (el){
-            var event = document.createEvent('MouseEvents')
-            event.initMouseEvent('click', true, true, document.defaultView, 1, 0, 0, 0, 0, false, false, false, false, 0, null)
-            el.dispatchEvent(event)
-        }
-
-        var mousedown = function (el){
-            var event = document.createEvent('MouseEvents')
-            event.initMouseEvent('mousedown', true, true, document.defaultView, 1, 0, 0, 0, 0, false, false, false, false, 0, null)
-            el.dispatchEvent(event)
-        }
-
-        var counter = 0
-
-        $('p.live').live('click', function(){ counter++ })
-
-        $(document.body).append('<p class="live" id="live_1"></p>')
-        $(document.body).append('<p class="live" id="live_2"></p>')
-
-
-
-        click($('#live_1').get(0))
-        click($('#live_2').get(0))
-
-        $('p.live').remove()
-        $(document.body).append('<p class="live" id="live_this_test"></p>')
-
-        $('p.live').live('click', function(){
-            assertEqual(document.getElementById('live_this_test'), this)
-        })
-        click($('#live_this_test').get(0))
-
-        alert(counter)
+        $('#test')
     </script>
 </body>
 </html>

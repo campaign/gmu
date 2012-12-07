@@ -1,7 +1,7 @@
 ;(function(){
     fire = function (type, element, x, y) {
         var event = document.createEvent('Event'),
-            touch = { pageX: x, pageY: y, target: element }
+            touch = { pageX: x, pageY: y, target: element, clientX: x, clientY:y }
 
         event.initEvent('touch'+type, true, true)
         event.touches = [touch]
