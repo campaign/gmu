@@ -8,6 +8,13 @@ $arr = array(
         "icon" => 'adddesktop.png',
         "href" => 'add2desktop/add2desktop.html',
     ),
+    'appframe' => array(
+        "name" => 'Appframe',
+        "description" => 'webapp框架',
+        "group" => 'Components',
+        "icon" => 'slider.png',
+        "href" => 'appframe/appframe.html',
+    ),
     'button' => array(
         "name" => 'Button',
         "description" => '按钮',
