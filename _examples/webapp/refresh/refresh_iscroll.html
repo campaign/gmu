@@ -23,6 +23,7 @@
             padding: 10px 10px 10px 90px;
             display: block;
             position: relative;
+            -webkit-transform: translateZ(0px);
         }
 
         .data-list li.ui-list-hover {
@@ -156,7 +157,7 @@
                     })(data);
 
                 $list[dir == 'up' ? 'prepend' : 'append'](html);
-                me.afterDataLoading();    //数据加载完成后改变状态
+                me.afterDataLoading(dir);    //数据加载完成后改变状态
             });
         }
     });
