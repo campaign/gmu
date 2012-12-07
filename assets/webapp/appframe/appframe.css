@@ -19,7 +19,7 @@
     pointer-events:none;
     -webkit-transform: translate3d(0, 0, 0);
     -webkit-transition-duration: 300ms;
-    -webkit-animation-timing-function:linear;
+    -webkit-animation-timing-function:cubic-bezier(0.33, 0.66, 0.66, 1);
 }
 
 .ui-appframe-wheel {
@@ -39,5 +39,5 @@
     z-index: 98;
     -webkit-transform: translate3d(0, 0, 0);
     -webkit-transition-duration: 0ms;
-    -webkit-animation-timing-function:linear;
+    -webkit-animation-timing-function:ease-out;
 }

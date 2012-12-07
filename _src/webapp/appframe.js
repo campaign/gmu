@@ -51,7 +51,7 @@
                     index = o.index,
                     node = o.items[index];
                 if(o.rolling) {
-                    var stopY = getComputedStyle(node, null)['-webkit-transform'].replace(/[^0-9-.,]/g, '').split(',')[5] - 0;
+                    var stopY = +getComputedStyle(node, null)['-webkit-transform'].replace(/[^0-9-.,]/g, '').split(',')[5];
                     if(stopY > o.data[index].bottom && stopY < 0) {
                         node.style.webkitTransform = 'translate3d(0,' + stopY + 'px,0)';
                         o.data[index].y = stopY;
@@ -166,12 +166,29 @@
             var me = this,
                 o = me._data,
                 data = o.data[o.index],
-                speed = o.math.abs(deltaY) / time * 1000,
-                target = data.y + speed * speed * (deltaY > 0 ? 0.001 : -0.001);
-            if(data.y > 0 || data.y < data.bottom) me._roll({ time: 200, to: data.y > 0 ? 0 : data.bottom });
-            else if(target < data.bottom) me._roll({ time: speed, to: data.bottom - o.math.min(data.bottom - target, 50) });
-            else if(target > 0) me._roll({ time: speed, to: o.math.min(50, target) });
-            else me._roll({ time: speed, to: target });
+                y = data.y,
+                bottom = data.bottom;
+            if(y < bottom) me._roll({time: 300, to: bottom});
+            else if(y > 0) me._roll({time: 300, to: 0});
+            else{
+                var D = 0.0006,
+                    M = o.math,
+                    H = o.wH,
+                    T = -y,
+                    B = y - bottom,
+                    S = M.abs(deltaY) / time,
+                    dist = S * S / 2 / D;
+                if (deltaY > 0 && dist > T) {
+                    T += H / (6 / (dist / S * D));
+                    S = S * T / dist;
+                    dist = T;
+                } else if (deltaY < 0 && dist > B) {
+                    B += H / (6 / (dist / S * D));
+                    S = S * B / dist;
+                    dist = B;
+                }
+                me._roll({ time:M.max(M.round(S / D), 10), to: dist * (deltaY < 0 ? -1 : 1) + y });
+            }
         },
 
         /**

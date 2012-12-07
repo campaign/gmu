@@ -31,9 +31,9 @@ test("setup", function() {
 test("左右滑动", function() {
     expect(3);
     stop();
-    var pageswipe = $('#pageswipe').pageswipe('this',{
+    var pageswipe = $('#pageswipe').pageswipe({
         toolbar:'#toolbar'
-    });
+    }).pageswipe('this');
     ta.touchstart($(".ui-pageswipe-wheel")[0], {
         touches: [{
             clientX: 0,
@@ -118,9 +118,7 @@ test("show(), hide(), toggle()", function() {
 test("destroy()", function() {
     expect(3);
     var l1 = ua.eventLength();
-    var pageswipe = $('#pageswipe').pageswipe('this',{
-        toolbar:'#toolbar'
-    });
+    var pageswipe = $('#pageswipe').pageswipe('this');
     pageswipe.destroy();
     var a = 0;
     for(var i in pageswipe) a++;
