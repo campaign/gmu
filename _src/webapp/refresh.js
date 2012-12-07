@@ -66,7 +66,7 @@
                         }
                     }
                     $elem.on('click', function () {
-                        if (!me.status(dir)) return;         //检查是否处于可用状态
+                        if (!me.status(dir) || data._actDir) return;         //检查是否处于可用状态，同一方向上的仍在加载中，或者不同方向的还未加载完成 traceID:FEBASE-569
                         me._setStyle(dir, 'loading');
                         me._loadingAction(dir, 'click');
                     });

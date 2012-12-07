@@ -8,6 +8,13 @@ $arr = array(
         "icon" => 'adddesktop.png',
         "href" => 'add2desktop/add2desktop.html',
     ),
+    'appframe' => array(
+        "name" => 'Appframe',
+        "description" => 'webapp框架',
+        "group" => 'Components',
+        "icon" => 'slider.png',
+        "href" => 'appframe/appframe.html',
+    ),
     'button' => array(
         "name" => 'Button',
         "description" => '按钮',
@@ -83,7 +90,7 @@ $arr = array(
         "description" => '',
         "group" => 'Components',
         "icon" => 'suggestion.png',
-        "href" => 'suggestion/suggestion.html',
+        "href" => 'suggestion/suggestion_setup.html',
     ),
     'tabs' => array(
         "name" => 'Tabs',
@@ -103,7 +110,7 @@ $arr = array(
 
 $detect = new Mobile_Detect();
 
-if($detect->isiOS()){
+if(!$detect->isiOS()){
     unset($arr['adddesktop']);
 }
 
