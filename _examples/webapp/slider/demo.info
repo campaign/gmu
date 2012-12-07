@@ -1,8 +1,0 @@
-{
-  name: 'Slider',
-  description: '旋转木马',
-  group: 'Components',
-  icon: 'slider.png',
-  main: 'slider.html',
-  weight: 0
-}

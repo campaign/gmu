@@ -42,7 +42,10 @@
     if (duration) duration = duration / 1000
     return this.anim(properties, duration, ease, callback)
   }
-
+    /**
+     * added by chenluyang
+     * @reason b
+     */
   $.fn.animateFrom = function(properties, duration, ease, callback){
     if ($.isObject(duration))
       ease = duration.easing, callback = duration.complete, duration = duration.duration
