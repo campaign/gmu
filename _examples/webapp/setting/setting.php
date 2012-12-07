@@ -103,7 +103,7 @@ $arr = array(
 
 $detect = new Mobile_Detect();
 
-if($detect->isiOS()){
+if(!$detect->isiOS()){
     unset($arr['adddesktop']);
 }
 
