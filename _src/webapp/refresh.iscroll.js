@@ -78,7 +78,7 @@
                                 upStatus = me.status('up'),
                                 downStatus = me.status('down');
 
-                            if ((up && !upStatus && down && !downStatus) || data._actDir) return;     //增加上下按钮的同时加载处理 traceID:FEBASE-569
+                            if (up && !upStatus && down && !downStatus) return;
                             if (downStatus && down && !downRefreshed && this.y < (this.maxScrollY - threshold)) {    //下边按钮，上拉加载
                                 me._setMoveState('down', 'beforeload', 'pull');
                             } else if (upStatus && up && !upRefreshed && this.y > threshold) {     //上边按钮，下拉加载
