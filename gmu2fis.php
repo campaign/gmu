@@ -339,10 +339,10 @@ class GMU2FIS {
     }
 
     public static function rScandir($path, $exts, &$res=array()) {
-        $path = rtrim($path, '/\\');
+        $path = rtrim(str_replace('\\', '/', $path), '/\\');
         $files = scandir($path);
         foreach ($files as $file) {
-            $filepath = $path . DS . $file;
+            $filepath = $path . '/' . $file;
             if (is_dir($filepath) && $file[0] != '.') {
                 self::rScandir($filepath, $exts, $res);
             } else {
