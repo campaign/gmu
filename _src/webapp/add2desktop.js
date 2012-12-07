@@ -28,10 +28,10 @@
      */
     $.ui.define('add2desktop', {
         _data: {
-            icon: '../../../assets/webapp/add2desktop/icon.png',
+            icon: '',
             container:  '',
             key:'_gmu_adddesktop_key',
-            useFix: true,
+            useFix: false,
             position: {
                 bottom: 12,
                 left: '50%'
