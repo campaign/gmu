@@ -65,8 +65,8 @@
                 var me = this,
                     data = me._data;
 
-                data.isScrollToNext = !!(data.isScrollToNext === undefined);
-                data.isShowShadow = !!(data.isShowShadow === undefined);
+                data.isScrollToNext = data.isScrollToNext === undefined ? true : data.isScrollToNext ;
+                data.isShowShadow = data.isShowShadow === undefined ? true : data.isShowShadow;
                 me._loadIscroll();
                 $(window).on('ortchange', $.proxy(me._ortChangeHandler, me));
                 me.on('destroy', function () {
