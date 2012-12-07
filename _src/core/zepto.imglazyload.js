@@ -28,7 +28,7 @@
      * });
      */
     $.fn.imglazyload = function (opts) {
-        var pedding = $.slice(this),
+        var pedding = $.slice(this).reverse(),
             splice = Array.prototype.splice,
             opts = $.extend({
                 threshold:0,
@@ -80,7 +80,7 @@
             _detect('init');
         });
 
-        (opts.container === window ? $(document) : $container).on(opts.eventName || 'scrollStop', function () {
+        (opts.container === window ? $(document) : $container).on(opts.eventName + ' ortchange', function () {
             _detect();
         });
 
