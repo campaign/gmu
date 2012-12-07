@@ -32,6 +32,18 @@
             height: 28px;
         }
 
+        .sec-nav .ui-navigator-shadowr, .sec-nav .ui-navigator-shadowl {
+            background: url('s-sec.png') right -33px no-repeat;
+        }
+
+        .sec-nav .ui-navigator-shadowl{
+            background-position: 0 0;
+        }
+
+        .sec-nav .ui-navigator-shadowall {
+            background: url('s-sec.png') 0 0 no-repeat, url('s-sec.png') right -33px no-repeat;
+        }
+
     </style>
 </head>
 
@@ -103,7 +115,13 @@
      * webapp/navigator/navigator.iscroll.default.css
      *
      */
-    $('#nav-smartSetup').navigator();    //smart setup方式创建 推荐方式
+    $('#nav-smartSetup').on('tabselect', function(e, item){
+        console.log(item);
+    }).on('beforetabselect', function(e){
+                e.preventDefault();
+            }).navigator('switchTo', 0);    //smart setup方式创建 推荐方式
+
+
 
     $.ui.navigator('#nav-render', {    //render方式创建
         content:[

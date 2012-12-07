@@ -3,7 +3,7 @@
     top: -9999px;
     left: 0;
     background-color: #fff;
-    z-index: 999;
+    z-index: 200;
     -webkit-user-select: none;
     -webkit-box-sizing: border-box;
 }

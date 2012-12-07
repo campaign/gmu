@@ -76,7 +76,7 @@
                         });
                         data.items = items;
                         data.active = Math.max(0, Math.min(items.length-1, data.active || $('.ui-state-active', data._nav).index()||0));
-                        $('#'+items[data.active].id).add(data._nav.children().eq(data.active)).addClass('ui-state-active');
+                        me._getPanel().add(data._nav.children().eq(data.active)).addClass('ui-state-active');
                         break;
                     } //if cannot find the ul, switch this to create mode. Doing this by remove the break centence.
                 default:
@@ -101,7 +101,12 @@
                     data.container = data.container || 'body';
             }
             data.container && $el.appendTo(data.container);
-            me._fitToContent($('#'+items[data.active].id));
+            me._fitToContent(me._getPanel());
+        },
+
+        _getPanel: function(index){
+            var data = this._data;
+            return $('#'+data.items[index===undefined?data.active:index].id);
         },
 
         _findElement:function (selector, el) {
@@ -124,13 +129,20 @@
             var me = this, data = me._data, $el = me.root(), eventHandler = $.proxy(me._eventHandler, me);
             $el.addClass('ui-tabs');
             data._nav.on('click', eventHandler).children().highlight('ui-state-hover');
+            $(window).on('ortchange', eventHandler);
         },
 
         _eventHandler:function (e) {
             var match, data = this._data, match;
-            if((match = $(e.target).closest('li', data._nav.get(0))) && match.length) {
-                e.preventDefault();
-                this.switchTo(match.index());
+            switch(e.type) {
+                case 'ortchange':
+                    this._fitToContent(this._getPanel());
+                    break;
+                default:
+                    if((match = $(e.target).closest('li', data._nav.get(0))) && match.length) {
+                        e.preventDefault();
+                        this.switchTo(match.index());
+                    }
             }
         },
 
@@ -149,11 +161,11 @@
             var me = this, data = me._data, items = data.items, eventData, to, from, reverse, endEvent;
             if(!data._buzy && data.active != (index = Math.max(0, Math.min(items.length-1, index)))) {
                 to = $.extend({}, items[index]);//copy it.
-                to.div = $('#'+to.id, me._el);
+                to.div = me._getPanel(index);
                 to.index = index;
 
                 from = $.extend({}, items[data.active]);//copy it.
-                from.div = $('#'+from.id, me._el);
+                from.div = me._getPanel();
                 from.index = index;
 
                 eventData = $.Event('beforeActivate');
@@ -199,7 +211,7 @@
             var data = this._data, eventHandler = this._eventHandler;
             data._nav.off('click', eventHandler).children().highlight();
             data.swipe && data._content.off('swipeLeft swipeRight', eventHandler);
-            return this.$super();
+            return this.$super('destroy');
         }
 
         /**

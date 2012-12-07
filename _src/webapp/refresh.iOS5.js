@@ -89,7 +89,7 @@
                         upStatus = me.status('up'),
                         downStatus = me.status('down');
 
-                    if ((up && !upStatus) && (down && !downStatus)) return;    //处于数据正在加载中，即上次加载还未完成，直接返回
+                    if ((up && !upStatus) && (down && !downStatus)) return;    //处于数据正在加载中，即上次加载还未完成，直接返回, 增加上下按钮的同时加载处理 traceID:FEBASE-569
                     data.iScroll.deltaY = scrollY - lastMoveY;    //每次在touchmove时更新偏移量的值
                     if (downStatus && down && !downRefreshed && -scrollY < (maxScrollY - threshold)) {      //下边按钮，上拉加载
                         me._setMoveState('down', 'beforeload', 'pull');
@@ -98,7 +98,7 @@
                     } else if (upStatus && up && !upRefreshed && -scrollY > threshold ) {      //上边按钮，下拉加载
                         me._setMoveState('up', 'beforeload', 'pull');
                     } else if (upStatus && up && upRefreshed && -scrollY < threshold) {       //上边按钮，下拉恢复
-                        me._setMoveState('up', 'default', 'restore');
+                        me._setMoveState('up', 'loaded', 'restore');
                     }
 
                     data.lastMoveY = scrollY;
@@ -221,7 +221,7 @@
                     dir = dir || data._actDir;
 
                 data['_' + dir + 'Refreshed'] = false;
-                me.root().get(0).scrollTop = data.topOffset;
+                dir == 'up' && (me.root().get(0).scrollTop = data.topOffset);
                 return me.afterDataLoadingOrg(dir);
             }
         }

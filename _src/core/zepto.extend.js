@@ -263,7 +263,6 @@
         debounce: function(delay, fn, t) {
             return fn === undefined ? $.throttle(250, delay, false) : $.throttle(delay, fn, t === undefined ? false : t !== false);
         }
-
     });
 
     /**
@@ -461,7 +460,7 @@
      */
     /** dispatch scrollStop */
     function _registerScrollStop(){
-        $(window).on('scroll', $.debounce(200, function() {
+        $(window).on('scroll', $.debounce(80, function() {
             $(document).trigger('scrollStop');
         }, false));
     }

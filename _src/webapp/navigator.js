@@ -93,7 +93,7 @@
                 $el.children('ul').addClass('ui-navigator-list');
             }
             $el.find('a').each(function (i) {
-                $(this).hasClass('cur') && defTab === 0 && (data.defTab = i);
+                defTab === 0 ? $(this).hasClass('cur') && (data.defTab = i) : $(this).removeClass('cur');    //处理同时defTab和写cur class的情况
             });
         },
         _init: function () {
@@ -117,18 +117,7 @@
             var me = this,
                 target = e.target;
 
-            while (target.nodeType != 1) {    //ios4中，e.target会取到text节点
-                target = target.parentNode;
-            }
-
-            var beforeSelectEvent = $.Event('beforetabselect');
-            me.trigger(beforeSelectEvent, target);
-            if (beforeSelectEvent.defaultPrevented) {     //阻止默认事件
-                e.preventDefault();
-                return me;
-            };
-
-            target.tagName.toLowerCase() == 'a' && me.switchTo(target.index);
+            $(target).closest('a').get(0) && me.switchTo(target.index, false, e);
             return me;
         },
         /**
@@ -140,13 +129,24 @@
          * var nav = $.ui.navigator(opts);      //render模式
          * nav.switchTo(1);
          */
-        switchTo: function (index, isDef) {
+        switchTo: function (index, isDef, e) {
             var me = this,
                 data = me._data,
                 lastIndex = data._lastIndex,
-                $tabList = data._$tabList;
+                $tabList = data._$tabList,
+                beforeSelectEvent = $.Event('beforetabselect');
 
-            if (lastIndex == index) return me;            //当选中的是同一个tab时，直接返回
+            me.trigger(beforeSelectEvent, $tabList[index]);
+            if (beforeSelectEvent.defaultPrevented) {     //阻止默认事件
+                e && e.preventDefault();     //若是程序调switchTo，则直接return，若点击调用则preventDefault
+                return me;
+            };
+
+            //点击同一个tab，若是程序调switchTo，则直接return，若点击调用则preventDefault
+            if (lastIndex == index) {
+                e && e.preventDefault();
+                return me;
+            }          //当选中的是同一个tab时，直接返回
             lastIndex >= 0 && $tabList.eq(lastIndex).removeClass("cur");      //修改样式放在跳转后边
             $tabList.eq(index).addClass("cur");
             data._lastIndex = index;

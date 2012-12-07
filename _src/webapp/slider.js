@@ -83,7 +83,7 @@
         _init:function() {
             var me = this,
                 index = me.data('index'),
-                root = me.data('root'),
+                root = me.root(),
                 _eventHandler = $.proxy(me._eventHandler, me);
             me._setWidth();
             $(me.data('wheel')).on('touchstart touchmove touchend touchcancel webkitTransitionEnd', _eventHandler);
@@ -132,6 +132,15 @@
                 dotIndex = {}, i, j,
                 l = o.imgInit || length;
             o.showDot && (dots[0].className = 'ui-slider-dot-select');
+            if(o.imgZoom) $(lazyImgs).on('load', function() {
+                var h = this.height,
+                    w = this.width,
+                    min_h = Math.min(h, height),
+                    min_w = Math.min(w, width);
+                if(h/height > w/width) this.style.cssText += 'height:' + min_h + 'px;' + 'width:' + min_h/h * w + 'px;';
+                else this.style.cssText += 'height:' + min_w/w * h + 'px;' + 'width:' + min_w + 'px';
+                this.onload = null;
+            });
             for(i = 0; i < length; i++) {
                 items[i].style.cssText += 'width:'+ width + 'px;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                 dotIndex[i] = loop ? (i > length/2 - 1  ? i - length/2 : i) : i;
@@ -144,15 +153,6 @@
                     }
                 }
             }
-            if(o.imgZoom) $(lazyImgs).on('load', function() {
-                var h = this.height,
-                    w = this.width,
-                    min_h = Math.min(h, height),
-                    min_w = Math.min(w, width);
-                if(h/height > w/width) this.style.cssText += 'height:' + min_h + 'px;' + 'width:' + min_h/h * w + 'px;';
-                else this.style.cssText += 'height:' + min_w/w * h + 'px;' + 'width:' + min_w + 'px';
-                this.onload = null;
-            });
             me.data({
                 root:           root[0],
                 wheel:          wheel,
