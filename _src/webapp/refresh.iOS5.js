@@ -98,7 +98,7 @@
                     } else if (upStatus && up && !upRefreshed && -scrollY > threshold ) {      //上边按钮，下拉加载
                         me._setMoveState('up', 'beforeload', 'pull');
                     } else if (upStatus && up && upRefreshed && -scrollY < threshold) {       //上边按钮，下拉恢复
-                        me._setMoveState('up', 'default', 'restore');
+                        me._setMoveState('up', 'loaded', 'restore');
                     }
 
                     data.lastMoveY = scrollY;
