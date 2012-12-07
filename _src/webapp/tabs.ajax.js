@@ -67,7 +67,7 @@
                     index > items.length - 1 ||
                     !(item = items[index]) || //如果范围错误
                     !item.isAjax || //如果不是ajax类型的
-                    ( ( $panel = $('#' + item.id)).text() && !force && loaded[index] ) //如果没有加载过，并且tab内容为空
+                    ( ( $panel = me._getPanel(index)).text() && !force && loaded[index] ) //如果没有加载过，并且tab内容为空
                     )return this;
 
                 (prevXHR = me.xhr) && $.later(function(){//把切出去没有加载玩的xhr abort了
