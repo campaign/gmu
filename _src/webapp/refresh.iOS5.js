@@ -221,7 +221,7 @@
                     dir = dir || data._actDir;
 
                 data['_' + dir + 'Refreshed'] = false;
-                me.root().get(0).scrollTop = data.topOffset;
+                dir == 'up' && (me.root().get(0).scrollTop = data.topOffset);
                 return me.afterDataLoadingOrg(dir);
             }
         }
