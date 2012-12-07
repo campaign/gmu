@@ -23,7 +23,7 @@
  * div.fix({bottom:0, right:0}); //将div固顶在右下角
  *
  * @blackList
- * - M031 魅族4.0
+ * - M031 魅族4.0(支持position:fixed;但是元素的visibility为hidden);
  */
 
 (function ($, undefined) {
