@@ -1,5 +1,6 @@
 /** 一级导航样式 */
 .ui-navigator {
+    width: 100%;
     border-top: 1px solid #2468c9;
     border-bottom: 1px solid #0145a5;
     background:#2773dc;
