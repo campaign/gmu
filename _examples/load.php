@@ -16,7 +16,7 @@ function _buildFile(&$files, $arr){
             //@import core/zepto.js, core/zepto.event.js, core/zepto.ui.js
             if(preg_match('/@import\s(.+?)$/ims', $content, $match)){
                 $import = $match[1];
-                $import = preg_replace("/ +/", "", $import);
+                $import = preg_replace("/\\s+/", "", $import);
                 $imports = array_unique(explode(",", $import));
                 $files[$file]['children'] = array();
                 _buildFile($files[$file]['children'], $imports);
@@ -24,14 +24,14 @@ function _buildFile(&$files, $arr){
             $files[$file]['css'] = array();
             if(preg_match('/@importcss\s(.+?)$/ims', $content, $match)){
                 $import = $match[1];
-                $import = preg_replace("/ +/", "", $import);
+                $import = preg_replace("/\\s+/", "", $import);
                 $imports = array_unique(explode(",", $import));
                 foreach($imports as $import){
                     if(is_file($cssDir.$import)){
                         $files[$file]['css'][] = $import;
                     }
                     if($theme){
-                        $import = preg_replace('/\.css$/', '.'.$theme.'.css', $import);
+                        $import = preg_replace('/css$/', $theme.'.css', $import);
                         if(is_file($cssDir.$import)){
                             $files[$file]['css'][] = $import;
                         }
