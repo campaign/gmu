@@ -111,7 +111,7 @@
             }
             $.ui.dropmenu({
                 align: 'right',
-                arrowPos: {left:'auto', right:'15px'},
+                arrowPos: {left:'auto', right:'17px'},
                 items: pages,
                 container: $(node).find('.ui-toolbar').first(),
                 cacheParentOffset: false
