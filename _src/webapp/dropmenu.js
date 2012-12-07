@@ -28,6 +28,11 @@
                 x:0,
                 y:-1
             }
+        },
+        defaultArrowPos = {
+            left: {left:'25%', right:'auto'},
+            center: {left:'50%', right:'auto'},
+            right: {left:'75%', right:'auto'}
         };
 
     /**
@@ -44,6 +49,11 @@
      * - ''pos'' {'up'|'down'|'auto'}: (可选，默认'down')设置下拉菜单是在按钮的下面显示还是上面显示。如果设置为'auto', 将自动设置，目的是尽量让下拉菜单不超出可视区域。
      * - ''direction'' {'vertical'|'horizontal'}: (可选, 默认'vertical')设置下拉菜单是垂直排列还是左右排列。
      * - ''arrow'' {Boolean}: (可选, 默认true) 是否显示箭头
+     * - ''arrowPos'' {Object}: (可选) 控制箭头位置, Object中有两个参数，如下。
+     *   - ''left''
+     *   - ''right''
+     *   默认如果align为center，{left:50%, right:auto}, 如果align为left,{left:25%, right:auto}, 如果align为right，{left:75%, right:auto}
+     *   数值可以为数字，百分比，或者带单位的数字字符串。
      * - ''autoClose'' {Boolean}: (可选, 默认true) 当下拉菜单显示的时候，点击其他区域是否关闭菜单。
      * - ''items'' {Array}: (可选) 当为render模式时必填 设置下拉菜单的列表内容，格式为: \[{text:\'\', icon: \'\', click: fn, href:\'\'}, ...\]
      * - ''events'' 所有[Trigger Events](#dropmenu_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
@@ -63,6 +73,7 @@
             pos: 'down',//up, down, auto.
             direction:'', //vertical, horizontal
             arrow:true, //是否显示剪头
+            arrowPos: null,
             autoClose:true, //点击其他地方自动关闭
             items:null, // 数组: {text:'', icon: '', click: '', href:''}
             itemClick: null,//event
@@ -102,6 +113,7 @@
                     data._items = me._findElement('.ui-dropmenu-items');
                     data.container = data.container || 'body';
             }
+            data._arrow && data._arrow.css(data.arrowPos || defaultArrowPos[data.align]);
             data.container && $el.appendTo(data.container);
         },
 
@@ -262,10 +274,6 @@
                 case 'ortchange':
                     data._parentOffset = this._getParentOffset();//TRACE FEBASE-658 转屏后，parentOffset不对了，要重新计算一次。
                     data._isShow && me._el.css(me._caculate(data._actBtn));
-                    break;
-                case 'mousedown':
-                case 'touchstart':
-                    data._isShow && data.autoClose && !this._isFromSelf(e.target) && this.hide();
                     break;
                 default:
                     el = me._el.get(0);
