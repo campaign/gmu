@@ -22,6 +22,8 @@
  * div.fix({bottom:0, left:0}); //将div固顶在左下角
  * div.fix({bottom:0, right:0}); //将div固顶在右下角
  *
+ * @blackList
+ * - M031 魅族4.0
  */
 
 (function ($, undefined) {
@@ -30,20 +32,7 @@
             var me = this;                      //如果一个集合中的第一元素已fix，则认为这个集合的所有元素已fix，
             if(me.attr('isFixed')) return me;   //这样在操作时就可以针对集合进行操作，不必单独绑事件去操作
             me.css(opts).css('position', 'fixed').attr('isFixed', true);
-            var buff = $('<div style="position:fixed;top:10px;"></div>').appendTo('body'),
-                top = buff.offset(true).top,
-                checkFixed = function() {
-                    if(window.pageYOffset > 0) {
-                        if(buff.offset(true).top !== top || buff.css('visibility') === 'hidden') {
-                            me.css('position', 'absolute');
-                            doFixed();
-                            $(document).on('scrollStop', doFixed);
-                            $(window).on('ortchange', doFixed);
-                        }
-                        $(document).off('scrollStop', checkFixed);
-                        buff.remove();
-                    }
-                },
+            var blackList = /M031/.test(navigator.userAgent),
                 doFixed = function() {
                     me.css({
                         top: window.pageYOffset + (opts.bottom !== undefined ? window.innerHeight - me.height() - opts.bottom : (opts.top ||0)),
@@ -51,7 +40,27 @@
                     });
                     opts.width == '100%' && me.css('width', document.body.offsetWidth);
                 };
-            $(document).on('scrollStop', checkFixed);
+            if(blackList) {
+                me.css('position', 'absolute');
+                $(document).on('scrollStop', doFixed);
+                $(window).on('ortchange', doFixed);
+            } else {
+                var buff = $('<div style="position:fixed;top:10px;"></div>').appendTo('body'),
+                    top = buff.offset(true).top,
+                    checkFixed = function() {
+                        if(window.pageYOffset > 0) {
+                            if(buff.offset(true).top !== top) {
+                                me.css('position', 'absolute');
+                                doFixed();
+                                $(document).on('scrollStop', doFixed);
+                                $(window).on('ortchange', doFixed);
+                            }
+                            $(document).off('scrollStop', checkFixed);
+                            buff.remove();
+                        }
+                    };
+                $(document).on('scrollStop', checkFixed);
+            }
             return me;
         }
     });
