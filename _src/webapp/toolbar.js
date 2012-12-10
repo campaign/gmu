@@ -3,7 +3,7 @@
  * @file
  * @name Toolbar
  * @desc 工具栏组件
- * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.fix.js
+ * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.fix.js, core/zepto.highlight.js
  */
 (function($) {
     /**
