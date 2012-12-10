@@ -18,9 +18,8 @@
      * - ''backButtonText'' {String}:(可选)返回按钮文字
      * - ''backButtonHref'' {String}: (可选)返回按钮的链接
      * - ''btns'' {Array}: (可选)右侧要添加的按钮(Dom节点)
-     * - ''btns'' {Array}: (可选)右侧要添加的按钮(Dom节点)
-     * - ''useFix'' {Array}: (可选)是否使用固顶效果(toolbar 不在页面顶端)
-     * - ''position'' {Object}: (可选)固顶的位置参数
+     * - ''useFix'' {Boolean}: (可选)是否使用固顶效果(toolbar 不在页面顶端)
+     * - ''position'' {Object}: (可选)固顶的位置参数,如 {top:10, left:0}
      * **Demo**
      * <codepreview href="../gmu/_examples/webapp/toolbar/toolbar.html">
      * ../gmu/_examples/webapp/toolbar/toolbar.html
