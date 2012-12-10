@@ -29,6 +29,7 @@
 .ui-slider-item {
     height: 100%;
     width:100%;
+    background-color: #fff;
     text-align: center;
     position: absolute;
     top:0;
