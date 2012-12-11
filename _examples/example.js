@@ -1,9 +1,10 @@
 (function(undefined){
     var script = document.getElementById('bootstrap'),
-        use = script.getAttribute('data-use'),
-        page = (script.getAttribute('data-page')||'').split(','),
-        theme = script.getAttribute('data-theme'),
+        use = script.getAttribute('data-use') || '',
+        page = (script.getAttribute('data-page') || '').split(','),
+        theme = script.getAttribute('data-theme') || '',
         path = script.getAttribute('data-path') || '../../load.php',
+        backUrl = script.getAttribute('data-backurl') || '../',
         requires = ['webapp/button.js', 'webapp/dropmenu.js', 'webapp/toolbar.js'],
         i, jsRE;
 
@@ -97,7 +98,7 @@
             useFix:true,
             btns: btn,
             backButtonClick: function(){
-                location.href = '../';
+                location.href = backUrl;
             }
         });
         if(btn && btn.length){

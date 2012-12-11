@@ -6,7 +6,7 @@ header("Content-type: text/html; charset=utf-8");
 $setting = require_once('./setting/setting.php');
 $components = array();
 foreach ($setting as $item) {
-    empty($item['group']) || ($item['group'] = 'Components');
+    empty($item['group']) && ($item['group'] = 'Components');
     if (empty($components[$item['group']])) {
         $components[$item['group']] = array();
     }
