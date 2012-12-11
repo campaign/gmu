@@ -107,6 +107,7 @@ foreach ($setting as $item) {
         data-theme="blue"
         data-use="core/zepto.iscroll.js"
         data-path="../load.php"
+        data-backurl="../../"
         data-page="">
     (function ($) {
         var headerHeight = $('header').height(), wrap = $('#wrap');
