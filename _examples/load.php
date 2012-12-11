@@ -78,27 +78,10 @@ function fixImagePath($cssFile){
     $content = file_get_contents($cssFile);
 
     if(!$basepath) {
-        if(!isset($_SERVER['HTTP_REFERER']))return $content;
-        $basepath = $_SERVER['HTTP_REFERER'];
-        $basepath = preg_replace('/http(?:s?):\/\/[^\/]+/', '', $basepath);
-
-        $env = array();
-
-        if ( strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) === 0 ) {
-            $env['SCRIPT_NAME'] = $_SERVER['SCRIPT_NAME']; //Without URL rewrite
-        } else {
-            $env['SCRIPT_NAME'] = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']) ); //With URL rewrite
-        }
-        $env['PATH_INFO'] = substr_replace($_SERVER['REQUEST_URI'], '', 0, strlen($env['SCRIPT_NAME']));
-        if ( strpos($env['PATH_INFO'], '?') !== false ) {
-            $env['PATH_INFO'] = substr_replace($env['PATH_INFO'], '', strpos($env['PATH_INFO'], '?')); //query string is not removed automatically
-        }
-        $env['SCRIPT_NAME'] = rtrim($env['SCRIPT_NAME'], '/');
-        $env['PATH_INFO'] = '/' . ltrim($env['PATH_INFO'], '/');
-
-        $basepath = dirname(realpath(dirname(__FILE__).'/../'.getRelativePath($basepath, $env['PATH_INFO'])));
+        $dirname = basename(dirname(__FILE__));
+        if(!isset($_SERVER['HTTP_REFERER']) || !preg_match('#^.*'.$dirname.'(/.*)$#', $_SERVER['HTTP_REFERER'] , $match) )return $content;
+        $basepath = dirname(dirname(__FILE__).$match[1]);
     }
-
     preg_match_all('/url\((([\'"]?)(?!data)([^\'"]+?)\2)\)/im', $content, $m);
     if(isset($m[3])) {
         foreach($m[3] as $image) {
