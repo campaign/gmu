@@ -38,7 +38,7 @@ function _buildFile(&$files, $arr){
                     }
                 }
             }
-            if(preg_match('/^(webapp|pad)\/(.+?)(?:\.(.+?))?\.js/i', $file, $match)){// 如果是组件代码
+            if(preg_match('/^(webapp|pad|chart)\/(.+?)(?:\.(.+?))?\.js/i', $file, $match)){// 如果是组件代码
                 $cssFile = $match[1].'/'.$match[2].'/'.$match[2].(isset($match[3]) ?'.'.$match[3]:'').'.css';
                 if(is_file($cssDir.$cssFile)){
                     $files[$file]['css'][] = $cssFile;
