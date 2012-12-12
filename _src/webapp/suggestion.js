@@ -195,7 +195,7 @@
             if (!me.data('status')) return;
             switch (type) {
                 case 'focus':
-                    me._setSize()._showList()._setPos();
+                    me._setSize()._showList()._setPos().trigger('open');
                     break;
                 case 'touchstart':
                 case 'mousedown':
@@ -259,7 +259,7 @@
                 }, $.os.android?200:0);
             });
             $('.ui-suggestion-button span:last-child').on('click', function() {
-                me.hide().leaveInput();
+                me.hide().leaveInput().trigger('close');
             });
             return me;
         },  
