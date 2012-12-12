@@ -38,7 +38,7 @@ function _buildFile(&$files, $arr){
                     }
                 }
             }
-            if(preg_match('/^(webapp|pad)\/(.+?)(?:\.(.+?))?\.js/i', $file, $match)){// 如果是组件代码
+            if(preg_match('/^(webapp|pad|chart)\/(.+?)(?:\.(.+?))?\.js/i', $file, $match)){// 如果是组件代码
                 $cssFile = $match[1].'/'.$match[2].'/'.$match[2].(isset($match[3]) ?'.'.$match[3]:'').'.css';
                 if(is_file($cssDir.$cssFile)){
                     $files[$file]['css'][] = $cssFile;
@@ -78,14 +78,10 @@ function fixImagePath($cssFile){
     $content = file_get_contents($cssFile);
 
     if(!$basepath) {
-        if(!isset($_SERVER['HTTP_REFERER']))return $content;
-        $basepath = $_SERVER['HTTP_REFERER'];
-        //$basepath = 'http://127.0.0.1/mobile/gmu/_examples/webapp/dialog/dialog.html';
-
-        $basepath = parse_url($basepath);
-        $basepath = dirname($_SERVER['DOCUMENT_ROOT'].$basepath['path']);
+        $dirname = basename(dirname(__FILE__));
+        if(!isset($_SERVER['HTTP_REFERER']) || !preg_match('#^.*'.$dirname.'(/.*)$#', $_SERVER['HTTP_REFERER'] , $match) )return $content;
+        $basepath = dirname(dirname(__FILE__).$match[1]);
     }
-
     preg_match_all('/url\((([\'"]?)(?!data)([^\'"]+?)\2)\)/im', $content, $m);
     if(isset($m[3])) {
         foreach($m[3] as $image) {
@@ -120,14 +116,14 @@ function getRelativePath($path, $relativePath){
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
 $js = isset($_REQUEST['js']) ? $_REQUEST['js'] : '';
 $theme = isset($_REQUEST['theme']) ? $_REQUEST['theme'] : '';
-$baseUrl = isset($_REQUEST['base']) ? $_REQUEST['base'] : '../../../_src/';
+$baseUrl = isset($_REQUEST['base']) ? $_REQUEST['base'] : '../../_src/';
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
 $baseDir = dirname(dirname(__FILE__)).'/_src/';
 $cssDir = dirname(dirname(__FILE__)).'/assets/';
 
 $allowedTypes = array('webapp', 'pad', 'core');
 if (!in_array($type, $allowedTypes)) {
-	$type = current($allowedTypes);
+    $type = current($allowedTypes);
 }
 
 $js = preg_replace("/ +/", "", $js);
@@ -149,12 +145,12 @@ _gennerateFile($files, $alljs, $allCss);
 
 if($mode){
     header("Content-type: text/xml");
-	$xml = '<?xml version="1.0" encoding="UTF-8" ?>'."\n";
+    $xml = '<?xml version="1.0" encoding="UTF-8" ?>'."\n";
     $xml .= '<root>';
     $xml .= '<jses>';
-	foreach($alljs as $key => $val) {
+    foreach($alljs as $key => $val) {
         $xml .= '<js name="'.$key.'"><![CDATA['.$val.']]></js>';
-	}
+    }
     $xml .='</jses>';
     $xml .= '<csses>';
     foreach($allCss as $val) {
@@ -162,12 +158,12 @@ if($mode){
     }
     $xml .='</csses>';
     $xml .= '</root>';
-	echo $xml;
-	return;
+    echo $xml;
+    return;
 }
 
 header('Content-Type: application/javascript');
 ?>
 <?php foreach($alljs as $key => $val):?>
-	document.write('<script type="text/javascript" name="<?php echo $key?>" src="<?php echo $baseUrl.$key?>"></script>');
+document.write('<script type="text/javascript" name="<?php echo $key?>" src="<?php echo $baseUrl.$key?>"></script>');
 <?php endforeach; ?>

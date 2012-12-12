@@ -16,7 +16,7 @@
         type="text/javascript"
         data-theme="default"
         data-use="webapp/add2desktop.js"
-        data-page="默认样式|add2desktop.html,自定义图标|add2desktop_icon.html">
+        data-page="render方式创建|add2desktop.html,setup方式创建|add2desktop_icon.html">
     /**
      * JS:
      *   Zepto:
@@ -33,9 +33,6 @@
 
     //创建组件
     $('#add2').add2desktop();
-//        var demo = $.ui.add2desktop({
-//            icon:'gmu_a2d.png'
-//        });
 
     //清除LocalStorage
     $('#clear').on('click',function(){
