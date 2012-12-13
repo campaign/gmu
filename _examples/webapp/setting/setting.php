@@ -1,7 +1,14 @@
 <?php
 require_once dirname(__FILE__) . '../../../Mobile_Detect.php';
 $arr = array(
-    'adddesktop' => array(
+    'linechart' => array(
+        "name" => 'LineChart',
+        "description" => '折线图',
+        "group" => 'Chart',
+        "icon" => 'adddesktop.png',
+        "href" => '../chart/linechart/linechart.html',
+    ),
+    /*'adddesktop' => array(
         "name" => 'Add2desktop',
         "description" => '添加到桌面',
         "group" => 'Components',
@@ -14,7 +21,7 @@ $arr = array(
         "group" => 'Components',
         "icon" => 'slider.png',
         "href" => 'appframe/appframe.html',
-    ),
+    ),*/
     'button' => array(
         "name" => 'Button',
         "description" => '按钮',
