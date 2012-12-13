@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 按钮组件
  * @name Button
  * @desc 按钮组件
  * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.highlight.js

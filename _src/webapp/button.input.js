@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file Button － 表单插件
  * @name Button － 表单插件
  * @short Button.input
  * @desc button组件下的表单插件，用来扩展按钮类型，在没有插件的情况，只支持button，加此插件后，可以支持以下类型

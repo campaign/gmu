@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 下拉菜单组件
  * @name Dropmenu
  * @desc 下拉菜单组件
  * @import core/zepto.ui.js, core/zepto.highlight.js
