@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file 导航栏组件
  * @name Navigator
  * @desc <qrcode align="right" title="Live Demo">../gmu/_examples/webapp/navigator/tab.html</qrcode>
  * @desc 导航栏组件

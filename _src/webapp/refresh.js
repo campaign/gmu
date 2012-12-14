@@ -1,5 +1,5 @@
 /**
- * @fileOverview
+ * @file 加载更多组件
  * @name Refresh
  * @desc 加载更多组件
  * @import core/zepto.js, core/zepto.ui.js

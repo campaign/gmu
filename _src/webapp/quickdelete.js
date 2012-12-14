@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 快速删除组件
  * @name Quickdelete
  * @desc 快速删除组件
  * @import core/zepto.ui.js
