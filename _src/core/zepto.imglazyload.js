@@ -1,5 +1,5 @@
 /**
- *  @file
+ *  @file 基于Zepto的图片延迟加载插件
  *  @name imglazyload
  *  @desc 图片延迟加载
  *  @import core/zepto.extend.js

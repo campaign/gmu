@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file Dropmenu － 内滚插件
  * @name Dropmenu － 内滚插件
  * @short Dropmenu.iscroll
  * @import webapp/dropmenu.js, core/zepto.iscroll.js

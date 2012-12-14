@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 弹出框组件
  * @name Dialog
  * @desc 弹出框组件
  * @import core/zepto.ui.js, core/zepto.highlight.js

@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file 显示更多组件
  * @name More
  * @desc 在顶部工具栏显示更多的连接
  * @import core/zepto.extend.js, core/zepto.ui.js

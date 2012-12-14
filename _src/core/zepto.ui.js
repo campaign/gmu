@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 所有UI组件的基类，通过它可以简单的快速的创建新的组件。
  * @name UI 基类
  * @short Zepto UI
  * @desc 所有UI组件的基类，通过它可以简单的快速的创建新的组件。
@@ -7,7 +7,7 @@
  */
 (function($, undefined) {
     $.ui = $.ui || {
-        version: '2.0',
+        version: '2.0.0',
 
         guid: _guid,
 
