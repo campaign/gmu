@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file 生成桌面图标组件
  * @name Add2desktop
  * @desc 在iOS中将页面添加为桌面图标(不支持Android系统)
  * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.fix.js
