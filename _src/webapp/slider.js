@@ -30,9 +30,8 @@
      * - ''slideend'' {Function}: (可选)页面切换完成(滑动完成)时执行的函数,第1个参数为Event对象,第2个参数为滑动后的page页码
      *
      * **Demo**
-     * <codepreview href="../demo/webapp/slider.html">
-     * ../demo/webapp/slider.html
-     * ../src/css/webapp/slider.css
+     * <codepreview href="../gmu/_examples/webapp/slider/slider.html">
+     * ../gmu/_examples/webapp/slider/slider.html
      * </codepreview>
      */
     $.ui.define('slider', {
