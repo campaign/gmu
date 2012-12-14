@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file Gotop - 内滚插件
  * @name Gotop － iscroll插件
  * @short Gotop.iscroll
  * @import core/zepto.iscroll.js, webapp/gotop.js
