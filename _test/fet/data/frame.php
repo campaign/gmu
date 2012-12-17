@@ -15,7 +15,7 @@ if(preg_match('/destroy=true/i', $_SERVER['QUERY_STRING'])){
     print '<script type="text/javascript" src="../lib/js/DestroyTest.js"></script>' . "\n";
 }
 if($release == 0 && array_key_exists('f', $_GET)){
-    print "<script type='text/javascript' src='../lib/js/zepto.js'></script>\n";
+//    print "<script type='text/javascript' src='../lib/js/zepto.js'></script>\n";
 	if($cov)
 		print "<script type='text/javascript' src='../bin/import.php?f={$_GET['f']}&cov=true'></script>"."\n";
 	else
