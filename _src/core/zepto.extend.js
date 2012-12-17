@@ -1,6 +1,6 @@
 /**
  * @name Extend
- * @file
+ * @file 对Zepto做了些扩展，以下所有JS都依赖与此文件
  * @desc 对Zepto一些扩展，组件必须依赖
  * @import core/zepto.js
  */

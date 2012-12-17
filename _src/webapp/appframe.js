@@ -1,6 +1,6 @@
 
 /**
- * @file
+ * @file webapp框架组件
  * @name Appframe
  * @desc webapp框架
  * @import core/zepto.extend.js, core/zepto.ui.js

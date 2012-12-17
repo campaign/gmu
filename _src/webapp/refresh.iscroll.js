@@ -5,7 +5,7 @@
 ///import third-party.iscroll.iscroll;
 
 /**
- * @fileOverview
+ * @file 加载更多组件 － iScroll版
  * @name Refresh.iscroll
  * @short Refresh.iscroll
  * @import core/zepto.iscroll.js, webapp/refresh.js

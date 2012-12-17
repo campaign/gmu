@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file Tabs - 左右滑动手势插件
  * @name Tabs - 左右滑动手势插件
  * @short Tabs.swipe
  * @import webapp/tabs.js

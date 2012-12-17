@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file Tabs - ajax插件
  * @name Tabs - ajax插件
  * @short Tabs.ajax
  * @desc tabs插件, 有了此插件,tabs支持ajax功能

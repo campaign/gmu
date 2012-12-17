@@ -12,7 +12,7 @@ module('plugin/webapp/suggestion', {
 test('默认参数 & container & source & events', function() {
     stop();
     expect(37);
-    ua.loadcss(["reset.css", "webapp/suggestion/suggestion.css"], function() {
+    ua.loadcss(["reset.css", "webapp/suggestion/suggestion.css", "webapp/suggestion/suggestion.default.css"], function() {
         var sugg = $.ui.suggestion({
             container: "#sugg-input",
             source: upath + "data/suggestion.php",
@@ -52,11 +52,10 @@ test('默认参数 & container & source & events', function() {
                 equal(sugg._data.wrapper.find("ul li")[2].firstChild.innerHTML, "<span>1</span>15网盘", "第3个提示");
                 equal(sugg._data.wrapper.find("ul li")[3].firstChild.innerHTML, "<span>1</span>0+10", "第4个提示");
                 equal(sugg._data.wrapper.find("ul li")[4].firstChild.innerHTML, "<span>1</span>1对战平台", "第5个提示");
-                equal(sugg._data.wrapper.offset().width, $(input).offset().width, "The width is same as input");
-                equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
+                equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
+                equal(sugg._data.wrapper.offset().left, $(input).parent().offset().left, "The left is same as input");
                 equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-                var chasm = $.os.ios ? 1 : 0;
-                equal(sugg._data.wrapper.offset().height, 102 + chasm, "The height is right");
+                equal(sugg._data.wrapper.offset().height, 102, "The height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-button").height(), 34, "The button height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 306, "The scroller height is right");
@@ -371,7 +370,7 @@ test('renderList & renderEvent', function() {
             equal(sugg._data.wrapper.find(".ui-suggestion-scroller span").length, 9, "显示 9 个选项");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is same as input");
-            equal(sugg._data.wrapper.offset().width, $(input).offset().width, "The width is same as input");
+            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
             sugg.destroy();
             start();
         }, 350);
@@ -424,11 +423,10 @@ test('height', function() {
         setTimeout(function() {
             equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
             equal($(".ui-suggestion ul li").length, 9, "The items count");
-            equal(sugg._data.wrapper.offset().width, $(input).offset().width, "The width is same as input");
+            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-            var chasm = $.os.ios ? 1 : 0;
-            equal(sugg._data.wrapper.offset().height, 436 + chasm, "The height is right");
+            equal(sugg._data.wrapper.offset().height, 436, "The height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 400, "The content height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 306, "The scroller height is right");
             sugg.destroy();
@@ -453,8 +451,7 @@ test('width', function() {
             equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is right");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is same as input");
-            var chasm = $.os.ios ? 1 : 0;
-            equal(sugg._data.wrapper.offset().height, 102 + chasm, "The height is right");
+            equal(sugg._data.wrapper.offset().height, 102, "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -479,11 +476,10 @@ test('offset', function() {
     sugg.on("show", function() {
         setTimeout(function() {
             equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
-            equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
+            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left + 10, "The left is right");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height + 20, "The top is same as input");
-            var chasm = $.os.ios ? 1 : 0;
-            equal(sugg._data.wrapper.offset().height, 135 + chasm, "The height is right");
+            equal(sugg._data.wrapper.offset().height, 135, "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -1158,11 +1154,10 @@ test('setup', function() {
             equal(sugg._data.wrapper.find("ul li")[2].firstChild.innerHTML, "<span>1</span>15网盘", "第3个提示");
             equal(sugg._data.wrapper.find("ul li")[3].firstChild.innerHTML, "<span>1</span>0+10", "第4个提示");
             equal(sugg._data.wrapper.find("ul li")[4].firstChild.innerHTML, "<span>1</span>1对战平台", "第5个提示");
-            equal(sugg._data.wrapper.offset().width, $("#inputId").offset().width, "The width is same as input");
+            equal(sugg._data.wrapper.offset().width, $("#inputId").parent().offset().width, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $("#inputId").offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $("#inputId").offset().top + $("#inputId").offset().height, "The top is right");
-            var chasm = $.os.ios ? 1 : 0;
-            equal(sugg._data.wrapper.offset().height, 102 + chasm, "The height is right");
+            equal(sugg._data.wrapper.offset().height, 102, "The height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-button").height(), 34, "The button height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 306, "The scroller height is right");

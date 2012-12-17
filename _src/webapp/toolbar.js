@@ -1,9 +1,9 @@
 
 /**
- * @file
+ * @file 工具栏组件
  * @name Toolbar
  * @desc 工具栏组件
- * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.fix.js
+ * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.fix.js, core/zepto.highlight.js
  */
 (function($) {
     /**
@@ -18,9 +18,7 @@
      * - ''backButtonText'' {String}:(可选)返回按钮文字
      * - ''backButtonHref'' {String}: (可选)返回按钮的链接
      * - ''btns'' {Array}: (可选)右侧要添加的按钮(Dom节点)
-     * - ''btns'' {Array}: (可选)右侧要添加的按钮(Dom节点)
-     * - ''useFix'' {Array}: (可选)是否使用固顶效果(toolbar 不在页面顶端)
-     * - ''position'' {Object}: (可选)固顶的位置参数
+     * - ''useFix'' {Boolean}: (可选)是否使用固顶效果(toolbar 不在页面顶端)
      * **Demo**
      * <codepreview href="../gmu/_examples/webapp/toolbar/toolbar.html">
      * ../gmu/_examples/webapp/toolbar/toolbar.html
@@ -34,7 +32,6 @@
             backButtonHref:     '',
             btns:               '',
             useFix:             false,
-            position:           { top: 0 },
             backButtonClick:    function() { history.back(1) },
             _isShow:            false
         },
@@ -135,9 +132,11 @@
          * demo.show();
          */
         show: function() {
-            this.data('_isShow', true);
-            this.root().show();
-            return this;
+            var me = this;
+            me.data('_isShow', true);
+            me.root().show();
+            me.trigger('show');
+            return me;
         },
 
         /**
@@ -153,9 +152,11 @@
          * demo.hide();
          */
         hide: function() {
-            this.data('_isShow', false);
-            this.root().hide();
-            return this;
+            var me = this;
+            me.data('_isShow', false);
+            me.root().hide();
+            me.trigger('hide');
+            return me;
         },
 
         /**
@@ -171,8 +172,9 @@
          * demo.toggle();
          */
         toggle: function() {
-            this.data('_isShow') ? this.hide() : this.show();
-            return this;
+            var me = this;
+            me.data('_isShow') ? me.hide() : me.show();
+            return me;
         }
         /**
          * @name Trigger Events
