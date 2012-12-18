@@ -2,7 +2,7 @@
  * @file 加载更多组件
  * @name Refresh
  * @desc 加载更多组件
- * @import core/zepto.js, core/zepto.ui.js
+ * @import core/zepto.ui.js
  * @importCSS loading.css
  */
 
@@ -13,6 +13,7 @@
      * @grammar refresh(options) ⇒ self
      * @desc **Options**
      * - ''ready'' {Function}: (必选) 当点击按钮，或者滑动达到可加载内容条件时，此方法会被调用。需要在此方法里面进行ajax内容请求，并在请求完后，调用afterDataLoading()，通知refresh组件，改变状态。
+     * _ ''statechange'' {Function}: (可选) 样式改变时触发，该事件可以被阻止，阻止后可以自定义加载样式，回调参数：event(事件对象), elem(refresh按钮元素), state(状态), dir(方向)
      * - ''events'' 所有[Trigger Events](#refresh_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
      *
      * **setup方式html规则**
