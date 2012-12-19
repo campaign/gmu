@@ -2,6 +2,11 @@
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 header("Content-type: text/html; charset=utf-8");
 
+if(!preg_match('#webkit#i', $_SERVER['HTTP_USER_AGENT'])){
+    echo '此页面只支持webkit引擎浏览器';
+    exit;
+}
+
 //collect demos
 $setting = require_once('./setting/setting.php');
 $components = array();
