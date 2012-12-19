@@ -184,9 +184,9 @@
                         if (e.target != e.currentTarget) return //如果是冒泡上来的，则不操作
                         to.div.off(endEvent, arguments.callee);//解除绑定
                         data._buzy = false;
-                        data._content.removeClass('ui-viewport-transitioning');
                         from.div.removeClass('out reverse');
                         to.div.removeClass('in reverse');
+                        data._content.removeClass('ui-viewport-transitioning');
                         me.trigger('animateComplete', [to, from]);
                         me._fitToContent(to.div);
                         data._nav.children().removeClass('ui-state-active').eq(to.index).addClass('ui-state-active');
