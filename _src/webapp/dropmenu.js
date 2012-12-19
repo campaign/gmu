@@ -260,7 +260,7 @@
         show:function (target) {
             var me = this, data = this._data;
             data._parentOffset = data.cacheParentOffset ? data._parentOffset || this._getParentOffset() : this._getParentOffset();//获得父级的position:relative元素的offset
-            data.autoClose && $(document).on('tap.'+this.id(), function(e){
+            data.autoClose && $(document).on('click.'+this.id(), function(e){
                 me._isFromSelf(e.target) || me.hide();
             });
             this._el.css(this._caculate(data._actBtn = target || data._actBtn)).css('zIndex', zIndex++);//bugfix: FEBASE-542
@@ -306,7 +306,7 @@
         hide:function () {
             var data = this._data;
             data._isShow && this.root().css('top', '-99999px');
-            data.autoClose && $(document).off('tap.'+this.id());
+            data.autoClose && $(document).off('click.'+this.id());
             data._isShow = false;
             return this;
         },
@@ -329,7 +329,7 @@
             var data = this._data, eventHandler = this._eventHandler;
             data._btn && data._btn.off('click', eventHandler);
             $('.ui-dropmenu-items li a', this._el).highlight();
-            data.autoClose && $(document).off('tap.'+this.id());
+            data.autoClose && $(document).off('click.'+this.id());
             $(window).off('ortchange', eventHandler);
             return this.$super('destroy');
         }
