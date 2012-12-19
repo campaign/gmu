@@ -290,7 +290,7 @@ test("destroy",function(){
         var ol = w.dt.objLength(dialog);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2,"The event is ok");
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
         equal(el1,el2,"The event is ok");
         ok(ol==0,"The dialog is destroy");
         this.finish();

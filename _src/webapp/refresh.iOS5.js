@@ -1,6 +1,6 @@
 
 /**
- * @fileOverview
+ * @file 加载更多组件 － iOS5版，采用overflow:''scroll''实现
  * @name Refresh.iOS5
  * @short Refresh.iOS5
  * @import webapp/refresh.js

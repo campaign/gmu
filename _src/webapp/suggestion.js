@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file 搜索建议组件
  * @name Suggestion
  * @desc <qrcode align="right" title="Live Demo">../gmu/_examples/webapp/suggestion/suggestion_setup.html</qrcode>
  * 搜索建议组件
