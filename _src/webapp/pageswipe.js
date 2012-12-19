@@ -27,7 +27,7 @@
     $.ui.define('pageswipe', {
         _data:{
             toolbar:            '',
-            iconWidth:          50,
+            iconWidth:          55,
             springBackDis:      15,
             _locked:            false,
             _isShow:            false
