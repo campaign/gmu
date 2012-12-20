@@ -5,7 +5,7 @@
  *  @import core/zepto.js, core/zepto.extend.js
  */
 (function($) {
-    var actElem, inited = false, timer, cls, eventHanlder = function(){
+    var actElem, inited = false, timer, cls, removeCls = function(){
         clearTimeout(timer);
         if(actElem && (cls = actElem.attr('highlight-cls'))){
             actElem.removeClass(cls).attr('highlight-cls', '');
@@ -23,8 +23,8 @@
          * $('a').highlight();// 把所有a的自带的高亮效果去掉。
          */
         highlight: function(className) {
-            inited || (inited = $(document).on('touchend.highlight touchmove.highlight touchcancel.highlight', eventHanlder), true);
-            eventHanlder();
+            inited = inited || !!$(document).on('touchend.highlight touchmove.highlight touchcancel.highlight', removeCls);
+            removeCls();
             return this.each(function() {
                 var $el = $(this);
                 $el.css('-webkit-tap-highlight-color', 'rgba(255,255,255,0)').off('touchstart.highlight');
@@ -33,7 +33,7 @@
                         actElem = $el.attr('highlight-cls', className).addClass(className);
                     }, 100);
                 });
-            })
+            });
         }
     });
 })(Zepto);
