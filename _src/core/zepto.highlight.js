@@ -5,6 +5,7 @@
  *  @import core/zepto.js, core/zepto.extend.js
  */
 (function($) {
+    var actElem;
     $.extend($.fn, {
         /**
          * @name highlight
@@ -18,26 +19,23 @@
         highlight: function(className) {
             return this.each(function() {
                 var $el = $(this),
-                    events = 'touchstart.highlight touchend.highlight touchmove.highlight',
+                    events = 'touchstart.highlight touchend.highlight touchmove.highlight touchcancel.highlight',
                     timer;
                 timer && clearTimeout(timer);
                 $el.css('-webkit-tap-highlight-color', 'rgba(255,255,255,0)').off(events);
                 className && $el.on(events, function(e) {
-                    if ($el[0].contains(e.target)) {
-                        switch (e.type) {
-                            case 'mousedown':
-                            case 'touchstart':
-                                timer = $.later(function() {
-                                    $el.addClass(className);
-                                }, 100);
-                                break;
-                            case 'touchend':
-                            case 'mouseup':
-                            case 'touchmove':
-                            case 'mousemove':
-                                clearTimeout(timer);
-                                $el.removeClass(className);
-                        }
+                    switch (e.type) {
+                        case 'mousedown':
+                        case 'touchstart':
+                            actElem && actElem.removeClass(className);
+                            timer = $.later(function() {
+                                actElem = $el.addClass(className);
+                            }, 100);
+                            break;
+                        default:
+                            clearTimeout(timer);
+                            $el.removeClass(className);
+                            actElem = null;
                     }
                 });
             })

@@ -9,7 +9,7 @@
 <body>
 <div id="toolbar">
     <!--toolbar请嵌套一层外壳，样式见上面-->
-    <div><span class="switch">切换</span></div>
+    <div><span id="back_btn">返回</span><span class="switch">切屏</span></div>
 </div>
 
 <div id="pageswipe">
@@ -75,6 +75,10 @@
     //切换按钮事件
     $('.switch').tap(function() {
         $('#pageswipe').pageswipe('toggle');
+    });
+    //返回按钮事件
+    $('#back_btn').tap(function() {
+        history.back();
     });
 </script>
 </body>

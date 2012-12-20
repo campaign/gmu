@@ -6,6 +6,9 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+.ui-viewport-transitioning .ui-loading {
+    -webkit-animation-name: none;
+}
 .in {
     -webkit-animation-timing-function: ease-out;
     -webkit-animation-duration: 350ms;
