@@ -59,7 +59,8 @@
                     wrapper = me.root().get(0),
                     _scrollFn = function () {
                         clearTimeout(me.data('topOffsetTimer'));
-                        if ($upElem && $upElem.length && wrapper.scrollTop <= topOffset) {
+                        if ($upElem && $upElem.length && wrapper.scrollTop <= topOffset && !data['_upRefreshed']) {
+
                             wrapper.scrollTop = topOffset;
                         }
                     };
@@ -102,6 +103,7 @@
                     }
 
                     data.lastMoveY = scrollY;
+                    data._moved = true;
                     return me.trigger('scrollmove', e, scrollY, scrollY - lastMoveY);
                 };
                 me._scrollMove.apply(me, arguments);
@@ -122,11 +124,11 @@
                  4.上边按钮向下拉，大距离，再回向上拉，惯性回弹scrollTop <= topOffset不触发，走touchstart时的绑定的scroll事件
                  5.上边按钮向下拉，触发加载，走action中的回弹
                  */
-                if ((restoreDir == 'up' || wrapper.scrollTop <= topOffset) && !actDir) {
+                if ((restoreDir == 'up' || wrapper.scrollTop <= topOffset) && !actDir && data._moved) {
                     me.data('topOffsetTimer', $.later(function () {
                         $(wrapper).off('scroll', data._scrollFn);     //scroll事件不需要再触发
                         wrapper.scrollTop = topOffset;
-                    }, 300));
+                    }, 800));
                 }
 
                 if (actDir) {
@@ -134,6 +136,7 @@
                     me._loadingAction(actDir, 'pull');
                 }
 
+                data._moved = false;
                 return me.trigger('scrollend', e);
             },
 
