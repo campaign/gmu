@@ -5,7 +5,13 @@
  *  @import core/zepto.js, core/zepto.extend.js
  */
 (function($) {
-    var actElem;
+    var actElem, inited = false, timer, cls, eventHanlder = function(){
+        clearTimeout(timer);
+        if(actElem && (cls = actElem.attr('highlight-cls'))){
+            actElem.removeClass(cls).attr('highlight-cls', '');
+            actElem = null;
+        }
+    };
     $.extend($.fn, {
         /**
          * @name highlight
@@ -17,26 +23,15 @@
          * $('a').highlight();// 把所有a的自带的高亮效果去掉。
          */
         highlight: function(className) {
+            inited || (inited = $(document).on('touchend.highlight touchmove.highlight touchcancel.highlight', eventHanlder), true);
+            eventHanlder();
             return this.each(function() {
-                var $el = $(this),
-                    events = 'touchstart.highlight touchend.highlight touchmove.highlight touchcancel.highlight',
-                    timer;
-                timer && clearTimeout(timer);
-                $el.css('-webkit-tap-highlight-color', 'rgba(255,255,255,0)').off(events);
-                className && $el.on(events, function(e) {
-                    switch (e.type) {
-                        case 'mousedown':
-                        case 'touchstart':
-                            actElem && actElem.removeClass(className);
-                            timer = $.later(function() {
-                                actElem = $el.addClass(className);
-                            }, 100);
-                            break;
-                        default:
-                            clearTimeout(timer);
-                            $el.removeClass(className);
-                            actElem = null;
-                    }
+                var $el = $(this);
+                $el.css('-webkit-tap-highlight-color', 'rgba(255,255,255,0)').off('touchstart.highlight');
+                className && $el.on('touchstart.highlight', function() {
+                    timer = $.later(function() {
+                        actElem = $el.attr('highlight-cls', className).addClass(className);
+                    }, 100);
                 });
             })
         }
