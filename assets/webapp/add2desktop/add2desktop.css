@@ -13,6 +13,7 @@
     background: #494949;
     border-radius: 2px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    outline: 1px solid rgba(0, 0, 0, 0);
 }
 .ui-add2desktop img {
     display: block;
