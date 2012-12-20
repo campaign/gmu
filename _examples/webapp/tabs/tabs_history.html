@@ -59,7 +59,7 @@
      */
     window.scrollTo(0, 1);//收起地址栏
 
-    var flag = false, first = true, active =  /^#tabs(\d+)$/.test(location.hash) && parseInt(RegExp.$1)-1 || 0;
+    var flag = false, active =  /^#tabs(\d+)$/.test(location.hash) && parseInt(RegExp.$1)-1 || 0;
     $('#tabs1').tabs({
         active: active,
         swipe: true,
@@ -75,7 +75,7 @@
             }, $.os.android?400:0);
         }
     });
-    $(window).on('hashchange', function(event){
+    $(window).on('hashchange popstate', function(event){
         var index = /^#tabs(\d+)$/.test(location.hash) && parseInt(RegExp.$1)-1 || 0;
         $.later(function(){//android下hash一变不能马上开始动画，否则会有影响！原因不明
             flag = true;//标记一下，手动切换过去不用载入history纪录
