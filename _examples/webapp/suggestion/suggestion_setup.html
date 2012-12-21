@@ -3,7 +3,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
 	<meta charset="utf-8">
-	<title>suggestion render模式</title>
+	<title>suggestion setup模式</title>
     <style>
         /** suggestion */
         .search {
@@ -69,10 +69,12 @@
     </style>
 </head>
 <body>
-<div class="search">
-    <div class="search-input"><input type="text" id="input"></div>
-    <div class="search-button"><input type="button" value="百度一下"></div>
-</div>
+<form action="http://www.baidu.com/s" method="get">
+    <div class="search">
+        <div class="search-input"><input type="text" id="input" name="wd"></div>
+        <div class="search-button"><input type="submit" value="百度一下"></div>
+    </div>
+</form>
 
 <script id="bootstrap" src="../../example.js"
         type="text/javascript"
