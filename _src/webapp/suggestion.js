@@ -32,7 +32,6 @@
      * - ''renderList''       {Function}:                  (可选)自定义渲染下拉列表
      * - ''renderEvent''      {Function}:                  (可选)绑定用户事件
      * - ''sendRequest''      {Function}:                  (可选)用户自定义请求方式
-     * - ''highlight''        {Boolean}:                   (可选)下拉列表支持高亮,默认是true
      * - ''select''         {Function}:                    (可选)选中一条sug触发
      * - ''submit''         {Function}:                    (可选)提交时触发
      * - ''open''          {Function}:                    (可选)sug框展开时触发
@@ -445,7 +444,6 @@
             }
             me.data('wrapper').css("display", "block");
             me.data('posAdapt') && me._posAdapt(1);
-            me.data('highlight') && me.data('wrapper').find(".ui-suggestion-result").highlight("hover");
             return me.trigger('show');
         },  
 
