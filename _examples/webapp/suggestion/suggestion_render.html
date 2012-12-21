@@ -68,10 +68,12 @@
     </style>
 </head>
 <body>
-<div class="search">
-    <div class="search-input"><input type="text" id="input"></div>
-    <div class="search-button"><input type="button" value="百度一下"></div>
-</div>
+<form action="http://www.baidu.com/s" method="get">
+    <div class="search">
+        <div class="search-input"><input type="text" id="input" name="wd"></div>
+        <div class="search-button"><input type="submit" value="百度一下"></div>
+    </div>
+</form>
 
 <script id="bootstrap" src="../../example.js"
         type="text/javascript"
