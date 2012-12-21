@@ -414,31 +414,33 @@
 (function($) {
     /** detect orientation change */
     $(document).ready(function () {
-        var getOrt = function() {
+        var getOrt = "matchMedia" in window ? function(){
+                return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
+            }: "orientation" in window? function(){
+                return window.orientation%180?'landscape':'portrait';
+            }:function(){
                 var elem = document.documentElement;
                 return elem.clientWidth / elem.clientHeight < 1.1 ? "portrait" : "landscape";
             },
             lastOrt = getOrt(),
             handler = function(e) {
-                clearInterval(timeId);
-                timeId = $.later(function() {
-                    var curOrt, done = function(){
-                        clearInterval(timeId);
+                if(e.type == 'orientationchange'){
+                    return $(window).trigger('ortchange');
+                }
+                maxTry = 20;
+                clearInterval(timer);
+                timer = $.later(function() {
+                    var curOrt = getOrt();
+                    if (lastOrt !== curOrt) {
+                        lastOrt = curOrt;
+                        clearInterval(timer);
                         $(window).trigger('ortchange');
-                    };
-                    if(e.type == 'orientationchange') {
-                        done();
-                    } else {
-                        curOrt = getOrt();
-                        if (lastOrt !== curOrt) {
-                            lastOrt = curOrt;
-                            done();
-                        }
+                    } else if(--maxTry){//最多尝试20次
+                        clearInterval(timer);
                     }
-
                 }, 50, true);
             },
-            timeId;
+            timer, maxTry;
         $(window).bind($.support.orientation ? 'orientationchange' : 'resize', $.debounce(handler));
     });
 
