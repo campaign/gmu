@@ -193,7 +193,7 @@
             if (data._mask) {
                 result.mask = {
                     width:  root.clientWidth,
-                    height: Math.max(root.scrollHeight, root.clientHeight)
+                    height: Math.max(root.scrollHeight, root.clientHeight)-1//不减1的话uc浏览器再旋转的时候不触发resize.
                 }
             }
             css = {};
