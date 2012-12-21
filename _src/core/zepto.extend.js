@@ -390,7 +390,7 @@
      * @desc 检测设备对某些属性或方法的支持情况
      *
      * **可用属性**
-     * - ***orientation*** 检测是否支持转屏事件，UC中存在orientaion，但转屏不会触发该事件，故UC属于不支持转屏事件
+     * - ***orientation*** 检测是否支持转屏事件，UC中存在orientaion，但转屏不会触发该事件，故UC属于不支持转屏事件(iOS 4上qq, chrome都有这个现象)
      * - ***touch*** 检测是否支持touch相关事件
      * - ***cssTransitions*** 检测是否支持css3的transition
      * - ***has3d*** 检测是否支持translate3d的硬件加速
@@ -401,7 +401,7 @@
      * }
      */
     $.support = $.extend($.support || {}, {
-        orientation: !$.browser.uc && "orientation" in window && "onorientationchange" in window,
+        orientation: !($.browser.uc || (parseFloat($.os.version)<5 && ($.browser.qq || $.browser.chrome))) && "orientation" in window && "onorientationchange" in window,
         touch: "ontouchend" in document,
         cssTransitions: "WebKitTransitionEvent" in window,
         has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
@@ -416,11 +416,9 @@
     $(document).ready(function () {
         var getOrt = "matchMedia" in window ? function(){
                 return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
-            }: "orientation" in window? function(){
-                return window.orientation%180?'landscape':'portrait';
             }:function(){
                 var elem = document.documentElement;
-                return elem.clientWidth / elem.clientHeight < 1.1 ? "portrait" : "landscape";
+                return elem.clientWidth / Math.max(elem.clientHeight, 320) < 1.1 ? "portrait" : "landscape";
             },
             lastOrt = getOrt(),
             handler = function(e) {
