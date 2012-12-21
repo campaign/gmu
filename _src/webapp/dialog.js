@@ -6,16 +6,16 @@
  */
 (function($, undefined) {
     var actualSize = function(el){
-            var el = $(el).first().clone(), size ={};
-            el.css({
+            var clone = $(el).first().clone(), size ={};
+            clone.css({
                 position:'absolute !important',
-                top:'-1000px',
+                left:'-99999px',
                 display:'block !important'
             }).appendTo(document.body);
 
-            size['width'] = el.width();
-            size['height'] = el.height();
-            el.remove();
+            size['width'] = clone.width();
+            size['height'] = clone.height();
+            clone.remove();
             return size;
         },
         tpl = '<% if(mask){ %><div class="ui-mask"></div><% } %>' +
@@ -142,7 +142,6 @@
             data._wrap.on('click', eventHanlder);
             data._mask && data._mask.on('click', eventHanlder);
 
-            data._size = actualSize(data._wrap);
             data._pos = {
                 x:'center',
                 y:'center'
@@ -154,6 +153,7 @@
             var me = this, match, wrap, data = me._data, fn;
             switch(e.type){
                 case 'ortchange':
+                    data._size = null;
                     this.refresh();
                     break;
                 case 'touchmove':
@@ -199,19 +199,19 @@
             css = {};
             size = data._size;
             if(pos.x =='center'){
-                css['left'] = '50%';
-                css['margin-left'] = -size.width/2 +'px';
+                css.left = '50%';
+                css.marginLeft = -size.width/2 +'px';
             } else {
-                css['left'] = pos.x;
-                css['margin-left'] = '0';
+                css.left = pos.x;
+                css.marginLeft = '0';
             }
             if(pos.y =='center'){
                 $win = $(window);
-                css['top'] = $win.height() / 2 + window.pageYOffset;
-                css['margin-top'] = -size.height/2 +'px';
+                css.top = $win.height() / 2 + window.pageYOffset;
+                css.marginTop = -size.height/2 +'px';
             } else {
-                css['top'] = pos.y;
-                css['margin-top'] = '0';
+                css.top = pos.y;
+                css.marginTop = '0';
             }
             result.wrap = css;
             return result;
@@ -225,6 +225,7 @@
         refresh: function(){
             var me = this, data = me._data, ret;
             if(data._isOpen) {
+                data._size = data._size || actualSize(data._wrap);
                 ret = this._calculate();
                 'mask' in ret && data._mask.css(ret.mask);
                 data._wrap.css(ret.wrap);
