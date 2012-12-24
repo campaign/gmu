@@ -60,10 +60,37 @@
                 return obj;
             }, data);
             return _zeptoLize(name, Class);
+        },
+
+        /**
+         * @name $.ui.isWidget()
+         * @grammar $.ui.isWidget(obj) ⇒ boolean
+         * @grammar $.ui.isWidget(obj, name) ⇒ boolean
+         * @desc 判断obj是不是widget实例
+         *
+         * **参数**
+         * - ''obj'' 用于检测的对象
+         * - ''name'' 可选，默认监测是不是''widget''(基类)的实例，可以传入组件名字如''button''。作用将变为obj是不是button组件实例。
+         * @param obj
+         * @param name
+         * @example
+         *
+         * var btn = $.ui.button(),
+         *     dialog = $.ui.dialog();
+         *
+         * console.log($.isWidget(btn)); // => true
+         * console.log($.isWidget(dialog)); // => true
+         * console.log($.isWidget(btn, 'button')); // => true
+         * console.log($.isWidget(dialog, 'button')); // => false
+         * console.log($.isWidget(btn, 'noexist')); // => false
+         */
+        isWidget: function(obj, name){
+            return obj instanceof (name===undefined ? _widget: $.ui[name] || _blankFn);
         }
     };
 
     var id = 1,
+        _blankFn = function(){},
         tpl = '<%=name%>-<%=id%>',
         uikey = 'gmu-widget';
         
