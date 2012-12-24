@@ -864,7 +864,7 @@ var UserAction = {
 			srcpath = location.href.split("/run.do")[0]
 			+ "/_test/fet/bin/import.php";
 		} else {
-			srcpath =location.href.split("/test/")[0]
+			srcpath =location.href.split("/_test/")[0]
 			+ "/_test/fet/bin/import.php";
 		}
 		var param0 = src;
@@ -892,7 +892,7 @@ var UserAction = {
 					if (p._addons.length == 1) {
 						// console.log(mm[i]);
 						return;
-					}		
+					}
 				}
 				else{
 					if (typeof (p[mm[i]]) == 'undefined') {
