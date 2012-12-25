@@ -1366,17 +1366,22 @@ var UserAction = {
             var h = setInterval(function() {
                 if (w.Zepto) {// 等待加载完成，IE6下这地方总出问题
                     clearInterval(h);
-                    $J(cssObj).each(function(id,cssLine){
-                        $J(w.document.head).append("<link type='text/css' rel='stylesheet' href='"+cssLine+"'>")
-                    });
-                    $J(w.document.body).append("<div id= 'cssLoadTest'class='cssloaded'></div>");
-                    var h1 = setInterval(function() {
-                        if ($J(w.document.body).find("#cssLoadTest").css('width') == '20px'){
-                            clearInterval(h1);
-                            $J(w.document.body).find("#cssLoadTest").remove();
-                            setTimeout(op.ontest(w, w.frameElement), 20);
-                        }
-                    }, 20);
+                    if(cssObj.length>0){
+                        $J(cssObj).each(function(id,cssLine){
+                            $J(w.document.head).append("<link type='text/css' rel='stylesheet' href='"+cssLine+"'>")
+                        });
+                        $J(w.document.body).append("<div id= 'cssLoadTest'class='cssloaded'></div>");
+                        var h1 = setInterval(function() {
+                            if ($J(w.document.body).find("#cssLoadTest").css('width') == '20px'){
+                                clearInterval(h1);
+                                $J(w.document.body).find("#cssLoadTest").remove();
+                                setTimeout(op.ontest(w, w.frameElement), 20);
+                            }
+                        }, 20);
+                    }else{
+                        setTimeout(op.ontest(w, w.frameElement), 20);
+                    }
+
                 }
             }, 20);
         }).attr('src', srcpath);

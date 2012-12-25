@@ -93,14 +93,23 @@ test('$.ui.isWidget', function() {
 
 test("destroy",function(){
     ua.destroyTest(function(w,f){
-        w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+
+        w.$.ui.define('klass', {
+            _create: function() {
+            },
+            _setup: function() {
+            },
+            _init: function() {
+            }
+        });
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var el = document.createElement('div');
+        var el = w.document.createElement('div');
         el.id = 'dd';
-        document.body.appendChild(el);
-        var obj = $.ui.klass(el).destroy();
+        w.document.body.appendChild(el);
+        var obj =  w.$.ui.klass(el, {});
+        obj.destroy();
 
         var el2= w.dt.eventLength();
         var ol = w.dt.objLength(obj);
@@ -108,7 +117,7 @@ test("destroy",function(){
 
         equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
         equal(el1,el2,"The event is ok");
-        ok(ol==0,"The object is destroy");
+        ok(ol==0,"The obj is destroy");
         this.finish();
     })
 }) ;
