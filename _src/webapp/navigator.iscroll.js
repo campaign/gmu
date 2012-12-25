@@ -142,7 +142,9 @@
                         $navWrapper.removeClass(shadowClass['all'] + ' ' + shadowClass['right']).addClass(shadowClass['left']);
                     }
                 } else {      //向左滑动到最大
-                    $navWrapper.removeClass(shadowClass['all'] + ' ' + shadowClass['left']).addClass(shadowClass['right']);
+                    $navWrapper.removeClass(shadowClass['all'] + ' ' + shadowClass['left']);
+                    //转屏后是否可滑动
+                    iScroll.hScroll ? $navWrapper.addClass(shadowClass['right']) : $navWrapper.removeClass(shadowClass['all'] + ' ' + shadowClass['left'] + ' ' +shadowClass['right']);
                 }
 
                 return me;
@@ -183,6 +185,7 @@
                     iScroll = data.iScroll;
 
                 iScroll.refresh();
+                me._setShadow();    //增加阴影的转屏处理 traceid:FEBASE-663
                 data._$navWrapper.width(iScroll.wrapperW - iScroll.wrapperOffsetLeft);
             },
             switchTo: function (index, isDef, e) {

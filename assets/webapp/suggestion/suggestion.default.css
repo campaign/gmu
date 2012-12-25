@@ -21,7 +21,7 @@
 	padding: 0 10px;
 }
 
-.ui-suggestion .ui-suggestion-result:active{
+.ui-suggestion .ui-suggestion-result:active, .ui-suggestion-result-highlight{
 	background: #ededed;
 }
 

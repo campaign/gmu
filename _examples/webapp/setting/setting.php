@@ -38,7 +38,7 @@ $arr = array(
     ),
     'gotop' => array(
         "name" => 'Gotop',
-        "description" => '',
+        "description" => '返回顶部',
         "group" => 'Components',
         "icon" => 'gotop.png',
         "href" => 'gotop/gotop.html',
@@ -52,7 +52,7 @@ $arr = array(
     ),
     'more' => array(
         "name" => 'More',
-        "description" => '更多',
+        "description" => '显示更多',
         "group" => 'Components',
         "icon" => 'more.png',
         "href" => 'more/more.html',
@@ -73,21 +73,21 @@ $arr = array(
     ),
     'refresh' => array(
         "name" => 'Refresh',
-        "description" => '加在更多',
+        "description" => '加载更多',
         "group" => 'Components',
         "icon" => 'refresh.png',
         "href" => 'refresh/refresh.html',
     ),
     'slider' => array(
         "name" => 'Slider',
-        "description" => '旋转木马',
+        "description" => '图片轮播',
         "group" => 'Components',
         "icon" => 'slider.png',
         "href" => 'slider/slider.html',
     ),
     'suggestion' => array(
         "name" => 'Suggestion',
-        "description" => '',
+        "description" => '搜索建议',
         "group" => 'Components',
         "icon" => 'suggestion.png',
         "href" => 'suggestion/suggestion_setup.html',
@@ -101,7 +101,7 @@ $arr = array(
     ),
     'toolbar' => array(
         "name" => 'Toolbar',
-        "description" => '',
+        "description" => '工具栏',
         "group" => 'Components',
         "icon" => 'toolbar.png',
         "href" => 'toolbar/toolbar.html',

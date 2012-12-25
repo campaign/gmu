@@ -17,7 +17,7 @@
                 var me = this;
 
                 me._initOrg();
-                me.root().on('touchstart touchmove touchend', $.proxy(me._eventHandler, me));
+                me.root().on('touchstart touchmove touchend touchcancel', $.proxy(me._eventHandler, me));
                 return me;
             },
             _changeStyle: function (dir, state) {
@@ -68,6 +68,7 @@
                 switch (e.type) {
                     case 'touchstart':
                         me._startHandler(e);
+                        break;
                     case 'touchmove':
                         clearTimeout(data._endTimer);        //解决部分android上，touchmove未禁用时，touchend不触发问题
                         data._endTimer = $.later(function () {
@@ -76,8 +77,10 @@
                         me._moveHandler(e);
                         break;
                     case 'touchend':
-                        clearTimeout(data._endTimer);      //解决部分android上，touchmove未禁用时，touchend不触发问题
+                    case 'touchcancel':
+                        clearTimeout(data._endTimer);
                         me._endHandler();
+                        break;
                 }
                 return me;
             }
