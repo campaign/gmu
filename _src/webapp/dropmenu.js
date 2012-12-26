@@ -71,7 +71,7 @@
             height:null,
             offset:null,
             pos: 'down',//up, down, auto.
-            direction:'', //vertical, horizontal
+            direction:'vertical', //vertical, horizontal
             arrow:true, //是否显示剪头
             arrowPos: null,
             autoClose:true, //点击其他地方自动关闭
@@ -87,7 +87,7 @@
                 case 'setup':
                     data._arrow = me._findElement('.ui-dropmenu-arrow');
                     data._arrow || data.arrow && (data._arrow = $(tpl.arrow).prependTo($el));
-                    data._items = me._findElement('ul').first();
+                    data._items = me._el.find('ul').first();
                     if (data._items) {
                         items = [];
                         data._items.addClass('ui-dropmenu-items').children().each(function () {
@@ -142,7 +142,7 @@
             $('.ui-dropmenu-items li a', $el).highlight('ui-state-hover');
             $el.on('click', eventHandler).highlight();
             $(window).on('ortchange', eventHandler);
-            data.btn && me.bindButton(data.btn);
+            data.btn && me.bindButton($.ui.isWidget(data.btn) ? data.btn.root(): data.btn);
         },
 
         _prepareClassName:function () {

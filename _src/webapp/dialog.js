@@ -146,7 +146,7 @@
                 x:'center',
                 y:'center'
             };
-            data.autoOpen && me.open();
+            data.autoOpen && me.root().one('init', function(){me.open();});
         },
 
         _eventHandler: function(e){
