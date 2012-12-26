@@ -281,7 +281,8 @@ test('多实例', function () {
 
 test('方法：enable,disable,destory测试', function () {
     createDom('both');
-    stop(17);
+    expect(17)
+    stop();
     var count = 0,
         $wrapper = $('.wrapper'),
         refresh = $wrapper.refresh({
