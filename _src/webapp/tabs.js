@@ -47,7 +47,6 @@
             transition: 'slide',//目前只支持slide动画，或无动画
             activate: null,// events
             beforeActivate: null, //event
-            beforeRender:null,// 在新内容写入之前触发，可以在此时处理json数据
             animateComplete: null//如果用了transtion，这个事件将在动画执行完成后触发.
         },
 
@@ -223,6 +222,7 @@
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
          * | activate | event, to, from | 内容切换后触发, to和from为Object, 成员有: div(内容div), index(位置), title(标题), content(内容),href(链接) |
          * | beforeActivate | event, to, from | 内容切换之前触发，可以通过e.preventDefault()来阻止 |
+         * | animateComplete | event, to, from | 动画完成后执行，如果没有设置动画，此时间不会触发 |
          * | destory | event | 组件在销毁的时候触发 |
          */
     });
