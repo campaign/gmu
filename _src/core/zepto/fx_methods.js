@@ -1,6 +1,9 @@
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
+/**
+ * @file
+ * @name
+ * @desc
+ * @import zepto.js
+ */
 
 ;(function($, undefined){
   var document = window.document, docElem = document.documentElement,

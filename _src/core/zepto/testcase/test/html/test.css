@@ -72,3 +72,7 @@ a:link, a:visited { color: darkblue; }
 .fixtures-right {
     margin-left: 120px;
 }
+
+html, body {
+    -ms-touch-action: none; /* Direct all pointer events to JavaScript code. */
+}

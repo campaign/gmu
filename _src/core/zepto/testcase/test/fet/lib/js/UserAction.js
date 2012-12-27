@@ -843,7 +843,7 @@ var UserAction = {
 		}
 	},
 
-	importsrc : function(src, callback, matcher, exclude, win) {
+	importsrc : function(src, callback, single, exclude, win) {
 		/**
 		 * 支持release分之，此处应该直接返回
 		 */
@@ -871,38 +871,22 @@ var UserAction = {
 		if (exclude)
 			ps.e = exclude;
 		var param1 = exclude || "";
+        var s = single || "";
 		/**
 		 * IE下重复载入会出现无法执行情况
 		 */
 		var head = doc.getElementsByTagName('head')[0];
 		var sc = doc.createElement('script');
 		sc.type = 'text/javascript';
-		sc.src = srcpath + "?f=" + param0 + "&e=" + param1;
+		sc.src = srcpath + "?f=" + param0 +"&s=true"+ "&e=" + param1;
+
 		head.appendChild(sc);
 
-		matcher = matcher || src;
-		var mm = matcher.split(",")[0].split(".");
 		var h = setInterval(function() {
-			var p = win;
-			for ( var i = 0; i < mm.length; i++) {
-				if(i == mm.length - 1 && mm[i].indexOf("$") > -1){ //如果要加载的是插件
-					if (p._addons.length == 1) {
-						// console.log(mm[i]);
-						return;
-					}		
-				}
-				else{
-					if (typeof (p[mm[i]]) == 'undefined') {
-						// console.log(mm[i]);
-						return;
-					}
-				}
-				p = p[mm[i]];
-			}
 			clearInterval(h);
 			if (callback && 'function' == typeof callback)
 				callback();
-		}, 20);
+		}, 500);
 	},
 
 	/* 用于加载css文件，如果没有加载完毕则不执行回调函数 */

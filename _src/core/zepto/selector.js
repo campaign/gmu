@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @name
+ * @desc
+ * @import zepto.js
+ */
 ;(function($){
   var zepto = $.zepto, oldQsa = zepto.qsa, oldMatches = zepto.matches
 

@@ -28,7 +28,7 @@
         if ( is_dir( $filedir ) ) { //判断要遍历的是否是目录
             if ( $dh = opendir( $filedir ) ) { //打开目录并赋值一个目录句柄(directory handle)
                 while ( FALSE !== ( $filestring = readdir( $dh ) ) ) { //读取目录中的文件名
-                    if ( $filestring != '.' && $filestring != '..' && !preg_match( "/\\.svn$/" , $filestring ) && !preg_match( "/data$/" , $filestring ) && !preg_match( "/html$/" , $filestring ) && !preg_match( "/tools$/" , $filestring ) && !preg_match( "/ipad$/" , $filestring ) && !preg_match( "/import\\.js$/" , $filestring ) ) { //如果不是.和..(每个目录下都默认有.和..)
+                    if ( $filestring != '.' && $filestring != '..' && !preg_match( "/\\.svn$/" , $filestring ) && !preg_match( "/data$/" , $filestring ) && !preg_match( "/tools$/" , $filestring ) && !preg_match( "/ipad$/" , $filestring ) && !preg_match( "/import\\.js$/" , $filestring ) ) { //如果不是.和..(每个目录下都默认有.和..)
                         if ( is_dir( $filedir . $filestring ) ) { //该文件名是一个目录时
                             if ( !$exclude || ( $exclude && !preg_match( "/$exclude/" , $filedir . $filestring ) ) ) {
                                 $tempArr = getAllFiles( $filedir . $filestring . '/' , $fileType , $exclude ); //继续遍历该子目录

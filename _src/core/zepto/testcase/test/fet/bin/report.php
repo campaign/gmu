@@ -1,6 +1,6 @@
 <?php
     error_reporting( E_ERROR | E_WARNING );
-    require_once dirname( __FILE__ ) . '/../conf/Config.php';
+    require_once dirname( __FILE__ ) . '/../conf/config.php';
     /*存放report的路径*/
     $tmpDir = ConfigTest::$testdir . DIRECTORY_SEPARATOR;
     /*report路径*/

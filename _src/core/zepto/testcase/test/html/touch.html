@@ -7,10 +7,10 @@
     <title>Zepto touch unit tests</title>
     <script src="../../vendor/evidence.js"></script>
     <script src="evidence_runner.js"></script>
-    <script src="../../src/polyfill.js"></script>
-    <script src="../../src/zepto.js"></script>
-    <script src="../../src/event.js"></script>
-
+    <script src="../../../polyfill.js"></script>
+    <script src="../../../zepto.js"></script>
+    <script src="../../../event.js"></script>
+    <script src="../../../touch.js"></script>
 </head>
 <body>
 <h1>Touch tests</h1>
@@ -27,7 +27,7 @@
         height: 50px;
     }
 </style>
-<script src="../../src/touch.js"></script>
+
 <script>
     (function(){
 
@@ -146,7 +146,7 @@
                 setTimeout(function(){
                     down(element, 12, 12)
                     up(element)
-                    console.log(singleCount + ' ' + doubleCount)
+                    //console.log(singleCount + ' ' + doubleCount)
                     t.resume(function(){
                         t.assertEqual(0, singleCount)
                         t.assertEqual(1, doubleCount)

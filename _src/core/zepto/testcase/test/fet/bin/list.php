@@ -2,23 +2,38 @@
     header( "Content-type: text/html; charset=utf-8" );
     /*某些环节下起浏览器时会将&符号自动截断，因此这里参数只通过判断字符是否存在来实现*/
     $filter = "*";
-    foreach ( $_GET as $key => $paras ) {
-        if ( $key == 'filter'){
+    $uri = $_SERVER["REQUEST_URI"];
+
+    if(strstr($uri,"--__--")){
+        foreach ( $_GET as $key => $paras ) {
+            if ( $key == 'filter'){
+                $filter = $_GET[ 'filter' ];
+                $para = explode("--__--",$filter);
+                $filter = $para[0];
+                break;
+            }else
+                if(strstr( $paras , 'filter=' ) ) {
+                    $para = explode("--__--",substr($paras,strpos($paras,"filter=")));
+                    $filter = str_replace("filter=","",$para[0]);
+                    break;
+                }else{
+                    $filter = "*";
+                }
+        }
+
+    }else{
+        if ( isset($_GET['filter'])){
             $filter = $_GET[ 'filter' ];
-        }else if(strstr( $paras , 'filter=' ) ) {
-            $para = explode("--__--",substr($paras,strpos($paras,"filter=")));
-            $filter = str_replace("filter=","",$para[0]);
-            break;
-        }else{
-            $filter = "*";
         }
     }
+if(!$filter){
+    $filter = '*';
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>js组件 Test Index Page</title>
     <?php
     require_once dirname( __FILE__ ) . DIRECTORY_SEPARATOR . "../lib/php/case.class.php";
@@ -32,7 +47,7 @@
                 if ( location.href.search( "batchrun=true" ) > 0
                     || $J( 'input#id_control_runnext' ).attr( 'checked' ) ) {
                     var search = location.search.substring(1);
-                    if(/platform=mtn/.test(search)){
+                    if(/platform=mtn/.test(search)&&/autoshot=true/.test(search)){
                         te.autoshot();
                     }
 
@@ -70,6 +85,11 @@
     ?>
     <div style="clear: both; overflow: hidden"></div>
 </div>
+<script>
+    /*jiangshuguang 在android2.3和ios4上，用例列表不能滚动  overflow-y: scroll; */
+    var isIos4= navigator.userAgent.match(/(iPhone\sOS)\s\d+_/)?navigator.userAgent.match(/(iPhone\sOS)\s\d+_/)[0].match(/\d/)[0]==4:false;
+    (/Android.*2\.3/.test(navigator.userAgent) || isIos4) || $J(".testlist").css("max-height","200px");
+</script>
 <div id="id_runningarea" class="runningarea"
      style="border: solid; display: none"></div>
 <div id="id_reportarea" class="reportarea" style="display: none;"></div>

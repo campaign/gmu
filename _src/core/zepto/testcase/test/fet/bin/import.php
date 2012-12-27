@@ -1,5 +1,5 @@
 <?php
-require_once '../conf/Config.php';
+require_once '../conf/config.php';
 //加入一个调试开关
 if(array_key_exists('debug', $_GET))
 ConfigTest::$DEBUG = true;
@@ -13,7 +13,7 @@ if(!ConfigTest::$DEBUG){
  *
  * path: import.php
  * author: berg
- * version: 1.0
+ * @姜曙光做了修改，改动较大，可以查看diff
  * date: 2010/07/18 23:57:52
  *
  * @fileoverview * import.js的php版本
@@ -24,43 +24,65 @@ if(!ConfigTest::$DEBUG){
 $cov = array_key_exists('cov', $_GET) ? $_GET['cov'] : false;
 $f = explode(',', $_GET['f']);//explode() 函数把字符串分割为数组,此处$f=baidu.ajax.form
 $e = (array_key_exists('e', $_GET) && $_GET['e']!='') ? explode(",", $_GET['e']) : array();
+$s = array_key_exists('s', $_GET) ? $_GET['s'] : false;
+
 require_once dirname(__FILE__).'/analysis.php';
+
 $analysis = new Analysis();
 $IGNORE = array();
 foreach ($e as $d){
 	if(ConfigTest::$DEBUG)var_dump($d);
-	$IGNORE = array_merge($IGNORE, array_keys($analysis->get_import_srcs($d)));
+    if(preg_match("/.js/",$d)){
+        $eDone = preg_replace('/\s+/','',$d);
+    }else{
+        $eDone = preg_replace('/\s+/','',$d).".js";
+    }
+    array_push($IGNORE,$eDone);
+//    $contents =   $analysis->get_import_srcs($d."js");
+//    foreach($contents as $content){
+//        $IGNORE = array_merge($IGNORE, $content['i']);
+//    }
 }
+
 if(ConfigTest::$DEBUG)var_dump($IGNORE);
 
 function importSrc($d, $cov=false){
 	global $IGNORE;
-	foreach($IGNORE as $idx=>$domain)
-	if($domain == $d)
-	return "";
+    global $analysis;
+	if(in_array($d,$IGNORE)){
+        return array();
+    }
 	array_push($IGNORE, $d);
-	$ccnt = Analysis::get_src_cnt($d, $cov);
-    return $ccnt['c'];
-//	return preg_replace("/\/\/\/import\s+([\w\-\$]+(\.[\w\-\$]+)*);?/ies", "importSrc('\\1')", $ccnt['c']);
+    return $analysis->get_import_srcs($d);//jiangshuguang
 }
-//update by bell 2011-03-25, 更新覆盖率相关逻辑
-if(!$cov){
-	$cnt = "";
-	foreach($f as $d){
-		$cnt.=';'.importSrc($d, $cov);
-	}
-	echo $cnt;
-}else{
-	$IMPORT_LIST = array();
-	foreach($f as $d){
-		if(ConfigTest::$DEBUG)var_dump($d);
-		$IMPORT_LIST = array_merge($IMPORT_LIST, array_keys($analysis->get_import_srcs($d)));
-	}
-	if(ConfigTest::$DEBUG) var_dump('after analysis', $IMPORT_LIST);
-	else foreach($IMPORT_LIST as $d) {
-		if(array_search($d, $IGNORE))
-		continue;
-		$c = Analysis::get_src_cnt($d);
-		echo $c['cc']."\n";
-	}
+
+/*jiangshuguang更改了相关逻辑，适用于gmu*/
+
+$cnt = "";
+
+foreach($f as $d){
+    if(preg_match("/.js/",$d)){
+        $jsPath = preg_replace('/\s+/','',$d);
+    }else{
+        $jsPath = preg_replace('/\s+/','',$d).".js";
+    }
+    if($s){
+        $content = Analysis::get_src_cnt($jsPath);
+        if($cov){
+            $cnt = $cnt.$content["cc"];
+        }else{
+            $cnt = $cnt.$content["c"];
+        }
+    }else{
+        $contents = importSrc($jsPath);
+        foreach($contents as $content){
+            if($cov){
+                $cnt = $cnt.$content["cc"];
+            }else{
+                $cnt = $cnt.$content["c"];
+            }
+        }
+    }
 }
+echo $cnt;
+
