@@ -875,11 +875,13 @@ test("testIsFunction", function() {
     assertEqualCollection($("span.b,span.c,span.e",el), $("span",el).not(document.getElementById("notTestExclude")))
     assertEqualCollection($("li",el), $("li, span",el).not(document.getElementsByTagName("span")))
     //function form
+
     assertEqualCollection($("span.b,span.c",el),$("span",el).not(function(i){
       var $this=$(this)
       $this.html(i)
       return ($this.hasClass("d") || $this.hasClass("e")) ? true : false
     }))
+
     //test the index was passed in properly in previous test
     assertEqual("0",$("span.b",el).text())
     assertEqual("1",$("span.c",el).text())
@@ -2363,28 +2365,28 @@ test("testIsFunction", function() {
   test("testDelegateBlurFocus", function() {
       /**
        * marked by chenluyang
-       * ie下不触发input的focus()和blur()事件
+       * 单独测试时没有问题，见case/testDelegateBlurFocus.html
        */
     var counter = 0
     $('#delegate_blur_test').delegate('input', 'blur', function(){ counter++ })
 
     $('#delegate_blur_test').find('input').focus()
     $('#delegate_blur_test').find('input').blur()
-    assertEqual(1, counter) //TODO IE 结果为0
+    assertEqual(1, counter)
 
     $('#delegate_blur_test').find('input').focus()
     $('#delegate_blur_test').find('input').blur()
-    assertEqual(2, counter) //TODO IE 结果为0
+    assertEqual(2, counter)
 
     $('#delegate_focus_test').delegate('input', 'focus', function(){ counter++ })
 
     $('#delegate_focus_test').find('input').focus()
     $('#delegate_focus_test').find('input').blur()
-    assertEqual(3, counter) //TODO IE 结果为0
+    assertEqual(3, counter)
 
     $('#delegate_focus_test').find('input').focus()
     $('#delegate_focus_test').find('input').blur()
-    assertEqual(4, counter) //TODO IE 结果为0
+    assertEqual(4, counter)
   });
 /*
  * marked by chenluyang
