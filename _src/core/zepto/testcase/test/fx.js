@@ -33,10 +33,8 @@
     assertStyle = function(expected, object, property, message) {
         if (/^(transform|transition|animation)/.test(property)) property = stylePrefix + property
         if (!('nodeName' in object)) object = object.get(0)
-
-        var actual = object.style[camelize(property)],
+        var actual = object.style[camelize(property).replace(/^Ms/, 'ms')],
             expression = expected instanceof RegExp ? expected.test(actual) : expected === actual
-        //alert(expected + ' | ' + actual + ' | ' + expression)
         expression ? assertEqual(expected, actual) : ok(false);
     }
 })();

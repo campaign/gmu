@@ -1,8 +1,9 @@
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
-
-// The following code is heavily inspired by jQuery's $.fn.data()
+/**
+ * @file
+ * @name
+ * @desc
+ * @import zepto.js
+ */
 
 ;(function($) {
   var data = {}, dataAttr = $.fn.data, camelize = $.zepto.camelize,

@@ -58,7 +58,10 @@
     <script src="../src/event.js"></script>
     <script src="../src/fx.js"></script>
     <script>
-        $(document.body).delegate('#some_element', 'click', function(){ return false })
+        $(document.body).delegate('#some_element', 'click', function(e){
+            e.returnValue = false;
+            return false
+        })
 
         var event = $.Event('click')
         $('#some_element').trigger(event)

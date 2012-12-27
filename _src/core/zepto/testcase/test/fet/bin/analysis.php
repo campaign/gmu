@@ -1,11 +1,11 @@
 ﻿<?php
-require_once dirname(__FILE__).'/../conf/Config.php';
-error_reporting(E_ERROR|E_WARNING);
+require_once dirname(__FILE__).'/../conf/config.php';
+//error_reporting(E_ERROR|E_WARNING);
 /**
  *
  * 分析源码引入及依赖关系，提供单次读取中的文件载入缓存 dfddf
  * @author yangbo
- *
+ * @姜曙光做了部分修改，可以查看diff
  */
 class Analysis{
 	/**
@@ -14,7 +14,6 @@ class Analysis{
 	 */
 	static private $_cache = array();
 	//static private $projpath = array();
-
 	var $circle = array();
 
 	public function Analysis(){
@@ -35,27 +34,25 @@ class Analysis{
 	 * @param $exclude 期望排除的依赖库
 	 * @param $parent 解决相互依赖问题
 	 */
-	public function get_import_srcs($domain, $recurse = true){
+	public function get_import_srcs($domain){
 		if(ConfigTest::$DEBUG) var_dump("分析$domain");
+        $domainDone = preg_replace("/\s+/","",$domain);
+		if(in_array($domainDone, $this->circle))
+            return array();
+		array_push($this->circle, $domainDone);
+        $contents = array();
+		$cnts = self::get_src_cnt($domainDone);
 
-		if(array_search($domain, $this->circle)) return array();//如果已经被分析过则直接返回
-		array_push($this->circle, $domain);
+        if(sizeof($cnts["i"])>0){
+            foreach($cnts["i"] as $d){
+                if(!empty($d)){
+                    $contents = array_merge($contents, $this->get_import_srcs($d));
+                }
+            }
+        }
 
-		$include = array();
-		$cnts = self::get_src_cnt($domain);
-		$is = $cnts['i'];
-		if(sizeof($is) > 0)
-		foreach($is as $d){
-			if($recurse)
-			$include = array_merge($include, $this->get_import_srcs($d));
-			else
-			$include[$d] = self::$_cache[$d];
-		}
-
-		//因为依赖关系的前后联系，最后在include中加入当前domain
-		if($recurse)
-		$include[$domain] = $cnts['c'];
-		return $include;
+        array_push($contents,$cnts);
+        return $contents;
 	}
 
 
@@ -65,28 +62,31 @@ class Analysis{
 	 * @see ConfigTest::$covdir
 	 */
 	static function get_src_cnt($domain){
-		new Analysis();
 		if(!array_key_exists($domain, self::$_cache)){
 			$cnt =''; $covcnt = '';
-			//$path = join('/', explode('.', $domain)).'.js';
-			$path = $domain.'.js'; //为了支持xx.xx.js类型的文件名而修改 田丽丽
+            $path = $domain;
 			//文件在当前项目存在则取当前项目，否则取tangram项目
 			foreach(ConfigTest::$srcdir as $i=>$d){
 				if(ConfigTest::$DEBUG)
 				var_dump($d.$path);
-				if(file_exists($d.$path)){
-					$cnt = file_get_contents($d.$path);
-					$cnt.="\n";//读取文件内容必须加个回车
+                $jsPath = preg_replace('/\s+/','',$d.$path);
+				if(file_exists($jsPath)){
+					$cnt = file_get_contents($jsPath);
+					$cnt.=";\n";//读取文件内容必须加个回车
 					break;
 				}
 			}
+
 			//尝试读取cov目录下的文件，如果不存在则忽略
 			$covpath = ConfigTest::$covdir.$path;
+            $covpath = preg_replace("/\s+/","",$covpath) ;
 			if(file_exists($covpath)){
 				if(ConfigTest::$DEBUG)var_dump($covpath);
-				$covcnt = file_get_contents($covpath);
+				$covcnt = file_get_contents($covpath).";\n";
 			}
-			else $covcnt = $cnt;
+			else{
+                $covcnt = $cnt;
+            }
 			if($cnt == ''){
 				if(ConfigTest::$DEBUG)
 				print "fail read file : ".$path;
@@ -97,15 +97,13 @@ class Analysis{
 			print "start read file $domain<br />";
 
 			$is = array();
-			//正则匹配，提取所有(///import xxx;)中的xxx
-			preg_match_all('/\/\/\/import\s+([^;]+);?/ies', $cnt, $is, PREG_PATTERN_ORDER);
-
-			//移除//，顺便移除空行
-			//			$cnt = preg_replace('/\/\/.*/m', '', $cnt);TODO:正则处理出现在“”或者正则中的//时出现问题
-			//移除/**/
-			//			$cnt = preg_replace('/\/\*.*\*\//sU', '', $cnt);
-
-			self::$_cache[$domain] = array('c'=>$cnt, 'i'=>$is[1], 'cc'=>$covcnt);
+            $depend = array();
+			//正则匹配，提取所有(@import xxx;)中的xxx
+            preg_match('/@import\s+.+/', $cnt, $is);    //jiangshuguang
+            if(count($is)>0){
+                $depend = explode(",",preg_replace('/@import/','',preg_replace("/\s*/","",$is[0])));
+            }
+            self::$_cache[$domain] = array('c'=>$cnt, 'i'=>$depend, 'cc'=>$covcnt); //jiangshuguang
 		}
 		return self::$_cache[$domain];
 	}

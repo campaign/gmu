@@ -64,7 +64,7 @@ h3 {
 }
 
 .testlist {
-	max-height: 200px;
+//	max-height: 200px;
 	overflow-y: scroll;
 	border-style: double;
 }
@@ -142,7 +142,7 @@ a.button:active span {
 }
 
 .runningarea {
-	height: 70%;
+	height: 2000px;
 }
 
 .runningmaindiv {

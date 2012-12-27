@@ -532,6 +532,7 @@
     test("testGlobalAjaxSendCantAbort", function(t) {
         var xhr
         $(document).on('ajaxSend', function(e, x) { xhr = x; return false })
+        debugger
         ok($.ajax())
         ok(!xhr.aborted)
     })
@@ -561,6 +562,7 @@
      * 见case/testGlobalCallbacks.html, 单独测试中没有问题
      */
     test("testGlobalCallbacks", function(t) {
+        $.active = 0
         var fired = []
         $(document).on('ajaxStart ajaxBeforeSend ajaxSend ajaxSuccess ajaxError ajaxComplete ajaxStop', function(e) {
             fired.push(e.type)

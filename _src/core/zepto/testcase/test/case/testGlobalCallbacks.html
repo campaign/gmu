@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <title>testGlobalAjaxSendCantAbort</title>
+  <title>testGlobalCallbacks</title>
 </head>
 <body>
     <div id="fixtures">
         <div id="ajax_load"></div>
     </div>
-    <script src="../../src/zepto.js"></script>
-    <script src="../../src/event.js"></script>
-    <script src="../../src/ajax.js"></script>
+    <script src="../../../zepto.js"></script>
+    <script src="../../../event.js"></script>
+    <script src="../../../ajax.js"></script>
     <script>
         OriginalXHR = $.ajaxSettings.xhr
         MockXHR = function() {

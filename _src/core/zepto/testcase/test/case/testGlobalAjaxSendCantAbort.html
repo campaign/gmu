@@ -9,10 +9,10 @@
     <div id="fixtures">
         <div id="ajax_load"></div>
     </div>
-    <script src="../../src/polyfill.js"></script>
-    <script src="../../src/zepto.js"></script>
-    <script src="../../src/event.js"></script>
-    <script src="../../src/ajax.js"></script>
+    <script src="../../../polyfill.js"></script>
+    <script src="../../../zepto.js"></script>
+    <script src="../../../event.js"></script>
+    <script src="../../../ajax.js"></script>
     <script>
         OriginalXHR = $.ajaxSettings.xhr
         MockXHR = function() {
@@ -58,7 +58,10 @@
 
         $.ajaxSettings.xhr = function(){ return new MockXHR }
 
-        $(document).on('ajaxSend', function(e, x) {xhr = x; return false })
+        $(document).on('ajaxSend', function(e, x) {
+            xhr = x;
+            return false
+        })
 
         alert($.ajax())
         alert(!xhr.aborted)

@@ -1,6 +1,3 @@
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
 
 var Zepto = (function() {
   var undefined, key, $, classList, emptyArray = [], slice = emptyArray.slice,
@@ -28,7 +25,12 @@ var Zepto = (function() {
       'td': tableRow, 'th': tableRow,
       '*': document.createElement('div')
     },
-    readyRE = /complete|loaded|interactive/,
+      /**
+       *  modified by chenluyang
+       *  @reason 在IE10里，interactive触发的时候，body是还没开始解析的，所以直接触发函数获取body会报错。所以去掉了interactive
+       *  @original  readyRE = /complete|loaded|interactive/,
+       */
+    readyRE = /complete|loaded/,
     classSelectorRE = /^\.([\w-]+)$/,
     idSelectorRE = /^#([\w-]+)$/,
     tagSelectorRE = /^[\w-]+$/,
@@ -102,10 +104,29 @@ var Zepto = (function() {
   // The generated DOM nodes are returned as an array.
   // This function can be overriden in plugins for example to make
   // it compatible with browsers that don't support the DOM fully.
+    function closeHTML(str){
+        var arrTags = ["span","font","b","u","i","h1","h2","h3","h4","h5","h6","p","li","ul","table","div"],
+            intOpen,intClose, re, arrMatch
+        for(var i = 0; i < arrTags.length; i++){
+            intOpen = 0
+            intClose =0
+            re = new RegExp("\\<" + arrTags[i] + "( [^\\<\\>]+|)\\>","ig")
+            arrMatch = str.match(re)
+            if(arrMatch != null) intOpen = arrMatch.length
+            re = new RegExp("\\<\\/"+arrTags[i]+"\\>","ig")
+            arrMatch = str.match(re)
+            if(arrMatch != null) intClose = arrMatch.length
+            for(var j = 0;j < intOpen - intClose;j++){
+                str += "</"+arrTags[i]+">"
+            }
+        }
+        return str
+    }
   zepto.fragment = function(html, name) {
     if (name === undefined) name = fragmentRE.test(html) && RegExp.$1
     if (!(name in containers)) name = '*'
     var container = containers[name]
+    isWp && (html = closeHTML(html))    //added by chenluyang, for ie10 tag补全
     container.innerHTML = '' + html
     return $.each(slice.call(container.childNodes), function(){
       container.removeChild(this)
@@ -324,12 +345,7 @@ var Zepto = (function() {
     },
 
     ready: function(callback){
-        /**
-         *  modified by chenluyang
-         *  @reason 在IE10里，interactive触发的时候，body是还没开始解析的，所以直接触发函数获取body会报错。所以在IE下，直接将函数绑定在DOMContentLoaded中
-         *  @original  if (readyRE.test(document.readyState)) callback($)
-         */
-      if (readyRE.test(document.readyState) && !isWp) callback($)
+      if (readyRE.test(document.readyState)) callback($)
       else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false)
       return this
     },
@@ -602,7 +618,11 @@ var Zepto = (function() {
           this.each(function(){ this.style.removeProperty(dasherize(property)) })
         else
           css = dasherize(property) + ":" + maybeAddPx(property, value)
-
+      /*
+       * added by chenluyang
+       * @reason IE中，不会将rgba（*，*，*，1）自动转化成rgb（*，*，*）
+       */
+      css = css.replace(/rgba\((\d*\,\s*\d*\,\s*\d*)\,\s*1\)/g, 'rgb($1)')
       return this.each(function(){ this.style.cssText += ';' + css })
     },
     index: function(element){

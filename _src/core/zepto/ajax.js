@@ -1,6 +1,9 @@
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
+/**
+ * @file
+ * @name
+ * @desc
+ * @import zepto.js, event.js
+ */
 
 ;(function($){
   var jsonpID = 0,
@@ -18,14 +21,8 @@
   // trigger a custom event and return false if it was cancelled
   function triggerAndReturn(context, eventName, data) {
     var event = $.Event(eventName)
-
     $(context).trigger(event, data)
-      /**
-       * modified by chenluyang
-       * @reason ie10下event的defaultPrevented属性无法被修改,添加了ieDefaultPrevented属性进行辅助
-       * @original return event.defaultPrevented
-        */
-    return event.ieDefaultPrevented !== undefined ? !event.ieDefaultPrevented : !event.defaultPrevented
+    return !event.defaultPrevented
   }
 
   // trigger an Ajax "global" event

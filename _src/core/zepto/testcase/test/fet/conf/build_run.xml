@@ -44,7 +44,7 @@
         <jsl:jslint options="undef=true, white=true, eqeq=true,nomen=true,sloppy=true" haltOnFailure="false">
             <!--formatter plain, 没有 destfile 则表示输出到控制台 -->
             <formatter type="plain"/>
-            <!-- formatter report 表示输出成 js 格式的 report-->
+            <!-- formatter report 表示输出成 html 格式的 report-->
             <formatter type="junit" destfile="_test/tools/br/jslint"/>
             <formatter type="report" destfile="_test/tools/br/jslint.html"/>
             <!-- 通过指定 fileset 设置要进行检测的 JavaScript 文件集 -->

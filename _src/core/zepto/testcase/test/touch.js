@@ -1,9 +1,20 @@
 ;(function(){
+    var transEvent = {
+        touchstart: 'MSPointerDown',
+        touchend: 'MSPointerUp',
+        touchmove: 'MSPointerMove'
+    }
+
+    function compatEvent(evt) {
+        return window.navigator.msPointerEnabled ? transEvent[evt] : evt;
+        //return 'ontouchstart' in window ? evt : transEvent[evt]
+    }
+
     fire = function (type, element, x, y) {
         var event = document.createEvent('Event'),
             touch = { pageX: x, pageY: y, target: element, clientX: x, clientY:y }
 
-        event.initEvent('touch'+type, true, true)
+        event.initEvent(compatEvent('touch'+type), true, true)
         event.touches = [touch]
         element.dispatchEvent(event)
     }
@@ -25,9 +36,13 @@
      *  所以请参考zepto本身的测试用例, html/touch.html
      */
     test("prepare", function(){
-        $('<div id="test"></div>').appendTo('body')
-        ok($("#test"));
-    });
+        stop()
+        ua.loadcss([upath + "test.css", upath + "css/zepto.css"], function(){
+            $('<div id="test"></div>').appendTo('body')
+            ok($("#test"));
+            start()
+        })
+    })
 
     test("testTap", function(t){
         stop()

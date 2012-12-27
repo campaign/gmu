@@ -1,6 +1,9 @@
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
+/**
+ * @file
+ * @name
+ * @desc
+ * @import zepto.js, event.js
+ */
 
 ;(function($){
   var touch = {}, touchTimeout,
@@ -9,9 +12,9 @@
 	   *  @reason 兼容IE10下面Pointer事件
 	   */
 	   transEvent = {
-			touchstart: 'mousedown',// 'MSPointerDown',
-			touchend: 'mouseup',//'MSPointerUp',
-			touchmove: 'mousemove'//'MSPointerMove'
+			touchstart: 'MSPointerDown',
+			touchend: 'MSPointerUp',
+			touchmove: 'MSPointerMove'
 		}
 		
   function compatEvent(evt) {
@@ -28,7 +31,7 @@
     return xDelta >= yDelta ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
   }
 
-  var longTapDelay = 750, longTapTimeout
+  var longTapDelay = 750, longTapTimeout, longTapArea = 5
 
   function longTap(){
     longTapTimeout = null
@@ -45,10 +48,9 @@
 
   $(document).ready(function(){
     var now, delta
-      var log = $('#test').get(0)
-
+    //ie10 /* Direct all pointer events to JavaScript code. */
+    $('body').css('-ms-touch-action: none;')
     $(document.body).bind(compatEvent('touchstart'), function(e){
-        log.innerHTML += 'touchstart' + '<br/>'
       now = Date.now()
       delta = now - (touch.last || now)
 	  /**
@@ -70,45 +72,31 @@
       if (delta > 0 && delta <= 250) touch.isDoubleTap = true
       touch.last = now
       longTapTimeout = setTimeout(longTap, longTapDelay)
-
     }).bind(compatEvent('touchmove'), function(e){
-            log.innerHTML += 'touchmove' + '<br/>'
-            //e.preventDefault()
-      cancelLongTap()
-	  /**
-	   *  modified by chenluyang
-	   *  @reason 兼容IE10下面Event对象
-	   *  @oringal 
-	   *   touch.x2 = e.touches[0].pageX
-       *   touch.y2 = e.touches[0].pageY
-	   */
+            /**
+             *  modified by chenluyang
+             *  @reason 兼容IE10下面Event对象, IE10下，即使手指不移动，也会间隔触发MSPointerMove事件
+             *  @oringal
+             *   touch.x2 = e.touches[0].pageX
+             *   touch.y2 = e.touches[0].pageY
+             */
+      if(!touch.el) return
       touch.x2 = e.touches ? e.touches[0].pageX : e.pageX
       touch.y2 = e.touches ? e.touches[0].pageY : e.pageY
-      //delete touch.last
-            //touch.isMove = true
+      touch.x2 && longTapArea <= Math.abs(touch.x1 - touch.x2)  && cancelLongTap()
+
     }).bind(compatEvent('touchend'), function(e){
-            log.innerHTML += 'touchend' + '<br/>'
        cancelLongTap()
       // double tap (tapped twice within 250ms)
       if (touch.isDoubleTap) {
         touch.el.trigger('doubleTap')
         touch = {}
-
       // swipe
       } else if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) ||
                  (touch.y2 && Math.abs(touch.y1 - touch.y2) > 30)) {
           touch.el.trigger('swipe') &&
             touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)))
         touch = {}
-      //precise tap
-      /**
-       *  added by chenluyang
-       *  @reason 触发touchmove的就不属于preciseTap
-       */
-      } else if(!touch.x2){
-        touch.el.trigger('preciseTap')
-        touch = {}
-      // normal tap
       } else if ('last' in touch) {
         touch.el.trigger('tap')
         touchTimeout = setTimeout(function(){
@@ -118,7 +106,6 @@
         }, 250)
       }
     }).bind('touchcancel', function(){
-            log.innerHTML += 'touchend' + '<br/>'
       if (touchTimeout) clearTimeout(touchTimeout)
       if (longTapTimeout) clearTimeout(longTapTimeout)
       longTapTimeout = touchTimeout = null
@@ -127,10 +114,13 @@
   })
 
 
-  ;['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap', 'preciseTap'].forEach(function(m){
+  ;['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m){
     $.fn[m] = function(callback){ return this.bind(m, callback) }
   })
-
+    $.fn['longTap'] = function(callback){
+        this.bind('contextmenu', function(e){ e.preventDefault() })
+        return this.bind('longTap', callback)
+    }
 
 
 })(Zepto)

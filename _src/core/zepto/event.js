@@ -1,6 +1,9 @@
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
+/**
+ * @file
+ * @name
+ * @desc
+ * @import zepto.js
+ */
 
 ;(function($){
     var $$ = $.zepto.qsa, handlers = {}, _zid = 1, specialEvents={}
@@ -135,7 +138,6 @@
             var prevent = event.preventDefault
             event.preventDefault = function() {
                 this.defaultPrevented = true
-                this.defaultPrevented || (this.ieDefaultPrevented = true)
                 prevent.call(this)
             }
         }
@@ -214,7 +216,7 @@
                 //console.log(element)
                 $.each(findHandlers(element, event.type || event), function(i, handler){
                     result = handler.proxy(e)
-                    e.isDefaultPrevented && (e.defaultPrevented = true)     //todo
+                    e.isDefaultPrevented() && (e.defaultPrevented = event.defaultPrevented = true)     //IE10，模拟事件冒泡
                     if (e.isImmediatePropagationStopped()) return false
                 })
                 if (e.isImmediatePropagationStopped() || e.isPropagationStopped()) return false
@@ -255,13 +257,16 @@
     })
 
     $.Event = function(type, props) {
-        var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true
+        var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true, e
         if (props) for (var name in props) (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name])
         event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null)
         /**
-         *  added by chenluyang
-         *  @reason 在此处直接为没有defaultPrevented属性的event模拟改属性
+         * added by chenluyang
+         * @reason IE10 event.defaultPrevented为只读
          */
+        e = event.constructor
+        event = createProxy(event)
+        event.constructor = e
         fix(event)
         return event
     }
