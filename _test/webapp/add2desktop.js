@@ -288,20 +288,22 @@ if($.os.ios && canShow){
     });
 
     test('destroy()', function(){
-		stop();
-		expect(3);
-        window.localStorage.removeItem("_gmu_adddesktop_key");
-		var l1 = ua.eventLength();
-		var add2desktop = $.ui.add2desktop();
-        add2desktop.destroy();
-        var a=0;
-        for(var i in add2desktop)
-            a++;
-        equals(a, 0, "The obj is cleared");
-        equals($(".ui-add2desktop").length, 0, "The dom is removed");
-        var l2 = ua.eventLength();
-        equals(l2, l1, "The events are cleared");
-        start();
+        ua.destroyTest(function(w,f){
+            var dl1 = w.dt.domLength(w);
+            var el1= w.dt.eventLength();
+
+            var add2desktop = $.ui.add2desktop();
+            add2desktop.destroy();
+
+            var el2= w.dt.eventLength();
+            var ol = w.dt.objLength(add2desktop);
+            var dl2 =w.dt.domLength(w);
+
+            equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+            equal(el1,el2,"The event is ok");
+            ok(ol==0,"The toolbar is destroy");
+            this.finish();
+        })
 	});
 }
 else{
