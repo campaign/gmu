@@ -8,7 +8,7 @@ module("webapp - button",{
 });
 
 test("默认配置项，在什么都不传的情况下是否正确",function(){
-    expect(10);
+    expect(9);
     stop();
     ua.loadcss(["reset.css", "webapp/button/button.css"], function(){
         var btn = $.ui.button();
@@ -20,7 +20,6 @@ test("默认配置项，在什么都不传的情况下是否正确",function(){
         strictEqual(btn.data('type'), 'button', '默认配置中type为\'button\'');
         strictEqual(btn.data('icon'), '', '默认配置中icon为\'\'');
         strictEqual(btn.data('iconpos'), '', '默认配置中iconpos为\'\'');
-        strictEqual(btn.data('className'), '', '默认配置中className为\'\'');
         strictEqual(btn.data('attributes'), null, '默认配置中attributes为null');
         ok(btn.data('_container').is('body'), '默认配置中container为body');
 
@@ -331,33 +330,31 @@ test("el selector $ 多实例 $ 显示" ,function() {
     $("#button").remove();
 });
 
-test("destroy()", function() {
-    expect(3);
-    var l1 = ua.eventLength();
-    var link1=document.createElement('a');
-    $(link1).attr('class','button1');
-    $(link1).html('button1');
-    document.body.appendChild(link1);
-    var button=$.ui.button('.button1',{
-        label:'test',
-        attributes: {
-            href: 'javascript:void 0'
-        }
-    });
-    button.destroy();
-    var a=0;
-    for(var i in button)
-        a++;
-    equals(a, 0, "The obj is clear");
-    equals($(".ui-button").length, 0, "The dom is removed");
-    var l2 = ua.eventLength();
-    equals(l2, l1, "The events are cleared");
+test("destroy",function(){
+    ua.destroyTest(function(w,f){
+        w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
 
-    $(link1).remove();
-});
+        var obj =  w.$.ui.button();
+        obj.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(obj);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The instance is destroy");
+        this.finish();
+    })
+}) ;
+
 
 test("多种实例化方式", function() {
     expect(23);
+    stop();
+
     //crate模式
     var btn1 = $.ui.button({
         icon: 'home',
@@ -403,26 +400,5 @@ test("多种实例化方式", function() {
     equals(btn1.data('icon'), 'home', 'icon为home');
     btn1.destroy();
 
+    start();
 });
-
-test("多种实例化方式", function() {
-    expect(23);
-    //crate模式
-    var btn1 = $.ui.button({
-        icon: 'home',
-        label: 'button',
-        attributes: {
-            class: 'white'
-        }
-    });
-
-    ok(btn1.root().closest('#btsn_create').length, '按钮存在与#btsn_create下面');
-    ok(btn1 instanceof $.ui.button, '按钮为button实例');
-    ok(btn1.data('_textSpan'), '按钮有文字节点');
-    ok(btn1.data('_iconSpan'), '按钮有图标节点');
-
-
-});
-
-
-
