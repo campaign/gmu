@@ -17,6 +17,10 @@
     text-align: left;
     text-indent: 10px;
     pointer-events: none;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .ui-slider-dots {
@@ -44,7 +48,8 @@
     z-index: 99;
     width: 20px;
     height: 40px;
-    top: 32px;
+    top:50%;
+    margin-top: -35px;
     background: rgba(0, 0, 0, 0.3) url(ui-slider-arrow.png) no-repeat;
     background-size: 35px 15px;
     outline: none;

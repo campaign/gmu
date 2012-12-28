@@ -165,7 +165,7 @@
 
                 from = $.extend({}, items[data.active]);//copy it.
                 from.div = me._getPanel();
-                from.index = index;
+                from.index = data.active;
 
                 eventData = $.Event('beforeActivate');
                 me.trigger(eventData, [to, from]);
@@ -173,6 +173,7 @@
 
                 data._content.children().removeClass('ui-state-active');
                 to.div.addClass('ui-state-active');
+                data._nav.children().removeClass('ui-state-active').eq(to.index).addClass('ui-state-active');
                 if(data.transition) { //use transition
                     data._buzy = true;
                     endEvent = $.fx.animationEnd + '.tabs';
@@ -188,11 +189,7 @@
                         data._content.removeClass('ui-viewport-transitioning');
                         me.trigger('animateComplete', [to, from]);
                         me._fitToContent(to.div);
-                        data._nav.children().removeClass('ui-state-active').eq(to.index).addClass('ui-state-active');
                     });
-                } else {
-                    //change class
-                    data._nav.children().removeClass('ui-state-active').eq(to.index).addClass('ui-state-active');
                 }
                 data.active = index;
                 me.trigger('activate', [to, from]);

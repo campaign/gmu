@@ -65,6 +65,7 @@
                 _toolbar:       _toolbar
             });
             me.on('destroy', function() {
+                $(me.data('toolbar')).remove();
                 $(window).off('ortchange', _eventHandler);
             });
             return me;

@@ -25,9 +25,9 @@ if(isset($m[3])) {
 echo $content."\n".".cssloaded{ width: 20px;}";
 
 function getRelativePath($path, $relativePath){
-    $relativePath = rtrim($relativePath, '/');
+    $relativePath = rtrim(str_replace("\\", "/", $relativePath), '/');
     $newPath = '';
-    $path = explode("/", $path);
+    $path = explode("/", str_replace("\\", "/", $path));
     $relativePath = explode("/", $relativePath);
     foreach( $path as $k => $v) {
         if($v != $relativePath[$k] )break;

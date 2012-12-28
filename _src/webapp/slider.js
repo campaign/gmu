@@ -14,12 +14,12 @@
      * css选择器, 或者zepto对象
      * **Options**
      * - ''container'' {selector|zepto}: (可选)放置的父容器
-     * - ''setup'' {Boolean}: (可选, 默认:false)是否使用setup模式
-     * - ''content'' {Array}: (必选)内容
+     * - ''content'' {Array}: (必选)内容,格式为：[ {href:'图片跳转URL', pic:'图片路径', title:'图片下方文字'}, {...}]
+     * - ''viewNum'' {Number}: (可选, 默认:1) 可以同时看到几张图片
      * - ''imgInit'' {Number}: (可选, 默认:2)初始加载几张图片
-     * - ''imgZoom'' {Boolean}: (可选, 默认:false)是否缩放图片
-     * - ''loop'' {Boolean}: (可选, 默认:false)播放到最后一张时继续正向播放第一张(无缝滑动)，设为false则反向播放倒数第2张
-     * - ''stopPropagation'' {Boolean}: (可选, 默认:false)是否在横向滑动的时候阻止冒泡(慎用,可能会导致意想不到的bug)
+     * - ''imgZoom'' {Boolean}: (可选, 默认:false)是否缩放图片,设为true时可以将超出边界的图片等比缩放
+     * - ''loop'' {Boolean}: (可选, 默认:false)设为true时,播放到最后一张时继续正向播放第一张(无缝滑动)，设为false则反向播放倒数第2张
+     * - ''stopPropagation'' {Boolean}: (可选, 默认:false)是否在横向滑动的时候阻止冒泡(慎用,会导致上层元素接受不到touchMove事件)
      * - ''springBackDis'' {Number}: (可选, 默认:15)滑动能够回弹的最大距离
      * - ''autoPlay'' {Boolean}: ((可选, 默认:true)是否自动播放
      * - ''autoPlayTime'' {Number}: (可选, 默认:4000ms)自动播放的间隔
@@ -36,7 +36,7 @@
      */
     $.ui.define('slider', {
         _data:{
-            index:                  0,
+            viewNum:                1,
             imgInit:                2,
             imgZoom:                false,
             loop:                   false,
@@ -49,6 +49,8 @@
             showDot:                true,
             slide:                  null,
             slideend:               null,
+            index:                  0,
+            _stepLength:            1,
             _direction:             1
         },
 
@@ -56,6 +58,7 @@
             var me = this,
                 i = 0, j, k = [],
                 content = me.data('content');
+            me._initConfig();
             (me.root() || me.root($('<div></div>'))).addClass('ui-slider').appendTo(me.data('container') || (me.root().parent().length ? '' : document.body)).html(
             '<div class="ui-slider-wheel"><div class="ui-slider-group">' +
             (function() {
@@ -68,15 +71,14 @@
 
         _setup: function(mode) {
             var me = this,
-                loop = me.data('loop'),
                 root = me.root().addClass('ui-slider');
+            me._initConfig();
             if(!mode) {
                 var items = root.children(),
                     group = $('<div class="ui-slider-group"></div>').append(items.addClass('ui-slider-item'));
-                root.empty().append($('<div class="ui-slider-wheel"></div>').append(group).append(loop ? group.clone() : ''));
+                root.empty().append($('<div class="ui-slider-wheel"></div>').append(group).append(me.data('loop') ? group.clone() : ''));
                 me._addDots();
-            } else loop && $('.ui-slider-wheel', root).append($('.ui-slider-group', root).clone());
-            root.css('opacity', 1);
+            } else me.data('loop') && $('.ui-slider-wheel', root).append($('.ui-slider-group', root).clone());
         },
 
         _init:function() {
@@ -94,6 +96,19 @@
                 $(window).off('ortchange', _eventHandler);
             });
             me.data('autoPlay') && me._setTimeout();
+        },
+
+        /**
+         * 初始化参数配置
+         */
+        _initConfig: function() {
+            var o = this._data;
+            if(o.viewNum > 1) {
+                o.loop = false;
+                o.showDot = false;
+                o.imgInit = o.viewNum + 1;
+                this.root().css('overflow', 'visible');
+            }
         },
 
         /**
@@ -119,7 +134,7 @@
             var me = this,
                 o = me._data,
                 root = me.root(),
-                width = root.width(),
+                width = root.width() / o.viewNum,
                 height = root.height(),
                 loop = o.loop,
                 items = $('.ui-slider-item', root).toArray(),
@@ -141,7 +156,7 @@
                 this.onload = null;
             });
             for(i = 0; i < length; i++) {
-                items[i].style.cssText += 'width:'+ width + 'px;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
+                items[i].style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                 dotIndex[i] = loop ? (i > length/2 - 1  ? i - length/2 : i) : i;
                 if(i < l) {
                     j = lazyImgs.shift();
@@ -234,9 +249,14 @@
          * touchend事件
          */
         _touchEnd:function() {
-            var o = this._data,
-                distance = o.springBackDis;
-            o.S || this._slide(o.index + (o.X <= -distance ? 1 : (o.X > distance) ? -1 : 0));
+            var me = this,
+                o = me._data;
+            if(!o.S) {
+                var distance = o.springBackDis,
+                stepLength = o.X <= -distance ? Math.ceil(-o.X / o.width) : (o.X > distance) ? -Math.ceil(o.X / o.width) : 0;
+                o._stepLength = Math.abs(stepLength);
+                me._slide(o.index + stepLength);
+            }
         },
 
         /**
@@ -245,12 +265,13 @@
         _slide:function(index, auto) {
             var me = this,
                 o = me._data,
-                length = o.length;
-            if(-1 < index && index < length) {
+                length = o.length,
+                end = length - o.viewNum + 1;
+            if(-1 < index && index < end) {
                 me._move(index);
-            } else if(index === length) {
+            } else if(index >= end) {
                 if(!o.loop) {
-                    me._move(index - (auto ? 2 : 1));
+                    me._move(end - (auto ? 2 : 1));
                     o._direction = -1;
                 } else {
                     o.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + (length/2 - 1) * o.width + 'px,0,0);';
@@ -258,7 +279,7 @@
                     $.later(function() {me._move(length/2)}, 20);
                 }
             } else {
-                if(!o.loop) me._move(index + (auto ? 2 : 1));
+                if(!o.loop) me._move(auto ? 1 : 0);
                 else {
                     o.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + (length/2) * o.width + 'px,0,0);';
                     $.later(function() {me._move(length/2 - 1)}, 20);
@@ -277,7 +298,7 @@
             this.trigger('slide', dotIndex);
             if(o.lazyImgs.length) {
                 var j = o.allImgs[index];
-                j.src || (j.src = j.getAttribute('lazyload'));
+                j && j.src || (j.src = j.getAttribute('lazyload'));
             }
             if(o.showDot) {
                 o.dot.className = '';
@@ -296,12 +317,15 @@
                 o = me._data;
             me.trigger('slideend', o.dotIndex[o.index]);
             if(o.lazyImgs.length){
-                var j = o.lazyImgs.shift();
-                j.src = j.getAttribute('lazyload');
-                if(o.loop) {
-                    j = o.allImgs[o.index + o.length / 2];
-                    j && !j.src && (j.src = j.getAttribute('lazyload'));
+                for(var length = o._stepLength, i = 0; i< length; i++) {
+                    var j = o.lazyImgs.shift();
+                    j && (j.src = j.getAttribute('lazyload'));
+                    if(o.loop) {
+                        j = o.allImgs[o.index + o.length / 2];
+                        j && !j.src && (j.src = j.getAttribute('lazyload'));
+                    }
                 }
+                o._stepLength = 1;
             }
             me._setTimeout();
         },
@@ -323,8 +347,9 @@
          * 重设容器及子元素宽度
          */
         _resize:function() {
-            var me = this, o = me._data,
-                width = o.root.offsetWidth,//todo 添加获取隐藏元素大小的方法
+            var me = this,
+                o = me._data,
+                width = o.root.offsetWidth / o.viewNum, //todo 添加获取隐藏元素大小的方法
                 length = o.length,
                 items = o.items;
             if(!width) return me;

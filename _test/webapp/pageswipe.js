@@ -1,4 +1,4 @@
-module('plugin/webapp/pageswipe', {
+module('webapp.pageswipe', {
     setup: function() {
         $('body').append('<div id="toolbar"><div><span class="switch">切换</span></div></div><div id="pageswipe"><div><p style="height: 400px;">内容部分</p></div><div style="height: 400px;">索引</div></div> ')
         //切换按钮事件
@@ -16,9 +16,9 @@ test("setup", function() {
     stop();
     ua.loadcss(["reset.css", "webapp/pageswipe/pageswipe.css","../_test/webapp/css/pageswipe/pageswipe_demo.css"], function() {
         setTimeout(function() {
-            var pageswipe = $('#pageswipe').pageswipe('this',{
+            var pageswipe = $('#pageswipe').pageswipe({
                 toolbar:'#toolbar'
-            });
+            }).pageswipe('this');
             equals(pageswipe._el.find(".ui-pageswipe-wheel").length, 1, "The wheel is right");
             equals(pageswipe._el.find(".ui-pageswipe-content").length, 1 , "The content are right");
             equals(pageswipe._el.find(".ui-pageswipe-index").length, 1 , "The index are right");
@@ -74,9 +74,9 @@ test("左右滑动", function() {
 test("点击切换按钮", function() {
     stop();
     expect(2);
-    var pageswipe = $('#pageswipe').pageswipe('this',{
+    var pageswipe = $('#pageswipe').pageswipe({
         toolbar:'#toolbar'
-    });
+    }).pageswipe('this');
     ta.tap($('.switch')[0]);
     setTimeout(function(){
         equals($('.ui-pageswipe-wheel').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'),"The picture slide");
@@ -92,9 +92,9 @@ test("点击切换按钮", function() {
 test("show(), hide(), toggle()", function() {
     stop();
     expect(4);
-    var pageswipe = $('#pageswipe').pageswipe('this',{
+    var pageswipe = $('#pageswipe').pageswipe({
         toolbar:'#toolbar'
-    });
+    }).pageswipe('this');
     pageswipe.show();
     setTimeout(function () {
         equals($('.ui-pageswipe-wheel').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'), "The picture slide");
@@ -116,14 +116,21 @@ test("show(), hide(), toggle()", function() {
 });
 
 test("destroy()", function() {
-    expect(3);
-    var l1 = ua.eventLength();
-    var pageswipe = $('#pageswipe').pageswipe('this');
-    pageswipe.destroy();
-    var a = 0;
-    for(var i in pageswipe) a++;
-    equals(a, 0, "The obj is cleared");
-    equals($('#pageswipe').length, 0, "The dom is removed");
-    var l2 = ua.eventLength();
-    equals(l2, l1, "The events are cleared");
+
+    ua.destroyTest(function(w,f){
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var pageswipe = $('#pageswipe').pageswipe().pageswipe('this');
+        pageswipe.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(pageswipe);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The dialog is destroy");
+        this.finish();
+    })
 });

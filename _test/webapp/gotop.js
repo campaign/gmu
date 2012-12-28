@@ -1,4 +1,4 @@
-module("plugin/webapp/gotop", {
+module("webapp/gotop", {
 	setup: function(){
 		h = top.$J(".runningarea").css("height");
 		top.$J(".runningarea").css("height", "600"); //不能让document.documentElement.clientHeight大于window.pageYOffset
@@ -65,13 +65,40 @@ test("el(selector)", function(){
 	$("#test").remove();
 });
 
+test("useAnim=false", function(){
+    expect(6);
+    stop();
+    enSetup();
+    var gotop = $.ui.gotop($('<div class="ui-gotop">'), {
+        useAnimation: false
+    });
+    setTimeout(function(){
+        window.scrollTo(0, 1000);
+        ta.scrollStop(document);
+        setTimeout(function(){
+            ok(ua.isShown(gotop._el[0]), "The gotop shows");
+            ok(Math.abs(window.pageYOffset - 1000) <= 1, "The pageYOffset is right");
+            equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
+            equals(gotop._el.offset().top, 1000 + document.documentElement.clientHeight - 50 - 10, "The gotop top is right");
+            ua.click(gotop._el[0]);
+            setTimeout(function(){
+                equals(window.pageYOffset, 1, "scroll to top");
+                ok(!ua.isShown(gotop._el[0]), "The gotop hides");
+                window.scrollTo(0, 0);
+                gotop.destroy();
+                start();
+            });
+        }, 300);
+    }, 100);
+});
+
 test("afterScroll", function(){
 	expect(3);
 	stop();
 	enSetup();
 	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {
 		afterScroll: function(){
-			equals(window.pageYOffset, 0, "scroll to top");
+			equals(window.pageYOffset, 1, "scroll to top");
 			ok(!ua.isShown(gotop._el[0]), "The gotop hides");
 			setTimeout(function(){
 				gotop.destroy();
@@ -90,75 +117,9 @@ test("afterScroll", function(){
 	});
 });
 
-test("no iScrollInstance", function(){
-	stop();
-	expect(6);
-	enSetup();
-    var s = new iScroll("thelist");
-	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {
-	});
-	stop();
-    setTimeout(function(){
-	    window.scrollTo(0, 1000);
-	    ta.scrollStop(document);
-	    setTimeout(function(){
-	        ok(ua.isShown(gotop._el[0]), "The gotop shows");
-	        ok(Math.abs(window.pageYOffset - 1000) <= 1, "The pageYOffset is right");
-	        equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
-	        equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 10, "The gotop top is right");
-	        ua.click(gotop._el[0]); //click gotop
-	        setTimeout(function(){
-	             equals(window.pageYOffset, 0, "scroll to top");
-	             ok(!ua.isShown(gotop._el[0]), "The gotop hides");
-	             window.scrollTo(0, 0);
-	             gotop.destroy();
-	             start();
-	        }, 500);
-	    }, 300);
-    }, 100);
-});
-
-test("iScrollInstance", function(){
-	stop();
-	expect(6);
-	enSetup();
-	$("#thelist").css("height", window.innerHeight);
-    var s = new iScroll("thelist");
-	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {
-		iScrollInstance: s,
-		afterScroll: function(){
-			equal($("#scroller").offset().top, $("#thelist").offset().top, "The page scrolled");
-            ok(!ua.isShown(gotop._el[0]), "The gotop hides");
-            setTimeout(function(){
-				gotop.destroy();
-				start();
-			}, 0);
-		}
-	});
-	stop();
-    setTimeout(function(){
-    	ua.mousedown($("#scroller")[0], {
-    		clientX: 0,
-    		clientY: 0
-    	});
-    	ua.mousemove($("#scroller")[0], {
-    		clientX: 0,
-    		clientY: -1000
-    	});
-    	setTimeout(function(){
-    		ua.mouseup($("#scroller")[0]);
-    		setTimeout(function(){
-    			approximateEqual($("#scroller").offset().top, $("#thelist").offset().top - 1000, "The page scrolled");
-    	        ok(ua.isShown(gotop._el[0]), "The gotop shows");
-    	        equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
-    	        equals(gotop._el.offset().top, window.innerHeight - 50 - 10, "The gotop top is right"); //位置相对于整个页面没有变
-    	        ua.click(gotop._el[0]); //click gotop
-    	    }, 300);
-    	}, 400);
-    }, 100);
-});
 
 test("show() & hide()", function(){
+    stop();
 	expect(8);
 	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {});
 	gotop.show();
@@ -172,6 +133,7 @@ test("show() & hide()", function(){
 	gotop.hide();
 	ok(!ua.isShown(gotop._el[0]), "The gotop hides");
 	gotop.destroy();
+    start();
 });
 
 test("basic operations", function(){
@@ -204,7 +166,7 @@ test("basic operations", function(){
                     equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 8, "The gotop top is right");
                     ua.click(gotop._el[0]); //click gotop
                     setTimeout(function(){
-                        equals(window.pageYOffset, 0, "scroll to top");
+                        equals(window.pageYOffset, 1, "scroll to top");
                         ok(!ua.isShown(gotop._el[0]), "The gotop hides");
                         window.scrollTo(0, 1000);
                         ta.scrollStop(document);
@@ -287,18 +249,20 @@ test("setup 模式", function(){
 });
 
 test("destroy", function(){
-	expect(3);
-	enSetup();
-	var l1 = ua.eventLength();
-	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {});
-    window.scrollTo(0, 10);
-    ta.scrollStop(document);
-	gotop.destroy();
-	var a=0; 
-	for(var i in gotop) 
-		a++;
-	equals(a, 0, "The obj is cleared");
-	equals($(".ui-gotop").length, 0, "The dom is removed");
-	var l2 = ua.eventLength();
-	equals(l2, l1, "The events are cleared");
+    ua.destroyTest(function(w,f){
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var gotop = $.ui.gotop();
+        gotop.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(gotop);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
+    });
 });
