@@ -110,7 +110,7 @@ if($.os.ios && canShow){
         },100);
 	});
 
-    test("事件 beforeShow & show & ofterHide & init",function(){
+    test("事件 beforeShow & ofterHide & init",function(){
         expect(5);
         stop();
         var  i =0;

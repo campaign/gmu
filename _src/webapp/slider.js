@@ -107,7 +107,7 @@
                 o.loop = false;
                 o.showDot = false;
                 o.imgInit = o.viewNum + 1;
-                this.root().css('overflow', 'visiable');
+                this.root().css('overflow', 'visible');
             }
         },
 
