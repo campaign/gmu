@@ -108,17 +108,19 @@ var Zepto = (function() {
         var arrTags = ["span","font","b","u","i","h1","h2","h3","h4","h5","h6","p","li","ul","table","div"],
             intOpen,intClose, re, arrMatch
         for(var i = 0; i < arrTags.length; i++){
-            intOpen = 0
-            intClose =0
-            re = new RegExp("\\<" + arrTags[i] + "( [^\\<\\>]+|)\\>","ig")
-            arrMatch = str.match(re)
-            if(arrMatch != null) intOpen = arrMatch.length
-            re = new RegExp("\\<\\/"+arrTags[i]+"\\>","ig")
-            arrMatch = str.match(re)
-            if(arrMatch != null) intClose = arrMatch.length
-            for(var j = 0;j < intOpen - intClose;j++){
-                str += "</"+arrTags[i]+">"
-            }
+            try{
+                intOpen = 0
+                intClose =0
+                re = new RegExp("\\<" + arrTags[i] + "( [^\\<\\>]+|)\\>","ig")
+                arrMatch = str.match(re)
+                if(arrMatch != null) intOpen = arrMatch.length
+                re = new RegExp("\\<\\/"+arrTags[i]+"\\>","ig")
+                arrMatch = str.match(re)
+                if(arrMatch != null) intClose = arrMatch.length
+                for(var j = 0;j < intOpen - intClose;j++){
+                    str += "</"+arrTags[i]+">"
+                }
+            }catch(e){}
         }
         return str
     }
@@ -550,7 +552,7 @@ var Zepto = (function() {
         }
       },
      */
-    offset: function() {
+    offset: function(coordinates) {
       var getBCR = function (el){
         if('getBoundingClientRect' in el){
           getBCR = function(el) {
@@ -585,6 +587,17 @@ var Zepto = (function() {
       }
 
       return function(ignore) {
+        if (coordinates) return this.each(function(index){
+          var $this = $(this),
+              coords = funcArg(this, coordinates, index, $this.offset()),
+              parentOffset = $this.offsetParent().offset(),
+              props = {
+                top:  coords.top  - parentOffset.top,
+                left: coords.left - parentOffset.left
+              }
+              if ($this.css('position') == 'static') props['position'] = 'relative'
+              $this.css(props)
+        })
         if (!this.length) return null;
         var obj = getBCR(this[0]),
             pageX = ignore ? 0 : window.pageXOffset,

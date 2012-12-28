@@ -8,7 +8,7 @@ module("webapp - button - plugin",{
 });
 
 test("默认配置项，在什么都不传的情况下是否正确",function(){
-    expect(10);
+    expect(9);
     stop();
     ua.loadcss(["reset.css", "webapp/button/button.css"], function(){
         var btn = $.ui.button();
@@ -20,7 +20,6 @@ test("默认配置项，在什么都不传的情况下是否正确",function(){
         strictEqual(btn.data('type'), 'button', '默认配置中type为\'button\'');
         strictEqual(btn.data('icon'), '', '默认配置中icon为\'\'');
         strictEqual(btn.data('iconpos'), '', '默认配置中iconpos为\'\'');
-        strictEqual(btn.data('className'), '', '默认配置中className为\'\'');
         strictEqual(btn.data('attributes'), null, '默认配置中attributes为null');
         ok(btn.data('_container').is('body'), '默认配置中container为body');
 
