@@ -13,8 +13,12 @@
      * @desc **el**
      * css选择器, 或者zepto对象
      * **Options**
-     * - ''container'' {selector}: (可选，默认：body) 组件容器
+     * - ''container'' {selector}: (可选,默认：body) 组件容器
+     * - ''useAnimation'' {Boolean}: (可选, 默认为true), 返回顶部时是否使用动画
+     * - ''position'' {Object}: (可选, 默认为{bottom:10, right:10}), 使用fix效果时，要用的位置参数
+     * - ''afterScroll'' {function}: (可选,默认：null) 返回顶部后执行的回调函数
      * - ''iScrollInstance'' {Object}: (可选) 使用iscroll时需要传入iScroll实例，用来判定显示与隐藏
+     * - ''disablePlugin'' {Boolean}: (可选,默认：false) 是否禁用插件，当加载了gotop.iscroll.js插件但又不想用该插件时，可传入这个参数来禁用插件
      * **Demo**
      * <codepreview href="../gmu/_examples/webapp/gotop/gotop.html">
      * ../gmu/_examples/webapp/gotop/gotop.html
@@ -24,6 +28,7 @@
     $.ui.define('gotop', {
         _data: {
             container:          '',
+            useAnimation:       true,
             useFix:             true,
             position:           {bottom: 10, right: 10},
         	afterScroll:        null,
@@ -84,7 +89,6 @@
                     }, 300));
                     break;
                 case 'scrollStop':
-                case 'mousewheel':
                     me._check();
                     break;
                 case 'ortchange':
@@ -109,11 +113,24 @@
          * 滚动到顶部或指定节点位置
          */
 		_scrollTo: function() {
-            var me = this;
-            clearTimeout(me.data('_TID'));
+            var me = this,
+                from = window.pageYOffset;
             me.hide();
-            window.scrollTo(0, 0);
-            me.trigger('afterScroll');
+            clearTimeout(me.data('_TID'));
+            if (!me.data('useAnimation')) {
+                window.scrollTo(0, 1);
+                me.trigger('afterScroll');
+            } else {
+                me.data('moveToTop', $.later(function() {
+                    if (from > 1) {
+                        window.scrollBy(0, -Math.min(100,from - 1));
+                        from -= 100;
+                    } else {
+                        clearInterval(me.data('moveToTop'));
+                        me.trigger('afterScroll');
+                    }
+                }, 16, true));
+            }
             return me;
 		},
 

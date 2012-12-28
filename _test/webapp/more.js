@@ -208,21 +208,23 @@ test("setup 模式 data-mode=true", function(){
 });
 
 test("destroy()", function(){
-	expect(3);
-	enSetup();
-	var l1 = ua.eventLength();
-	var more1 = $.ui.more($('<div class="ui-more"></div>'),{
-		container : $('#morecontainer'),
-	    content : links
-	});
-	more1.show();
-	more1.destroy();
-	var a=0; 
-	for(var i in more1) 
-		a++;
-	equals(a, 0, "The obj is cleared");
-	equals($(".ui-more").length, 0, "The dom is removed");
-	var l2 = ua.eventLength();
-	equals(l2, l1, "The events are cleared");
-	start();
+    ua.destroyTest(function(w,f){
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var more1 = $.ui.more($('<div class="ui-more"></div>'),{
+            container : $('#morecontainer'),
+            content : links
+        });
+        more1.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(more1);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The toolbar is destroy");
+        this.finish();
+    })
 });

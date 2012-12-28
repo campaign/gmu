@@ -84,6 +84,39 @@ module("webapp/slider",{
                 pic: "../../webapp/css/slider/image2.png"
             }
         ];
+        content5=[
+            {
+                href: "#",
+                pic: "../../webapp/css/slider/image1.png",
+                title: "图片1"
+            },
+
+            {
+                href: "http://www.baidu.com",
+                pic: "../../webapp/css/slider/image2.png",
+                title: "图片2"
+            },
+            {
+                href: "#",
+                pic: "../../webapp/css/slider/image3.png",
+                title: "图片3"
+            },
+            {
+                href: "#",
+                pic: "../../webapp/css/slider/image4.png",
+                title: "图片4"
+            },
+            {
+                href: "#",
+                pic: "../../webapp/css/slider/image4.png",
+                title: "图片4"
+            },
+            {
+                href: "#",
+                pic: "../../webapp/css/slider/image4.png",
+                title: "图片4"
+            }
+        ];
 
         $("body").append("<div id='ui-slider-test'></div>");
         $("#ui-slider-test").css("height","148px").css("overflow","hidden");
@@ -198,6 +231,38 @@ test("content", function() {
     equals(bottom[1].childNodes[0].href.substr(-9), 'undefined', "No href");
     slider.destroy();
     start();
+});
+
+
+test("viewNum = 3", function() {
+    stop();
+    expect(5);
+    var i= 0,
+        viewNum = 3;
+    var slider = $.ui.slider("#ui-slider-test", {
+        viewNum: viewNum,
+        content: content5,
+        autoPlay:false,
+        slideend:function(){
+            i++;
+            if(i==1){
+                approximateEqual($('.ui-slider-wheel').offset().left,$('#ui-slider-test').offset().width /viewNum * -1,"显示第二张图片");
+                slider.next();
+            }else if(i==2){
+                approximateEqual($('.ui-slider-wheel').offset().left,$('#ui-slider-test').offset().width /viewNum * -2,"显示第三张图片");
+                slider.next();
+            }else if(i==3){
+                approximateEqual($('.ui-slider-wheel').offset().left,$('#ui-slider-test').offset().width /viewNum * -3,"显示第四张图片");
+                setTimeout(function(){
+                    slider.destroy();
+                    start();
+                },10);
+            }
+        }
+    });
+    equals($('.ui-slider-wheel').offset().left,0,"初始显示第一张图片");
+    equals($('.ui-slider-wheel').offset().width, $('#ui-slider-test').offset().width *(content5.length /viewNum), "The viewNum is right");
+    slider.next();
 });
 
 test("imgInit=0 (加载全部的图片) & 检查是否影响播放", function() {
@@ -1008,18 +1073,22 @@ test("_setup", function() {
 });
 
 test("destroy()", function() {
-    expect(3);
-    var l1 = ua.eventLength();
-    var slider = $.ui.slider("#ui-slider-test",{
-        content: content3
-    });
+    ua.destroyTest(function(w,f){
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
 
-    slider.destroy();
-    var a=0;
-    for(var i in slider)
-        a++;
-    equals(a, 0, "The obj is cleared");
-    equals($(".ui-slider").length, 0, "The dom is removed");
-    var l2 = ua.eventLength();
-    equals(l2, l1, "The events are cleared");
+        var slider = $.ui.slider("#ui-slider-test",{
+            content: content3
+        });
+        slider.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(slider);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The slider is destroy");
+        this.finish();
+    });
 });
