@@ -36,7 +36,7 @@ test("左右滑动无动画", function(){
             items: getItems(),
             transition:''
     })
-    ua.loadcss(["transitions.css", "webapp/tabs/tabs.css","webapp/tabs/tabs.default.css"], function(){
+    ua.loadcss(["reset.css","transitions.css", "webapp/tabs/tabs.css","webapp/tabs/tabs.default.css"], function(){
         ta.touchstart($(".ui-panel")[0], {
             touches: [{
                 clientX: 0,

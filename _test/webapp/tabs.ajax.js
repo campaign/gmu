@@ -12,52 +12,105 @@ function setup(type) {
              +   '<ul>'
              +      '<li><a href="#conten1">Tab1</a></li>'
              +      '<li><a href="../../webapp/data/tabs/proxy.php?file=sample.' + type + '">Ajax1</a></li>'
-             +      '<li><a href="../../webapp/data/tabs/proxy.php?file=sample1.' + type + '">Ajax2</a></li>'
+             +      '<li><a href="../../webapp/data/tabs/proxy.php?file=sample.' + type + '">Ajax2</a></li>'
              +  '</ul>'
              +  '<div id="conten1">content1</div>'
              +'</div>'
-    $("#container").append(html)
+    $('body').append(html)
 }
 
-test("加载成功", function(){
+test("只为加载css用",function(){
+    expect(1);
+    stop();
+    ua.loadcss(["reset.css","transitions.css", "webapp/tabs/tabs.css","webapp/tabs/tabs.default.css"], function(){
+        ok(true, '样式加载进来了！');
+        start();
+    });
+});
+
+test("加载成功&事件测试:beforeLoad,load,beforeRender", function(){
     stop()
     setup('html')
-    var status = '';
-    ua.loadcss(["transitions.css", "webapp/tabs/tabs.css","webapp/tabs/tabs.default.css"], function(){
-        $('#tabs').tabs({
-            ajax: {
-                type: 'POST',
-                contentType: 'application/x-www-form-urlencoded'
-            },
-            swipe: true,
-            beforeLoad: function(e, xhr, settings){
-                ok(true, 'beforeLoad has triggered')
-                status += 'beforeLoad '
-                var ui = this;
-                settings.data = $.param({
-                    index: ui.data('active')
-                });
-            },
-            beforeRender : function(event, response, panel, index, xhr){
-                status += 'beforeRender '
-                ok(true, 'beforeRender has triggered')
-                equal(1, index, '加载页面index正确')
-
-            },
-            load : function(event, panel){
-                status += 'load'
-                ok(true, 'load has triggered')
-                equal('beforeLoad beforeRender load', status)
-                start()
+    var count = 0,
+        status = '';
+    $('#tabs').tabs({
+        ajax: {
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded'
+        },
+        beforeLoad: function(e, xhr, settings){
+            if (count == 1) {
+                e.preventDefault();
+                ok(true, 'beforeLoad is prevented');
             }
-        });
-        $('#tabs li').eq(1).trigger('click')
-
-    })
-
+            ok(true, 'beforeLoad has triggered')
+            status += 'beforeLoad '
+            var ui = this;
+            settings.data = $.param({
+                index: ui.data('active')
+            });
+        },
+        beforeRender : function(event, response, panel, index, xhr){
+            status += 'beforeRender '
+            ok(true, 'beforeRender has triggered')
+            equal(1, index, '加载页面index正确')
+        },
+        load : function(event, panel){
+            count++;
+            status += 'load';
+            ok(true, 'load has triggered');
+            equal('beforeLoad beforeRender load', status);
+            equals($(panel).find('h3').length, 1, 'content h3 loaded');
+            equals($(panel).find('p').length, 1, 'content p loaded');
+            if (count == 1) {
+                ok(true, '第二次点击开始');
+                ua.click($('#tabs .ui-tabs-nav li').get(2));
+                setTimeout(function () {
+                    $('#tabs').tabs('destroy');
+                    start();
+                }, 300);
+            }
+        }
+    });
+    ua.click($('#tabs .ui-tabs-nav li').get(1));
+    ok(true, '第一次点击开始');
 })
 
-test("取消请求", function(){
+test("第一次加载还未完成，第二次加载开始，则第一次取消请求", function(){
+    stop()
+    setup('html');
+    expect(7);
+    $('#tabs').tabs({
+        transition: '',
+        ajax: {
+            type: 'GET',
+            contentType: 'application/x-www-form-urlencoded'
+        },
+        beforeLoad: function(e, xhr, settings){
+            ok(true, 'beforeLoad has triggered');
+        },
+        beforeRender : function(event, response, panel, index, xhr){
+            ok(true, 'beforeRender has triggered');
+        },
+        load : function(event, panel){
+            ok(true, 'load has triggered');
+            setTimeout(function () {
+                $('#tabs').tabs('destroy');
+                start();
+            }, 300);
+        },
+        loadError: function () {
+            ok(true, 'load error triggered');
+        }
+    });
+    ok(true, '第一次点击开始');
+    ua.click($('#tabs .ui-tabs-nav li').get(1));
+
+    ok(true, '第二次点击开始');
+    ua.click($('#tabs .ui-tabs-nav li').get(2));
+});
+
+test("事件&rend后内容高度能自适应", function(){
     stop()
     setup('html')
     $('#tabs').tabs({
@@ -65,85 +118,20 @@ test("取消请求", function(){
             type: 'POST',
             contentType: 'application/x-www-form-urlencoded'
         },
-        swipe: true,
         beforeLoad: function(e, xhr, settings){
-            ok(true, 'beforeLoad has triggered and canel this ajax')
-            e.preventDefault()
-            start()
+            ok(true, 'beforeLoad has triggered')
         },
         beforeRender : function(event, response, panel, index, xhr){
-            ok(false, 'beforeRender has triggered')
+            ok(true, 'beforeRender has triggered')
         },
         load : function(event, panel){
-            ok(false, 'beforeRender has triggered')
+            ok(true, 'load has triggered');
+            setTimeout(function () {
+                equals($(panel).height(), $('#tabs .ui-tabs-content').height()-1, 'rend后内容高度能自适应了');
+                $('#tabs').tabs('destroy');
+                start();
+            },300)
         }
     });
-    $('#tabs li').eq(1).trigger('click')
-})
-
-test("加载失败", function(){
-    stop()
-    setup('html')
-    var status = '';
-    ua.loadcss(["transitions.css", "webapp/tabs/tabs.css","webapp/tabs/tabs.default.css"], function(){
-        $('#tabs').tabs({
-            ajax: {
-                type: 'POST',
-                contentType: 'application/x-www-form-urlencoded'
-            },
-            swipe: true,
-            beforeLoad: function(e, xhr, settings){
-                ok(true, 'beforeLoad has triggered')
-                status += 'beforeLoad '
-                var ui = this;
-                settings.data = $.param({
-                    index: ui.data('active')
-                });
-            },
-            beforeRender : function(event, response, panel, index, xhr){
-                status += 'beforeRender '
-                ok(true, 'beforeRender has triggered')
-                equal(2, index, '加载页面index正确')
-
-            },
-            load : function(event, panel){
-                status += 'load'
-                ok(true, 'load has triggered')
-                equal('beforeLoad beforeRender load', status)
-                ok($('.ui-load-error').length)
-                start()
-            }
-        });
-        $('#tabs li').eq(2).trigger('click')
-    })
-})
-
-test("请求json数据, 阻止response写入panel中", function(){
-    stop()
-    setup('json')
-    var json = '';
-    ua.loadcss(["transitions.css", "webapp/tabs/tabs.css","webapp/tabs/tabs.default.css"], function(){
-        $('#tabs').tabs({
-            ajax: {
-                dataType: 'json'
-            },
-            swipe: true,
-            beforeRender: function(e, response, panel, index){
-                equal('object', typeof response);
-                equal(1, index);
-                var html = '';
-                $.each(response, function(){
-                    html += '<p>'+this.text+'</p>';
-                });
-                panel.html(html);
-                json = html
-                e.preventDefault();
-            },
-            load : function(event, panel){
-                equal(json, panel.innerHTML)
-                start()
-            }
-        });
-        $('#tabs li').eq(1).trigger('click')
-    })
-})
+    ua.click($('#tabs .ui-tabs-nav li').get(1));
+});
