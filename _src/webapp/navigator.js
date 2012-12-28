@@ -151,7 +151,7 @@
             $tabList.eq(index).addClass("cur");
             data._lastIndex = index;
 
-            return me.trigger('tabselect', $tabList.get(index), lastIndex);
+            return me.trigger('tabselect', [$tabList.get(index), index]);
         },
         /**
          * @name getCurTab
