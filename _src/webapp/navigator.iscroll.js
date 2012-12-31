@@ -149,26 +149,16 @@
 
                 return me;
             },
-            _scrollToNext: function (index, pos, isDef) {
+            _scrollToNext: function (index, pos) {
                 var me = this,
                     data = me._data,
                     scrollerSumWidth = data._scrollerSumWidth,
                     iScroll = data.iScroll;      //iscroll滚动的时间
 
-                if (isDef && pos == scrollerSumWidth.length - 1) {      //默认tab，当选中最后一个时跳动iScroll.maxScrollX
-                    iScroll.scrollTo(iScroll.maxScrollX, 0, 400);
-                    return me;
-                }
-
-                if (!(pos == 'last' || pos == 'first')) return me;    //不需要跳动
-                iScroll.scrollTo(pos == 'last' ? iScroll.wrapperW - scrollerSumWidth[index + 1] : pos == 'first' ? -scrollerSumWidth[index - 2] || 0 : iScroll.x, 0, 400);
+                iScroll.scrollTo(pos == 'last' ? iScroll.wrapperW - (scrollerSumWidth[index + 1] || scrollerSumWidth[scrollerSumWidth.length - 1]) : pos == 'first' ? (-scrollerSumWidth[index - 2] || 0) : iScroll.x, 0, 400);
                 return me;
             },
             _getPos:function (index) {
-                if (index === 0 || index === this._data._scrollerNum - 1) {      //若是列表中的第一个或者最后一个，直接返回其索引
-                    return index;
-                }
-
                 var me = this,
                     data = me._data,
                     iScroll = data.iScroll,
@@ -176,8 +166,8 @@
                     scrollerSumWidth = data._scrollerSumWidth,
                     $navList = data._$navList,
                     thisOffsetDis = scrollerSumWidth[index] - movedXDis,
-                    preOffsetDis = scrollerSumWidth[index - 1] - movedXDis,
-                    nextOffsetDis = scrollerSumWidth[index + 1] - movedXDis,
+                    preOffsetDis = scrollerSumWidth[(index - 1) || 0]  - movedXDis,
+                    nextOffsetDis = (scrollerSumWidth[index + 1] || scrollerSumWidth[scrollerSumWidth.length - 1]) - movedXDis,
                     wrapperWidth = iScroll.wrapperW;
 
                 return (thisOffsetDis >= wrapperWidth || nextOffsetDis > wrapperWidth) ?   //当前tab为半个tab或者其下一个tab为半个，则视为可显示区的最后一个
@@ -204,7 +194,7 @@
                         pos = me._getPos(index);
 
                     isDef && data.isShowShadow && me._setShadow();      //默认defTab设置阴影
-                    data.isScrollToNext && me._scrollToNext(index, pos, isDef);
+                    data.isScrollToNext && me._scrollToNext(index, pos);
                 }
                 return me;
             }
