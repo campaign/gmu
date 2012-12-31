@@ -52,7 +52,7 @@ module('plugin/webapp/navigator', {
 
 test("no el & create mode", function(){
     stop();
-	ua.loadcss(["reset.css", "webapp/navigator/navigator.css"], function(){
+	ua.loadcss(["reset.css", "webapp/navigator/navigator.css","webapp/navigator/navigator.default.css"], function(){
 		var nav = $.ui.navigator({
 	        content: content1
 	    }),_data = nav._data;
@@ -61,10 +61,7 @@ test("no el & create mode", function(){
         equals(_data.container, "", "The _data is right");
         equals(_data.content, content1, "The _data is right");
         equals(_data.defTab, 0, "The _data is right");
-        equals(_data._$fixElemLeft.length, 1, "The _data is right");
-        equals(_data._$fixElemRight.length, 0, "The _data is right");
         equals(_data._$tabList.length, 6, "The _data is right");
-        equals(_data.className, '', "The _data is right");
         equals(_data._lastIndex, 0, "The _data is right");
 
         ok(ua.isShown(nav._el[0]), "The navigator shows");
@@ -73,14 +70,13 @@ test("no el & create mode", function(){
         equals(nav._el.width(), $("body").width(), "The width is right");
         equals(nav._el.height(), 44, "The height is right");
         equals(nav._el.children()[0].tagName.toLowerCase(), "a", "The fix tab is right");
-        equals(nav._el.children()[0].href, 'javascript:;', "The fix tab is right");
-        equals(nav._el.children()[0].className, "ui-navigator-fix cur", "The fix tab is right");
+        equals(nav._el.children()[0].href, 'http://www.baidu.com/', "The fix tab is right");
+        equals(nav._el.children()[0].className, "ui-navigator-fix ui-navigator-fixleft cur", "The fix tab is right");
         equals(nav._el.children()[0].textContent, "首页fix", "The fix tab is right");
         equals(nav._el.find('ul li a').length, 5, "The li number is right");
         equals(nav._el.find('ul li a').get(0).textContent, "首页", "The a is right");
-        equals(nav._el.find('ul li a').get(0).href, 'javascript:;', "The a is right");
+        equals(nav._el.find('ul li a').get(0).href.split('#')[1], 'test1', "The a is right");
         equals(nav._el.find('ul li a').height(), 42, "The a is right");
-        equals(_data._$fixElemLeft.hasClass('cur'), true, "The defTab is right");
         nav.destroy();
         start();
 	});
@@ -117,12 +113,11 @@ test("el selector & no container & className & create mode", function(){
 	test1.appendChild(test2);
 
 	var nav = $.ui.navigator(".ui-navigator", {
-        content: content1,
-		className: "my"
+        content: content1
     });
 	
 	ok(ua.isShown(nav._el[0]), "The navigator shows");
-	equals(nav._el.attr("class"), "ui-navigator my", "The class is right");
+	equals(nav._el.attr("class"), "ui-navigator", "The class is right");
 	equals(nav._el.parent().attr("id"), "test1", "The container is right");
 	
 	equals(nav._el.width(), $("body").width(), "The width is right");
@@ -139,15 +134,9 @@ test("full setup", function(){
         _el = nav._el;
 
     equals(_data.container, "", "The _data is right");       //保存的数据正确
-    equals(_data.content.length, 6, "The _data is right");
-    equals(_data.count, 6, "The _data is right");
     equals(_data.defTab, 4, "The _data is right");
-    equals(_data._$fixElemLeft.length, 1, "The _data is right");
-    equals(_data._$fixElemRight.length, 0, "The _data is right");
     equals(_data._$tabList.length, 6, "The _data is right");
-    equals(_data.className, '', "The _data is right");
     equals(_data._lastIndex, 4, "The _data is right");
-    equals(_data._fullMode, true, "The _data is right");
     equals(_data.setup, true, "The _data is right");
 
     ok(ua.isShown(nav._el[0]), "The navigator shows");        //显示正确
@@ -170,7 +159,6 @@ test("full setup", function(){
 });
 
 test("smart setup", function(){
-    expect(23);
     smartSetup();
     var nav = $("#nav-smartsetup").navigator({
         tabselect: function (e) {
@@ -180,15 +168,9 @@ test("smart setup", function(){
     var _data = nav._data;
 
     equals(_data.container, "", "The _data is right");       //保存的数据正确
-    equals(_data.content.length, 6, "The _data is right");
-    equals(_data.count, 6, "The _data is right");
     equals(_data.defTab, 3, "The _data is right");
-    equals(_data._$fixElemLeft.length, 1, "The _data is right");
-    equals(_data._$fixElemRight.length, 0, "The _data is right");
     equals(_data._$tabList.length, 6, "The _data is right");
-    equals(_data.className, '', "The _data is right");
     equals(_data._lastIndex, 3, "The _data is right");
-    equals(_data._fullMode, undefined, "The _data is right");
     equals(_data.setup, true, "The _data is right");
 
     ok(ua.isShown(nav._el[0]), "The navigator shows");
@@ -206,7 +188,7 @@ test("smart setup", function(){
     $("#nav-fullsetup").remove();
 });
 
-test("defTab in three mode", function(){
+test("defTab in three mode & 多实例", function(){
 	var nav = $.ui.navigator({
         content: content1,
         defTab: 2
@@ -244,27 +226,25 @@ test("defTab in three mode", function(){
         defTab: 0
     }).navigator("this");
 
-    equals(nav._data.defTab, 0, "Smartsetup mode, the _data is right");
-    equals(nav._data._lastIndex, 0, "Smartsetup mode, the _data is right");
+    equals(nav._data.defTab, 3, "Smartsetup mode, the _data is right");
+    equals(nav._data._lastIndex, 3, "Smartsetup mode, the _data is right");
 
     ok(ua.isShown(nav._el[0]), "Smartsetup mode, the navigator shows");
     equals(nav._el.attr("class"), "ui-navigator", "Smartsetup mode the class is right");
     equals(nav._el.parent().attr("tagName").toLowerCase(), "body", "Smartsetup mode, the container is right");
-    equals(nav._data._$tabList.eq(0).hasClass('cur'), true, "Smartsetup mode, the selection of defTab is right");
-    equals(nav._data._$tabList.get(3).className, "", "Create mode the selection of defTab is right");
+    equals(nav._data._$tabList.eq(3).hasClass('cur'), true, "Smartsetup mode, the selection of defTab is right");
     equals(nav._el.find('ul li a').length, 5, "Smartsetup mode, the tab number is right");
     nav.destroy();
     $('#nav-smartsetup').remove();
 });
 
 test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switchTo() 在select tab过程中被调用
-	expect(38);
-	var data = [0, 0, 1, 1, 3, 6], count = 0;
+	expect(31);
+    stop();
 	var nav = $.ui.navigator({
         content: content2,
-        tabselect: function(index){
-        	equals(index, data[count], "The tabselect is triggered");   //应该触发6次，点击当前tab，也会触发tabselect
-        	count ++;
+        tabselect: function(e,$elem, index){
+        	ok(true, "The tabselect is triggered");   //应该触发6次，点击当前tab，也会触发tabselect
         }
     });
 	var a = nav._el.find('ul li a');
@@ -275,7 +255,6 @@ test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switch
     equals(window.location.href, l, "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 0, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "首页", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test1", "The getCurTab() is right");
 
 	ua.click(a[1]);
 	equals(nav._data._lastIndex, 1, "The lastIndex is right");
@@ -283,7 +262,6 @@ test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switch
 	equals(window.location.href, l + "#test2", "Doesn't jump to the cur tab url");
 	equals(nav.getCurTab().index, 1, "The getCurTab() is right");
 	equals(nav.getCurTab().info.text, "电影", "The getCurTab() is right");
-	equals(nav.getCurTab().info.url, "#test2", "The getCurTab() is right");
 
     ua.click(a[1]);      //点击同一个tab
     equals(nav._data._lastIndex, 1, "The lastIndex is right");
@@ -291,7 +269,6 @@ test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switch
     equals(window.location.href, l + "#test2", "Doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 1, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "电影", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test2", "The getCurTab() is right");
 
     ua.click(a[3]);
     equals(nav._data._lastIndex, 3, "The lastIndex is right");
@@ -300,7 +277,6 @@ test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switch
     equals(window.location.href, l + "#test3", "Doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 3, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "动漫", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test3", "The getCurTab() is right");
 
     ua.click(a[6]);      //点击最后一个
     equals(nav._data._lastIndex, 6, "The lastIndex is right");
@@ -309,13 +285,13 @@ test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switch
     equals(window.location.href, l + "#test3", "Doesn't jump to the cur tab url");   //javacript:;空链接
     equals(nav.getCurTab().index, 6, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "综艺", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "javascript:;", "The getCurTab() is right");
 
+    start();
 	nav.destroy();
 });
 
 test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ //switchTo() 在select tab过程中被调用
-    expect(35);
+    expect(30);
     smartSetup();
     var nav = $('#nav-smartsetup').navigator({
         defTab: 1
@@ -332,7 +308,6 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
     equals(window.location.href, l + "#test3", "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 1, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "首页", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test1", "The getCurTab() is right");
 
     ua.click(a[3]);
     equals(nav._data._lastIndex, 4, "The lastIndex is right");
@@ -341,7 +316,6 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
     equals(window.location.href, l + "#test3", "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 4, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "动漫", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test3", "The getCurTab() is right");
 
     ua.click(a[4]);      //点击最后一个
     equals(nav._data._lastIndex, 5, "The lastIndex is right");
@@ -350,7 +324,6 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
     equals(window.location.href, l + "#test3", "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 5 , "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "综艺", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "javascript:;", "The getCurTab() is right");
 
     ua.click(b[0]);      //点击fix tab
     equals(nav._data._lastIndex, 0, "The lastIndex is right");
@@ -359,7 +332,6 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
     equals(window.location.href, l + "#test1", "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 0, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "首页fix", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test1", "The getCurTab() is right");
     
     ua.click(b[0]);      //点击同一个fix tab
     equals(nav._data._lastIndex, 0, "The lastIndex is right");
@@ -368,31 +340,35 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
     equals(window.location.href, l + "#test1", "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 0, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "首页fix", "The getCurTab() is right");
-    equals(nav.getCurTab().info.url, "#test1", "The getCurTab() is right");
 
     nav.destroy();
     $('#nav-smartsetup').remove();
 });
 
-test('destroy()', function () {
-	expect(3);
-	var l1 = ua.eventLength();
-    var nav = $.ui.navigator({
-        content:[
-            {text:"首页", url: "#b"},
-            {text:"电影", url: "#a"},
-            {text:"电视剧", url: "javascript:;"},
-            {text:"动漫", url: "javascript:;"},
-            {text:"fix2", url: "#e", pos:"right"}
-        ]
-    });
-    nav.destroy();
-    var a=0; 
-    for(var i in nav) 
-		a++;
-	equals(a, 0, "The obj is cleared");
-	equals($(".ui-navigator").length, 0, "The dom is removed");
-	var l2 = ua.eventLength();
-	equals(l2, l1, "The events are cleared");
-	start();
+test("destroy",function(){
+    ua.destroyTest(function(w,f){
+        //w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var nav = $.ui.navigator({
+            content:[
+                {text:"首页", url: "#b"},
+                {text:"电影", url: "#a"},
+                {text:"电视剧", url: "javascript:;"},
+                {text:"动漫", url: "javascript:;"},
+                {text:"fix2", url: "#e", pos:"right"}
+            ]
+        });
+        nav.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(nav);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The dialog is destroy");
+        this.finish();
+    })
 });

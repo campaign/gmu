@@ -28,8 +28,8 @@ module('webapp/navigator.iscroll', {
 
         smartSetup = function (w) {
             var html = '<div id="nav-smartsetup">'
-                + '<a href="#test1">fix left1</a>'
-                + '<a href="#test1">fix left2</a>'
+                + '<a class="ui-navigator-fixleft" href="#test1">fix left1</a>'
+                + '<a class="ui-navigator-fixleft" href="#test1">fix left2</a>'
                 + '<ul>'
                 + '<li><a href="#test1">首页</a></li>'
                 + '<li><a href="#test2">电影</a></li>'
@@ -47,8 +47,8 @@ module('webapp/navigator.iscroll', {
 
         shadowTest = function (id) {
             var html = '<div id="nav-shadowTest' + (id || '') + '">'
-                + '<a href="javascript:;">fix left1</a>'
-                + '<a href="javascript:;">fix left2</a>'
+                + '<a class="ui-navigator-fixleft" href="javascript:;">fix left1</a>'
+                + '<a class="ui-navigator-fixleft" href="javascript:;">fix left2</a>'
                 + '<ul>'
                 + '<li><a href="javascript:;">首页</a></li>'
                 + '<li><a href="javascript:;">首页1</a></li>'
@@ -74,89 +74,86 @@ module('webapp/navigator.iscroll', {
                 + '<li><a href="javascript:;">综艺测</a></li>'
                 + '<li><a href="javascript:;">综艺测试</a></li>'
                 + '</ul>'
-                + '<a href="#test1">fix right1</a>'
+                + '<a class="ui-navigator-fixright" href="#test1">fix right1</a>'
             var w = w || window;
             w.$("body").append(html);
         };
     }
 });
 
-test("create html: create or setup fix and scroll navigator", function(){
+test("只为加载css用",function(){
+    expect(1);
     stop();
-    ua.loadcss(["reset.css", "webapp/navigator/navigator.css", "webapp/navigator/navigator.iscroll.css"], function(){
-        var nav = $.ui.navigator({
-            content: content
-        });
-        var list = nav._el.find(".ui-navigator-list");
-        var li = nav._el.find("li");
-        equals(nav._data.container, "", "The container is right");
-        equals(nav._data.content, content, "The content is right");
-        equals(nav._data.defTab, 0, "The defTab is right");
-        equals(nav._data._$fixElemLeft.length, 1, "The _$fixElemLeft is right");
-        equals(nav._data._$fixElemRight.length, 1, "The _$fixElemRight is right");
-        equals(nav._data._$tabList.length, 7, "The _$tabList is right");
-        equals(nav._data.className, '', "The className is right");
-        equals(nav._data._lastIndex, 0, "The _lastIndex is right");
-        equals(nav._data._$navScroller.attr("class"), "ui-navigator-list", "The _data is right");
-        equals(nav._data._$navWrapper.hasClass("ui-navigator-wrapper"), true, "The _data is right");
-        equals(nav._data._$navWrapper.hasClass("ui-navigator-shadowr"), list.offset().right > $(window).width ? true : false, "The _data is right");
-        equals(nav._data._$navList.length, 5, "The _data is right");
-        equals(nav._data._scrollerNum, 5, "The _data is right");
-        equals(nav._data._scrollerSumWidth[0], 62, "The _data is right");
-
-        ok(ua.isShown(nav._el[0]), "The navigator shows");
-        equals(nav._el.attr("class"), "ui-navigator", "The class is right");
-        equals($('.ui-navigator-list').parent().hasClass('ui-navigator-wrapper'), true, 'The wrapper is exsited');
-        equals($('.ui-navigator-wrapper').css('overflow'), 'hidden', 'The wrapper style is right');
-        equals($('.ui-navigator-wrapper').prev().hasClass('ui-navigator-fix'), true, 'The fix left is right');
-        equals($('.ui-navigator-wrapper').next().hasClass('ui-navigator-fix'), true, 'The fix right is right');
-        equals($('.ui-navigator-list').find('a').length, 5, 'The scroller number is right');
-        equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller style is right');
-        equals(li.width(), 62, "The li widht is right");
-        equals(list.width(), 326, "The list widht is right");
-        nav.destroy();
-
-        smartSetup();
-        var nav2 = $('#nav-smartsetup').navigator({
-            defTab: 3
-        }).navigator('this');
-
-        var list = nav2._el.find(".ui-navigator-list");
-        var li = nav2._el.find("li");
-        equals(nav2._data.container, "", "The container is right");
-        equals(nav2._data.content.length, 11, "The content is right");
-        equals(nav2._data.defTab, 3, "The defTab is right");
-        equals(nav2._data._$fixElemLeft.length, 2, "The _$fixElemLeft is right");
-        equals(nav2._data._$fixElemRight.length, 0, "The _$fixElemRight is right");
-        equals(nav2._data._$tabList.length, 11, "The _$tabList is right");
-        equals(nav2._data.className, '', "The className is right");
-        equals(nav2._data._lastIndex, 3, "The _lastIndex is right");
-        equals(nav2._data._$navScroller.attr("class"), "ui-navigator-list", "The _data is right");
-        equals(nav2._data._$navWrapper.hasClass("ui-navigator-wrapper"), true, "The _data is right");
-        equals(nav2._data._$navWrapper.hasClass("ui-navigator-shadowr"), list.offset().right > $(window).width ? true : false, "The _data is right");
-        equals(nav2._data._$navList.length, 9, "The _data is right");
-        equals(nav2._data._scrollerNum, 9, "The _data is right");
-        equals(nav2._data._scrollerSumWidth[0], 62, "The _data is right");
-
-
-        ok(ua.isShown(nav2._el[0]), "The navigator shows");
-        equals(nav2._el.attr("class"), "ui-navigator", "The class is right");
-        equals($('.ui-navigator-list').parent().hasClass('ui-navigator-wrapper'), true, 'The wrapper is exsited');
-        equals($('.ui-navigator-wrapper').css('overflow'), 'hidden', 'The wrapper style is right');
-        equals($('.ui-navigator-wrapper').prev().hasClass('ui-navigator-fix'), true, 'The fix left is right');
-        equals($('.ui-navigator-wrapper').prev().prev().hasClass('ui-navigator-fix'), true, 'The fix left2 is right');
-        equals($('.ui-navigator-list').find('a').length, nav2._data._scrollerNum, 'The scroller number is right');
-        equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller number is right');
-        equals(li.width(), 62, "The li widht is right");
-        equals(list.width(), 574, "The list widht is right");
-        nav2.destroy();
-
+    ua.loadcss(["reset.css", "webapp/navigator/navigator.css", "webapp/navigator/navigator.default.css", "webapp/navigator/navigator.iscroll.css", "webapp/navigator/navigator.iscroll.default.css"], function(){
+        ok(true, '样式加载进来了！');
         start();
     });
 });
+
+test("create html: create or setup fix and scroll navigator", function(){
+    stop();
+    var nav = $.ui.navigator({
+        content: content
+    });
+    var list = nav._el.find(".ui-navigator-list");
+    var li = nav._el.find("li");
+    equals(nav._data.container, "", "The container is right");
+    equals(nav._data.defTab, 0, "The defTab is right");
+    equals(nav._data._$tabList.length, 7, "The _$tabList is right");
+    equals(nav._data._lastIndex, 0, "The _lastIndex is right");
+    equals(nav._data._$navScroller.attr("class"), "ui-navigator-list", "The _data is right");
+    equals(nav._data._$navWrapper.hasClass("ui-navigator-wrapper"), true, "The _data is right");
+    equals(nav._data._$navWrapper.hasClass("ui-navigator-shadowr"), list.offset().right > $(window).width ? true : false, "The _data is right");
+    equals(nav._data._$navList.length, 5, "The _data is right");
+    equals(nav._data._scrollerNum, 5, "The _data is right");
+    equals(nav._data._scrollerSumWidth[0], 62, "The _data is right");
+
+    ok(ua.isShown(nav._el[0]), "The navigator shows");
+    equals(nav._el.attr("class"), "ui-navigator", "The class is right");
+    equals($('.ui-navigator-list').parent().hasClass('ui-navigator-wrapper'), true, 'The wrapper is exsited');
+    equals($('.ui-navigator-wrapper').css('overflow'), 'hidden', 'The wrapper style is right');
+    equals($('.ui-navigator-wrapper').prev().hasClass('ui-navigator-fix'), true, 'The fix left is right');
+    equals($('.ui-navigator-wrapper').next().hasClass('ui-navigator-fix'), true, 'The fix right is right');
+    equals($('.ui-navigator-list').find('a').length, 5, 'The scroller number is right');
+    equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller style is right');
+    equals(li.width(), 62, "The li widht is right");
+    equals(list.width(), 326, "The list widht is right");
+    nav.destroy();
+
+    smartSetup();
+    var nav2 = $('#nav-smartsetup').navigator({
+        defTab: 3
+    }).navigator('this');
+
+    var list = nav2._el.find(".ui-navigator-list");
+    var li = nav2._el.find("li");
+    equals(nav2._data.container, "", "The container is right");
+    equals(nav2._data.defTab, 3, "The defTab is right");
+    equals(nav2._data._$tabList.length, 11, "The _$tabList is right");
+    equals(nav2._data._lastIndex, 3, "The _lastIndex is right");
+    equals(nav2._data._$navScroller.attr("class"), "ui-navigator-list", "The _data is right");
+    equals(nav2._data._$navWrapper.hasClass("ui-navigator-wrapper"), true, "The _data is right");
+    equals(nav2._data._$navList.length, 9, "The _data is right");
+    equals(nav2._data._scrollerNum, 9, "The _data is right");
+    equals(nav2._data._scrollerSumWidth[0], 62, "The _data is right");
+
+    ok(ua.isShown(nav2._el[0]), "The navigator shows");
+    equals(nav2._el.attr("class"), "ui-navigator", "The class is right");
+    equals($('.ui-navigator-list').parent().hasClass('ui-navigator-wrapper'), true, 'The wrapper is exsited');
+    equals($('.ui-navigator-wrapper').css('overflow'), 'hidden', 'The wrapper style is right');
+    equals($('.ui-navigator-wrapper').prev().hasClass('ui-navigator-fix'), true, 'The fix left is right');
+    equals($('.ui-navigator-wrapper').prev().prev().hasClass('ui-navigator-fix'), true, 'The fix left2 is right');
+    equals($('.ui-navigator-list').find('a').length, nav2._data._scrollerNum, 'The scroller number is right');
+    equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller number is right');
+    equals(li.width(), 62, "The li widht is right");
+    equals(list.width(), 574, "The list widht is right");
+    nav2.destroy();
+
+    start();
+});
 test("Event: tabselect & scrollstart & scrollmove & scrollend", function(){
     stop();
-    expect(4)
+    expect(5)
     fullSetup();
     var count = 0,
         nav = $('#nav-fullsetup').navigator({
@@ -175,10 +172,9 @@ test("Event: tabselect & scrollstart & scrollmove & scrollend", function(){
                 ok(true, 'The scrollend trigger');
                 setTimeout(function () {
                     nav.destroy();
-                }, 100)
-                $('#nav-fullsetup').remove();
-                start();
-
+                    $('#nav-fullsetup').remove();
+                    start();
+                }, 300);
             }
         }).navigator('this'),
         scroller = $(".ui-navigator-list")[0];
@@ -216,14 +212,10 @@ test("setShadow: shadowleft & shadowright & shadowall & scroll not selected", fu
     var width = $("body").css("width");
     $("body").css("width", 640);
     var nav = $('#nav-shadowTest').navigator({
-            defTab: 3,
-            scrollend: function () {
-
-            }
+            defTab: 3
         }).navigator('this'),
         scroller = $(".ui-navigator-list")[0],
         $wrapper = $('.ui-navigator-wrapper');
-
     setTimeout(function () {
         equals(nav._data.defTab, 3, 'The defTab is right');
         equals($wrapper.hasClass('ui-navigator-shadowr'), true, 'The shadow right shows');
@@ -257,7 +249,7 @@ test("setShadow: shadowleft & shadowright & shadowall & scroll not selected", fu
             setTimeout(function () {
                 equals(nav._data._lastIndex, 5, 'The tab scroll is right, not selected');
                 equals($wrapper.hasClass('ui-navigator-shadowl'), true, 'The shadow left shows');
-                nav.destroy();
+                $('#nav-shadowTest').navigator('destroy');
                 $('#nav-shadowTest').remove();
                 $("body").css("width", width);
                 start();
@@ -299,7 +291,7 @@ test('defTab: in the viewport & not in the viewport', function () {
         }).navigator('this');
 
     equals(nav._data.defTab, 2, 'The scroll defTab index is right');
-    equals(nav._getPos(0), 0, 'The scroll defTab is not moved');
+    equals(nav._getPos(0), 'first', 'The scroll defTab is not moved');
     equals(nav._data.iScroll.x, 0, 'The scroll defTab is not moved');
     equals(nav._data._$navWrapper.hasClass('ui-navigator-shadowr'), true, 'The right shadow appears');
     nav.destroy();
@@ -327,7 +319,7 @@ test('defTab: in the viewport & not in the viewport', function () {
     equals(nav._getPos(3), 'last', 'The scroll defTab pos is right');
 
     setTimeout(function () {
-        equals(nav._data.iScroll.x, -nav._data._$navList[4].offsetWidth, 'The scroll defTab is right dis');
+        equals(nav._data.iScroll.x, nav._data.iScroll.wrapperW - nav._data._scrollerSumWidth[4], 'The scroll defTab is right dis');
         equals(nav._data._$navWrapper.hasClass('ui-navigator-shadowall'), true, 'The all shadow appears');
         nav.destroy();
         $('#nav-shadowTest' + count).remove();
@@ -338,7 +330,7 @@ test('defTab: in the viewport & not in the viewport', function () {
             defTab: 24
         }).navigator('this');
         equals(nav._data.defTab, 24, 'The scroll defTab index is right');
-        equals(nav._getPos(22), 22, 'The scroll defTab pos is right');
+        equals(nav._getPos(22), 'last', 'The scroll defTab pos is right');
 
         setTimeout(function () {
             equals(nav._data.iScroll.x, nav._data.iScroll.maxScrollX, 'The scroll defTab is right dis');
@@ -379,7 +371,7 @@ test("_scrollToNext: last & first & mid & scroll the distance", function(){
     equals(nav._data.defTab, 0, 'The defTab is right');
 
     ua.click($navList[0]);
-    equals(nav._getPos(0), 0, 'The first elem return the right pos');
+    equals(nav._getPos(0), 'first', 'The first elem return the right pos');
     equals(nav._data.iScroll.x, 0, 'The first elem moves the right dis');
 
     lastMovedX = nav._data.iScroll.x;
@@ -394,10 +386,10 @@ test("_scrollToNext: last & first & mid & scroll the distance", function(){
         equals(nav._getPos(2), 'last', 'The right last elem returns the right pos');
 
         setTimeout(function () {
-            equals(nav._data.iScroll.x, movedX - $navList.eq(3).parent()[0].offsetWidth, 'The right last elem moved the right dis');
+            equals(nav._data.iScroll.x, nav._data.iScroll.wrapperW - nav._data._scrollerSumWidth[3], 'The right last elem moved the right dis');
 
             ua.click($navList[length - 1]);      //the last elem
-            equals(nav._getPos(length - 1), length - 1, 'The last elem return the right pos');
+            equals(nav._getPos(length - 1), 'last', 'The last elem return the right pos');
 
             setTimeout(function () {
                 equals(nav._data.iScroll.x, nav._data.iScroll.maxScrollX, 'The first elem moves the right dis');
@@ -407,7 +399,7 @@ test("_scrollToNext: last & first & mid & scroll the distance", function(){
                 equals(nav._getPos(length - 3), 'first', 'The left first elem return the right pos');
 
                 setTimeout(function () {
-                    equals(nav._data.iScroll.x, movedX + $navList.eq(length - 4).parent()[0].offsetWidth, 'The left first elem moves the right dis');
+                    equals(nav._data.iScroll.x, -nav._data._scrollerSumWidth[length - 5], 'The left first elem moves the right dis');
                     nav.destroy();
                     $('#nav-shadowTest').remove();
                     $("body").css("width", width);
