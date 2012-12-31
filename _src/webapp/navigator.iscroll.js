@@ -149,11 +149,16 @@
 
                 return me;
             },
-            _scrollToNext: function (index, pos) {
+            _scrollToNext: function (index, pos, isDef) {
                 var me = this,
                     data = me._data,
                     scrollerSumWidth = data._scrollerSumWidth,
                     iScroll = data.iScroll;      //iscroll滚动的时间
+
+                if (isDef && pos == scrollerSumWidth.length - 1) {      //默认tab，当选中最后一个时跳动iScroll.maxScrollX
+                    iScroll.scrollTo(iScroll.maxScrollX, 0, 400);
+                    return me;
+                }
 
                 if (!(pos == 'last' || pos == 'first')) return me;    //不需要跳动
                 iScroll.scrollTo(pos == 'last' ? iScroll.wrapperW - scrollerSumWidth[index + 1] : pos == 'first' ? -scrollerSumWidth[index - 2] || 0 : iScroll.x, 0, 400);
@@ -199,7 +204,7 @@
                         pos = me._getPos(index);
 
                     isDef && data.isShowShadow && me._setShadow();      //默认defTab设置阴影
-                    data.isScrollToNext && me._scrollToNext(index, pos);
+                    data.isScrollToNext && me._scrollToNext(index, pos, isDef);
                 }
                 return me;
             }
