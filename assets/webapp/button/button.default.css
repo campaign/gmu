@@ -1,6 +1,6 @@
 .ui-button{
     display: inline-block;
-    padding: 7px 9px;
+    padding: 0.5em 0.6em;
     margin: 2px;
     border: 1px solid #D2D2D2;
     -webkit-border-radius:  2px;
@@ -9,7 +9,12 @@
     color: #333;
     text-decoration: none;
     font-size: 14px;
-    line-height: 1.0;
+}
+
+@media all and (min-device-width:768px) and (max-device-width: 1024px){
+    .ui-button{
+        font-size: 16px;
+    }
 }
 .ui-button.white {
     background-color: rgba(0, 0, 0, 0.4);
