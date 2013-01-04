@@ -1,12 +1,16 @@
 .ui-refresh .ui-refresh-up, .ui-refresh .ui-refresh-down{
     background: #fff;
-    height: 40px;
-    line-height: 40px;
-    padding: 5px 10px;
+    padding: 1em 10px;
     border-bottom: 1px solid #ccc;
     font-size: 14px;
     color: #888;
     text-align: center;
+}
+
+@media all and (min-device-width: 768px) and (max-device-width:1024px) {
+    .ui-refresh .ui-refresh-up, .ui-refresh .ui-refresh-down{
+        font-size: 16px;;
+    }
 }
 
 .ui-refresh .ui-refresh-up .ui-loading,
