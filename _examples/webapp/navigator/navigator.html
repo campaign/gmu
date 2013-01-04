@@ -9,28 +9,28 @@
             border-top: 1px solid #d2d2d2;;
             border-bottom: 1px solid #d2d2d2;
             background:#f4f4f4;
-            padding: 4px 0;
-            height: 28px;
+            padding: 2px 0;
         }
 
         .sec-nav .ui-navigator-list li a {
-            line-height: 28px;
-            padding: 0 15px;
-            height: 28px;
+            line-height: 1.6em;
+            padding: 0.2em 15px;
             font-size: 16px;
             color: #3b3b3b;
+        }
+
+        @media all and (min-device-width: 768px) and (max-device-width: 1024px) {
+            .sec-nav .ui-navigator-list li a{
+                font-size: 18px;
+            }
         }
 
         .sec-nav .ui-navigator-list li > a.cur {
             background-color: #dbe5f2;
             outline: 1px solid  #bed0e8;
-            height: 28px;
             color: #0a50b1;
         }
 
-        .sec-nav .ui-navigator-wrapper{
-            height: 28px;
-        }
 
         .sec-nav .ui-navigator-shadowr, .sec-nav .ui-navigator-shadowl {
             background: url('s-sec.png') right -33px no-repeat;

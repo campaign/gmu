@@ -1,7 +1,3 @@
-.ui-navigator .ui-navigator-wrapper{
-    height: 42px;
-}
-
 .ui-navigator .ui-navigator-shadowr, .ui-navigator .ui-navigator-shadowl {
     /*gmu-image-self*/background: url('nav.png') right -44px no-repeat;
 }
