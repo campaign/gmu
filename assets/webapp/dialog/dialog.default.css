@@ -3,6 +3,7 @@
     -webkit-box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.6);
     -webkit-border-radius: 3px;
 }
+
 .ui-dialog .ui-dialog-title {
     height: 50px;
     line-height: 50px;
@@ -68,4 +69,14 @@
 
 .ui-dialog-btns .ui-btn.ui-state-hover {
     background-color: #e2e2e2;
+}
+
+/*css for pad*/
+@media all and (min-device-width:768px) and (max-device-width: 1024px){
+    .ui-dialog{
+        min-width: 500px;
+    }
+    .ui-dialog .ui-dialog-title{
+        min-height: 1.1em;
+    }
 }

@@ -70,7 +70,11 @@
 .login-dialog-dark .ui-dialog-btns .ui-state-hover {
     background-color: #21252b;
 }
+.vote-dialog p{
+    height: 24px;
+    line-height: 24px;
 
+}
 .vote-dialog p.vote {
     -webkit-background-size: 219px 25px;
     background-size: 219px 25px;

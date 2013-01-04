@@ -57,6 +57,7 @@
     </div>
     <div id="dialog3" title="文档评分" class="vote-dialog">
         <p class="vote"></p>
+        <p>星级从1到5，获得越多星星，表示等级越高</p>
     </div>
 </div>
 <script id="bootstrap" src="../../example.js"
@@ -147,9 +148,12 @@
             }
         },
         title: '登录提示',
-        content: '<p>请使用百度账号登录后, 获得更多个性化特色功能</p>'
+        content: '<p>请使用百度账号登录后, 获得更多个性化特色功能</p><p>特色功能1：个性化首页</p>' +
+                '<p>特色功能2：各产品线自动关联，无需再次登录，一站式服务</p><p>特色功能3：记录您当前的活动状态</p>' +
+                '<p>特色功能4：个性化提醒</p>'
     });
     dialog5.data('_wrap').addClass('login-dialog login-dialog-dark');
+
 
     $('.btns a').button({click: function(){
         var el = this.root();
