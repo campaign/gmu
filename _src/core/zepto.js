@@ -1,4 +1,3 @@
-/* Zepto 1.0rc1 - polyfill zepto event detect fx ajax form touch - zeptojs.com/license */
 ;(function(undefined){
   if (String.prototype.trim === undefined) // fix for iOS 3.2
     String.prototype.trim = function(){ return this.replace(/^\s+/, '').replace(/\s+$/, '') }
@@ -30,6 +29,8 @@
       return accumulator
     }
 })()
+
+
 var Zepto = (function() {
   var undefined, key, $, classList, emptyArray = [], slice = emptyArray.slice,
     document = window.document,
@@ -41,7 +42,7 @@ var Zepto = (function() {
        * added by chenluyang
        * @reason 判断是否为ie10
        */
-    isWp = document.__proto__ ? 0 : 1,
+    isWp = document.__proto__ ? false : true,
 
     // Used by `$.zepto.init` to wrap elements, text/comment nodes, document,
     // and document fragment node types.
@@ -56,7 +57,12 @@ var Zepto = (function() {
       'td': tableRow, 'th': tableRow,
       '*': document.createElement('div')
     },
-    readyRE = /complete|loaded|interactive/,
+      /**
+       *  modified by chenluyang
+       *  @reason 在IE10里，interactive触发的时候，body是还没开始解析的，所以直接触发函数获取body会报错。所以去掉了interactive
+       *  @original  readyRE = /complete|loaded|interactive/,
+       */
+    readyRE = /complete|loaded/,
     classSelectorRE = /^\.([\w-]+)$/,
     idSelectorRE = /^#([\w-]+)$/,
     tagSelectorRE = /^[\w-]+$/,
@@ -130,10 +136,31 @@ var Zepto = (function() {
   // The generated DOM nodes are returned as an array.
   // This function can be overriden in plugins for example to make
   // it compatible with browsers that don't support the DOM fully.
+    function closeHTML(str){
+        var arrTags = ["span","font","b","u","i","h1","h2","h3","h4","h5","h6","p","li","ul","table","div"],
+            intOpen,intClose, re, arrMatch
+        for(var i = 0; i < arrTags.length; i++){
+            try{
+                intOpen = 0
+                intClose =0
+                re = new RegExp("\\<" + arrTags[i] + "( [^\\<\\>]+|)\\>","ig")
+                arrMatch = str.match(re)
+                if(arrMatch != null) intOpen = arrMatch.length
+                re = new RegExp("\\<\\/"+arrTags[i]+"\\>","ig")
+                arrMatch = str.match(re)
+                if(arrMatch != null) intClose = arrMatch.length
+                for(var j = 0;j < intOpen - intClose;j++){
+                    str += "</"+arrTags[i]+">"
+                }
+            }catch(e){}
+        }
+        return str
+    }
   zepto.fragment = function(html, name) {
     if (name === undefined) name = fragmentRE.test(html) && RegExp.$1
     if (!(name in containers)) name = '*'
     var container = containers[name]
+    isWp && (html = closeHTML(html))    //added by chenluyang, for ie10 tag补全
     container.innerHTML = '' + html
     return $.each(slice.call(container.childNodes), function(){
       container.removeChild(this)
@@ -224,18 +251,21 @@ var Zepto = (function() {
     return zepto.init(selector, context)
   }
 
+  // Copy all but undefined properties from one or more
+  // objects to the `target` object.
+
     /**
      *  modified by chenluyang
      *  @reason 新增了深度扩展功能(按照git上zepto新版)
      *  @original
      *    $.extend = function(target){
      *       slice.call(arguments, 1).forEach(function(source) {
-     for (key in source)
-     if (source[key] !== undefined)
-     target[key] = source[key]
-     })
-     return target
-     }
+             for (key in source)
+                if (source[key] !== undefined)
+                    target[key] = source[key]
+                })
+             return target
+         }
      */
     function extend(target, source, deep) {
         for (key in source)
@@ -349,12 +379,7 @@ var Zepto = (function() {
     },
 
     ready: function(callback){
-       /**
-         *  modified by chenluyang
-         *  @reason 在IE10里，interactive触发的时候，body是还没开始解析的，所以直接触发函数获取body会报错。所以在IE下，直接将函数绑定在DOMContentLoaded中
-         *  @original  if (readyRE.test(document.readyState)) callback($)
-         */
-      if (readyRE.test(document.readyState) && !isWp) callback($)
+      if (readyRE.test(document.readyState)) callback($)
       else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false)
       return this
     },
@@ -559,7 +584,7 @@ var Zepto = (function() {
         }
       },
      */
-    offset: function() {
+    offset: function(coordinates) {
       var getBCR = function (el){
         if('getBoundingClientRect' in el){
           getBCR = function(el) {
@@ -594,6 +619,17 @@ var Zepto = (function() {
       }
 
       return function(ignore) {
+        if (coordinates) return this.each(function(index){
+          var $this = $(this),
+              coords = funcArg(this, coordinates, index, $this.offset()),
+              parentOffset = $this.offsetParent().offset(),
+              props = {
+                top:  coords.top  - parentOffset.top,
+                left: coords.left - parentOffset.left
+              }
+              if ($this.css('position') == 'static') props['position'] = 'relative'
+              $this.css(props)
+        })
         if (!this.length) return null;
         var obj = getBCR(this[0]),
             pageX = ignore ? 0 : window.pageXOffset,
@@ -627,7 +663,11 @@ var Zepto = (function() {
           this.each(function(){ this.style.removeProperty(dasherize(property)) })
         else
           css = dasherize(property) + ":" + maybeAddPx(property, value)
-
+      /*
+       * added by chenluyang
+       * @reason IE中，不会将rgba（*，*，*，1）自动转化成rgb（*，*，*）
+       */
+      css = css.replace(/rgba\((\d*\,\s*\d*\,\s*\d*)\,\s*1\)/g, 'rgb($1)')
       return this.each(function(){ this.style.cssText += ';' + css })
     },
     index: function(element){
@@ -737,6 +777,7 @@ var Zepto = (function() {
 // If `$` is not yet defined, point it to `Zepto`
 window.Zepto = Zepto
 '$' in window || (window.$ = Zepto)
+
 ;(function($){
     var $$ = $.zepto.qsa, handlers = {}, _zid = 1, specialEvents={}
 
@@ -870,7 +911,6 @@ window.Zepto = Zepto
             var prevent = event.preventDefault
             event.preventDefault = function() {
                 this.defaultPrevented = true
-                this.defaultPrevented || (this.ieDefaultPrevented = true)
                 prevent.call(this)
             }
         }
@@ -949,12 +989,13 @@ window.Zepto = Zepto
                 //console.log(element)
                 $.each(findHandlers(element, event.type || event), function(i, handler){
                     result = handler.proxy(e)
-                    e.isDefaultPrevented && (e.defaultPrevented = true)     //todo
+                    e.isDefaultPrevented() && (e.defaultPrevented = event.defaultPrevented = true)     //IE10，模拟事件冒泡
                     if (e.isImmediatePropagationStopped()) return false
                 })
                 if (e.isImmediatePropagationStopped() || e.isPropagationStopped()) return false
             })
         })
+
     }
 
     // triggers event handlers on current element just as if an event occurred,
@@ -989,22 +1030,26 @@ window.Zepto = Zepto
     })
 
     $.Event = function(type, props) {
-        var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true
+        var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true, e
         if (props) for (var name in props) (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name])
         event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null)
-		/**
-         *  added by chenluyang
-         *  @reason 在此处直接为没有defaultPrevented属性的event模拟改属性
+        /**
+         * added by chenluyang
+         * @reason IE10 event.defaultPrevented为只读
          */
+        e = event.constructor
+        event = createProxy(event)
+        event.constructor = e
         fix(event)
         return event
     }
 })(Zepto)
+
 ;(function($){
   function detect(ua){
     var os = this.os = {}, browser = this.browser = {},
       webkit = ua.match(/WebKit\/([\d.]+)/),
-      /**
+        /**
          * modified by chenluyang
          * @reason 修复android检测bug, 个别HTC的手机中没有android字段
          * @original
@@ -1042,6 +1087,7 @@ window.Zepto = Zepto
   $.__detect = detect
 
 })(Zepto)
+
 ;(function($, undefined){
   var prefix = '', eventPrefix, endEventName, endAnimationName,
 	/**
@@ -1080,6 +1126,34 @@ window.Zepto = Zepto
     if ($.isObject(duration))
       ease = duration.easing, callback = duration.complete, duration = duration.duration
     if (duration) duration = duration / 1000
+    return this.anim(properties, duration, ease, callback)
+  }
+    /**
+     * added by chenluyang
+     * @reason b
+     */
+  $.fn.animateFrom = function(properties, duration, ease, callback){
+    if ($.isObject(duration))
+      ease = duration.easing, callback = duration.complete, duration = duration.duration
+    if (duration) duration = duration / 1000
+
+    var oldProperties = {}, transforms, $this = $(this)
+    $.extend(true, oldProperties, properties)
+    for(var key in properties) {
+      if (supportedTransforms.test(key)) {
+        transforms || (transforms = [])
+        transforms.push(key + '(' + properties[key] + ')')
+        delete oldProperties[key]
+        delete properties[key]
+      } else {
+          properties[key] = $this.css(key)
+      }
+    }
+    if (transforms) {
+        oldProperties[prefix + 'transform'] = transforms.join(' ')
+        properties[prefix + 'transform'] = $this.css(prefix + 'transform')//transforms.join(' ')
+    }
+    $this.css(oldProperties)
     return this.anim(properties, duration, ease, callback)
   }
 
@@ -1145,6 +1219,7 @@ window.Zepto = Zepto
 
   testEl = null
 })(Zepto)
+
 ;(function($){
   var jsonpID = 0,
       isObject = $.isObject,
@@ -1161,14 +1236,8 @@ window.Zepto = Zepto
   // trigger a custom event and return false if it was cancelled
   function triggerAndReturn(context, eventName, data) {
     var event = $.Event(eventName)
-
     $(context).trigger(event, data)
-      /**
-       * modified by chenluyang
-       * @reason ie10下event的defaultPrevented属性无法被修改,添加了ieDefaultPrevented属性进行辅助
-       * @original return event.defaultPrevented
-        */
-    return event.ieDefaultPrevented !== undefined ? !event.ieDefaultPrevented : !event.defaultPrevented
+    return !event.defaultPrevented
   }
 
   // trigger an Ajax "global" event
@@ -1220,6 +1289,11 @@ window.Zepto = Zepto
   function empty() {}
 
   $.ajaxJSONP = function(options){
+      /**
+       * added by chenluyang
+       * @reason 直接调用jsonp时补全所需参数
+       */
+    for (key in $.ajaxSettings) if (options[key] === undefined) options[key] = $.ajaxSettings[key]
     var callbackName = 'jsonp' + (++jsonpID),
       script = document.createElement('script'),
       abort = function(){
@@ -1228,11 +1302,10 @@ window.Zepto = Zepto
         ajaxComplete('abort', xhr, options)
       },
       xhr = { abort: abort }, abortTimeout
-
-    if (options.error) script.onerror = function() {
-      xhr.abort()
-      options.error()
-    }
+      if (options.error) script.onerror = function() {
+        xhr.abort()
+        options.error()
+      }
 
     window[callbackName] = function(data){
       clearTimeout(abortTimeout)
@@ -1426,6 +1499,7 @@ window.Zepto = Zepto
     return params.join('&').replace('%20', '+')
   }
 })(Zepto)
+
 ;(function ($) {
   $.fn.serializeArray = function () {
     var result = [], el
@@ -1462,9 +1536,24 @@ window.Zepto = Zepto
   }
 
 })(Zepto)
-;(function($){
-  var touch = {}, touchTimeout
 
+;(function($){
+  var touch = {}, touchTimeout,
+	  /**
+	   *  added by chenluyang
+	   *  @reason 兼容IE10下面Pointer事件
+	   */
+	   transEvent = {
+			touchstart: 'MSPointerDown',
+			touchend: 'MSPointerUp',
+			touchmove: 'MSPointerMove'
+		}
+		
+  function compatEvent(evt) {
+    return window.navigator.msPointerEnabled ? transEvent[evt] : evt;
+    //return 'ontouchstart' in window ? evt : transEvent[evt]
+  }
+  
   function parentIfText(node){
     return 'tagName' in node ? node : node.parentNode
   }
@@ -1474,7 +1563,7 @@ window.Zepto = Zepto
     return xDelta >= yDelta ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
   }
 
-  var longTapDelay = 750, longTapTimeout
+  var longTapDelay = 750, longTapTimeout, longTapArea = 5
 
   function longTap(){
     longTapTimeout = null
@@ -1491,40 +1580,57 @@ window.Zepto = Zepto
 
   $(document).ready(function(){
     var now, delta
-
-    $(document.body).bind('touchstart', function(e){
+    //ie10 /* Direct all pointer events to JavaScript code. */
+    $('body').css('-ms-touch-action: none;')
+    $(document.body).bind(compatEvent('touchstart'), function(e){
       now = Date.now()
       delta = now - (touch.last || now)
-      touch.el = $(parentIfText(e.touches[0].target))
+	  /**
+	   *  modified by chenluyang
+	   *  @reason 兼容IE10下面Event对象
+	   *  @oringal 
+	   */
+      touch.el = $(parentIfText(e.touches ? e.touches[0].target : e.target))
       touchTimeout && clearTimeout(touchTimeout)
-      touch.x1 = e.touches[0].pageX
-      touch.y1 = e.touches[0].pageY
+	  /**
+	   *  modified by chenluyang
+	   *  @reason 兼容IE10下面Event对象
+	   *  @oringal 
+	   *   touch.x1 = e.touches[0].pageX
+       *   touch.y1 = e.touches[0].pageY
+	   */
+      touch.x1 = e.touches ? e.touches[0].pageX : e.pageX
+      touch.y1 = e.touches ? e.touches[0].pageY : e.pageY
       if (delta > 0 && delta <= 250) touch.isDoubleTap = true
       touch.last = now
       longTapTimeout = setTimeout(longTap, longTapDelay)
-    }).bind('touchmove', function(e){
-      cancelLongTap()
-      touch.x2 = e.touches[0].pageX
-      touch.y2 = e.touches[0].pageY
-    }).bind('touchend', function(e){
-       cancelLongTap()
+    }).bind(compatEvent('touchmove'), function(e){
+            /**
+             *  modified by chenluyang
+             *  @reason 兼容IE10下面Event对象, IE10下，即使手指不移动，也会间隔触发MSPointerMove事件
+             *  @oringal
+             *   touch.x2 = e.touches[0].pageX
+             *   touch.y2 = e.touches[0].pageY
+             */
+      if(!touch.el) return
+      touch.x2 = e.touches ? e.touches[0].pageX : e.pageX
+      touch.y2 = e.touches ? e.touches[0].pageY : e.pageY
+      touch.x2 && longTapArea <= Math.abs(touch.x1 - touch.x2)  && cancelLongTap()
 
+    }).bind(compatEvent('touchend'), function(e){
+       cancelLongTap()
       // double tap (tapped twice within 250ms)
       if (touch.isDoubleTap) {
         touch.el.trigger('doubleTap')
         touch = {}
-
       // swipe
       } else if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) ||
                  (touch.y2 && Math.abs(touch.y1 - touch.y2) > 30)) {
           touch.el.trigger('swipe') &&
             touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)))
         touch = {}
-
-      // normal tap
       } else if ('last' in touch) {
         touch.el.trigger('tap')
-
         touchTimeout = setTimeout(function(){
           touchTimeout = null
           touch.el.trigger('singleTap')
@@ -1539,7 +1645,15 @@ window.Zepto = Zepto
     })
   })
 
+
   ;['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m){
     $.fn[m] = function(callback){ return this.bind(m, callback) }
   })
+    $.fn['longTap'] = function(callback){
+        this.bind('contextmenu', function(e){ e.preventDefault() })
+        return this.bind('longTap', callback)
+    }
+
+
 })(Zepto)
+
