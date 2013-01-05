@@ -13,13 +13,24 @@ body {height: 800px;}
     font-size: 16px;
     text-indent: 10px;
 }
+
+
 .btn_2 {
     display: inline-block;
-    height: 30px;
+    height: 31px;
     width:34px;
     background: url(toolbar_icons.png) no-repeat;
     -webkit-background-size: 52px 672px;
     background-position: 4px -156px;
+}
+/*css for pad*/
+@media all and (min-device-width:768px) and (max-device-width: 1024px){
+    .btn_2 {
+        height: 36px;
+        width:41px;
+        -webkit-background-size: 63px 800px;
+        background-position: 5px -185px;
+    }
 }
 .ui-toolbar .ui-toolbar-toolscon .ui-button-icon-only .ui-icon {
     background: url(toolbar_icons.png) no-repeat;

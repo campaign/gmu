@@ -5,6 +5,7 @@
 
 .ui-toolbar-wrap {
     position: relative;
+    height: 40px;
 }
 .ui-toolbar-wrap a {
     text-decoration: none;
@@ -57,7 +58,6 @@
     position: absolute;
     top:0;
     height: 100%;
-    line-height: 40px;
 }
 
 .ui-toolbar-left {
@@ -80,6 +80,33 @@
     text-align: center;
 }
 
-
+/*css for pad*/
+@media all and (min-device-width:768px) and (max-device-width: 1024px){
+    .ui-toolbar-wrap {
+        height: 48px;
+    }
+    .ui-toolbar-title {
+        font-size: 16px;
+        line-height: 48px;
+    }
+    .ui-toolbar-backbtn {
+        line-height: 35px;
+        height: 36px;
+        margin: 6px 0 0 22px;
+        padding: 0 0.6em 0 0.5em;
+    }
+    .ui-toolbar-backbtn:before, .ui-toolbar-backbtn:after {
+        content: '\0020';
+        border-width:18px 9px 18px 0;
+        left: -8px;
+        top: -1px;
+        width:0;
+        height:0;
+        display: block;
+    }
+    .ui-toolbar-backbtn:after {
+        left: -7px;
+    }
+}
 
 
