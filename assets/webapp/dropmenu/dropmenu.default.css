@@ -15,17 +15,17 @@
 
 .ui-dropmenu .ui-dropmenu-items a {
     display: block;
-    line-height: 1.5;
-    padding: 6px 5px 3px 10px;
+    padding: 0.5em 1em;
     text-align: left;
     position: relative;
     color: #5b5b5b;
     text-decoration: none;
     cursor: pointer;
+    font-size: 14px;
 }
 
 .ui-dropmenu .ui-dropmenu-items .ui-icontext a {
-    padding-left: 28px;
+    padding-left: 2em;
 }
 
 .ui-dropmenu .ui-dropmenu-items .ui-icontext .ui-icon {
@@ -92,8 +92,8 @@
 }
 .ui-dropmenu.ui-horizontal .ui-dropmenu-items li a {
     border-radius: 3px;
-    width: 24px;
-    height: 24px;
+    width: 1.7em;
+    height: 1.7em;
     padding: 0;
     display: block;
 }
@@ -132,4 +132,13 @@
 }
 .ui-dropmenu.has-iScroll .ui-dropmenu-arrow {
     -webkit-transform: translateZ(0px);/**解决箭头不消失问题*/
+}
+
+@media all and (min-device-width: 768px) and (max-device-width:1024px){
+    .ui-dropmenu .ui-dropmenu-items a{
+        font-size: 16px;
+    }
+    .ui-dropmenu.ui-horizontal .ui-dropmenu-items li{
+        padding: 6px 4px 6px;
+    }
 }
