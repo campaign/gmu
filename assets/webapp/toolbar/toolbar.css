@@ -58,7 +58,6 @@
     position: absolute;
     top:0;
     height: 100%;
-    line-height: 40px;
 }
 
 .ui-toolbar-left {
@@ -107,9 +106,6 @@
     }
     .ui-toolbar-backbtn:after {
         left: -7px;
-    }
-    .ui-toolbar-left, .ui-toolbar-right {
-        line-height: 48px;
     }
 }
 
