@@ -1,16 +1,9 @@
-.ui-toolbar {
-    height: 42px;
-    width:100%;
-}
+
 .ui-toolbar-wrap {
     border: 1px solid #135CBE;
     border-width: 1px 0;
     background: #2773dc;
-    height: 40px;
     color: #fff;
-}
-.ui-toolbar-title {
-    line-height: 40px;
 }
 
 .ui-toolbar-backbtn {
