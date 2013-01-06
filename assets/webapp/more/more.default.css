@@ -17,7 +17,7 @@
     font-size: 14px;
     color: #36355a;
 }
-@media screen and (min-width:321px){
+@media screen and (min-device-width : 768px) and (max-device-width : 1024px){
     .ui-more-links a {
         font-size: 16px;
     }
