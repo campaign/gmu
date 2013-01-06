@@ -1,7 +1,7 @@
 /**
  * @file 搜索建议组件
  * @name Suggestion
- * @desc <qrcode align="right" title="Live Demo">../gmu/_examples/webapp/suggestion/suggestion_setup.html</qrcode>
+ * @desc <qrcode align="right" title="Live Demo">../gmu/_examples/widget/suggestion/suggestion_setup.html</qrcode>
  * 搜索建议组件
  * @import core/zepto.ui.js, core/zepto.iscroll.js, core/zepto.highlight.js
  */
@@ -41,8 +41,8 @@
      * <input type="text" id="input">
      * </code>
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/suggestion/suggestion_setup.html">
-     * ../gmu/_examples/webapp/suggestion/suggestion_setup.html
+     * <codepreview href="../gmu/_examples/widget/suggestion/suggestion_setup.html">
+     * ../gmu/_examples/widget/suggestion/suggestion_setup.html
      * </codepreview>
      */
     $.ui.define('suggestion', {

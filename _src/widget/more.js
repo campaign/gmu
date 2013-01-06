@@ -18,9 +18,9 @@
      * - ''container'' {selector}: (可选，默认：body) 组件容器
      * - ''columnNum'' {Number}: (可选，默认：5) 列数
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/more/more.html">
-     * ../gmu/_examples/webapp/more/more.html
-     * ../gmu/_examples/webapp/more/more_demo.css
+     * <codepreview href="../gmu/_examples/widget/more/more.html">
+     * ../gmu/_examples/widget/more/more.html
+     * ../gmu/_examples/widget/more/more_demo.css
      * </codepreview>
      */
     $.ui.define('more', {

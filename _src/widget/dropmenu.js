@@ -59,8 +59,8 @@
      * - ''events'' 所有[Trigger Events](#dropmenu_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
      *
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/dropmenu/dropmenu.html">
-     * ../gmu/_examples/webapp/dropmenu/dropmenu.html
+     * <codepreview href="../gmu/_examples/widget/dropmenu/dropmenu.html">
+     * ../gmu/_examples/widget/dropmenu/dropmenu.html
      * </codepreview>
      */
     $.ui.define('dropmenu', {

@@ -21,8 +21,8 @@
      * <input type="text" id="input">
      * </code>
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/suggestion/suggestion_setup.html">
-     * ../gmu/_examples/webapp/suggestion/suggestion_setup.html
+     * <codepreview href="../gmu/_examples/widget/suggestion/suggestion_setup.html">
+     * ../gmu/_examples/widget/suggestion/suggestion_setup.html
      * </codepreview>
      */
     $.ui.define('quickdelete', {

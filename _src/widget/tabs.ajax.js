@@ -14,9 +14,9 @@
  * </code>
  *
  * **Demo**
- * <codepreview href="../gmu/_examples/webapp/tabs/tabs_ajax.html">
- * ../gmu/_examples/webapp/tabs/tabs_ajax.html
- * ../gmu/_examples/webapp/tabs/tabs_json.html
+ * <codepreview href="../gmu/_examples/widget/tabs/tabs_ajax.html">
+ * ../gmu/_examples/widget/tabs/tabs_ajax.html
+ * ../gmu/_examples/widget/tabs/tabs_json.html
  * </codepreview>
  *
  * @import widget/tabs.js

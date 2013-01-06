@@ -9,6 +9,10 @@
     /**
      * @name 说明
      * @desc Refresh lite插件，支持拉动加载。
+     * **Demo**
+     * <codepreview href="../gmu/_examples/widget/refresh/refresh_lite.html">
+     * ../gmu/_examples/widget/refresh/refresh_lite.html
+     * </codepreview>
      */
     $.ui.refresh.register(function () {
         return {

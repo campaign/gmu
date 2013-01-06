@@ -18,9 +18,9 @@
      * - ''iconWidth'' {Number}: (可选，默认：50) 侧边栏按钮的宽度
      * - ''springBackDis'' {Number}: (可选，默认：15) 滑动较小时的回弹的阀值
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/pageswipe/pageswipe.html">
-     * ../gmu/_examples/webapp/pageswipe/pageswipe.html
-     * ../gmu/_examples/webapp/pageswipe/pageswipe_demo.css
+     * <codepreview href="../gmu/_examples/widget/pageswipe/pageswipe.html">
+     * ../gmu/_examples/widget/pageswipe/pageswipe.html
+     * ../gmu/_examples/widget/pageswipe/pageswipe_demo.css
      * </codepreview>
      */
     

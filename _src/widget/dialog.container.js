@@ -22,8 +22,8 @@
              * @desc 无此插件dialog的container只能是body, 加此插件后，可以是body下的其他容器，由于定位方式不一样，所以以插件的形式来实现此功能。
              *
              * **Demo**
-             * <codepreview href="../gmu/_examples/webapp/dialog/dialog_container.html">
-             * ../gmu/_examples/webapp/dialog/dialog_container.html
+             * <codepreview href="../gmu/_examples/widget/dialog/dialog_container.html">
+             * ../gmu/_examples/widget/dialog/dialog_container.html
              * </codepreview>
              */
             _calculate:function () {
