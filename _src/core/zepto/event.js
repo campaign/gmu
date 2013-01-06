@@ -133,14 +133,14 @@
                  }
              }
          */
-        if (!('defaultPrevented' in event) || $.isWp) {
+        //if (!('defaultPrevented' in event) || $.isWp) {
             event.defaultPrevented = false
             var prevent = event.preventDefault
             event.preventDefault = function() {
                 this.defaultPrevented = true
                 prevent.call(this)
             }
-        }
+        //}
     }
 
     $.fn.delegate = function(selector, event, callback){
