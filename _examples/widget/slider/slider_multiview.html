@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8">
+    <title>显示多张图片</title>
+</head>
+<body>
+
+<div id="slider_1" style="height: 200px;"></div>
+
+
+<script id="bootstrap" src="../../example.js"
+        type="text/javascript"
+        data-theme="default"
+        data-use="webapp/slider.js"
+        data-page="图片轮播|slider.html,无缝滑动|slider_loop.html,显示多张图片|slider_multiview.html">
+    /**
+     * JS:
+     *   Zepto:
+     *     zepto.js
+     *   GMU:
+     *     core/zepto.extend.js
+     *     core/zepto.ui.js
+     *     webapp/slider.js
+     *
+     * CSS:
+     * webapp/slider/slider.css
+     *
+     * 如果需要主题还需要
+     * webapp/slider/slider.default.css
+     *
+     */
+    //创建slider组件(render方式)
+    var slider_1 = $.ui.slider('#slider_1', {
+        autoPlay:false,
+        showArr:false,
+        viewNum:3,
+        content:[
+            {
+                href: "http://www.baidu.com",
+                pic: "pic1.jpg",
+                title:'白昼冷光'
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic2.jpg",
+                title: "听风者"
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic3.jpg",
+                title: "暮光之城2"
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic4.jpg",
+                title: "搞定岳父大人"
+            },
+            {
+                href: "http://www.baidu.com",
+                pic: "pic5.jpg",
+                title: "三个火枪手"
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic6.jpg",
+                title: "人在囧途"
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic7.jpg",
+                title: "第一次"
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic8.jpg",
+                title: "婚前试爱"
+            }, {
+                href: "http://www.baidu.com",
+                pic: "pic9.jpg",
+                title: "青春期"
+            }
+        ]
+    });
+</script>
+</body>
+</html>
