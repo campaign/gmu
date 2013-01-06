@@ -38,7 +38,7 @@ function _buildFile(&$files, $arr){
                     }
                 }
             }
-            if(preg_match('/^(webapp|pad|chart)\/(.+?)(?:\.(.+?))?\.js/i', $file, $match)){// 如果是组件代码
+            if(preg_match('/^(widget|chart)\/(.+?)(?:\.(.+?))?\.js/i', $file, $match)){// 如果是组件代码
                 $cssFile = $match[1].'/'.$match[2].'/'.$match[2].(isset($match[3]) ?'.'.$match[3]:'').'.css';
                 if(is_file($cssDir.$cssFile)){
                     $files[$file]['css'][] = $cssFile;
@@ -121,7 +121,7 @@ $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
 $baseDir = dirname(dirname(__FILE__)).'/_src/';
 $cssDir = dirname(dirname(__FILE__)).'/assets/';
 
-$allowedTypes = array('webapp', 'pad', 'core');
+$allowedTypes = array('widget', 'core');
 if (!in_array($type, $allowedTypes)) {
     $type = current($allowedTypes);
 }
