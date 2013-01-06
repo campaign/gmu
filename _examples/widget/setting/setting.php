@@ -1,26 +1,12 @@
 <?php
 require_once dirname(__FILE__) . '../../../Mobile_Detect.php';
 $arr = array(
-    'linechart' => array(
-        "name" => 'LineChart',
-        "description" => '折线图',
-        "group" => 'Chart',
-        "icon" => 'adddesktop.png',
-        "href" => '../chart/linechart/linechart.html',
-    ),
-    'adddesktop' => array(
-        "name" => 'Add2desktop',
-        "description" => '添加到桌面',
+    'slider' => array(
+        "name" => 'Slider',
+        "description" => '图片轮播',
         "group" => 'Components',
-        "icon" => 'adddesktop.png',
-        "href" => 'add2desktop/add2desktop.html',
-    ),
-    'button' => array(
-        "name" => 'Button',
-        "description" => '按钮',
-        "group" => 'Components',
-        "icon" => 'button.png',
-        "href" => 'button/button.html',
+        "icon" => 'slider.png',
+        "href" => 'slider/slider.html',
     ),
     'dialog' => array(
         "name" => 'Dialog',
@@ -29,34 +15,6 @@ $arr = array(
         "icon" => 'dialog.png',
         "href" => 'dialog/dialog.html',
     ),
-    'dropmenu' => array(
-        "name" => 'Dropmenu',
-        "description" => '下拉菜单',
-        "group" => 'Components',
-        "icon" => 'dropmenu.png',
-        "href" => 'dropmenu/dropmenu.html',
-    ),
-    'gotop' => array(
-        "name" => 'Gotop',
-        "description" => '返回顶部',
-        "group" => 'Components',
-        "icon" => 'gotop.png',
-        "href" => 'gotop/gotop.html',
-    ),
-    'imglazyload' => array(
-        "name" => 'Image lazy load',
-        "description" => '图片懒加载',
-        "group" => 'Components',
-        "icon" => 'imglazyload.png',
-        "href" => 'imglazyload/imglazyload.html',
-    ),
-    'more' => array(
-        "name" => 'More',
-        "description" => '显示更多',
-        "group" => 'Components',
-        "icon" => 'more.png',
-        "href" => 'more/more.html',
-    ),
     'navigator' => array(
         "name" => 'Navigator',
         "description" => '导航栏',
@@ -64,26 +22,12 @@ $arr = array(
         "icon" => 'navigator.png',
         "href" => 'navigator/navigator.html',
     ),
-    'pageswipe' => array(
-        "name" => 'Page swipe',
-        "description" => '页面切换',
-        "group" => 'Components',
-        "icon" => 'slider.png',
-        "href" => 'pageswipe/pageswipe.html',
-    ),
     'refresh' => array(
         "name" => 'Refresh',
         "description" => '加载更多',
         "group" => 'Components',
         "icon" => 'refresh.png',
         "href" => 'refresh/refresh.html',
-    ),
-    'slider' => array(
-        "name" => 'Slider',
-        "description" => '图片轮播',
-        "group" => 'Components',
-        "icon" => 'slider.png',
-        "href" => 'slider/slider.html',
     ),
     'suggestion' => array(
         "name" => 'Suggestion',
@@ -106,6 +50,62 @@ $arr = array(
         "icon" => 'toolbar.png',
         "href" => 'toolbar/toolbar.html',
     ),
+    'dropmenu' => array(
+        "name" => 'Dropmenu',
+        "description" => '下拉菜单',
+        "group" => 'Components',
+        "icon" => 'dropmenu.png',
+        "href" => 'dropmenu/dropmenu.html',
+    ),
+    'gotop' => array(
+        "name" => 'Gotop',
+        "description" => '返回顶部',
+        "group" => 'Components',
+        "icon" => 'gotop.png',
+        "href" => 'gotop/gotop.html',
+    ),
+    'adddesktop' => array(
+        "name" => 'Add2desktop',
+        "description" => '添加到桌面',
+        "group" => 'Components',
+        "icon" => 'adddesktop.png',
+        "href" => 'add2desktop/add2desktop.html',
+    ),
+    'button' => array(
+        "name" => 'Button',
+        "description" => '按钮',
+        "group" => 'Components',
+        "icon" => 'button.png',
+        "href" => 'button/button.html',
+    ),
+    'pageswipe' => array(
+        "name" => 'Page swipe',
+        "description" => '页面切换',
+        "group" => 'Components',
+        "icon" => 'slider.png',
+        "href" => 'pageswipe/pageswipe.html',
+    ),
+    'imglazyload' => array(
+        "name" => 'Image lazy load',
+        "description" => '图片懒加载',
+        "group" => 'Components',
+        "icon" => 'imglazyload.png',
+        "href" => 'imglazyload/imglazyload.html',
+    ),
+    'more' => array(
+        "name" => 'More',
+        "description" => '显示更多',
+        "group" => 'Components',
+        "icon" => 'more.png',
+        "href" => 'more/more.html',
+    ),
+    'linechart' => array(
+        "name" => 'LineChart',
+        "description" => '折线图',
+        "group" => 'Chart',
+        "icon" => 'adddesktop.png',
+        "href" => '../chart/linechart/linechart.html',
+    )
 );
 
 $detect = new Mobile_Detect();
