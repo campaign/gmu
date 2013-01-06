@@ -107,7 +107,6 @@
                 o.loop = false;
                 o.showDot = false;
                 o.imgInit = o.viewNum + 1;
-                this.root().css('overflow', 'visible');
             }
         },
 
@@ -134,7 +133,7 @@
             var me = this,
                 o = me._data,
                 root = me.root(),
-                width = root.width() / o.viewNum,
+                width = Math.ceil(root.width() / o.viewNum),
                 height = root.height(),
                 loop = o.loop,
                 items = $('.ui-slider-item', root).toArray(),
