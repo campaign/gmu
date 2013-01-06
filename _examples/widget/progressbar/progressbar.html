@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8"/>
+    <title>progressbar demo</title>
+    <link rel="stylesheet" href="progressbar_demo.css"/>
+</head>
+<body>
+<div id="progressbar">
+</div>
+<input id="cur_val"/><button id="set_val">Set</button>
+
+
+<div id="progressbar-2"></div>
+<input id="cur_val-2"/><button id="set_val-2">Set</button>
+<script id="bootstrap" src="../../example.js"
+        type="text/javascript"
+        data-theme="default"
+        data-use="widget/progressbar.js"
+        data-page="普通页面|progressbar.html">
+    /**
+     * JS:
+     *   Zepto:
+     *     zepto.js
+     *   GMU:
+     *     core/zepto.extend.js
+     *     core/zepto.ui.js
+     *     webapp/progressbar.js
+     *
+     * CSS:
+     * webapp/progressbar/progressbar.css
+     *
+     */
+
+    //创建组件
+    var demo = $.ui.progressbar('#progressbar');
+    //$('#progressbar').progressbar();           //setup
+    $('#set_val').click(function() {
+        demo.value($('#cur_val').val());
+    });
+
+    //创建组件
+    var demo_2 = $.ui.progressbar('#progressbar-2', {horizontal: false});
+    //$('#progressbar').progressbar();           //setup
+    $('#set_val-2').click(function() {
+        demo_2.value($('#cur_val-2').val());
+    });
+</script>
+</body>
+</html>

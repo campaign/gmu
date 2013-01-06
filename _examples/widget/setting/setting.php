@@ -8,6 +8,13 @@ $arr = array(
         "icon" => 'slider.png',
         "href" => 'slider/slider.html',
     ),
+    'progressbar' => array(
+        "name" => 'progressbar',
+        "description" => '进度条',
+        "group" => 'Components',
+        "icon" => 'slider.png',
+        "href" => 'progressbar/progressbar.html',
+    ),
     'dialog' => array(
         "name" => 'Dialog',
         "description" => '弹出框',
