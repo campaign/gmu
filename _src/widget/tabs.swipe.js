@@ -2,7 +2,7 @@
  * @file Tabs - 左右滑动手势插件
  * @name Tabs - 左右滑动手势插件
  * @short Tabs.swipe
- * @import webapp/tabs.js
+ * @import widget/tabs.js
  */
 (function ($, undefined) {
     var durationThreshold = 1000, // 时间大于1s就不算。

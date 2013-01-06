@@ -2,7 +2,7 @@
  * @file Dialog － 父容器插件
  * @name Dialog － 父容器插件
  * @short Dialog.container
- * @import webapp/dialog.js
+ * @import widget/dialog.js
  */
 (function ($, undefined) {
     $.ui.dialog.register(function () {

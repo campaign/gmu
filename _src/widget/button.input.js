@@ -58,7 +58,7 @@
  * </codepreview>
  *
  *
- * @import webapp/button.js
+ * @import widget/button.js
  */
 (function($, undefined){
     var _uid = 1,

@@ -1,14 +1,8 @@
-///import ui.mobile.mobile;
-///import ui.mobile.ex;
-///import ui.mobile.widget;
-///import ui.mobile.control;
-///import third-party.iscroll.iscroll;
-
 /**
  * @file 加载更多组件 － iScroll版
  * @name Refresh.iscroll
  * @short Refresh.iscroll
- * @import core/zepto.iscroll.js, webapp/refresh.js
+ * @import core/zepto.iscroll.js, widget/refresh.js
  */
 
 (function($, undefined) {

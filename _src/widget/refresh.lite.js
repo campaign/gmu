@@ -2,7 +2,7 @@
  * @file 加载更多组件 － lite版本
  * @name Refresh.lite
  * @short Refresh.lite
- * @import webapp/refresh.js
+ * @import widget/refresh.js
  */
 
 (function($, undefined) {

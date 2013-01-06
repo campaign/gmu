@@ -19,7 +19,7 @@
  * ../gmu/_examples/webapp/tabs/tabs_json.html
  * </codepreview>
  *
- * @import webapp/tabs.js
+ * @import widget/tabs.js
  */
 (function ($, undefined) {
     var idRE = /^#.+$/,
