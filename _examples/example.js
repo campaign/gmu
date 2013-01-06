@@ -5,7 +5,7 @@
         theme = script.getAttribute('data-theme') || '',
         path = script.getAttribute('data-path') || '../../load.php',
         backUrl = script.getAttribute('data-backurl') || '../',
-        requires = ['webapp/button.js', 'webapp/dropmenu.js', 'webapp/toolbar.js'],
+        requires = ['widget/button.js', 'widget/dropmenu.js', 'widget/toolbar.js'],
         i, jsRE;
 
     for(i=requires.length; i--;) {

@@ -1,2 +1,2 @@
 <?php
-header('location: webapp');
+header('location: widget');
