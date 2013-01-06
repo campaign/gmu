@@ -136,7 +136,7 @@
                 $tabList = data._$tabList,
                 beforeSelectEvent = $.Event('beforetabselect');
 
-            me.trigger(beforeSelectEvent, $tabList[index]);
+            me.trigger(beforeSelectEvent, [$tabList[index]]);
             if (beforeSelectEvent.defaultPrevented) {     //阻止默认事件
                 e && e.preventDefault();     //若是程序调switchTo，则直接return，若点击调用则preventDefault
                 return me;

@@ -97,8 +97,8 @@
      * webapp/navigator/navigator.iscroll.default.css
      *
      */
-    $('#select').navigator().on('tabselect', function (e) {     //tabselect事件
-        $('#result').html('第'+ e.data.index+'个tab的data-type为'+ $(e.data).attr('data-type'));
+    $('#select').navigator().on('tabselect', function (e, elem, index) {     //tabselect事件
+        $('#result').html('第'+ index+'个tab的data-type为'+ $(elem).attr('data-type'));
     });
 
     $.ui.navigator('#before-select', {    //beforetabselect事件

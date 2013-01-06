@@ -72,7 +72,7 @@
      */
     $('#tabselect').navigator({
         tabselect: function (e) {
-            $('#result').html('第'+ e.data.index + '个tab被选中');       //tabselect事件，可以以option的方式传入，也可以直接.on的方式绑定
+            $('#result').html('第'+ e.data[0].index + '个tab被选中');       //tabselect事件，可以以option的方式传入，也可以直接.on的方式绑定
         }                                                                  //option方式时，默认选中tab的select事件也会触发
     });
 
