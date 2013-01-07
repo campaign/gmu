@@ -14,7 +14,7 @@
      * @desc **el**
      * css选择器, 或者zepto对象
      * **Options**
-     * - ''content'' {Array}: (必选) 内容
+     * - ''content'' {Array}: (必选) 内容，内容条目
      * - ''container'' {selector}: (可选，默认：body) 组件容器
      * - ''columnNum'' {Number}: (可选，默认：5) 列数
      * **Demo**
