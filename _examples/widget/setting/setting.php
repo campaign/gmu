@@ -99,13 +99,6 @@ $arr = array(
         "icon" => 'imglazyload.png',
         "href" => 'imglazyload/imglazyload.html',
     ),
-    'more' => array(
-        "name" => 'More',
-        "description" => '显示更多',
-        "group" => 'Components',
-        "icon" => 'more.png',
-        "href" => 'more/more.html',
-    ),
     'linechart' => array(
         "name" => 'LineChart',
         "description" => '折线图',
