@@ -40,10 +40,9 @@
         },
 
         _setup: function(mode) {
-            var me = this,
-                $elem = me.root();
+            var me = this;
             if(!mode) {
-
+                me._create();
             }
             return me;
         },
@@ -126,7 +125,7 @@
                         o._filled.style.width = _percent + '%';
                         me.trigger('valueChange');
                     }
-                    me.trigger('dragStart');
+                    me.trigger('dragMove');
                 }
             } else {
                 if(o.S) {
@@ -139,7 +138,7 @@
                         o._filled.style.cssText += 'height:' + _percent + '%;top:' + (o._height + Y + o._current) + 'px';
                         me.trigger('valueChange');
                     }
-                    me.trigger('dragStart');
+                    me.trigger('dragMove');
                 }
             }
         },
