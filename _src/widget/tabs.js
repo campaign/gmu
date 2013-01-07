@@ -35,8 +35,8 @@
      * - ''events'' 所有[Trigger Events](#tabs_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
      *
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/tabs/tabs.html">
-     * ../gmu/_examples/webapp/tabs/tabs.html
+     * <codepreview href="../gmu/_examples/widget/tabs/tabs.html">
+     * ../gmu/_examples/widget/tabs/tabs.html
      * </codepreview>
      */
     $.ui.define('tabs', {

@@ -22,8 +22,8 @@
      * - ''beforeshow'' {Function}: (可选) 显示前触发的事件，调用e.preventDefault()可以阻止显示
      * - ''afterhide'' {Function}: (可选) 隐藏后触发的事件，可以在这里写LocalStorage的值
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/add2desktop/add2desktop.html">
-     * ../gmu/_examples/webapp/add2desktop/add2desktop.html
+     * <codepreview href="../gmu/_examples/widget/add2desktop/add2desktop.html">
+     * ../gmu/_examples/widget/add2desktop/add2desktop.html
      * </codepreview>
      */
     $.ui.define('add2desktop', {

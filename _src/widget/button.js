@@ -41,9 +41,9 @@
      * </code>
      *
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/button/button.html">
-     * ../gmu/_examples/webapp/button/button.html
-     * ../gmu/_examples/webapp/button/button_demo.css
+     * <codepreview href="../gmu/_examples/widget/button/button.html">
+     * ../gmu/_examples/widget/button/button.html
+     * ../gmu/_examples/widget/button/button_demo.css
      * </codepreview>
      */
     $.ui.define('button', {

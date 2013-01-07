@@ -19,9 +19,9 @@
      * </code>
      * @desc
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/gotop/gotop_iscroll.html">
-     * ../gmu/_examples/webapp/gotop/gotop_iscroll.html
-     * ../gmu/_examples/webapp/gotop/gotop_demo.css
+     * <codepreview href="../gmu/_examples/widget/gotop/gotop_iscroll.html">
+     * ../gmu/_examples/widget/gotop/gotop_iscroll.html
+     * ../gmu/_examples/widget/gotop/gotop_demo.css
      * </codepreview>
      */
     $.ui.gotop.register(function(){

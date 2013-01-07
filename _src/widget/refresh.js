@@ -28,8 +28,8 @@
      * </code>
      * @notice 此组件不支持render模式，只支持setup模式
      * @desc **Demo**
-     * <codepreview href="../gmu/_examples/webapp/refresh/refresh.html">
-     * ../gmu/_examples/webapp/refresh/refresh.html
+     * <codepreview href="../gmu/_examples/widget/refresh/refresh.html">
+     * ../gmu/_examples/widget/refresh/refresh.html
      * </codepreview>
      */
     $.ui.define('refresh', {

@@ -45,8 +45,8 @@
      *
      * @desc
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/dropmenu/dropmenu_iscroll.html">
-     * ../gmu/_examples/webapp/dropmenu/dropmenu_iscroll.html
+     * <codepreview href="../gmu/_examples/widget/dropmenu/dropmenu_iscroll.html">
+     * ../gmu/_examples/widget/dropmenu/dropmenu_iscroll.html
      * </codepreview>
      */
 })(Zepto);

@@ -41,8 +41,8 @@
      * </div>
      * </code>
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/navigator/tab.html">
-     * ../gmu/_examples/webapp/navigator/tab.html
+     * <codepreview href="../gmu/_examples/widget/navigator/tab.html">
+     * ../gmu/_examples/widget/navigator/tab.html
      * </codepreview>
      */
     var tmpl = '<% for (var i=0, len=left.length; i<len; i++) { %>'

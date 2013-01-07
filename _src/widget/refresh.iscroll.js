@@ -9,6 +9,10 @@
     /**
      * @name 说明
      * @desc Refresh iscroll插件，支持拉动加载，内滚采用iscroll方式，体验更加贴近native。
+     * **Demo**
+     * <codepreview href="../gmu/_examples/widget/refresh/refresh_iscroll.html">
+     * ../gmu/_examples/widget/refresh/refresh_iscroll.html
+     * </codepreview>
      */
     $.ui.refresh.register(function () {
         return {

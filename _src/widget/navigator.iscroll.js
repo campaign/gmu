@@ -49,9 +49,9 @@
      * </div>
      * </code>
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/navigator/navigator.html">
-     * ../gmu/_examples/webapp/navigator/navigator.html
-     * ../gmu/_examples/webapp/navigator/navigator_fix.html
+     * <codepreview href="../gmu/_examples/widget/navigator/navigator.html">
+     * ../gmu/_examples/widget/navigator/navigator.html
+     * ../gmu/_examples/widget/navigator/navigator_fix.html
      * </codepreview>
      */
 

@@ -20,9 +20,9 @@
      * - ''btns'' {Array}: (可选)右侧要添加的按钮(Dom节点)
      * - ''useFix'' {Boolean}: (可选)是否使用固顶效果(toolbar 不在页面顶端)
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/toolbar/toolbar.html">
-     * ../gmu/_examples/webapp/toolbar/toolbar.html
-     * ../gmu/_examples/webapp/toolbar/toolbar_demo.css
+     * <codepreview href="../gmu/_examples/widget/toolbar/toolbar.html">
+     * ../gmu/_examples/widget/toolbar/toolbar.html
+     * ../gmu/_examples/widget/toolbar/toolbar_demo.css
      * </codepreview>
      */
     $.ui.define("toolbar", {

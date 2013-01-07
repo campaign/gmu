@@ -62,8 +62,8 @@
      * </code>
      *
      * **Demo**
-     * <codepreview href="../gmu/_examples/webapp/dialog/dialog.html">
-     * ../gmu/_examples/webapp/dialog/dialog.html
+     * <codepreview href="../gmu/_examples/widget/dialog/dialog.html">
+     * ../gmu/_examples/widget/dialog/dialog.html
      * </codepreview>
      */
     $.ui.define('dialog', {
@@ -237,7 +237,7 @@
          * @name open
          * @grammar open() ⇒ instance
          * @grammar open(x, y) ⇒ instance
-         * @desc 弹出弹出框，如果设置了位置，内部会数值转给[position](webapp/dialog.js#position)来处理。
+         * @desc 弹出弹出框，如果设置了位置，内部会数值转给[position](widget/dialog.js#position)来处理。
          */
         open: function(x, y){
             var data = this._data;
