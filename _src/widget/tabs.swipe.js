@@ -89,7 +89,7 @@
                         }
                         index !== undefined && (e.stopPropagation(), this.switchTo(index));
                         break;
-                    default://click
+                    default://tap
                         return this._eventHandlerOrg(e);
                 }
             }
