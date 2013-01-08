@@ -1,43 +1,6 @@
-(function(undefined){
-    var script = document.getElementById('bootstrap'),
-        use = script.getAttribute('data-use') || '',
-        page = (script.getAttribute('data-page') || '').split(','),
-        theme = script.getAttribute('data-theme') || '',
-        path = script.getAttribute('data-path') || '../../load.php',
-        backUrl = script.getAttribute('data-backurl') || '../',
-        requires = ['widget/button.js', 'widget/dropmenu.js', 'widget/toolbar.js'],
-        i, jsRE;
-
-    for(i=requires.length; i--;) {
-        jsRE = new RegExp('(\b|,)'+requires[i].replace(/[\-\[\]{}()*+?.,\/\\\^$|#\s]/g, "\\$&")+'(\b|,)');
-        jsRE.test(use) || (use = requires[i]+','+use);
-    }
-    loadAssets(path + '?mode=1&theme='+theme+'&js=' + use, function(xml){
-        var i, length, js, node,
-            jses = xml.getElementsByTagName('js'),
-            csses = xml.getElementsByTagName('css'),
-            head = document.getElementsByTagName('head')[0],
-            toolbar, btn, pages, item;
-
-        //插入css
-        for(i = csses.length; i--; ){
-            js = csses[i];
-            node =  document.createElement('style');
-            node.setAttribute("name", js.getAttribute("name"));
-            node.innerHTML = "/*"+js.getAttribute("name")+"*/\n"+js.textContent;
-            head.insertBefore(node, head.firstChild);
-        }
-        //插入script
-        for(i= 0, length = jses.length; i<length; i++){
-            js = jses[i];
-            node = document.createElement('script');
-            node.setAttribute("type", "text/javascript");
-            node.setAttribute("name", js.getAttribute("name"));
-            node.innerHTML = js.textContent;
-            document.body.appendChild(node);
-        }
-
-        //事件兼容pc，做测试用的。
+(function($){
+    //事件兼容pc，做测试用的
+    (function () {
         var $onFn = $.fn.on,
             $offFn = $.fn.off,
             transEvent = {
@@ -84,55 +47,96 @@
                 return $offFn.call(this, transFn(event), selector, callback);
             }
         });
+    })();
 
-        //初始化通用头部。
-        node = document.createElement('header');
-        document.body.insertBefore(node, document.body.firstElementChild);
-
-        btn = page.length && page[0] ? $.ui.button({
-            label: '切换'
-        }).root() : '';
-        toolbar = $.ui.toolbar({
-            title: document.title,
-            container: node,
-            useFix:true,
-            btns: btn,
-            backButtonClick: function(){
-                location.href = backUrl;
-            }
-        });
-        if(btn && btn.length){
-            pages = [];
-            for(i = page.length; i--;){
-                item = page[i].split('|');
-                pages.unshift({
-                    text: item[0],
-                    href: item[1]
+    ({
+        backUrl: '../..',
+        pages: ($('#bootstrap').attr('data-page') || '').split(','),
+        basePath: {
+            js: '../../../_src/',
+            css: '../../../assets/'
+        },
+        requires: {
+            css: ['icons.default.css', 'widget/button/button.css', 'widget/button/button.default.css', 'widget/dropmenu/dropmenu.css',
+                'widget/dropmenu/dropmenu.default.css', 'widget/toolbar/toolbar.css', 'widget/toolbar/toolbar.default.css'],
+            js: ['core/zepto.highlight.js', 'core/zepto.fix.js', 'widget/button.js', 'widget/dropmenu.js', 'widget/toolbar.js']
+        },
+        initHeader: function () {
+            var that = this;
+            $.each(that.requires, function (type, resArr) {
+                var len = resArr.length;
+                if (!len) return;
+                $.each(resArr, function (i, path) {
+                    that.sendRequest(that.basePath[type] + path, that.addResource, type, (type == 'js' && i == (len - 1)));
                 });
+            });
+        },
+        addResource: function (text, type, done, name) {
+            var head = document.head || document.getElementsByTagName('head')[0],
+                body = document.body || document.getElementsByTagName('body')[0],
+                node;
+            if (type == 'css') {
+                node = document.createElement('style');
+                node.type = "text/css";
+                node.innerHTML = text;
+                head.appendChild(node);
+            } else {
+                node = document.createElement('script');
+                node.type = "text/javascript";
+                node.innerHTML = text;
+                body.appendChild(node);
             }
-            $.ui.dropmenu({
-                align: 'right',
-                arrowPos: {left:'auto', right:'17px'},
-                items: pages,
-                container: $(node).find('.ui-toolbar').first(),
-                cacheParentOffset: false
-            }).bindButton(btn);
-        }
-        //现在开始执行script里面的内容
-        eval(script.textContent);
-    });
 
-    function loadAssets(url, cb){
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function() {
-            if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-                if(xhr.readyState === 4) {
-                    cb && cb.apply(xhr, [xhr.responseXML]);
+        done && this.initToolbar();
+        },
+        sendRequest: function (url, cb, type, done) {
+            var that = this,
+                xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    if(xhr.readyState === 4) {
+                        cb && cb.apply(that, [xhr.responseText, type, done]);
+                    }
                 }
+            };
+            xhr.send(null);
+        },
+        initToolbar: function () {
+            var that = this,
+                pages = that.pages,
+                $header = $('<header></header>').prependTo('body'),
+                btn = pages.length && pages[0] ? $.ui.button({
+                    label: '切换'
+                }).root() : '',
+                toolbar = $.ui.toolbar({
+                    title: document.title,
+                    container: $header,
+                    useFix:true,
+                    btns: btn,
+                    backButtonClick: function(){
+                        location.href = that.backUrl;
+                    }
+                }), item;
+
+            if(btn && btn.length){
+                var pageArr = [];
+                for(var i = pages.length; i--;){
+                    item = pages[i].split('|');
+                    pageArr.unshift({
+                        text: item[0],
+                        href: item[1]
+                    });
+                }
+                $.ui.dropmenu({
+                    align: 'right',
+                    arrowPos: {left:'auto', right:'17px'},
+                    items: pageArr,
+                    container: $header.find('.ui-toolbar').first(),
+                    cacheParentOffset: false
+                }).bindButton(btn);
             }
-        };
-        xhr.send(null);
-        return this;
-    }
-})();
+        }
+    }).initHeader();
+
+})(Zepto);
