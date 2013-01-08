@@ -2,7 +2,7 @@
  * @file
  * @name LineChart
  * @desc 线图
- * @import core/zepto.js, core/zepto.core.js, core/zepto.ui.js
+ * @import core/zepto.js, core/zepto.core.js, core/zepto.ui.js, chart/core/Chart.js
  */
 (function(){
     /**
