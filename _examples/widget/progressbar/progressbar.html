@@ -33,18 +33,16 @@
      *
      */
 
-    //创建组件
-    var demo = $.ui.progressbar('#progressbar');
-    //$('#progressbar').progressbar();           //setup
+    //创建横向组件
+    $('#progressbar').progressbar();
     $('#set_val').click(function() {
-        demo.value($('#cur_val').val());
+        $('#progressbar').progressbar('value', $('#cur_val').val());
     });
 
-    //创建组件
-    var demo_2 = $.ui.progressbar('#progressbar-2', {horizontal: false});
-    //$('#progressbar').progressbar();           //setup
+    //创建竖向组件
+    $('#progressbar-2').progressbar({horizontal: false});
     $('#set_val-2').click(function() {
-        demo_2.value($('#cur_val-2').val());
+        $('#progressbar-2').progressbar('value', $('#cur_val-2').val());
     });
 </script>
 </body>
