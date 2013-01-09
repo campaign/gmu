@@ -1,38 +1,29 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>slider demo - 显示多张图片</title>
     <meta charset="utf-8">
-    <title>显示多张图片</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
+    <!--demo展示所用css end-->
+    <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/slider/slider.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/slider/slider.default.css" /> <!--皮肤文件，若不使用该皮肤，可以不加载-->
+    <!--组件依赖css end-->
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/slider.js"></script>
+    <!--组件依赖js end-->
 </head>
 <body>
 
-<div id="slider_1" style="height: 200px;"></div>
-
-
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="widget/slider.js"
-        data-page="图片轮播|slider.html,无缝滑动|slider_loop.html,显示多张图片|slider_multiview.html">
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.ui.js
-     *     webapp/slider.js
-     *
-     * CSS:
-     * webapp/slider/slider.css
-     *
-     * 如果需要主题还需要
-     * webapp/slider/slider.default.css
-     *
-     */
-    //创建slider组件(render方式)
-    var slider_1 = $.ui.slider('#slider_1', {
+<div id="slider" style="height: 200px;"></div>
+<script>
+    //创建slider组件
+    var slider = $.ui.slider('#slider', {
         autoPlay:false,
         showArr:false,
         viewNum:3,
@@ -78,5 +69,9 @@
         ]
     });
 </script>
+
+<!--demo公用头部展示所用js，可以不用加载 begin-->
+<script id="bootstrap" src="../../example.js" type="text/javascript" data-page="图片轮播|slider.html,无缝滑动|slider_loop.html,显示多张图片|slider_multiview.html"></script>
+<!--demo公用头部展示所用js end-->
 </body>
 </html>

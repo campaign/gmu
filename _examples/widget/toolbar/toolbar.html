@@ -1,29 +1,40 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <meta charset="utf-8">
     <title>toolbar demo</title>
-    <link rel="stylesheet" href="toolbar_demo.css" />
-</head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
+    <link rel="stylesheet" href="toolbar_demo.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/button/button.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/button/button.default.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/dropmenu/dropmenu.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/dropmenu/dropmenu.default.css" />
+    <!--demo展示所用css end-->
+    <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/toolbar/toolbar.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/toolbar/toolbar.default.css" /> <!--皮肤文件，若不使用该皮肤，可以不加载-->
+    <!--组件依赖css end-->
+
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.fix.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/toolbar.js"></script>
+    <!--组件依赖js end-->
+
+    <!--demo展示所用js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.highlight.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/button.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/dropmenu.js"></script>
+    <!--demo展示所用js end-->
 <body>
 <div id="toolbar_1">
-    <span>返回</span>  <!-- 如果按钮为a标签，则默认不会添加点击事件 ,若不为a标签，默认会添加上【点击 history(-1)】的事件,该事件可以自己覆写-->
+    <a href="../">返回</a>  <!-- 如果按钮为a标签，则默认不会添加点击事件 ,若不为a标签，默认会添加上【点击 history(-1)】的事件,该事件可以自己覆写-->
     <h2>工具栏</h2>
     <span class="btn_1"></span>
-    <span class="btn_2"></span>
-</div>
-<!-- 第2个dropmenu -->
-<div id="dropmenu_2">
-    <ul>
-        <li><a><span class="ui-icon ui-icon-home"></span></a><!--</li>放在下行结尾可以去除display:inline-block带来的间隔-->
-        </li>
-        <li><a><span class="ui-icon ui-icon-grid"></span></a>
-        </li>
-        <li><a><span class="ui-icon ui-icon-delete"></span></a>
-        </li>
-        <li><a><span class="ui-icon ui-icon-gear"></span></a></li>
-    </ul>
 </div>
 
 <p class="note">这个一个最普通的工具栏，无固顶效果</p>
@@ -41,63 +52,30 @@
         7.题目的作用：概括内容，揭示主题；提示线<br/>
     </p>
 </div>
+<script>
+        //创建按钮和下拉菜单
+        var btn_1 = $('.btn_1').button({label:'切换'});
+        var dropmenu = $.ui.dropmenu({
+            btn: btn_1,
+            align:'right',
+            items:[
+                {
+                    text:'普通工具栏',
+                    href:'toolbar.html'
+                },
+                {
+                    text:'固顶工具栏1',
+                    href:'toolbar_fixed.html'
+                },
+                {
+                    text:'固顶工具栏2',
+                    href:'toolbar_fixed_top.html'
+                }
+            ]
+        });
 
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="widget/toolbar.js"
-        data-page="普通工具栏|toolbar.html">
-    $('header').remove();   //这个demo不需要顶部工具栏
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.ui.js
-     *     webapp/toolbar.js
-     *
-     * CSS:
-     * webapp/toolbar/toolbar.css
-     *
-     * 如果需要主题还需要
-     * webapp/toolbar/toolbar.default.css
-     *
-     */
-
-    //创建按钮和下拉菜单
-    var btn_1 = $('.btn_1').button({label:'切换'}),
-        dropmenu = $.ui.dropmenu({
-        btn: btn_1,
-        align:'right',
-        items:[
-            {
-                text:'普通工具栏',
-                href:'toolbar.html'
-            },
-            {
-                text:'固顶工具栏1',
-                href:'toolbar_fixed.html'
-            },
-            {
-                text:'固顶工具栏2',
-                href:'toolbar_fixed_top.html'
-            }
-        ]
-    });
-    //创建按钮和下拉菜单
-    $('.btn_2').button();
-    $('#dropmenu_2').dropmenu({
-        direction:'horizontal',
-        btn: $('.btn_2')
-    }).on('itemClick', function (e, item) {
-        alert(item.icon);
-    });
-    //创建toolbar
-    $('#toolbar_1').toolbar();
-
-    //最简单的toolbar,可不传任何参数,默认有一个返回按钮
-    //$.ui.toolbar();
+        //创建toolbar
+        $('#toolbar_1').toolbar();
 </script>
 </body>
 </html>

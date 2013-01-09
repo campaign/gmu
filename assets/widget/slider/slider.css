@@ -36,4 +36,21 @@
     overflow: hidden;
 }
 
+.ui-slider-item p {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
+    pointer-events: none;
+    overflow: hidden;
+    word-break: break-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
+.ui-slider-dots {
+    position: absolute;
+    bottom:6px;
+    right: 0;
+    padding-right: 6px;
+}
