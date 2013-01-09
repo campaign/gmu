@@ -64,23 +64,23 @@
         },
         initHeader: function () {
             var that = this;
-            $.each(that.requires, function (type, resArr) {
-                var len = resArr.length;
-                if (!len) return;
-                $.each(resArr, function (i, path) {
-                    that.sendRequest(that.basePath[type] + path, that.addResource, type);
-                });
+            $.each(that.requires['css'], function (i, path) {
+                that.addResource(that.basePath['css'] + path, 'css')
+            })
+            $.each(that.requires['js'], function (i, path) {
+                that.sendRequest(that.basePath['js'] + path, that.addResource);
             });
         },
-        addResource: function (text, type, done, name) {
+        addResource: function (text, type, done) {
             var head = document.head || document.getElementsByTagName('head')[0],
                 body = document.body || document.getElementsByTagName('body')[0],
                 node;
             if (type == 'css') {
-                node = document.createElement('style');
-                node.type = "text/css";
-                node.innerHTML = text;
-                head.appendChild(node);
+                $('<link>').attr({
+                    type: 'text/css',
+                    rel: 'stylesheet',
+                    href: text
+                }).appendTo(head);
             } else {
                 node = document.createElement('script');
                 node.type = "text/javascript";
@@ -90,15 +90,15 @@
 
         done && this.initToolbar();
         },
-        sendRequest: function (url, cb, type) {
+        sendRequest: function (url, cb) {
             var that = this,
                 xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.onreadystatechange = function() {
                 if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
                     if(xhr.readyState === 4) {
-                        type == 'js' && that.loadCount++;
-                        cb && cb.apply(that, [xhr.responseText, type, that.loadCount === that.requires['js'].length]);
+                        that.loadCount++;
+                        cb && cb.apply(that, [xhr.responseText, 'js', that.loadCount === that.requires['js'].length]);
                     }
                 }
             };
