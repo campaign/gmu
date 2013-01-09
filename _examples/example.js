@@ -50,6 +50,7 @@
     })();
 
     ({
+        loadCount: 0,
         backUrl: '../..',
         pages: ($('#bootstrap').attr('data-page') || '').split(','),
         basePath: {
@@ -67,7 +68,7 @@
                 var len = resArr.length;
                 if (!len) return;
                 $.each(resArr, function (i, path) {
-                    that.sendRequest(that.basePath[type] + path, that.addResource, type, (type == 'js' && i == (len - 1)));
+                    that.sendRequest(that.basePath[type] + path, that.addResource, type);
                 });
             });
         },
@@ -89,14 +90,15 @@
 
         done && this.initToolbar();
         },
-        sendRequest: function (url, cb, type, done) {
+        sendRequest: function (url, cb, type) {
             var that = this,
                 xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.onreadystatechange = function() {
                 if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
                     if(xhr.readyState === 4) {
-                        cb && cb.apply(that, [xhr.responseText, type, done]);
+                        type == 'js' && that.loadCount++;
+                        cb && cb.apply(that, [xhr.responseText, type, that.loadCount === that.requires['js'].length]);
                     }
                 }
             };
