@@ -1,31 +1,47 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <title>dropmenu demo</title>
     <meta charset="utf-8">
-    <title>下拉菜单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/button/button.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/button/button.default.css" />
     <style>
         .section {
             padding: 0 3px;
             -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
         }
-
         .section h2 {
             font-size: 16px;
             font-weight: bold;
             padding: 5px 5px;
             color: #5b5b5b;
         }
-
         .btns .ui-button {
             vertical-align: bottom;
         }
-
         #container {
             height: 400px;
         }
     </style>
+    <!--demo展示所用css end-->
+    <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/dropmenu/dropmenu.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/dropmenu/dropmenu.default.css" /> <!--皮肤文件，若不使用该皮肤，可以不加载-->
+    <!--组件依赖css end-->
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.highlight.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/dropmenu.js"></script>
+    <!--组件依赖js end-->
+
+    <!--demo展示所用js begin-->
+    <script type="text/javascript" src="../../../_src/widget/button.js"></script>
+    <!--demo展示所用js end-->
 </head>
 <body>
 <div class="section">
@@ -80,29 +96,7 @@
 
     </div>
 </div>
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="widget/dropmenu.js"
-        data-page="下拉菜单|dropmenu.html,dropmenu的render模式|dropmenu_render.html,dropmenu位置自动计算|dropmenu_smart.html,dropmenu内滚|dropmenu_iscroll.html">
-    //<![CDATA[
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.ui.js
-     *     webapp/dropmenu.js
-     *
-     * CSS:
-     * webapp/dropmenu/dropmenu.css
-     *
-     * 如果需要主题还需要
-     * icons.default.css
-     * webapp/dropmenu/dropmenu.default.css
-     *
-     */
+<script>
     $('#btn1').button();
     $('#dropmenu1').dropmenu({
         align:'left',
@@ -140,7 +134,9 @@
 
     $('body>.section').on('click', function(){//make blank area clickabel
     });
-    //]]>
 </script>
+<!--demo公用头部展示所用js，可以不用加载 begin-->
+<script id="bootstrap" src="../../example.js" type="text/javascript" data-page="下拉菜单|dropmenu.html,dropmenu的render模式|dropmenu_render.html,dropmenu位置自动计算|dropmenu_smart.html,dropmenu内滚|dropmenu_iscroll.html"></script>
+<!--demo公用头部展示所用js end-->
 </body>
 </html>

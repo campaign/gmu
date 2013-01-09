@@ -1,15 +1,31 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <meta charset="utf-8">
     <title>pageswipe demo</title>
-    <link rel="stylesheet" href="pageswipe_demo.css"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
+    <link rel="stylesheet" type="text/css" href="pageswipe_demo.css"/>
+    <!--demo展示所用css end-->
+    <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/pageswipe/pageswipe.css" />
+    <!--组件依赖css end-->
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.fix.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/pageswipe.js"></script>
+    <!--组件依赖js end-->
+    <!--demo展示所用js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.iscroll.js"></script>
+    <!--demo展示所用js end-->
 </head>
 <body>
 <div id="toolbar">
     <!--toolbar请嵌套一层外壳，样式见上面-->
-    <div><span id="back_btn">返回</span><span class="switch">切屏</span></div>
+    <div><a id="back_btn" href="../">返回</a><span class="switch">切屏</span></div>
 </div>
 
 <div id="pageswipe">
@@ -36,36 +52,19 @@
 
     <!--右边容器，内容自填,要使用iScroll-->
     <div>
-        <div id="right_index"></div>
+        <div id="right_index">
+            <ul id="thelist"></ul>
+        </div>
     </div>
 </div>
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="widget/pageswipe.js"
-        data-page="页面切换|pageswipe.html">
-    $('header').remove();   //这个demo不需要顶部工具栏
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.ui.js
-     *     core/zepto.iscroll.js
-     *     webapp/pageswipe.js
-     *
-     * CSS:
-     * webapp/pageswipe/pageswipe.css
-     *
-     */
+
+<script>
     //填充页面
-    var html = ['<ul>'];
-    for(var i = 0; i < 21; i++) html.push('<li>第 ' + i + ' 行</li>');
-    html.push('</ul>');
-    $('#right_index').html(html.join('')).height(window.innerHeight + 50);
+    for(var i = 0, html = []; i < 50; i++) {html.push('<li>第 ' + i + ' 行</li>');}
+    $('#right_index').height(window.innerHeight + 50);
+    $('#thelist').html(html.join(''));
     //创建iScroll实例
-    var isc = new iScroll('right_index');
+    new iScroll('right_index');
 
     //创建组件 (有fixed定位的toolbar的话需要传入)
     $('#pageswipe').pageswipe({
@@ -75,10 +74,6 @@
     //切换按钮事件
     $('.switch').tap(function() {
         $('#pageswipe').pageswipe('toggle');
-    });
-    //返回按钮事件
-    $('#back_btn').tap(function() {
-        history.back();
     });
 </script>
 </body>

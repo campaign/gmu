@@ -8,27 +8,12 @@
 }
 
 .ui-slider-item p {
-    position: absolute;
-    bottom: 0;
     color: #fff;
     background: rgba(0, 0, 0, 0.5);
-    width: 100%;
     padding: 6px 0;
-    text-align: left;
     text-indent: 10px;
-    pointer-events: none;
-    overflow: hidden;
-    word-break: break-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
-.ui-slider-dots {
-    position: absolute;
-    bottom:6px;
-    right: 0;
-    padding-right: 6px;
-}
 
 .ui-slider-dots b {
     display: inline-block;

@@ -1,15 +1,39 @@
 <!doctype html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>toolbar demo - fixed top</title>
     <meta charset="utf-8">
-    <title>toolbar demo</title>
-    <link rel="stylesheet" href="toolbar_demo.css" />
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
+    <link rel="stylesheet" href="toolbar_demo.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/button/button.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/button/button.default.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/dropmenu/dropmenu.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/dropmenu/dropmenu.default.css" />
+    <!--demo展示所用css end-->
+    <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/toolbar/toolbar.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/toolbar/toolbar.default.css" /> <!--皮肤文件，若不使用该皮肤，可以不加载-->
+    <!--组件依赖css end-->
+
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.fix.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/toolbar.js"></script>
+    <!--组件依赖js end-->
+
+    <!--demo展示所用js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.highlight.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/button.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/dropmenu.js"></script>
+    <!--demo展示所用js end-->
 <body>
 <h2 class="toolbar_note_2"> toolbar 在顶部的时候，可以调用fix()方法来固顶。</h2>
 <div id="toolbar_1">
-    <span>返回</span>  <!-- 如果按钮为a标签，则默认不会添加点击事件 ,若不为a标签，默认会添加上【点击 history(-1)】的事件,该事件可以自己覆写-->
+    <a href="../">返回</a>  <!-- 如果按钮为a标签，则默认不会添加点击事件 ,若不为a标签，默认会添加上【点击 history(-1)】的事件,该事件可以自己覆写-->
     <h2>固顶工具栏</h2>
     <span class="btn"></span>
 </div>
@@ -28,29 +52,7 @@
     </p>
 </div>
 
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="widget/toolbar.js"
-        data-page="普通工具栏|toolbar.html">
-    $('header').remove();   //这个demo不需要顶部工具栏
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.ui.js
-     *     webapp/toolbar.js
-     *
-     * CSS:
-     * webapp/toolbar/toolbar.css
-     *
-     * 如果需要主题还需要
-     * webapp/toolbar/toolbar.default.css
-     *
-     */
-
+<script>
     //创建按钮
     var btn = $('.btn').button({label:'切换'}),
         dropmenu = $.ui.dropmenu({
