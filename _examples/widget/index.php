@@ -118,7 +118,7 @@ foreach ($setting as $item) {
         data-jspath = '../../_src/'
         data-csspath = '../../assets/'
         data-path="../load.php"
-        data-backurl="../"
+        data-backurl="../../"
         data-page="">
     (function ($) {
        $('.thelist ul li').highlight('ui-state-hover');
