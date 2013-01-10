@@ -10,7 +10,7 @@ define("BASE_DIR", dirname(__FILE__).DS);
 header("Content-type: text/html; charset=utf-8");
 
 class GMU2FIS {
-    const TYPE_WEBAPP = "webapp";
+    const TYPE_WEBAPP = "widget";
 
     protected $type;
     protected $outputDir;
@@ -334,7 +334,7 @@ class GMU2FIS {
     }
 
     public static function run() {
-        $script = new GMU2FIS('webapp');
+        $script = new GMU2FIS('widget');
         $script->build();
     }
 
