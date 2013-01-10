@@ -127,7 +127,7 @@
         _init:function () {
             var me = this, data = me._data, $el = me.root(), eventHandler = $.proxy(me._eventHandler, me);
             $el.addClass('ui-tabs');
-            data._nav.on('tap', eventHandler).children().highlight('ui-state-hover');
+            data._nav.on('click', eventHandler).children().highlight('ui-state-hover');
             $(window).on('ortchange', eventHandler);
         },
 
@@ -205,7 +205,7 @@
          */
         destroy:function () {
             var data = this._data, eventHandler = this._eventHandler;
-            data._nav.off('tap', eventHandler).children().highlight();
+            data._nav.off('click', eventHandler).children().highlight();
             data.swipe && data._content.off('swipeLeft swipeRight', eventHandler);
             return this.$super('destroy');
         }
