@@ -51,11 +51,11 @@
 
     ({
         loadCount: 0,
-        backUrl: '../..',
+        backUrl: $('#bootstrap').attr('data-backurl') || '../..',
         pages: ($('#bootstrap').attr('data-page') || '').split(','),
         basePath: {
-            js: '../../../_src/',
-            css: '../../../assets/'
+            js: $('#bootstrap').attr('data-jspath') || '../../../_src/' ,
+            css: $('#bootstrap').attr('data-csspath') || '../../../assets/'
         },
         requires: {
             css: ['icons.default.css', 'widget/button/button.css', 'widget/button/button.default.css', 'widget/dropmenu/dropmenu.css',

@@ -24,6 +24,7 @@ foreach ($setting as $item) {
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta charset="utf-8">
     <title>GMU demos</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/reset.css" />
     <style>
         body {
             padding: 0;
@@ -85,6 +86,10 @@ foreach ($setting as $item) {
             color: #333;
         }
     </style>
+
+    <script type="text/javascript" src="../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../_src/core/zepto.ui.js"></script>
 </head>
 <body>
 <div id="wrap">
@@ -107,12 +112,13 @@ foreach ($setting as $item) {
         <?php endforeach;?>
     </div>
 </div>
+<link rel="stylesheet" type="text/css" href="../../assets/widget/toolbar/toolbar.blue.css">
 <script id="bootstrap" src="../example.js"
         type="text/javascript"
-        data-theme="blue"
-        data-use=""
+        data-jspath = '../../_src/'
+        data-csspath = '../../assets/'
         data-path="../load.php"
-        data-backurl="../../"
+        data-backurl="../"
         data-page="">
     (function ($) {
        $('.thelist ul li').highlight('ui-state-hover');
