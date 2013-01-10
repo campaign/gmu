@@ -4,10 +4,8 @@
     <title>图片加载错误处理</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="../../../assets/reset.css">
-    <link rel="stylesheet" href="../../../assets/webapp/button/button.css"/>
-    <link rel="stylesheet" href="../../../assets/webapp/toolbar/toolbar.css"/>
-    <link rel="stylesheet" href="../../../assets/webapp/dropmenu/dropmenu.css"/>
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
     <style>
         .ui-imglazyload{
             border: 1px solid #ccc;
@@ -24,6 +22,16 @@
             border: 1px solid #ccc;
         }
     </style>
+    <!--demo展示所用css end-->
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.imglazyload.js"></script>
+    <!--组件依赖js end-->
+    <!--demo展示所用js，不用关心 begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/widget/button.js"></script>
+    <!--demo展示所用js end-->
 </head>
 
 <body>
@@ -107,30 +115,17 @@
         特瓦尔德、普朗克等都在上面签了字。当征求爱因斯坦签名时，他断然拒绝了，而同时他却毅然在反战的《告欧
         洲人书》上签上自己的名字。这一举动震惊了全世界。</p>
 </div>
-
+<script>
+    $('.ui-imglazyload').imglazyload().on('error', function (e) {
+        e.preventDefault();       //error image will not be loaded
+    });
+</script>
+<!--demo公用头部展示所用js，可以不用加载 begin-->
 <script id="bootstrap" src="../../example.js"
         type="text/javascript"
         data-theme="default"
         data-use="core/zepto.imglazyload.js"
-        data-page="图片延迟加载|imglazyload.html, 图片加载错误处理|imglazyload_error.html">
-    //<![CDATA[
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.imglazyload.js
-     *
-     * CSS:
-     *     无样式依赖
-     *
-     */
-    $('.ui-imglazyload').imglazyload().on('error', function (e) {
-        e.preventDefault();       //error image will not be loaded
-    });
-    //]]>
-</script>
-
+        data-page="图片延迟加载|imglazyload.html, 图片加载错误处理|imglazyload_error.html"></script>
+<!--demo公用头部展示所用js end-->
 </body>
 </html>
