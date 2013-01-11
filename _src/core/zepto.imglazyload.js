@@ -15,7 +15,9 @@
      * - ''threshold''       {Array|Selector}:      (可选, 默认值:0)阀值，为正值则提前加载
      * - ''dataName''        {String}:              (可选, 默认值:data-url)图片url名称
      * - ''eventName''       {String}:              (可选, 默认值:scrollStop)绑定事件方式
+     * - ''refresh''         {Boolean}              (可选, 默认值:false)是否是更新操作，若是页面追加图片，可以将该参数设为false
      * - ''startload''       {Function}             (可选, 默认值:null)开始加载前的事件，该事件作为参数，不是trigger的
+     *
      *
      * **events**
      * - ''startload'' 开始加载图片
@@ -27,16 +29,17 @@
      *     e.preventDefault();      //该图片不再加载
      * });
      */
+    var pedding;
     $.fn.imglazyload = function (opts) {
-        var pedding = $.slice(this).reverse(),
-            splice = Array.prototype.splice,
+        var splice = Array.prototype.splice,
             opts = $.extend({
                 threshold:0,
                 container:window,
                 urlName:'data-url',
                 placeHolder:'',
                 eventName:'scrollStop',
-                startload: null
+                startload: null,
+                refresh: false
             }, opts),
             $container = $(opts.container),
             cTop = $container.scrollTop(),
@@ -52,18 +55,22 @@
                 }
             };
 
-        function _load(div) {
+        pedding = $.slice(this).reverse();
+        if (opts.refresh) return;      //更新pedding值
+
+        function _load(div, index) {
             var $div = $(div), $img;
             $.isFunction(opts.startload) && opts.startload.call($div);
             $img = $('<img />').on('load',function () {
                 $div.trigger('loadcomplete').replaceWith($img);
                 $img.off('load');
+                splice.call(pedding, index, 1);
             }).on('error',function () {     //图片加载失败处理
-                    var errorEvent = $.Event('error');       //派生错误处理的事件
-                    $div.trigger(errorEvent);
-                    errorEvent.defaultPrevented || pedding.push(div);
-                    $img.off('error').remove();
-                }).attr('src', $div.attr(opts.urlName));
+                var errorEvent = $.Event('error');       //派生错误处理的事件
+                $div.trigger(errorEvent);
+                errorEvent.defaultPrevented && splice.call(pedding, index, 1);
+                $img.off('error').remove();
+            }).attr('src', $div.attr(opts.urlName));
         }
 
         function _detect(type) {
@@ -71,7 +78,7 @@
             for (i = pedding.length; i--;) {
                 $image = $(div = pedding[i]);
                 offset = $image.offset();
-                detect[type || 'default'](offset.top, offset.height) && (splice.call(pedding, i, 1), _load(div));
+                detect[type || 'default'](offset.top, offset.height) && _load(div, i);
             }
         }
 

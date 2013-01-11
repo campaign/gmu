@@ -13,7 +13,7 @@
         tpl = {
             nav:'<ul class="ui-tabs-nav">'+
                 '<% var item; for(var i=0, length=items.length; i<length; i++) { item=items[i]; %>'+
-                    '<li<% if(i==active){ %> class="ui-state-active"<% } %>><a href="<%=item.href%>"><%=item.title%></a></li>'+
+                    '<li<% if(i==active){ %> class="ui-state-active"<% } %>><a href="javascript:;"><%=item.title%></a></li>'+
                 '<% } %></ul>',
             content:'<div class="ui-viewport ui-tabs-content">' +
                 '<% var item; for(var i=0, length=items.length; i<length; i++) { item=items[i]; %>'+
@@ -69,7 +69,7 @@
                             items.push({
                                 id: id,
                                 href: href,
-                                title: $a?$a.attr('href', '').text():$(this).text(),//如果href不删除的话，地址栏会出现，然后一会又消失。
+                                title: $a?$a.attr('href', 'javascript:;').text():$(this).text(),//如果href不删除的话，地址栏会出现，然后一会又消失。
                                 content: $content
                             });
                         });

@@ -194,7 +194,7 @@
          * ^ 名称 ^ 处理函数参数 ^ 描述 ^
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
          * | statechange | event, elem, state, dir | 组件发生状态变化时会触发 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          *
          * **组件状态说明**
          * - ''loaded'' 默认状态

@@ -4,6 +4,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
 	<meta charset="utf-8">
 	<title>suggestion render模式</title>
+    <!--demo展示所用css，不用关心 begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
     <style>
         /** suggestion */
         .search {
@@ -66,6 +68,21 @@
             background: -webkit-gradient(linear,left top,left bottom,from(#dfdfdf),to(#f7f6f6)) !important;
         }
     </style>
+    <!--demo展示所用css end-->
+
+    <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/suggestion/suggestion.css" />
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/quickdelete/quickdelete.css" />   <!--快速删除组件css，配合suggestion使用-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/suggestion/suggestion.default.css" />    <!--皮肤文件，若不使用该皮肤，可以不加载-->
+    <!--组件依赖css end-->
+    <!--组件依赖js begin-->
+    <script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../../_src/core/zepto.iscroll.js"></script>   <!--iScroll-->
+    <script type="text/javascript" src="../../../_src/widget/quickdelete.js"></script>     <!--快速删除组件，配合suggestion使用-->
+    <script type="text/javascript" src="../../../_src/widget/suggestion.js"></script>
+    <!--组件依赖js end-->
 </head>
 <body>
 <form action="http://www.baidu.com/s" method="get">
@@ -75,40 +92,25 @@
     </div>
 </form>
 
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="widget/suggestion.js, widget/quickdelete.js"
-        data-page="sug(setup模式)|suggestion_setup.html, sug(render方式)|suggestion_render.html">
-    //<![CDATA[
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.ui.js
-     *     core/zepto.iscroll.js
-     *     webapp/refresh.js
-     *
-     * CSS:
-     *     webapp/quickdelete/quickdelete.css
-     *     webapp/suggestion/suggestion.css
-     *
-     * 主题CSS
-     *     webapp/suggestion/suggestion.default.css
-     *
-     */
-    $.ui.suggestion({
-        container: "#input",
-        source: "../../data/suggestion.php"
-    });
+<script type="text/javascript">
+    (function () {
+        /*组件初始化js begin*/
+        $.ui.suggestion({
+            container: "#input",
+            source: "../../data/suggestion.php"     /*demo请求的php文件，需要在php环境下看效果*/
+        });
 
-    $.ui.quickdelete({
-        container: "#input"
-    });
-    //]]>
+        $.ui.quickdelete({
+            container: "#input"
+        });
+        /*组件初始化js end*/
+    })();
 </script>
+
+<!--demo公用头部展示所用js，可以不用加载 begin-->
+<script id="bootstrap" src="../../example.js" type="text/javascript"
+        data-page="sug(setup模式)|suggestion_setup.html, sug(render方式)|suggestion_render.html"></script>
+<!--demo公用头部展示所用js end-->
 
 </body>
 </html>

@@ -20,7 +20,8 @@
             _init: function () {
                 var me = this,
                     data = me._data,
-                    $el = me.root();
+                    $el = me.root(),
+                    wrapperH = $el.height();
 
                 me._initOrg();
                 $.extend(data, {
@@ -30,7 +31,7 @@
                     threshold: 0
                 });
 
-                $el.wrapAll('<div class="ui-refresh-wrapper"></div>');
+                $el.wrapAll($('<div class="ui-refresh-wrapper"></div>').height(wrapperH)).css('height', 'auto');
                 me._loadIscroll();
             },
             _changeStyle: function (dir, state) {
