@@ -15,7 +15,9 @@
      * - ''threshold''       {Array|Selector}:      (可选, 默认值:0)阀值，为正值则提前加载
      * - ''dataName''        {String}:              (可选, 默认值:data-url)图片url名称
      * - ''eventName''       {String}:              (可选, 默认值:scrollStop)绑定事件方式
+     * - ''refresh''         {Boolean}              (可选, 默认值:false)是否是更新操作，若是页面追加图片，可以将该参数设为false
      * - ''startload''       {Function}             (可选, 默认值:null)开始加载前的事件，该事件作为参数，不是trigger的
+     *
      *
      * **events**
      * - ''startload'' 开始加载图片
@@ -27,16 +29,17 @@
      *     e.preventDefault();      //该图片不再加载
      * });
      */
+    var pedding;
     $.fn.imglazyload = function (opts) {
-        var pedding = $.slice(this).reverse(),
-            splice = Array.prototype.splice,
+        var splice = Array.prototype.splice,
             opts = $.extend({
                 threshold:0,
                 container:window,
                 urlName:'data-url',
                 placeHolder:'',
                 eventName:'scrollStop',
-                startload: null
+                startload: null,
+                refresh: false
             }, opts),
             $container = $(opts.container),
             cTop = $container.scrollTop(),
@@ -51,6 +54,9 @@
                     return cTop >= top - opts.threshold - cHeight && cTop <= top + height + cHeight;
                 }
             };
+
+        pedding = $.slice(this).reverse();
+        if (opts.refresh) return;      //只更新pedding值
 
         function _load(div) {
             var $div = $(div), $img;
