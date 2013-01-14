@@ -56,7 +56,7 @@
             };
 
         pedding = $.slice(this).reverse();
-        if (opts.refresh) return;      //更新pedding值
+        if (opts.refresh) return this;      //更新pedding值
 
         function _load(div, index) {
             var $div = $(div), $img;
