@@ -31,7 +31,7 @@
             icon: '',
             container:  '',
             key:'_gmu_adddesktop_key',
-            useFix: false,
+            useFix: true,
             position: {
                 bottom: 12,
                 left: '50%'
