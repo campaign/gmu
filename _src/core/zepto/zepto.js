@@ -25,11 +25,6 @@ var Zepto = (function() {
       'td': tableRow, 'th': tableRow,
       '*': document.createElement('div')
     },
-      /**
-       *  modified by chenluyang
-       *  @reason 在IE10里，interactive触发的时候，body是还没开始解析的，所以直接触发函数获取body会报错。所以去掉了interactive
-       *  @original  readyRE = /complete|loaded|interactive/,
-       */
     readyRE = /complete|loaded/,
     classSelectorRE = /^\.([\w-]+)$/,
     idSelectorRE = /^#([\w-]+)$/,
@@ -108,17 +103,19 @@ var Zepto = (function() {
         var arrTags = ["span","font","b","u","i","h1","h2","h3","h4","h5","h6","p","li","ul","table","div"],
             intOpen,intClose, re, arrMatch
         for(var i = 0; i < arrTags.length; i++){
-            intOpen = 0
-            intClose =0
-            re = new RegExp("\\<" + arrTags[i] + "( [^\\<\\>]+|)\\>","ig")
-            arrMatch = str.match(re)
-            if(arrMatch != null) intOpen = arrMatch.length
-            re = new RegExp("\\<\\/"+arrTags[i]+"\\>","ig")
-            arrMatch = str.match(re)
-            if(arrMatch != null) intClose = arrMatch.length
-            for(var j = 0;j < intOpen - intClose;j++){
-                str += "</"+arrTags[i]+">"
-            }
+            try{
+                intOpen = 0
+                intClose =0
+                re = new RegExp("\\<" + arrTags[i] + "( [^\\<\\>]+|)\\>","ig")
+                arrMatch = str.match(re)
+                if(arrMatch != null) intOpen = arrMatch.length
+                re = new RegExp("\\<\\/"+arrTags[i]+"\\>","ig")
+                arrMatch = str.match(re)
+                if(arrMatch != null) intClose = arrMatch.length
+                for(var j = 0;j < intOpen - intClose;j++){
+                    str += "</"+arrTags[i]+">"
+                }
+            }catch(e){}
         }
         return str
     }
@@ -345,7 +342,12 @@ var Zepto = (function() {
     },
 
     ready: function(callback){
-      if (readyRE.test(document.readyState)) callback($)
+        /**
+         *  modified by chenluyang
+         *  @reason 在IE10里，interactive触发的时候，body是还没开始解析的，所以直接触发函数获取body会报错。所以去掉了interactive
+         *  @original  if (readyRE.test(document.readyState)) callback($)
+         */
+      if (readyRE.test(document.readyState) && (!isWp || document.readyState != 'interactive')) callback($)
       else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false)
       return this
     },
