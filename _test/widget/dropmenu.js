@@ -15,6 +15,7 @@ module("widget/dropmenu",{
 test("只为加载css用",function(){
     expect(1);
     stop();
+    //lili button.css和button.default.css各自的作用
     ua.loadcss(["reset.css", "icons.default.css", "widget/button/button.css","widget/button/button.default.css", "widget/dropmenu/dropmenu.css", "widget/dropmenu/dropmenu.default.css"], function(){
         ok(true, '样式加载进来了！');
         start();
@@ -22,23 +23,29 @@ test("只为加载css用",function(){
 });
 
 test("参数 － btn", function(){
-    expect(3);
+    expect(10);
     stop();
     ua.importsrc('widget/button', function(){
-        var contaier = $('#container');
-        var btn = $('<a class="btn">Click Me</a>').appendTo(contaier);
+        var container = $('#container');
+        var btn = $('<a class="btn">Click Me</a>').appendTo(container);
         var dropmenu = $.ui.dropmenu({
             btn: '.btn'
         });
         ok(dropmenu.data('_btn').is('.btn'), 'btn设置正确');
+        equals(container.next()[0], dropmenu._el[0], "btn和dropmenu位置正确");
+        ua.click(btn[0]);
+        ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
         dropmenu.destroy();
         btn.remove();
 
-        btn = $('<a class="btn">Click Me</a>').appendTo(contaier);
+        btn = $('<a class="btn">Click Me</a>').appendTo(container);
         dropmenu = $.ui.dropmenu({
             btn: btn
         });
         ok(dropmenu.data('_btn').is('.btn'), 'btn设置正确');
+        equals(container.next()[0], dropmenu._el[0], "btn和dropmenu位置正确");
+        ua.click(btn[0]);
+        ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
         dropmenu.destroy();
         btn.remove();
 
@@ -49,15 +56,22 @@ test("参数 － btn", function(){
             btn: btn
         });
         ok(dropmenu.data('_btn').is('.ui-button'), 'btn设置正确');
+        equals(container.next()[0], dropmenu._el[0], "btn和dropmenu位置正确");
+        ua.click(btn._el[0]);
+        ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
         dropmenu.destroy();
         btn.destroy();
 
+        dropmenu = $.ui.dropmenu({
+        });
+        equals(dropmenu._el.parent()[0], document.body, "btn不设置");
+        dropmenu.destroy();
         start();
     }, '$.ui.button', 'widget/dropmenu');
 });
 
 test("参数 － align", function(){
-    expect(7);
+    expect(14);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
@@ -70,6 +84,7 @@ test("参数 － align", function(){
         btn: '#btn'
     }).show();
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu默认为align center');
+    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, "dropmenu位置居中");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -83,6 +98,7 @@ test("参数 － align", function(){
         align: 'left'
     }).show();
     ok(obj.root().hasClass('ui-alignleft'), 'dropmenu被设置成左对齐');
+    equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -96,6 +112,7 @@ test("参数 － align", function(){
         align: 'center'
     }).show();
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu被设置成居中对齐');
+    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, "dropmenu位置居中");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -109,6 +126,7 @@ test("参数 － align", function(){
         align: 'right'
     }).show();
     ok(obj.root().hasClass('ui-alignright'), 'dropmenu被设置成居右对齐');
+    equals(obj._el.offset().right, $(btn).offset().right, "dropmenu位置居右");
     obj.destroy();
 
     $('#container').css({
@@ -129,11 +147,13 @@ test("参数 － align", function(){
         align: 'auto'
     }).show();
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu被当前为居中对齐');
+    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, "dropmenu位置居中");
     $('#btn').css({
         left: 0
     });
     obj.hide().show();
     ok(obj.root().hasClass('ui-alignleft'), 'dropmenu被当前为居左对齐');
+    equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
 
     $('#btn').css({
         left: 'auto',
@@ -141,8 +161,9 @@ test("参数 － align", function(){
     });
     obj.hide().show();
     ok(obj.root().hasClass('ui-alignright'), 'dropmenu被当前为居右对齐');
+    equals(obj._el.offset().right, $(btn).offset().right, "dropmenu位置居右");
 
-
+    obj.destroy();
     start();
 });
 
@@ -167,7 +188,7 @@ test("参数 － width & height", function(){
 });
 
 test("参数 － offset", function(){
-    expect(2);
+    expect(8);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
@@ -178,17 +199,15 @@ test("参数 － offset", function(){
         ],
         container: '#container',
         offset: {
-            x: 0,
-            y: 0
+            x: -10,
+            y: 20
         },
         btn: '#btn'
     }).show();
 
-    var defaultPosition = {
-        top: parseFloat(obj.root().css('top')),
-        left: parseFloat(obj.root().css('left'))
-    };
-
+    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2 - 10, "dropmenu位置居中偏左10px");
+    equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() + 20, "dropmenu的位置偏下20px");
+    
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -199,25 +218,60 @@ test("参数 － offset", function(){
         ],
         container: '#container',
         btn: '#btn',
+        align: 'left'
+    }).show();
+    
+    equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
+    equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() + 1, "dropmenu的位置偏下1px");
+    
+    obj.destroy();
+    
+    obj = $.ui.dropmenu({
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        container: '#container',
+        btn: '#btn',
+        align: 'left',
+        pos: 'up',
+    }).show();
+    
+    equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
+    equals(obj._el.offset().top, $(btn).offset().top - obj._el.height() - 1, "dropmenu的位置偏上1px");
+    
+    obj.destroy();
+    
+    $('#btn').css({
+        position: 'absolute',
+        left: 0
+    });
+    obj = $.ui.dropmenu({
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        container: '#container',
+        btn: '#btn',
+        align: 'auto',
         offset: {
             x: 3,
             y: 5
         }
     }).show();
 
-    var nowPosition = {
-        top: parseFloat(obj.root().css('top')),
-        left: parseFloat(obj.root().css('left'))
-    };
-
-    approximateEqual(nowPosition.left - defaultPosition.left, 3, 0.5, 'x方向偏差3px');
-    approximateEqual(nowPosition.top - defaultPosition.top, 5, 0.5, 'y方向偏差5px');
-
+    equals(obj._el.offset().left, 3, "dropmenu位置居左偏右3px");
+    equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() + 5, "dropmenu的位置偏下5px");
+    
+    obj.destroy();
+    
     start();
 });
 
 test("参数 － pos", function(){
-    expect(6);
+    expect(8);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
@@ -254,9 +308,15 @@ test("参数 － pos", function(){
         ],
         container: '#container',
         btn: '#btn',
-        pos: 'up'
+        pos: 'up',
+        offset: {
+            x: 10,
+            y: -20
+        },
     }).show();
     ok($('#btn').offset().top > obj.root().offset().top, "dropmenu的位置被设置在button位置上方.");
+    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2 + 10, "dropmenu位置居中偏左10px");
+    equals(obj._el.offset().top, $(btn).offset().top - obj._el.height() - 20, "dropmenu的位置偏上20px");
     obj.destroy();
 
     $('#container').css({
@@ -287,7 +347,7 @@ test("参数 － pos", function(){
         top: 'auto',
         bottom: 0
     });
-    obj.hide();//.show();
+    obj.hide().show();
     ok($('#btn').offset().top > obj.root().offset().top, "dropmenu的位置当前在button位置上方.");
 
     $('#btn').css({
@@ -297,6 +357,7 @@ test("参数 － pos", function(){
     obj.hide().show();
     ok($('#btn').offset().top < obj.root().offset().top, "dropmenu的位置当前在button位置下方.");
 
+    obj.destroy();
     start();
 });
 
@@ -345,6 +406,7 @@ test("参数 － direction", function(){
     pos1 = items.first().offset();
     pos2 = items.eq(1).offset();
 
+    //lili 此处样式不对
     ok(pos1.left != pos2.left && pos1.top == pos2.top, "item1, item2被设置成是水平排列的");
     obj.destroy();
 
@@ -365,7 +427,7 @@ test("参数 － arrow", function(){
         btn: '#btn'
     }).show();
 
-    ok(obj.root().find('.ui-dropmenu-arrow').length, "此dropmenu默认有arrow");
+    equals(obj.root().find('.ui-dropmenu-arrow').length, 1, "此dropmenu默认有arrow");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -379,7 +441,7 @@ test("参数 － arrow", function(){
         arrow: false
     }).show();
 
-    ok(!obj.root().find('.ui-dropmenu-arrow').length, "此dropmenu被设置成没有arrow");
+    equals(obj.root().find('.ui-dropmenu-arrow').length, 0, "此dropmenu被设置成没有arrow");
     obj.destroy();
     start();
 });
@@ -408,13 +470,13 @@ test("参数 － arrowpos", function(){
         pos2 = $arrow.offset();
 
     approximateEqual(pos1.right, pos2.right, 1, "arrow被设置到了dropmenu的最右边。");
-
+    //lili 用例不够
     obj.destroy();
     start();
 });
 
 test("参数 － autoClose", function(){
-    expect(3);
+    expect(6);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
@@ -424,8 +486,7 @@ test("参数 － autoClose", function(){
             }
         ],
         container: '#container',
-        btn: '#btn',
-        autoClose: true
+        btn: '#btn'
     }).show();
 
     ok(obj.data('_isShow'), '当前是显示的');
@@ -436,12 +497,34 @@ test("参数 － autoClose", function(){
     ua.click(document.body);
     ok(!obj.data('_isShow'), '点击其他地方，现在是关闭的');
 
+    //lili 为什么用设置负top的方式使之隐藏
+    obj.destroy();
+    
+    var obj = $.ui.dropmenu({
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        container: '#container',
+        btn: '#btn',
+        autoClose: false
+    }).show();
+
+    ok(obj.data('_isShow'), '当前是显示的');
+
+    ua.click(obj.root().find('ul.ui-dropmenu-items li').get(0));
+    ok(obj.data('_isShow'), '点击本身，还应该是显示的');
+
+    ua.click(document.body);
+    ok(obj.data('_isShow'), '点击其他地方，还应该是显示的');
+    
     obj.destroy();
     start();
 });
 
 test("参数 － items", function(){
-    expect(7);
+    expect(8);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
@@ -471,9 +554,10 @@ test("参数 － items", function(){
     var items = obj.root().find('ul.ui-dropmenu-items li');
     equals(items.length, 4, '当前是4个items');
     equals(items.eq(0).find('a').text(), 'test1', 'item1: 文字正确');
-    equals(items.eq(1).find('.ui-icon').length, 1, 'item2: 有icon');
-    equals(items.eq(2).find('.ui-icon').length, 1, 'item3: 有icon');
-    equals(items.eq(2).find('a').text(), "test3", 'item3: 且文字正确n');
+    equals(items.eq(1).find('.ui-icon-home').length, 1, 'item2: 有icon');
+    equals(items.eq(2).find('.ui-icon-delete').length, 1, 'item3: 有icon');
+    equals(items.eq(2).find('a').text(), "test3", 'item3: 且文字正确');
+    equals(items.eq(3).find('a').text(), 'test4', 'item4: 文字正确');
 
     ua.click(items.eq(0).find('a').get(0));
 
@@ -489,6 +573,7 @@ test("参数 － items", function(){
 });
 
 test("参数 － cacheParentOffset", function(){
+	//lili 什么场景下会使用此参数
     expect(2);
     stop();
     $('<div id="dropmenuWrap" style="position:relative;"></div>').appendTo('#container');
@@ -546,10 +631,9 @@ test("参数 － cacheParentOffset", function(){
     start();
 });
 
-test("参数 － container", function(){
-    expect(2);
+test("参数 － el & container", function(){
+    expect(7);
     stop();
-    $('<div id="dropmenuWrap" style="position:relative;"></div>').appendTo('#container');
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
         items: [
@@ -561,10 +645,29 @@ test("参数 － container", function(){
         autoClose: true
     }).show();
 
+    ok(obj.root().is('.ui-dropmenu'), 'el正确');
     ok(obj.root().parent().is('body'), '如果不设置container父级为body');
     obj.destroy();
 
-    obj = $.ui.dropmenu({
+    $("<div id='test1'></div>").appendTo(document.body);
+    
+    obj = $.ui.dropmenu("#test1", {
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        btn: '#btn',
+        autoClose: true
+    }).show();
+
+    ok(obj.root().is('.ui-dropmenu'), 'el正确');
+    ok(obj.root().is('#test1'), 'el正确');
+    ok(obj.root().parent().is('body'), 'container设置正确');
+    obj.destroy();
+    start();
+    
+    obj = $.ui.dropmenu($("<div class='ui-dropmenu'>"), {
         items: [
             {
                 text: 'test'
@@ -575,13 +678,14 @@ test("参数 － container", function(){
         container: '#container'
     }).show();
 
+    ok(obj.root().is('.ui-dropmenu'), 'el正确');
     ok(obj.root().parent().is('#container'), 'container设置正确');
     obj.destroy();
     start();
 });
 
 test("多实例", function(){
-    expect(3);
+    expect(5);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     $('<a id="btn2">btn</a>').appendTo('#container');
@@ -594,7 +698,7 @@ test("多实例", function(){
         btn: '#btn',
         autoClose: false,
         container: '#container'
-    }), obj2 = $.ui.dropmenu({
+    }), obj2 = $.ui.dropmenu($("<div class='custom'></div>"), {
         items: [
             {
                 text: 'test2'
@@ -604,11 +708,16 @@ test("多实例", function(){
         autoClose: false,
         container: '#container'
     });
+    
+    equals(obj.root().attr("class"), 'ui-dropmenu', '样式相互区分');
+    equals(obj2.root().attr("class"), 'ui-dropmenu custom', '样式相互区分');
+    
     $('#btn').trigger('click');
     ok(obj.data('_isShow') && !obj2.data('_isShow'), '点击btn，把第一个dropmenu显示出来了');
 
     $('#btn2').trigger('click');
     ok(obj.data('_isShow') && obj2.data('_isShow'), '点击btn2，把第二个dropmenu也显示出来了');
+    //lili 多个dropmenu之间不互斥了么
 
     $('#btn').trigger('click');
     ok(!obj.data('_isShow') && obj2.data('_isShow'), '点击btn，把第一个dropmenu隐藏了，但第二个dropmenu还是显示的');
@@ -620,15 +729,15 @@ test("多实例", function(){
 });
 
 test("显示", function(){
+	//lili 脑图中显示部分的功能还在么
  ok(true, "已在 参数 － pos 涉及了！");
 });
 
 test("基本操作", function(){
-    expect(7);
+    expect(3);
     stop();
     $('<div id="dropmenuWrap" style="position:relative;"></div>').appendTo('#container');
     $('<a id="btn">btn</a>').appendTo('#container');
-    $('<a id="btn2">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
         items: [
             {
@@ -637,34 +746,14 @@ test("基本操作", function(){
         ],
         btn: '#btn'
     });
-
-    var obj2 = $.ui.dropmenu({
-        items: [
-            {
-                text: 'test'
-            }
-        ],
-        btn: '#btn2'
-    });
-
+    
     ok(obj.root().offset().top<0, "dropmenu默认不可见");
     $('#btn').trigger('click');
     ok(obj.root().offset().top>0, "点击按钮变成可见");
     $('#btn').trigger('click');
     ok(obj.root().offset().top<0, "再次点击按钮变成不可见");
 
-    obj.show();
-    ok(obj.root().offset().top>0, "通过show（）方法让dropmenu可见");
-    $(document.body).trigger('click');
-    ok(obj.root().offset().top<0, "点击空白区，dropmenu不可见");
-
-    obj.show();
-    ok(obj.root().offset().top>0, "通过show（）方法让dropmenu可见");
-    $('#btn2').trigger('click');
-    ok(obj.root().offset().top<0, "点击其他按钮，dropmenu不可见");
-
     obj.destroy();
-    obj2.destroy();
     start();
 });
 
@@ -742,10 +831,17 @@ test("方法 － bindButton", function(){
 test("方法 － destroy",function(){
     ua.destroyTest(function(w,f){
         w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+        var container = w.$("<div id='container'></div>");
+        w.$("body").append(container.css({
+            padding: '2em',
+            position: 'relative'
+        }));
+        w.$('<a id="btn">btn</a>').appendTo('#container');
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
         var obj =  w.$.ui.dropmenu({
+        	btn: '#btn',
             items: [
                 {
                     text: 'test'
@@ -761,6 +857,7 @@ test("方法 － destroy",function(){
         equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
         equal(el1,el2,"The event is ok");
         ok(ol==0,"The instance is destroy");
+        equals(w.$("#container").length, 1, "组件之外的dom没有被移除");
         this.finish();
     })
 }) ;
@@ -813,3 +910,7 @@ test("事件", function(){
     obj.destroy();
     start();
 });
+
+//lili 还有isScroll这个参数么
+//创建模式没有测试
+//lili dropmenu.iscroll没有用例
