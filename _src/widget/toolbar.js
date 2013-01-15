@@ -87,9 +87,20 @@
             if(me.data('useFix')){
                 var placeholder = $('<div class="ui-toolbar-placeholder"></div>').height(root.offset().height).
                     insertBefore(root).append(root).append(root.clone().css({'z-index': -1, position: 'absolute',top: 0})),
-                    top = root.offset(true).top;
-                $(window).on('touchstart touchmove touchend touchcancel scroll', function() {
-                    document.body.scrollTop > top ? root.css({position:'fixed', top: 0}) : root.css('position', '');
+                    top = root.offset(true).top,
+                    fixed = false;
+                $(window).on('touchmove touchend touchcancel scroll scrollStop', function() {
+                    if(document.body.scrollTop > top) {
+                        if(!fixed) {
+                            root.css({position:'fixed', top: 0});
+                            fixed = true;
+                        }
+                    } else {
+                        if(fixed) {
+                            root.css('position', '');
+                            fixed = false;
+                        }
+                    }
                 });
             }
             backbtn.highlight('ui-state-hover').is('a') || backbtn.click(me.data('backButtonClick'));
