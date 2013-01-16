@@ -197,7 +197,7 @@ test('window scroll(fix)', function() {
                 approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
                 equals(toolbar._el.offset(true).top, 0, 'the pos is right');
                 w.scrollTo(0, 300);
-                ta.scrollStop(w);
+                ta.scrollStop(w.document);
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
                     equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
@@ -206,7 +206,7 @@ test('window scroll(fix)', function() {
                     equals(toolbar._el.offset().top-300,0, 'the pos is right');
                     approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
                     w.scrollTo(0,0);
-                    ta.scrollStop(w);
+                    ta.scrollStop(w.document);
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
                         equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
@@ -220,6 +220,100 @@ test('window scroll(fix)', function() {
                     },200);
                 },200);
             }, 200);
+        };
+    }, w);
+});
+test('useFix', function() {
+    expect(11);
+    stop();
+    var w = window.top;
+    ua.loadcss(["reset.css", "widget/toolbar/toolbar.css", "widget/toolbar/toolbar.default.css"], function(){
+        var s2 = w.document.createElement("script");
+        s2.src = "../../../_test/fet/bin/import.php?f=core/zepto.ui,core/zepto.extend,core/zepto.fix,core/zepto.highlight,core/zepto.iscroll,core/zepto.ui,widget/toolbar";
+        w.document.head.appendChild(s2);
+        s2.onload = function(){
+        	var toolbar = w.$.ui.toolbar({useFix:true});
+            var t = toolbar._el.offset(true).top;
+            var html = "";
+            for(var i = 0; i < 80; i++){
+                html += "<br />";
+            }
+            w.$("body").append(html);
+	        setTimeout(function(){
+	            w.scrollTo(0, 500);
+	            ta.scrollStop(w);
+                setTimeout(function(){
+                    equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                    equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                    equals(toolbar._el.height() , 42 , "the height is ok");
+                    ok(Math.abs(w.pageYOffset - 500) <= 1, "The pageYOffset is " + w.pageYOffset);
+                    equals(toolbar._el.offset().top, 500, 'the pos is right');
+                    equals(toolbar._el.offset().left, 0,'the pos is right');
+                    w.scrollTo(0,0);
+                    ta.scrollStop(w);
+                    setTimeout(function(){
+                        equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                        equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                        equals(toolbar._el.height() , 42 , "the height is ok");
+                        equals(toolbar._el.offset().top, t, 'the pos is right');
+                        equals(toolbar._el.offset().left, 0,'the pos is right');
+                        w.$("br").remove();
+                        toolbar.destroy();
+                        $(s2).remove();
+                        start();
+                    },200);
+	            },200);
+	        }, 200);
+        };
+    }, w);
+});
+test('setup & useFix', function() {
+	expect(11);
+    stop();
+    var w = window.top;
+    ua.loadcss(["reset.css", "widget/toolbar/toolbar.css", "widget/toolbar/toolbar.default.css"], function(){
+        var s2 = w.document.createElement("script");
+        s2.src = "../../../_test/fet/bin/import.php?f=core/zepto.ui,core/zepto.extend,core/zepto.fix,core/zepto.highlight,core/zepto.iscroll,core/zepto.ui,widget/toolbar";
+        w.document.head.appendChild(s2);
+        s2.onload = function(){
+            $container.html('<div id="toolbar">\
+        			<span>back</span>\
+        			<h1>测试标题</h1>\
+        			<a>字体</a>\
+        			<a>选择</a>\
+        		</div>');
+        	var toolbar = $('#toolbar').toolbar({useFix: true}).toolbar('this');
+            var t = toolbar._el.offset(true).top;
+            var html = "";
+            for(var i = 0; i < 80; i++){
+                html += "<br />";
+            }
+            w.$("body").append(html);
+	        setTimeout(function(){
+	            w.scrollTo(0, 500);
+	            ta.scrollStop(w);
+                setTimeout(function(){
+                    equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                    equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                    equals(toolbar._el.height() , 42 , "the height is ok");
+                    ok(Math.abs(w.pageYOffset - 500) <= 1, "The pageYOffset is " + w.pageYOffset);
+                    equals(toolbar._el.offset().top, 500, 'the pos is right');
+                    equals(toolbar._el.offset().left, 0,'the pos is right');
+                    w.scrollTo(0,0);
+                    ta.scrollStop(w);
+                    setTimeout(function(){
+                        equals(toolbar._el.css("display"), "block", "The toolbar is show");
+                        equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                        equals(toolbar._el.height() , 42 , "the height is ok");
+                        equals(toolbar._el.offset().top, t, 'the pos is right');
+                        equals(toolbar._el.offset().left, 0,'the pos is right');
+                        w.$("br").remove();
+                        toolbar.destroy();
+                        $(s2).remove();
+                        start();
+                    },200);
+	            },200);
+	        }, 200);
         };
     }, w);
 });
