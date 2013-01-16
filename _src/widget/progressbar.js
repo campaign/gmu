@@ -63,6 +63,7 @@
                 _width:         _offset.width,
                 _height:        _offset.height
             });
+            me.data('horizontal') && _offset.width && root.width(_offset.width);
             me.data('initValue') > 0 && me.value( me.data('initValue'));
         },
 
@@ -159,7 +160,6 @@
             o.horizontal ?
                 me.value((touch.pageX - rect.left) / o._width * 100) :
                 me.value((o._height - touch.pageY + rect.top) / o._height * 100);
-
         },
 
         value: function(value) {

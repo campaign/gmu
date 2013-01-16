@@ -129,7 +129,7 @@
                         clearInterval(me.data('moveToTop'));
                         me.trigger('afterScroll');
                     }
-                }, 16, true));
+                }, 20, true));
             }
             return me;
 		},
