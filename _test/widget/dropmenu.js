@@ -911,6 +911,7 @@ test("事件", function(){
     start();
 });
 
+//lili 没有mode参数了么，点击item不能替换button的值了么（如果没有提供此功能，需要构造一个类似的用例），点击item不能关闭dropmenu了么？
 //lili 还有isScroll这个参数么
-//创建模式没有测试
+//lili 创建模式没有测试
 //lili dropmenu.iscroll没有用例
