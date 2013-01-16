@@ -322,9 +322,29 @@ test("destroy()", function() {
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var toolbar = $.ui.toolbar({
-            container: '.ui-toolbar-container',
+        var toolbar = w.$.ui.toolbar({
             title: '工具栏标题'
+        });
+        toolbar.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(toolbar);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The toolbar is destroy");
+        this.finish();
+    })
+});
+test("useFix & destroy()", function() {
+    ua.destroyTest(function(w,f){
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var toolbar = w.$.ui.toolbar({
+            title: '工具栏标题',
+            useFix: true
         });
         toolbar.destroy();
 
