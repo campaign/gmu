@@ -66,6 +66,7 @@
     height:100%;
     width: 5px;
     border: 1px solid #111;
+    margin-top: -1px;
     border-left: 1px solid #3d3d3d;
 }
 .ui-progressbar-v .ui-progressbar-filled {
