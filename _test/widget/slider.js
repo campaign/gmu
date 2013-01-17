@@ -141,7 +141,7 @@ function setMod(){
 }
 
 test("el(selector)&默认参数",function(){
-    expect(15);
+    expect(16);
     stop();
     ua.loadcss(["reset.css", "widget/slider/slider.css","widget/slider/slider.default.css"], function(){
         var slider = $.ui.slider("#ui-slider-test", {
@@ -156,6 +156,7 @@ test("el(selector)&默认参数",function(){
         equals(slider._data.animationTime,400,"The default animationTime is right");
         equals(slider._data.showArr,true,"The default showArr is right");
         equals(slider._data.showDot,true,"The default showDot is right");
+        equals(slider._data.viewNum,1,"The default viewNum is right");
 
         equals(slider._el.attr("class"),"ui-slider","The root class is right");
         setTimeout(function(){
@@ -244,24 +245,26 @@ test("viewNum = 3", function() {
         content: content5,
         autoPlay:false,
         slideend:function(){
-            i++;
-            if(i==1){
-                approximateEqual($('.ui-slider-wheel').offset().left,$('#ui-slider-test').offset().width /viewNum * -1,"显示第二张图片");
-                slider.next();
-            }else if(i==2){
-                approximateEqual($('.ui-slider-wheel').offset().left,$('#ui-slider-test').offset().width /viewNum * -2,"显示第三张图片");
-                slider.next();
-            }else if(i==3){
-                approximateEqual($('.ui-slider-wheel').offset().left,$('#ui-slider-test').offset().width /viewNum * -3,"显示第四张图片");
-                setTimeout(function(){
-                    slider.destroy();
-                    start();
-                },10);
-            }
+        	setTimeout(function(){
+        		 i++;
+                 if(i==1){
+                     approximateEqual($('.ui-slider-wheel').offset().left, ($('#ui-slider-test').offset().width + 2) /viewNum * -1,"显示第二张图片");
+                     slider.next();
+                 }else if(i==2){
+                     approximateEqual($('.ui-slider-wheel').offset().left, ($('#ui-slider-test').offset().width + 2) /viewNum * -2,"显示第三张图片");
+                     slider.next();
+                 }else if(i==3){
+                     approximateEqual($('.ui-slider-wheel').offset().left, ($('#ui-slider-test').offset().width + 2) /viewNum * -3,"显示第四张图片");
+                     setTimeout(function(){
+                         slider.destroy();
+                         start();
+                     },10);
+                 }
+            }, 100)
         }
     });
     equals($('.ui-slider-wheel').offset().left,0,"初始显示第一张图片");
-    equals($('.ui-slider-wheel').offset().width, $('#ui-slider-test').offset().width *(content5.length /viewNum), "The viewNum is right");
+    approximateEqual($('#ui-slider-test').offset().width, $('.ui-slider-item').offset().width * viewNum, 2, "The viewNum is right");
     slider.next();
 });
 
