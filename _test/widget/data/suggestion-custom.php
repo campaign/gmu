@@ -1,4 +1,5 @@
 <?php
+    error_reporting(E_ERROR | E_WARNING | E_PARSE);
     header("Content-Type:application/javascript");
     $key = $_GET["wd"];
     $cb = $_GET["cb"];
