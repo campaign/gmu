@@ -15,6 +15,9 @@
      * css选择器, 或者zepto对象
      * **Options**
      * - ''container'' {selector}: (可选，默认：body) 组件容器
+     * - ''initValue'' {Number}: (可选，默认：0) 初始值（百分比）
+     * - ''horizontal'' {Boolean}: (可选，默认：true) 组件是否为横向(若设为false,则为竖向)
+     * - ''transitionDuration'' {Number}: (可选，默认：300) 按钮滑动时动画效果持续的时间,单位为ms,设为0则无动画
      * **Demo**
      * <codepreview href="../gmu/_examples/webapp/progressbar/progressbar.html">
      * ../gmu/_examples/webapp/progressbar/progressbar.html
@@ -23,11 +26,9 @@
     $.ui.define('progressbar', {
         _data: {
             initValue:          0,
-            stepLength:         0,
-            stopPropagation:    true,
             horizontal:         true,
             transitionDuration: 300,
-            _isShow:            false,
+            _isShow:            true,
             _current:           0,
             _percent:           0
         },
@@ -40,11 +41,7 @@
         },
 
         _setup: function(mode) {
-            var me = this;
-            if(!mode) {
-                me._create();
-            }
-            return me;
+            mode || this._create();
         },
 
         _init: function() {
@@ -117,10 +114,11 @@
             }
             if(o.horizontal) {
                 if(!o.S) {
-                    o.stopPropagation && e.stopPropagation();
+                    e.stopPropagation();
                     e.preventDefault();
-                    _percent = o._percent = (X + o._current) / o._width * 100;
+                    _percent =  (X + o._current) / o._width * 100;
                     if(_percent <= 100 && _percent >= 0) {
+                        o._percent = _percent;
                         o.X = X;
                         o._button.style.webkitTransform = 'translate3d(' + (o.X + o._current) + 'px,0,0)';
                         o._filled.style.width = _percent + '%';
@@ -130,10 +128,11 @@
                 }
             } else {
                 if(o.S) {
-                    o.stopPropagation && e.stopPropagation();
+                    e.stopPropagation();
                     e.preventDefault();
-                    _percent = o._percent = -(o._current + Y) / o._height * 100;
+                    _percent = -(o._current + Y) / o._height * 100;
                     if(_percent <= 100 && _percent >= 0) {
+                        o._percent = _percent;
                         o.Y = Y;
                         o._button.style.webkitTransform = 'translate3d(0,' + (Y + o._current) + 'px,0)';
                         o._filled.style.cssText += 'height:' + _percent + '%;top:' + (o._height + Y + o._current) + 'px';
@@ -170,6 +169,7 @@
                 return o._percent;
             } else {
                 value = parseFloat(value);
+                if(!value) return me;
                 value = value > 100 ? 100 : value < 0 ? 0 : value;
                 o._percent = value;
                 duration = ';-webkit-transition-duration:' + o.transitionDuration + 'ms';
@@ -219,8 +219,10 @@
          * @desc 组件内部触发的事件
          * ^ 名称 ^ 处理函数参数 ^ 描述 ^
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
-         * | beforeshow | event | 显示前触发的事件 |
-         * | afterhide | event | 隐藏后触发的事件 |
+         * | dragStart | event | 拖动进度条开始时触发的事件 |
+         * | dragMove | event | 拖动进度条过程中触发的事件 |
+         * | dragEnd | event | 拖动进度条结束时触发的事件 |
+         * | valueChange | event | 隐藏后触发的事件 |
          * | destory | event | 组件在销毁的时候触发 |
          */
     });
