@@ -244,23 +244,25 @@ test("setup",function(){
     }, 50);
 });
 
-test("destroy()", function(){
-	expect(3);
-	var l1 = ua.eventLength();
-	input = document.createElement("input");
-	document.body.appendChild(input);
-	$(input).attr("id", "text");
-	var qd = new $.ui.quickdelete({
-		container: "#text"
-	});
-	input.value = "1";
-	$(input).focus();
-	qd.destroy();
-	var a=0; 
-    for(var i in qd) 
-		a++;
-	equals(a, 0, "The obj is cleared");
-	equals($(".ui-input-mask").length, 0, "The dom is removed");
-	var l2 = ua.eventLength();
-	equals(l2, l1, "The events are cleared");
+test("destroy", function(){
+    ua.destroyTest(function(w,f){
+    	w.$("body").append('<div style="width: 220px;"><input style="height: 30px; padding: 1px;" id="text"></div>');
+        
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var qd = w.$.ui.quickdelete({
+    		container: "#text"
+    	});
+        qd.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(qd);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
+    });
 });

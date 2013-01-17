@@ -36,17 +36,23 @@ test("destroy",function(){
     ua.destroyTest(function(w,f){
         w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
 
+        var container = w.document.createElement('div');
+        w.document.body.appendChild(container);
+        w.$(container).attr( "id", "container" );
+
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var dialog =  w.$.ui.dialog();
+        var dialog =  w.$.ui.dialog({
+        	 container : '#container'
+        });
         dialog.destroy();
 
         var el2= w.dt.eventLength();
         var ol = w.dt.objLength(dialog);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(dl1,dl2,"The dom is ok");
         equal(el1,el2,"The event is ok");
         ok(ol==0,"The dialog is destroy");
         this.finish();

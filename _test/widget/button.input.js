@@ -565,6 +565,23 @@ test("多种实例化方式", function() {
 
 });
 
+test('destroy()', function(){
+    ua.destroyTest(function(w,f){
+    	w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
 
+        var btn = w.$.ui.button({type: 'radio'});
+        btn.destroy();
 
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(btn);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The toolbar is destroy");
+        this.finish();
+    })
+});
 

@@ -131,7 +131,7 @@ test("事件测试&接口测试:switchTo,beforeActivate,activate,animateComplete
             strictEqual(tabs._el.find('.ui-tabs-nav li').eq(1).hasClass('ui-state-active'), true, '切换后active tab index是1');
             strictEqual(tabs._el.find('.ui-tabs-content .ui-tabs-panel').eq(0).hasClass('ui-state-active'), false, '切换后active tab content index不是0');
             strictEqual(tabs._el.find('.ui-tabs-content .ui-tabs-panel').eq(1).hasClass('ui-state-active'), true, '切换后active tab content index是1');
-            ua.click(tabs2._el.find('.ui-tabs-nav li').get(2));
+            ta.tap(tabs2._el.find('.ui-tabs-nav li').get(2));
         }
     }).tabs('this');
 
@@ -151,7 +151,7 @@ test("事件测试&接口测试:switchTo,beforeActivate,activate,animateComplete
             strictEqual(tabs2._el.find('.ui-tabs-nav li').eq(2).hasClass('ui-state-active'), true, '切换后active tab是2');
             strictEqual(tabs2._el.find('.ui-tabs-content .ui-tabs-panel').eq(1).hasClass('ui-state-active'), false, '切换后active tab content 不是1');
             strictEqual(tabs2._el.find('.ui-tabs-content .ui-tabs-panel').eq(2).hasClass('ui-state-active'), true, '切换后active tab content 是2');
-            ua.click(tabs2._el.find('.ui-tabs-nav li').get(1));
+            ta.tap(tabs2._el.find('.ui-tabs-nav li').get(1));
             setTimeout(function () {
                 tabs.destroy();
                 tabs2.destroy();

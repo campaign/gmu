@@ -64,7 +64,7 @@ test("加载成功&事件测试:beforeLoad,load,beforeRender", function(){
             equals($(panel).find('p').length, 1, 'content p loaded');
             if (count == 1) {
                 ok(true, '第二次点击开始');
-                ua.click($('#tabs .ui-tabs-nav li').get(2));
+                ta.tap($('#tabs .ui-tabs-nav li').get(2));
                 setTimeout(function () {
                     $('#tabs').tabs('destroy');
                     start();
@@ -72,7 +72,7 @@ test("加载成功&事件测试:beforeLoad,load,beforeRender", function(){
             }
         }
     });
-    ua.click($('#tabs .ui-tabs-nav li').get(1));
+    ta.tap($('#tabs .ui-tabs-nav li').get(1));
     ok(true, '第一次点击开始');
 })
 
@@ -104,10 +104,10 @@ test("第一次加载还未完成，第二次加载开始，则第一次取消�
         }
     });
     ok(true, '第一次点击开始');
-    ua.click($('#tabs .ui-tabs-nav li').get(1));
+    ta.tap($('#tabs .ui-tabs-nav li').get(1));
 
     ok(true, '第二次点击开始');
-    ua.click($('#tabs .ui-tabs-nav li').get(2));
+    ta.tap($('#tabs .ui-tabs-nav li').get(2));
 });
 
 test("事件&rend后内容高度能自适应", function(){
@@ -133,5 +133,34 @@ test("事件&rend后内容高度能自适应", function(){
             },300)
         }
     });
-    ua.click($('#tabs .ui-tabs-nav li').get(1));
+    ta.tap($('#tabs .ui-tabs-nav li').get(1));
 });
+
+test("destroy",function(){
+    ua.destroyTest(function(w,f){
+        w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var tabs =  w.$.ui.tabs({
+        	items: [
+                    {title:'tab1'},
+                    {title:'tab2'},
+                    {title:'tab3'},
+                    {title:'tab4'}
+                ],
+        	ajax: {
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded'
+            }
+        });
+        tabs.destroy();
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(tabs);
+        var dl2 =w.dt.domLength(w);
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The tabs is destroy");
+        this.finish();
+    })
+}) ;
