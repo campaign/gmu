@@ -123,13 +123,13 @@
             } else {
                 me.data('moveToTop', $.later(function() {
                     if (from > 1) {
-                        window.scrollBy(0, -Math.min(100,from - 1));
-                        from -= 100;
+                        window.scrollBy(0, -Math.min(150,from - 1));
+                        from -= 150;
                     } else {
                         clearInterval(me.data('moveToTop'));
                         me.trigger('afterScroll');
                     }
-                }, 20, true));
+                }, 25, true));
             }
             return me;
 		},

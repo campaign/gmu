@@ -121,7 +121,7 @@ test("destroy()", function() {
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var pageswipe = $('#pageswipe').pageswipe().pageswipe('this');
+        var pageswipe = w.$('#pageswipe').pageswipe().pageswipe('this');
         pageswipe.destroy();
 
         var el2= w.dt.eventLength();

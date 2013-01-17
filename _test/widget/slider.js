@@ -491,7 +491,7 @@ test("loop=false & autoPlay=true",function(){
                     equals($('.ui-slider-wheel').offset().left, $('#ui-slider-test').offset().width * -2,"显示第三张图片");
                     slider.destroy();
                     start();
-                },90);
+                },120);
             }
         }
     }) ;
@@ -1077,7 +1077,7 @@ test("destroy()", function() {
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var slider = $.ui.slider("#ui-slider-test",{
+        var slider = w.$.ui.slider($('<div id="#ui-slider-test"></div>'),{
             content: content3
         });
         slider.destroy();

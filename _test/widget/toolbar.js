@@ -228,7 +228,7 @@ test("destroy()", function() {
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var toolbar = $.ui.toolbar({
+        var toolbar = w.$.ui.toolbar({
             container: '.ui-toolbar-container',
             title: '工具栏标题'
         });

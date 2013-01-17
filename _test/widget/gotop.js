@@ -253,7 +253,7 @@ test("destroy", function(){
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var gotop = $.ui.gotop();
+        var gotop = w.$.ui.gotop();
         gotop.destroy();
 
         var el2= w.dt.eventLength();

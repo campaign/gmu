@@ -1,3 +1,8 @@
+
+@fontface { /* for iOS6 fix bug */
+    font-family:"FixFont";
+    src:url();
+}
 .ui-add2desktop {
     position: fixed;
     bottom: 12px;
@@ -12,7 +17,8 @@
     background: #494949;
     border-radius: 2px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
-    outline: 1px solid rgba(0, 0, 0, 0);
+    outline: 1px solid rgba(0,0,0,0);
+    font-family: "FixFont";
 }
 .ui-add2desktop img {
     display: block;

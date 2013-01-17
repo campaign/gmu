@@ -292,7 +292,7 @@ if($.os.ios && canShow){
             var dl1 = w.dt.domLength(w);
             var el1= w.dt.eventLength();
 
-            var add2desktop = $.ui.add2desktop();
+            var add2desktop = w.$.ui.add2desktop();
             add2desktop.destroy();
 
             var el2= w.dt.eventLength();
