@@ -22,8 +22,9 @@ module("widget/refresh.lite",{
     }
 });
 
-function createDom (dir, $wrapper) {
-    var $wrapper = $wrapper || $('.wrapper'),
+function createDom (dir, $wrapper, w) {
+    var w = w || window,
+    	$wrapper = $wrapper || $('.wrapper'),
         upBtn = '<div class="ui-refresh-up"></div> ',
         downBtn = '<div class="ui-refresh-down"></div> ';
     switch (dir) {
@@ -231,4 +232,27 @@ test("公共方法 － enable&disable", function(){
         }, 500);
 
     }, 1000);
+});
+
+test("destroy", function(){
+    ua.destroyTest(function(w,f){
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+    	var html = '<div class="wrapper"><ul class="data-list"><li>测试数据1</li></ul></div>';
+    	w.$('body').append(html);
+    	createDom('up', null, w);
+    	
+        var refresh = w.$(".wrapper").refresh("this");
+        refresh.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(refresh);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
+    });
 });

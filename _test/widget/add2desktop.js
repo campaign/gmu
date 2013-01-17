@@ -16,7 +16,7 @@ if($.os.ios && canShow){
         window.localStorage.removeItem("_gmu_adddesktop_key");
 		ua.loadcss(["reset.css", "widget/add2desktop/add2desktop.css"], function(){
 				var add2desktop = $.ui.add2desktop({
-                    icon: upath + 'css/add2desktop/icon.png"/>',
+                    icon: upath + 'css/add2desktop/icon.png',
 					init: function(){
                         equals(this._el.parent()[0].tagName.toLowerCase(), "body", "The container is right");
                         equals(this._el.attr("class"), "ui-add2desktop", "The el is right");
@@ -289,9 +289,10 @@ if($.os.ios && canShow){
 
     test('destroy()', function(){
         ua.destroyTest(function(w,f){
-            var dl1 = w.dt.domLength(w);
+        	var dl1 = w.dt.domLength(w);
             var el1= w.dt.eventLength();
 
+            w.localStorage.removeItem("_gmu_adddesktop_key");
             var add2desktop = w.$.ui.add2desktop();
             add2desktop.destroy();
 
@@ -299,8 +300,9 @@ if($.os.ios && canShow){
             var ol = w.dt.objLength(add2desktop);
             var dl2 =w.dt.domLength(w);
 
-            equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
-            equal(el1,el2,"The event is ok");
+            equal(dl1,dl2 - 1,"The dom is ok");  //fix影响
+            equal(w.$(".ui-add2desktop").length, 0, "The dom is ok");
+            equal(el1,el2,"The event is ok"); //fix影响
             ok(ol==0,"The toolbar is destroy");
             this.finish();
         })

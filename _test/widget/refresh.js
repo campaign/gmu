@@ -23,8 +23,9 @@ module("widget/refresh",{
 });
 
 
-function createDom (dir, $wrapper) {
-    var $wrapper = $wrapper || $('.wrapper'),
+function createDom (dir, $wrapper, w) {
+    var w = w || window,
+    	$wrapper = $wrapper || w.$('.wrapper'),
         upBtn = '<div class="ui-refresh-up"></div> ',
         downBtn = '<div class="ui-refresh-down"></div> ';
     switch (dir) {
@@ -279,7 +280,7 @@ test('多实例', function () {
     ua.click($('.wrapper').find('.ui-refresh-up')[0]);
 });
 
-test('方法：enable,disable,destory测试', function () {
+test('方法：enable,disable测试', function () {
     createDom('both');
     expect(17)
     stop();
@@ -323,12 +324,25 @@ test('方法：enable,disable,destory测试', function () {
     ua.click($('.ui-refresh-up')[0]);
 });
 
+test("destroy", function(){
+    ua.destroyTest(function(w,f){
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
 
+    	var html = '<div class="wrapper"><ul class="data-list"><li>测试数据1</li></ul></div>';
+    	w.$('body').append(html);
+    	createDom('up', null, w);
+    	
+        var refresh = w.$(".wrapper").refresh("this");
+        refresh.destroy();
 
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(refresh);
+        var dl2 =w.dt.domLength(w);
 
-
-
-
-
-
-
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
+    });
+});

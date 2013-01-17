@@ -149,7 +149,7 @@ test("destroy", function(){
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var gotop = $.ui.gotop({
+        var gotop = w.$.ui.gotop({
             iScrollInstance: s
         });
         gotop.destroy();
@@ -158,8 +158,9 @@ test("destroy", function(){
         var ol = w.dt.objLength(gotop);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2,"The dom is ok");
-        equal(el1,el2,"The event is ok");
+        equal(dl1,dl2 - 1,"The dom is ok");   //fix影响
+        equal(w.$(".ui-gotop").length, 0, "The dom is ok");
+        equal(el1,el2,"The event is ok");    //fix影响
         ok(ol==0,"The gotop is destroy");
         this.finish();
     });

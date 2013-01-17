@@ -118,18 +118,20 @@ test("show(), hide(), toggle()", function() {
 test("destroy()", function() {
 
     ua.destroyTest(function(w,f){
-        var dl1 = w.dt.domLength(w);
-        var el1= w.dt.eventLength();
-
+       var el1= w.dt.eventLength();
+        
+        $('#pageswipe').remove();
+        w.$('body').append('<div id="toolbar"><div><span class="switch">切换</span></div></div><div id="pageswipe"><div><p style="height: 400px;">内容部分</p></div><div style="height: 400px;">索引</div></div> ')
+        
         var pageswipe = w.$('#pageswipe').pageswipe().pageswipe('this');
         pageswipe.destroy();
 
         var el2= w.dt.eventLength();
         var ol = w.dt.objLength(pageswipe);
-        var dl2 =w.dt.domLength(w);
-
-        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
-        equal(el1,el2,"The event is ok");
+       
+        equal(el1,el2,"The event is ok"); //fix影响
+        equals(w.$("#toolbar").length, 1, "The toolbar exists");
+        equals(w.$('#pageswipe').length, 0, "The dom is ok");
         ok(ol==0,"The dialog is destroy");
         this.finish();
     })

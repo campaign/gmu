@@ -343,7 +343,7 @@ test("destroy",function(){
         var ol = w.dt.objLength(obj);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(dl1,dl2,"The dom is ok");
         equal(el1,el2,"The event is ok");
         ok(ol==0,"The instance is destroy");
         this.finish();
