@@ -306,7 +306,7 @@
          */
         content: function(value) {
             var data = this._data;
-            value && data._content.empty().append(data.content = value);
+            value!==undefined && data._content.empty().append(data.content = value);
             return data.content;
         },
 
