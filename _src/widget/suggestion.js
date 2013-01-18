@@ -16,6 +16,7 @@
      * - ''container''        {Selector}:                  (必选)父元素
      * - ''source''           {String}:                    (必选)请求数据的url
      * - ''param''            {String}:                    (可选)url附加参数
+     * - ''formID''           {String}:                    (可选)提交搜索的表单，默认为包含input框的第一个父级form
      * - ''posAdapt''         {Boolean,默认:false}:         (可选)是否自动调整位置
      * - ''listCount''        {Number, 默认: 5}:            (可选)展现sug的条数: 5
      * - ''isCache''          {Boolean, 默认: true}:        (可选)是否缓存query: true
