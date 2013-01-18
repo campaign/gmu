@@ -29,6 +29,7 @@
             toolbar:            '',
             iconWidth:          55,
             springBackDis:      15,
+            _stamp:             0,
             _locked:            false,
             _isShow:            false
         },
@@ -177,13 +178,12 @@
         show: function() {
             var me = this,
                 o = me._data;
-            if(!o._locked) {
+            if(Date.now() - o._stamp > 40) {
                 var cssText = '-webkit-transition:400ms;-webkit-transform:translate3d(-' + o._end + 'px,0,0);';
                 o._wheel.style.cssText += cssText;
                 o._toolbar && (o._toolbar.style.cssText += cssText);
-                o._locked = true;
+                o._stamp = Date.now();
                 o._isShow = true;
-                setTimeout(function() {o._locked = false}, 40);
                 me.trigger('show');
             }
             return me;
@@ -203,13 +203,12 @@
         hide: function() {
             var me = this,
                 o = me._data;
-            if(!o._locked) {
+            if(Date.now() - o._stamp > 40) {
                 var cssText = '-webkit-transition:400ms;-webkit-transform:translate3d(0,0,0);';
                 o._wheel.style.cssText += cssText;
                 o._toolbar && (o._toolbar.style.cssText += cssText);
-                o._locked = true;
+                o._stamp = Date.now();
                 o._isShow = false;
-                setTimeout(function() {o._locked = false}, 40);
                 me.trigger('hide');
             }
             return me;
