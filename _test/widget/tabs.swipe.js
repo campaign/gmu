@@ -52,7 +52,6 @@ test("左右滑动无动画", function(){
         ta.touchend($(".ui-panel")[0]);
         equals(1, tabs._data.active, '向右滑动')
 
-        equals(1, tabs._data.active)
         ta.touchstart($(".ui-panel")[1], {
             touches: [{
                 clientX: 0,
@@ -94,47 +93,69 @@ test("左右滑动有动画", function(){
         swipe: true,
         items: getItems()
     })
-    ua.loadcss(["transitions.css", "widget/tabs/tabs.css","widget/tabs/tabs.default.css"], function(){
-        ta.touchstart($(".ui-panel")[0], {
+    ta.touchstart($(".ui-panel")[0], {
+        touches: [{
+            clientX: 0,
+            clientY: 0
+        }]
+    });
+    ta.touchmove($(".ui-panel")[0], {
+        touches:[{
+            clientX: -50,
+            clientY: 0
+        }]
+    });
+    ta.touchend($(".ui-panel")[0]);
+    ok($(".ui-panel").eq(0).hasClass('out'), '向右滑动（滑出）')
+    ok($(".ui-panel").eq(1).hasClass('in'), '向右滑动（滑入）')
+    setTimeout(function(){
+        ok(!$(".ui-panel").eq(0).hasClass('out'), '滑动结束')
+
+        ta.touchstart($(".ui-panel")[1], {
             touches: [{
                 clientX: 0,
                 clientY: 0
             }]
         });
-        ta.touchmove($(".ui-panel")[0], {
+        ta.touchmove($(".ui-panel")[1], {
             touches:[{
-                clientX: -50,
+                clientX: 50,
                 clientY: 0
             }]
         });
-        ta.touchend($(".ui-panel")[0]);
-        ok($(".ui-panel").eq(0).hasClass('out'), '向右滑动（滑出）')
-        ok($(".ui-panel").eq(1).hasClass('in'), '向右滑动（滑入）')
+        ta.touchend($(".ui-panel")[1]);
+        ok($(".ui-panel").eq(1).hasClass('out'), '向左滑动（滑出）')
+        ok($(".ui-panel").eq(0).hasClass('in'), '向左滑动（滑入）')
+
         setTimeout(function(){
-            ok(!$(".ui-panel").eq(0).hasClass('out'), '滑动结束')
-
-            ta.touchstart($(".ui-panel")[1], {
-                touches: [{
-                    clientX: 0,
-                    clientY: 0
-                }]
-            });
-            ta.touchmove($(".ui-panel")[1], {
-                touches:[{
-                    clientX: 50,
-                    clientY: 0
-                }]
-            });
-            ta.touchend($(".ui-panel")[1]);
-            ok($(".ui-panel").eq(1).hasClass('out'), '向左滑动（滑出）')
-            ok($(".ui-panel").eq(0).hasClass('in'), '向左滑动（滑入）')
-
-            setTimeout(function(){
-                ok(!$(".ui-panel").eq(0).hasClass('in'), '滑动结束')
-                start()
-            }, 400)
+            ok(!$(".ui-panel").eq(0).hasClass('in'), '滑动结束')
+            start()
         }, 400)
-    })
+    }, 400)
+})
+
+test("左右滑动无动画", function(){
+    var tabs = $.ui.tabs({
+    	disablePlugin: true,
+        container: '#container',
+        swipe: true,
+        items: getItems(),
+        transition:''
+    });
+    ta.touchstart($(".ui-panel")[0], {
+        touches: [{
+            clientX: 0,
+            clientY: 0
+        }]
+    });
+    ta.touchmove($(".ui-panel")[0], {
+        touches:[{
+            clientX: -50,
+            clientY: 0
+        }]
+    });
+    ta.touchend($(".ui-panel")[0]);
+    equals(0, tabs._data.active, 'disbale plugin');
 })
 
 test("destroy",function(){

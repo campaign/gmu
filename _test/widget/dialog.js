@@ -252,8 +252,8 @@ test('content()', function(){
         equals(d.data('_content')[0].childNodes[0].innerHTML, "test", "The content is right");
         equals(d.content(), '<span style="color:#ff0000">test</span>', "The content is right");
         d.content('test1', true);
-        equals(d.content(), 'test1', "The content is right");
-        equals(d.data('_content').text(), "test1", "The content is right");
+        equals(d.content(), '<span style="color:#ff0000">test</span>test1', "The content is right");
+        equals(d.data('_content')[0].childNodes[1].textContent, "test1", "The content is right");
         d.content("");
         equals(d.content(), "", "The content is right");
         d.destroy();
