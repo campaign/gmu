@@ -63,11 +63,13 @@
                 maskID = 'ui-input-mask-' + expando,
                 sugID = me.data('id', "ui-suggestion-" + $.ui.guid()),
                 $input = me.root($(me.data('container'))).attr("autocomplete", "off"),
+                formID = me.data('formID'),
                 $maskElem = $input.parent();
 
             me.data({
                 inputWidth: $input.get(0).offsetWidth,
-                cacheData: {}
+                cacheData: {},
+                form: formID ? $(formID) : $input.closest('form')
             });
             if ($maskElem.attr('class') != 'ui-input-mask') {
                 $maskElem = $('<div id="' + maskID + '" class="ui-input-mask"></div>').appendTo($input.parent()).append($input);
@@ -80,9 +82,11 @@
         _init: function() {
             var me = this,
                 $input = me.root(),
+                form = me.data('form'),
                 eventHandler = $.proxy(me._eventHandler, me);
 
             me.data('wrapper').on('touchstart', eventHandler);
+            form.length && form.on('submit', eventHandler);
             $input.on('focus input', eventHandler).parent().on('touchstart', eventHandler);
             $(window).on('ortchange', eventHandler);
             me.data('autoClose') && $(document).on('tap', eventHandler);
@@ -208,6 +212,8 @@
                 case 'ortchange':
                     me._setSize()._setPos();
                     break;
+                case 'submit':       //form提交时能存储历史记录
+                    me.data('isStorage') && me._localStorage(me.getValue());
                 case 'click':
                 case 'tap':
                     if (!(maskElem.compareDocumentPosition(target) & 16)) me.hide();
@@ -227,7 +233,7 @@
             if (query !== '' && (query.length < parseFloat(me.data('minChars')) || query.length > parseFloat(me.data('maxChars')))) {
                 return me;
             }
-            return query ? me._change(query) : data ? me._render(null, {s: data.split(",")}) : me.hide();
+            return query ? me._change(query) : data ? me._render(null, {s: data.split(encodeURIComponent(','))}) : me.hide();
         },
         
         /** 
@@ -421,11 +427,11 @@
             if (value === null) window.localStorage[id] = "";
             else if (value !== undefined) {
                 var localdata = window.localStorage[id],
-                    data = localdata ? localdata.split(",") : [];
+                    data = localdata ? localdata.split(encodeURIComponent(',')) : [];
 
                 if ($.inArray(value, data) != -1) return;
                 data.unshift(value);
-                window.localStorage[id] = data.join(",");
+                window.localStorage[id] = data.join(encodeURIComponent(','));
             }
 
             return window.localStorage[id];

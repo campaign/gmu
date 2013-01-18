@@ -1016,6 +1016,43 @@ test("history()", function() {
     sugg.destroy();
 });
 
+test("form submit", function() {
+    expect(2);
+    stop();
+    var subBtn = $('<input />').attr('type', 'submit'),
+        form = $('<form></form>').attr({
+        method: 'get',
+        action: 'http://www.baidu.com/s'
+    }).append(subBtn),
+        input = $('#sugg-input');
+    input.attr('name', 'wd').wrapAll(form);
+    var sugg = new $.ui.suggestion({
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php"
+    });
+    form.on('submit', function (e) {
+        e.preventDefault();
+    });
+    var id = sugg._data.wrapper.attr('id');
+    delete window.localStorage[id];
+
+    input[0].value = 'test';
+    ua.click(subBtn[0]);
+
+    setTimeout(function () {
+        input.focus();
+        equals(window.localStorage[id], 'test', '点击提交按钮存储1个历史记录');
+        input[0].value = 'test,test2';
+        ua.click(subBtn[0]);
+        setTimeout(function () {
+            equals(window.localStorage[id].split(encodeURIComponent(','))[0], 'test,test2', 'form提交存储历史记录正确');
+            sugg.destroy();
+            form.remove();
+            start();
+        }, 300)
+    }, 300);
+});
+
 test("focusInput() $ leaveInput()", function() {
     stop();
     expect(2);
