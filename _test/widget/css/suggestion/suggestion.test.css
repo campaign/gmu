@@ -1,0 +1,11 @@
+.com-search-input{
+    width: 190px;
+    height: 38px;
+    line-height: 38px;
+    -webkit-appearance: none;
+    font-size: 16px;
+    padding: 0 5px;
+}
+.ui-suggestion ul li{
+    height: 19px;
+}

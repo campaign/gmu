@@ -14,7 +14,7 @@
      * css选择器, 或者zepto对象
      * **Options**
      * - ''container'' {selector}: (可选,默认：body) 组件容器
-     * - ''useAnimation'' {Boolean}: (可选, 默认为true), 返回顶部时是否使用动画
+     * - ''useAnimation'' {Boolean}: (可选, 默认为true), 返回顶部时是否使用动画,在使用iScroll时,返回顶部的动作由iScroll实例执行,此参数无效
      * - ''position'' {Object}: (可选, 默认为{bottom:10, right:10}), 使用fix效果时，要用的位置参数
      * - ''afterScroll'' {function}: (可选,默认：null) 返回顶部后执行的回调函数
      * - ''iScrollInstance'' {Object}: (可选) 使用iscroll时需要传入iScroll实例，用来判定显示与隐藏
@@ -123,13 +123,13 @@
             } else {
                 me.data('moveToTop', $.later(function() {
                     if (from > 1) {
-                        window.scrollBy(0, -Math.min(100,from - 1));
-                        from -= 100;
+                        window.scrollBy(0, -Math.min(150,from - 1));
+                        from -= 150;
                     } else {
                         clearInterval(me.data('moveToTop'));
                         me.trigger('afterScroll');
                     }
-                }, 16, true));
+                }, 25, true));
             }
             return me;
 		},

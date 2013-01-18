@@ -3,7 +3,7 @@ module('plugin/widget/suggestion', {
         input = document.createElement('input');
         document.body.appendChild(input);
         $(input).attr("id", "sugg-input");
-        $(input).attr("class", "com-search-input ");
+        $(input).attr("class", "com-search-input");
         te.dom.push(input);
     }
 });
@@ -12,7 +12,7 @@ module('plugin/widget/suggestion', {
 test('默认参数 & container & source & events', function() {
     stop();
     expect(37);
-    ua.loadcss(["reset.css", "widget/suggestion/suggestion.css", "widget/suggestion/suggestion.default.css"], function() {
+    ua.loadcss(["reset.css", "widget/suggestion/suggestion.css", "widget/suggestion/suggestion.default.css", "../_test/widget/css/suggestion/suggestion.test.css"], function() {
         var sugg = $.ui.suggestion({
             container: "#sugg-input",
             source: upath + "data/suggestion.php",
@@ -55,10 +55,10 @@ test('默认参数 & container & source & events', function() {
                 equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
                 equal(sugg._data.wrapper.offset().left, $(input).parent().offset().left, "The left is same as input");
                 equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-                equal(sugg._data.wrapper.offset().height, 102, "The height is right");
+                approximateEqual(sugg._data.wrapper.offset().height, 102, "The height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-button").height(), 34, "The button height is right");
-                equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 306, "The scroller height is right");
+                equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
                 ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
             }, 100);
         });
@@ -87,6 +87,84 @@ test('param', function() {
             ok(ua.isShown(sugg._data.wrapper.get(0)),"The suggestion shows");
             equal(sugg._data.wrapper.find("li").length, 1, "The items count");
             ok(sugg._data.wrapper.find("li").eq(0).html().match(/<span>1<\/span>/),"第1个提示");
+            sugg.destroy();
+            start();
+        }, 100);
+    });
+    input.value = "1";
+    $(input).focus();
+});
+
+test('height', function() {
+    stop();
+    expect(8);
+    var sugg = $.ui.suggestion({
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php",
+        height: 400
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
+            equal($(".ui-suggestion ul li").length, 9, "The items count");
+            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
+            equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
+            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
+            approximateEqual(sugg._data.wrapper.offset().height, 436, "The height is right");
+            equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 400, "The content height is right");
+            equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
+            
+            sugg.destroy();
+            start();
+        }, 100);
+    });
+    input.value = "1";
+    $(input).focus();
+});
+
+test('width', function() {
+    stop();
+    expect(5);
+    var sugg = $.ui.suggestion({
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php",
+        width: 300
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
+            equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
+            equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is right");
+            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is same as input");
+            approximateEqual(sugg._data.wrapper.offset().height, 102, "The height is right");
+            sugg.destroy();
+            start();
+        }, 100);
+    });
+    input.value = "1";
+    $(input).focus();
+});
+
+test('offset', function() {
+    stop();
+    expect(5);
+    var sugg = $.ui.suggestion({
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php",
+        width: 300,
+        height: 99,
+        offset: {
+            x: 10,
+            y: 20
+        }
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
+            equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
+            equal(sugg._data.wrapper.offset().left, $(input).offset().left + 10, "The left is right");
+            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height + 20, "The top is same as input");
+            approximateEqual(sugg._data.wrapper.offset().height, 135, "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -410,84 +488,6 @@ test("sendRequest", function() {
     $(input).attr("value", "1");
     $(input).focus();
 });
-
-test('height', function() {
-    stop();
-    expect(8);
-    var sugg = $.ui.suggestion({
-        container: "#sugg-input",
-        source: upath + "data/suggestion.php",
-        height: 400
-    });
-    sugg.on("show", function() {
-        setTimeout(function() {
-            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
-            equal($(".ui-suggestion ul li").length, 9, "The items count");
-            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
-            equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
-            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-            equal(sugg._data.wrapper.offset().height, 436, "The height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 400, "The content height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 306, "The scroller height is right");
-            sugg.destroy();
-            start();
-        }, 100);
-    });
-    input.value = "1";
-    $(input).focus();
-});
-
-test('width', function() {
-    stop();
-    expect(5);
-    var sugg = $.ui.suggestion({
-        container: "#sugg-input",
-        source: upath + "data/suggestion.php",
-        width: 300
-    });
-    sugg.on("show", function() {
-        setTimeout(function() {
-            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
-            equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
-            equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is right");
-            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is same as input");
-            equal(sugg._data.wrapper.offset().height, 102, "The height is right");
-            sugg.destroy();
-            start();
-        }, 100);
-    });
-    input.value = "1";
-    $(input).focus();
-});
-
-test('offset', function() {
-    stop();
-    expect(5);
-    var sugg = $.ui.suggestion({
-        container: "#sugg-input",
-        source: upath + "data/suggestion.php",
-        width: 300,
-        height: 99,
-        offset: {
-            x: 10,
-            y: 20
-        }
-    });
-    sugg.on("show", function() {
-        setTimeout(function() {
-            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
-            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
-            equal(sugg._data.wrapper.offset().left, $(input).offset().left + 10, "The left is right");
-            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height + 20, "The top is same as input");
-            equal(sugg._data.wrapper.offset().height, 135, "The height is right");
-            sugg.destroy();
-            start();
-        }, 100);
-    });
-    input.value = "1";
-    $(input).focus();
-});
-
 
 test('listCount', function() {
     expect(6);
@@ -1016,6 +1016,43 @@ test("history()", function() {
     sugg.destroy();
 });
 
+test("form submit", function() {
+    expect(2);
+    stop();
+    var subBtn = $('<input />').attr('type', 'submit'),
+        form = $('<form></form>').attr({
+        method: 'get',
+        action: 'http://www.baidu.com/s'
+    }).append(subBtn),
+        input = $('#sugg-input');
+    input.attr('name', 'wd').wrapAll(form);
+    var sugg = new $.ui.suggestion({
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php"
+    });
+    form.on('submit', function (e) {
+        e.preventDefault();
+    });
+    var id = sugg._data.wrapper.attr('id');
+    delete window.localStorage[id];
+
+    input[0].value = 'test';
+    ua.click(subBtn[0]);
+
+    setTimeout(function () {
+        input.focus();
+        equals(window.localStorage[id], 'test', '点击提交按钮存储1个历史记录');
+        input[0].value = 'test,test2';
+        ua.click(subBtn[0]);
+        setTimeout(function () {
+            equals(window.localStorage[id].split(encodeURIComponent(','))[0], 'test,test2', 'form提交存储历史记录正确');
+            sugg.destroy();
+            form.remove();
+            start();
+        }, 300)
+    }, 300);
+});
+
 test("focusInput() $ leaveInput()", function() {
     stop();
     expect(2);
@@ -1133,7 +1170,7 @@ test('setup', function() {
     stop();
     expect(18);
     $("#sugg-input").remove();
-    $('<input id="inputId" type="text">').appendTo(document.body);
+    $('<input id="inputId" class="com-search-input" type="text">').appendTo(document.body);
     var sugg = $('#inputId').suggestion({
         source: upath + "data/suggestion.php",
         init: function() {
@@ -1157,10 +1194,10 @@ test('setup', function() {
             equal(sugg._data.wrapper.offset().width, $("#inputId").parent().offset().width, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $("#inputId").offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $("#inputId").offset().top + $("#inputId").offset().height, "The top is right");
-            equal(sugg._data.wrapper.offset().height, 102, "The height is right");
+            approximateEqual(sugg._data.wrapper.offset().height, 102, "The height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-button").height(), 34, "The button height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 306, "The scroller height is right");
+            equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
             ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
         }, 200);
     });
@@ -1179,30 +1216,26 @@ test('setup', function() {
     },20);
 });
 
-test("destroy", function() {
-    stop();
-    expect(3);
-    var l1 = ua.eventLength();
-    var sugg = new $.ui.suggestion({
-        container: "#sugg-input",
-        source: upath + "data/suggestion.php",
-        submit: function() {
+test("destroy", function(){
+    ua.destroyTest(function(w,f){
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
 
-        }
-    });
-    input.value = "1";
-    $(input).focus();
-    sugg.on("show", function() {
-        setTimeout(function() {
-            sugg.destroy();
-            var a = 0;
-            for(var i in sugg)
-            a++;
-            equals(a, 0, "The obj is cleared");
-            equals($(".ui-input-mask").length, 0, "The dom is removed");
-            var l2 = ua.eventLength();
-            equals(l2, l1, "The events are cleared");
-            start();
-        }, 100);
+        w.$("body").append('<input id="sugg-input" class="com-search-input ">');
+        
+        var sugg = w.$.ui.suggestion({
+            container: "#sugg-input",
+            source: upath + "data/suggestion.php"
+        });
+        sugg.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(sugg);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
     });
 });

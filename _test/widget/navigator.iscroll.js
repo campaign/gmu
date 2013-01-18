@@ -155,7 +155,7 @@ test("Event: tabselect & scrollstart & scrollmove & scrollend", function(){
     stop();
     expect(5)
     fullSetup();
-    var count = 0,
+    var count = 0, time = 0.
         nav = $('#nav-fullsetup').navigator({
             defTab: 0,
             tabselect: function (index) {
@@ -171,9 +171,12 @@ test("Event: tabselect & scrollstart & scrollmove & scrollend", function(){
             scrollend: function () {     //deftab not trigger scrollend
                 ok(true, 'The scrollend trigger');
                 setTimeout(function () {
-                    nav.destroy();
-                    $('#nav-fullsetup').remove();
-                    start();
+                	time ++;
+                    if(time == 2){    //init时触发一次scrollEnd
+                    	nav.destroy();
+                        $('#nav-fullsetup').remove();
+                        start();
+                    }
                 }, 300);
             }
         }).navigator('this'),
@@ -460,4 +463,25 @@ test('ortchange: bigger & smaller than tab width', function () {
             }, delayTime);
         }, 600);
     }, delayTime);
+});
+
+test("destroy",function(){
+    ua.destroyTest(function(w,f){
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var nav = w.$.ui.navigator({
+            content:content
+        });
+        nav.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(nav);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The dialog is destroy");
+        this.finish();
+    })
 });

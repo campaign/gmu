@@ -160,7 +160,7 @@
                 if(i < l) {
                     j = lazyImgs.shift();
                     j.src = j.getAttribute('lazyload');
-                    if(me.data('loop')) {
+                    if(o.loop) {
                         j = allImgs[i + length / 2];
                         j.src = j.getAttribute('lazyload');
                     }
@@ -292,7 +292,7 @@
          * 轮播方法
          */
         _move:function(index) {
-            var o = this._data, s,
+            var o = this._data,
                 dotIndex = o.dotIndex[index];
             this.trigger('slide', dotIndex);
             if(o.lazyImgs.length) {

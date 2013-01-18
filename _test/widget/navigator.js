@@ -347,18 +347,11 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
 
 test("destroy",function(){
     ua.destroyTest(function(w,f){
-        //w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var nav = $.ui.navigator({
-            content:[
-                {text:"首页", url: "#b"},
-                {text:"电影", url: "#a"},
-                {text:"电视剧", url: "javascript:;"},
-                {text:"动漫", url: "javascript:;"},
-                {text:"fix2", url: "#e", pos:"right"}
-            ]
+        var nav = w.$.ui.navigator({
+            content:content1
         });
         nav.destroy();
 
@@ -366,7 +359,7 @@ test("destroy",function(){
         var ol = w.dt.objLength(nav);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(dl1,dl2,"The dom is ok");
         equal(el1,el2,"The event is ok");
         ok(ol==0,"The dialog is destroy");
         this.finish();

@@ -1080,7 +1080,7 @@ test("destroy()", function() {
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
-        var slider = $.ui.slider("#ui-slider-test",{
+        var slider = w.$.ui.slider({
             content: content3
         });
         slider.destroy();
