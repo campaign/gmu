@@ -440,32 +440,6 @@ test("el selector $ 多实例 $ 显示" ,function() {
     $("#button").remove();
 });
 
-test("destroy()", function() {
-    expect(2);
-    //var l1 = ua.eventLength();
-    var link1=document.createElement('a');
-    $(link1).attr('class','button1');
-    $(link1).html('button1');
-    document.body.appendChild(link1);
-    var button=$.ui.button('.button1',{
-        label:'test',
-        attributes: {
-            href: 'javascript:void 0'
-        }
-    });
-    button.destroy();
-    var a=0;
-    for(var i in button)
-        a++;
-    equals(a, 0, "The obj is clear");
-    equals($(".ui-button").length, 0, "The dom is removed");
-    //var l2 = ua.eventLength();
-    //equals(l2, l1, "The events are cleared");
-
-    $(link1).remove();
-});
-
-
 test("setup类型检测", function() {
     expect(7);
     var btn = $('<input id="btn" type="button" />').appendTo($('#btsn_create')).button('this');
@@ -563,6 +537,18 @@ test("多种实例化方式", function() {
     equals(btn1.data('icon'), 'home', 'icon为home');
     btn1.destroy();
 
+});
+
+test("disablePlugin = true",function(){
+    expect(2);
+    var btn = $.ui.button({
+    	disablePlugin: true,
+        type:'input'
+    });
+    
+    equals(btn.root().attr("tagName").toLowerCase(), 'button', "disable plugin");
+    equals(btn.setIcon, undefined, "disable plugin");
+    btn.destroy();
 });
 
 test('destroy()', function(){

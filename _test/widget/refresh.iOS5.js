@@ -22,8 +22,9 @@ module("widget/refresh.iOS5",{
     }
 });
 
-function createDom (dir, $wrapper) {
-    var $wrapper = $wrapper || $('.wrapper'),
+function createDom (dir, $wrapper, w) {
+    var w = w || window,
+        $wrapper = $wrapper || w.$('.wrapper'),
         upBtn = '<div class="ui-refresh-up"></div> ',
         downBtn = '<div class="ui-refresh-down"></div> ';
     switch (dir) {
@@ -300,4 +301,67 @@ test("公共方法 － enable&disable", function(){
     }, 1000);
 });
 
+test('参数disablePlugin:true', function () {
+    createDom('both');
+    expect(1);
+    stop();
 
+    var $wrapper = $('.wrapper'),
+        lis = $wrapper.find('li'),
+        refresh = $wrapper.refresh({
+        	disablePlugin: true,
+            ready: function (dir, type) {
+                ok(true, 'ready is triggered');
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    refresh.data('threshold',-5);      //反冲距离
+    setTimeout(function(){
+        var l = $(target).offset().left+10;
+        var t = $(target).offset().top-10;
+
+        target.scrollTop = 0;//关键，要不然ios上不动。
+        ta.touchstart(target, {
+            targetTouches:[{
+                clientX: l,
+                clientY: t
+            }]
+        });
+        ta.touchmove(target, {
+            targetTouches:[{
+                clientX: l,
+                clientY: t-100
+            }]
+        });
+        ta.touchend(target);
+        setTimeout(function(){
+        	equals(refresh._data.iScroll, undefined, "disbale plugin");
+            start();
+        }, 300);
+    }, 500);
+});
+
+test("destroy", function(){
+	$(".wrapper").remove();
+    ua.destroyTest(function(w,f){
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+    	var html = '<div class="wrapper"><ul class="data-list"><li>测试数据1</li></ul></div>';
+    	w.$('body').append(html);
+    	createDom('up', null, w);
+    	
+        var refresh = w.$(".wrapper").refresh("this");
+        refresh.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(refresh);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
+    });
+});

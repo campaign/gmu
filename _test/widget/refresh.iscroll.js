@@ -18,12 +18,13 @@ module("widget/refresh.iscroll",{
         $('body').append(html);
     },
     teardown: function () {
-        $('.ui-refresh-wrapper, .wrapper').remove();
+        $('.ui-refresh-wrapper').remove();
     }
 });
 
-function createDom (dir, $wrapper) {
-    var $wrapper = $wrapper || $('.wrapper'),
+function createDom (dir, $wrapper, w) {
+    var w = w || window,
+    	$wrapper = $wrapper || w.$('.wrapper'),
         upBtn = '<div class="ui-refresh-up"></div> ',
         downBtn = '<div class="ui-refresh-down"></div> ';
     switch (dir) {
@@ -61,7 +62,10 @@ test('参数options:ready -up', function () {
             ready: function (dir, type) {
                 ok(true, 'ready is triggered');
                 this.afterDataLoading();
-                start();
+                setTimeout(function(){
+                	refresh.destroy();
+                    start();
+                }, 100);
             }
         }).refresh('this'),
         target = lis.get(0);
@@ -84,6 +88,19 @@ test('参数options:ready -up', function () {
         });
 
         ta.touchend(target);
+        
+        //PC
+        ua.mousedown(target, {
+            clientX: 0,
+            clientY: 0
+        });
+
+        ua.mousemove(target, {
+        	clientX: 0,
+            clientY: 200
+        });
+
+        ua.mouseup(target);
     }, 1000);
 });
 
@@ -99,7 +116,10 @@ test('参数options:ready - down', function () {
             ready: function (dir, type) {
                 ok(true, 'ready is triggered');
                 this.afterDataLoading();
-                start();
+                setTimeout(function(){
+                	refresh.destroy();
+                    start();
+                }, 100);
             }
         }).refresh('this'),
         target = lis.get(7);
@@ -120,6 +140,18 @@ test('参数options:ready - down', function () {
             }]
         });
         ta.touchend(target);
+        //PC
+        ua.mousedown(target, {
+        	clientX: l,
+        	clientY: t
+        });
+
+        ua.mousemove(target, {
+        	clientX: l,
+        	clientY: t - 200
+        });
+
+        ua.mouseup(target);
     }, 1000);
 });
 
@@ -151,7 +183,10 @@ test("参数options - statechange", function(){
                         break;
                 }
                 if(count>=12){
-                    start();
+                	setTimeout(function(){
+                		refresh.destroy();
+                        start();
+                	}, 100);
                 }
             }
         }).refresh('this'),
@@ -180,7 +215,24 @@ test("参数options - statechange", function(){
             }]
         });
         ta.touchend(target);
+        //PC
+        ua.mousedown(target, {
+        	clientX: l,
+        	clientY: t
+        });
 
+        ua.mousemove(target, {
+        	clientX: l,
+        	clientY: t + 200
+        });
+        
+        ua.mousemove(target, {
+        	clientX: l,
+        	clientY: t + 150
+        });
+
+        ua.mouseup(target);
+        
         ta.touchstart(target, {
             touches:[{
                 pageX: l,
@@ -194,6 +246,18 @@ test("参数options - statechange", function(){
             }]
         });
         ta.touchend(target);
+        //PC
+        ua.mousedown(target, {
+        	clientX: l,
+        	clientY: t
+        });
+
+        ua.mousemove(target, {
+        	clientX: l,
+        	clientY: t + 200
+        });
+
+        ua.mouseup(target);
 
        setTimeout(function(){
            refresh.afterDataLoading();
@@ -217,6 +281,23 @@ test("参数options - statechange", function(){
                }]
            });
            ta.touchend(target);
+           //PC
+           ua.mousedown(target, {
+        	   clientX: l,
+        	   clientY: t
+           });
+
+           ua.mousemove(target, {
+        	   clientX: l,
+        	   clientY: t - 200
+           });
+           
+           ua.mousemove(target, {
+        	   clientX: l,
+               pageY: t - 150
+           });
+
+           ua.mouseup(target);
 
            ta.touchstart(target, {
                touches:[{
@@ -231,6 +312,20 @@ test("参数options - statechange", function(){
                }]
            });
            ta.touchend(target);
+           
+           //PC
+           ua.mousedown(target, {
+        	   clientX: l,
+        	   clientY: t
+           });
+
+           ua.mousemove(target, {
+        	   clientX: l,
+               clientY: t - 200
+           });
+           
+           ua.mouseup(target);
+           
            setTimeout(function(){
                refresh.afterDataLoading();
                setTimeout(function(){
@@ -274,6 +369,18 @@ test("公共方法 － enable&disable", function(){
         });
 
         ta.touchend(target);//第一次，默认非diabled，所以ready会触发。
+        //PC
+        ua.mousedown(target, {
+     	   clientX: l,
+     	   clientY: t
+        });
+
+        ua.mousemove(target, {
+     	   clientX: l,
+            clientY: t + 200
+        });
+        
+        ua.mouseup(target);
 
 
         setTimeout(function(){
@@ -294,6 +401,18 @@ test("公共方法 － enable&disable", function(){
             });
 
             ta.touchend(target);//第一次，默认非diabled，所以ready会触发。
+            //PC
+            ua.mousedown(target, {
+         	   clientX: l,
+         	   clientY: t
+            });
+
+            ua.mousemove(target, {
+         	   clientX: l,
+                clientY: t + 200
+            });
+            
+            ua.mouseup(target);
 
             setTimeout(function(){
 
@@ -313,8 +432,21 @@ test("公共方法 － enable&disable", function(){
                 });
 
                 ta.touchend(target);
+                //PC
+                ua.mousedown(target, {
+             	   clientX: l,
+             	   clientY: t
+                });
+
+                ua.mousemove(target, {
+             	   clientX: l,
+                    clientY: t + 200
+                });
+                
+                ua.mouseup(target);
 
                 setTimeout(function(){
+                	refresh.destroy();
                     start();
                 }, 1000);
 
@@ -322,4 +454,83 @@ test("公共方法 － enable&disable", function(){
         }, 500);
 
     }, 1000);
+});
+
+test('disablePlugin', function () {
+    createDom('up');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+        lis = $wrapper.find('li'),
+        refresh = $wrapper.refresh({
+        	disablePlugin: true,
+            ready: function (dir, type) {
+                ok(true, 'ready is triggered');
+            }
+        }).refresh('this'),
+        target = lis.get(0);
+
+    setTimeout(function(){
+        ta.touchstart(target, {
+            touches: [{
+                target:target,
+                pageX: 0,
+                pageY: 0
+            }]
+        });
+
+        ta.touchmove(target, {
+            touches: [{
+                target:target,
+                pageX: 0,
+                pageY: 200
+            }]
+        });
+
+        ta.touchend(target);
+        
+        //PC
+        ua.mousedown(target, {
+            clientX: 0,
+            clientY: 0
+        });
+
+        ua.mousemove(target, {
+        	clientX: 0,
+            clientY: 200
+        });
+
+        ua.mouseup(target);
+        
+        setTimeout(function(){
+        	equals(refresh._data.useTransition, undefined, "disable plugin");
+        	refresh.destroy();
+        	start();
+        }, 300);
+    }, 1000);
+});
+
+test("destroy", function(){
+	$(".wrapper").remove();
+    ua.destroyTest(function(w,f){
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+    	var html = '<div class="wrapper"><ul class="data-list"><li>测试数据1</li></ul></div>';
+    	w.$('body').append(html);
+    	createDom('up', null, w);
+    	
+        var refresh = w.$(".wrapper").refresh("this");
+        refresh.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(refresh);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The gotop is destroy");
+        this.finish();
+    });
 });
