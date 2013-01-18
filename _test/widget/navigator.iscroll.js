@@ -151,6 +151,7 @@ test("create html: create or setup fix and scroll navigator", function(){
 
     start();
 });
+
 test("Event: tabselect & scrollstart & scrollmove & scrollend", function(){
     stop();
     expect(5)
@@ -463,6 +464,24 @@ test('ortchange: bigger & smaller than tab width', function () {
             }, delayTime);
         }, 600);
     }, delayTime);
+});
+
+test("create html: create or setup fix and scroll navigator", function(){
+    stop();
+    expect(4);
+    var nav = $.ui.navigator({
+    	disablePlugin: true,
+        content: content,
+        tabselect: function(){
+        	ok(true);
+        }
+    });
+    
+    equals(nav._data.iScroll, undefined, "disable plugin");
+    equals($(".ui-navigator-wrapper").length, 0, "disable plugin");
+    nav.switchTo(2);
+    nav.destroy();
+    start();
 });
 
 test("destroy",function(){

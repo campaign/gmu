@@ -136,6 +136,25 @@ test("事件&rend后内容高度能自适应", function(){
     ta.tap($('#tabs .ui-tabs-nav li').get(1));
 });
 
+test("disablePlugin",function(){
+	stop();
+	setup('html');
+    var tabs = $('#tabs').tabs({
+    	disablePlugin: true,
+        ajax: {
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded'
+        }
+    }).tabs("this");
+	ta.tap($('#tabs .ui-tabs-nav li').get(1));
+	setTimeout(function(){
+		equals($(".ui-tabs-content").children()[1].textContent, "", "disable plugin");
+		equals(tabs.load, undefined, "disable plugin");
+        tabs.destroy(); 
+        start();
+	}, 300);
+}) ;
+
 test("destroy",function(){
     ua.destroyTest(function(w,f){
         w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
@@ -144,10 +163,10 @@ test("destroy",function(){
 
         var tabs =  w.$.ui.tabs({
         	items: [
-                    {title:'tab1'},
-                    {title:'tab2'},
-                    {title:'tab3'},
-                    {title:'tab4'}
+                {title:'tab1', href:'http://www.baidu.com'},
+                {title:'tab2'},
+                {title:'tab3', href:'http://gmu.baidu.com'},
+                {title:'tab4', href:'http://gmu.baidu.com'}
                 ],
         	ajax: {
                 type: 'POST',
