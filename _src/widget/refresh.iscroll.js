@@ -27,9 +27,9 @@
                 $.extend(data, {
                     useTransition: true,
                     speedScale: 1,
-                    topOffset: data['$upElem'] ? data['$upElem'].height() : 0,
-                    threshold: 0
+                    topOffset: data['$upElem'] ? data['$upElem'].height() : 0
                 });
+                data.threshold = data.threshold || 5;
 
                 $el.wrapAll($('<div class="ui-refresh-wrapper"></div>').height(wrapperH)).css('height', 'auto');
                 me._loadIscroll();
