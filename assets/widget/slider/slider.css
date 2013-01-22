@@ -52,5 +52,11 @@
     position: absolute;
     bottom:6px;
     right: 0;
-    padding-right: 6px;
+    padding: 0 6px;
+    text-align: right;
+
+    /*无文字时，居中样式*/
+    /*width:100%;*/
+    /*background: rgba(0, 0, 0, 0.5);*/
+    /*text-align: center;*/
 }

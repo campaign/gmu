@@ -17,7 +17,7 @@
 
 .ui-slider-dots b {
     display: inline-block;
-    margin-right: 8px;
+    margin: 0 4px;
     width: 6px;
     height: 6px;
     border-radius: 3px;
