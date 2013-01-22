@@ -44,7 +44,7 @@ test("disablePlugin = true",function() {
     });
     setTimeout(function(){
         ok(dialog._data._container.is('body') , "container是body");
-        ok(dialog.root().parent().is('body'),"container是body");
+        ok(dialog.getWrap().parent().is('body'),"container是body");
         dialog.destroy();
         $(container).remove();
         start();
