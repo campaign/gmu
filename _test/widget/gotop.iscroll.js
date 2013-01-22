@@ -150,7 +150,8 @@ test("destroy", function(){
         var el1= w.dt.eventLength();
 
         var gotop = w.$.ui.gotop({
-            iScrollInstance: s
+            iScrollInstance: s,
+            useFix: false //fix()中dom和event都没有清干净，设置false排除fix带来的影响
         });
         gotop.destroy();
 
@@ -158,9 +159,9 @@ test("destroy", function(){
         var ol = w.dt.objLength(gotop);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2 - 1,"The dom is ok");   //fix影响
+        equal(dl1,dl2,"The dom is ok");
         equal(w.$(".ui-gotop").length, 0, "The dom is ok");
-        equal(el1,el2,"The event is ok");    //fix影响
+        equal(el1,el2,"The event is ok");
         ok(ol==0,"The gotop is destroy");
         this.finish();
     });
