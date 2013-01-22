@@ -201,7 +201,7 @@ if($.os.ios && canShow){
                     equals(add2desktop._el.width() , 187 , "the width is ok");
                     equals(add2desktop._el.height() , 70 , "the height is ok");
                     approximateEqual(add2desktop._el.offset().left, w.document.documentElement.clientWidth * 0.5 - 92,'the pos is right');
-                    equals(add2desktop._el.offset().top - 200, $(window).height() - 70 - 12, 'the pos is right');
+                    equals(add2desktop._el.offset().top - 200, w.innerHeight - 70 - 12, 'the pos is right');
                      w.scrollTo(0, 300);
                     ta.scrollStop(w);
                     setTimeout(function(){
@@ -209,7 +209,7 @@ if($.os.ios && canShow){
                         equals(add2desktop._el.width() , 187 , "the width is ok");
                         equals(add2desktop._el.height() , 70 , "the height is ok");
                         ok(Math.abs(w.pageYOffset - 300) <= 1, "The pageYOffset is " + w.pageYOffset);
-                        equals(add2desktop._el.offset().top-300,$(window).height() - 70 - 12 , 'the pos is right');
+                        equals(add2desktop._el.offset().top-300, w.innerHeight - 70 - 12 , 'the pos is right');
                         approximateEqual(add2desktop._el.offset().left, w.document.documentElement.clientWidth * 0.5 - 92,'the pos is right');
                         w.scrollTo(0,0);
                         ta.scrollStop(w);
@@ -217,7 +217,7 @@ if($.os.ios && canShow){
                             equals(add2desktop._el.css("display"), "block", "The add2desktop is show");
                             equals(add2desktop._el.width() , 187 , "the width is ok");
                             equals(add2desktop._el.height() , 70 , "the height is ok");
-                            equals(add2desktop._el.offset().top, $(window).height() - 70 - 12, 'the pos is right');
+                            equals(add2desktop._el.offset().top, w.innerHeight - 70 - 12, 'the pos is right');
                             approximateEqual(add2desktop._el.offset().left, w.document.documentElement.clientWidth * 0.5 - 92,'the pos is right');
                             w.$("br").remove();
                             add2desktop.destroy();
@@ -293,16 +293,18 @@ if($.os.ios && canShow){
             var el1= w.dt.eventLength();
 
             w.localStorage.removeItem("_gmu_adddesktop_key");
-            var add2desktop = w.$.ui.add2desktop();
+            var add2desktop = w.$.ui.add2desktop({
+            	useFix: false  //fix()中dom和event都没有清干净，设置false排除fix带来的影响
+            });
             add2desktop.destroy();
 
             var el2= w.dt.eventLength();
             var ol = w.dt.objLength(add2desktop);
             var dl2 =w.dt.domLength(w);
 
-            equal(dl1,dl2 - 1,"The dom is ok");  //fix影响
+            equal(dl1,dl2,"The dom is ok");
             equal(w.$(".ui-add2desktop").length, 0, "The dom is ok");
-            equal(el1,el2,"The event is ok"); //fix影响
+            equal(el1,el2,"The event is ok");
             ok(ol==0,"The toolbar is destroy");
             this.finish();
         })
