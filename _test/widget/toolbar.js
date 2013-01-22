@@ -192,7 +192,7 @@ test('window scroll(fix)', function() {
                 var toolbar = w.$.ui.toolbar();
                 toolbar.root().fix({top:0, left:0});
                 equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                 equals(toolbar._el.height() , 42 , "the height is ok");
                 approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
                 equals(toolbar._el.offset(true).top, 0, 'the pos is right');
@@ -200,7 +200,7 @@ test('window scroll(fix)', function() {
                 ta.scrollStop(w.document);
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                    equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                    equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                     equals(toolbar._el.height() , 42 , "the height is ok");
                     ok(Math.abs(w.pageYOffset - 300) <= 1, "The pageYOffset is " + w.pageYOffset);
                     equals(toolbar._el.offset().top-300,0, 'the pos is right');
@@ -209,7 +209,7 @@ test('window scroll(fix)', function() {
                     ta.scrollStop(w.document);
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                        equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                        equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                         equals(toolbar._el.height() , 42 , "the height is ok");
                         equals(toolbar._el.offset().top, 0, 'the pos is right');
                         approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
@@ -244,7 +244,7 @@ test('useFix', function() {
 	            ta.scrollStop(w);
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                    equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                    equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                     equals(toolbar._el.height() , 42 , "the height is ok");
                     ok(Math.abs(w.pageYOffset - 500) <= 1, "The pageYOffset is " + w.pageYOffset);
                     equals(toolbar._el.offset().top, 500, 'the pos is right');
@@ -253,7 +253,7 @@ test('useFix', function() {
                     ta.scrollStop(w);
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                        equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                        equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                         equals(toolbar._el.height() , 42 , "the height is ok");
                         equals(toolbar._el.offset().top, t, 'the pos is right');
                         equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -276,13 +276,14 @@ test('setup & useFix', function() {
         s2.src = "../../../_test/fet/bin/import.php?f=core/zepto.ui,core/zepto.extend,core/zepto.fix,core/zepto.highlight,core/zepto.iscroll,core/zepto.ui,widget/toolbar";
         w.document.head.appendChild(s2);
         s2.onload = function(){
+        	var $container = w.$('<div class="ui-toolbar-container" style="position:absolute;left:0;top:0;right:0;"></div>').appendTo(w.document.body);
             $container.html('<div id="toolbar">\
         			<span>back</span>\
         			<h1>测试标题</h1>\
         			<a>字体</a>\
         			<a>选择</a>\
         		</div>');
-        	var toolbar = $('#toolbar').toolbar({useFix: true}).toolbar('this');
+        	var toolbar = w.$('#toolbar').toolbar({useFix: true}).toolbar('this');
             var t = toolbar._el.offset(true).top;
             var html = "";
             for(var i = 0; i < 80; i++){
@@ -294,7 +295,7 @@ test('setup & useFix', function() {
 	            ta.scrollStop(w);
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                    equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                    equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                     equals(toolbar._el.height() , 42 , "the height is ok");
                     ok(Math.abs(w.pageYOffset - 500) <= 1, "The pageYOffset is " + w.pageYOffset);
                     equals(toolbar._el.offset().top, 500, 'the pos is right');
@@ -303,7 +304,7 @@ test('setup & useFix', function() {
                     ta.scrollStop(w);
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
-                        equals(toolbar._el.width() , document.body.offsetWidth , "the width is ok");
+                        equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
                         equals(toolbar._el.height() , 42 , "the height is ok");
                         equals(toolbar._el.offset().top, t, 'the pos is right');
                         equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -319,6 +320,7 @@ test('setup & useFix', function() {
 });
 test("destroy()", function() {
     ua.destroyTest(function(w,f){
+    	w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
@@ -339,6 +341,7 @@ test("destroy()", function() {
 });
 test("useFix & destroy()", function() {
     ua.destroyTest(function(w,f){
+    	w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
         var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
 
