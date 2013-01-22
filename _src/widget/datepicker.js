@@ -58,9 +58,9 @@
                 .minDate(data.minDate)
                 .maxDate(data.maxDate)
                 .refresh();
-            data._container.addClass('ui-datepicker').on('click', eventHandler);
+            data._container.addClass('ui-datepicker').on('click', eventHandler).highlight();
             if (!data._inline) {
-                el.on('focus', eventHandler);
+                el.on('click', eventHandler);
                 data._container.hide();
             }else data._isShow = true;
             data._inited = true;
@@ -79,24 +79,22 @@
         _eventHandler:function (e) {
             var match, me = this, data = me._data, root = data._container, target,
                 cell, isPrev;
-            switch (e.type) {
-                case 'focus':
-                    this.show();
-                    break;
-                default:
-                    target = e.target;
-                    if ((match = $(target).closest('.ui-datepicker-calendar tbody a', root.get(0))) && match.length) {
-                        e.preventDefault();
-                        cell = match.parent();
-                        this.date(new Date(cell.attr('data-year'), cell.attr('data-month'), match.text()));
-                        this[data._inline?'refresh':'hide']();
-                    } else if ((match = $(target).closest('.ui-datepicker-prev, .ui-datepicker-next', root.get(0))) && match.length) {
-                        e.preventDefault();
-                        isPrev = match.is('.ui-datepicker-prev');
-                        $.later(function(){
-                            me.goto((isPrev ? '-' : '+') + '1M');
-                        });
-                    }
+            target = e.target;
+            if(!data._inline && me._isFrom(target, me.root())){
+                me.root().blur();
+                this.show();
+                e.preventDefault();
+            } else if ((match = $(target).closest('.ui-datepicker-calendar tbody a', root.get(0))) && match.length) {
+                e.preventDefault();
+                cell = match.parent();
+                this.date(new Date(cell.attr('data-year'), cell.attr('data-month'), match.text()));
+                this[data._inline?'refresh':'hide']();
+            } else if ((match = $(target).closest('.ui-datepicker-prev, .ui-datepicker-next', root.get(0))) && match.length) {
+                e.preventDefault();
+                isPrev = match.is('.ui-datepicker-prev');
+                $.later(function(){
+                    me.goto((isPrev ? '-' : '+') + '1M');
+                });
             }
         },
 
@@ -158,9 +156,9 @@
             return html;
         },
 
-        _isFromSelf:function (target) {
+        _isFrom:function (target, parent) {
             var ret = false, data = this._data;
-            $.each(this._el.add(data._container), function () {
+            $.each(parent?parent:(this._el.add(data._container)), function () {
                 if (this === target || $.contains(this, target)) {
                     ret = true;
                     return false;
@@ -173,7 +171,7 @@
             var data = this._data, me=this;
             if (data._isShow)return this;
             data._inline || $(document).on('click.'+this.id(), function(e){
-                me._isFromSelf(e.target) || me.hide();
+                me._isFrom(e.target) || me.hide();
             });
             data._isShow = true;
             this.refresh();
@@ -206,7 +204,7 @@
                         data._selectedMonth = data._drawMonth = val.getMonth();
                         data._selectedDay = val.getDate();
                         dateStr = $.datepicker.formatDate(date = this.date());
-                        data._inline && this.root().val(dateStr);
+                        data._inline || this.root().val(dateStr);
                         data._inited && this.trigger('valuecommit', [date, dateStr, this]);
                         break;
                     case 'gap':
@@ -260,11 +258,9 @@
             if (!data._invalid) {
                 return;
             }
-            if ((cells = $('.ui-datepicker-calendar td:not(.ui-state-disabled)', data._container)).length) {
-                cells.highlight();
-            }
+            $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', data._container).highlight();
             data._container.empty().append(this._generateHTML());
-            $('.ui-datepicker-calendar td:not(.ui-state-disabled)', data._container).highlight('ui-state-hover');
+            $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', data._container).highlight('ui-state-hover');
             data._invalid = false;
             return this;
         },
@@ -272,7 +268,7 @@
         destroy:function () {
             var data = this._data, eventHandler = this._eventHandler;
             if (!data._inline) {
-                this.root().off('focus', eventHandler);
+                this.root().off('click', eventHandler);
                 $(document).off('click.'+this.id());
             }
             $('.ui-datepicker-calendar td:not(.ui-state-disabled)', data._container).highlight();
