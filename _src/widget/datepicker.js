@@ -1,7 +1,7 @@
 /**
  * @file 日历组件
  * @name Datepicker
- * @desc 日历组件
+ * @desc 日历组件, 可以用来作为日期选择器。
  * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.highlight.js
  */
 (function ($, undefined) {
@@ -42,6 +42,24 @@
         }
     }
 
+    /**
+     * @name $.ui.datepicker
+     * @grammar $.ui.datepicker(options) ⇒ instance
+     * @grammar datepicker(options) ⇒ self
+     * @desc **Options**
+     * - ''defaultDate'' {Date|String}: (可选，默认：today) 初始化日期
+     * - ''firstDay'' {Number}: (可选，默认：1)  设置新的一周从星期几开始，星期天用0表示, 星期一用1表示, 以此类推.
+     * - ''minDate'' {Date|String}: (可选，默认：null)  设置可以选择的最小日期
+     * - ''maxDate'' {Date|String}: (可选，默认：null)  设置可以选择的最大日期
+     * - ''container'' {selector}: (可选，默认：null)  当selector为input时，默认在input后面创建一个div存放datepicker，可以手动指定.
+     * - ''gap'' {Boolean}: (可选，默认：true)  如果为true，星期条与天数列表之间有5px的间隙。否则没有。
+     * - ''events'' 所有[Trigger Events](#datepicker_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
+     *
+     * **Demo**
+     * <codepreview href="../gmu/_examples/widget/datepicker/datepicker.html">
+     * ../gmu/_examples/widget/tabs/tabs.html
+     * </codepreview>
+     */
     $.ui.define('datepicker', {
         _data:{
             defaultDate:null, //默认日期
@@ -93,7 +111,7 @@
                 e.preventDefault();
                 isPrev = match.is('.ui-datepicker-prev');
                 $.later(function(){
-                    me.goto((isPrev ? '-' : '+') + '1M');
+                    me.goTo(isPrev ? '-' : '+' + '1M');
                 });
             }
         },
@@ -167,6 +185,11 @@
             return ret;
         },
 
+        /**
+         * @name show
+         * @grammar show() ⇒ instance
+         * @desc 显示组件
+         */
         show:function () {
             var data = this._data, me=this;
             if (data._isShow)return this;
@@ -176,13 +199,18 @@
             data._isShow = true;
             this.refresh();
             data._container.show();
-            return this.trigger('show');
+            return this.trigger('show', this);
         },
 
+        /**
+         * @name hide
+         * @grammar hide() ⇒ instance
+         * @desc 隐藏组件
+         */
         hide:function () {
             var data = this._data, eventData;
             if (!data._isShow)return this;
-            this.trigger(eventData = $.Event('beforehide'));
+            this.trigger(eventData = $.Event('beforehide'), this);
             if(eventData.defaultPrevented)return this;
             data._inline || $(document).off('click.'+this.id());
             data._isShow = false;
@@ -190,6 +218,11 @@
             return this.trigger('hide');
         },
 
+        /**
+         * @name option
+         * @grammar option(key[, value]) ⇒ instance
+         * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         */
         option:function (key, val) {
             var data = this._data, date, dateStr;
             if (val !== undefined) {
@@ -217,19 +250,40 @@
             return key == 'date' ? new Date(data._selectedYear, data._selectedMonth, data._selectedDay) : data[key];
         },
 
+        /**
+         * @name maxDate
+         * @grammar maxDate([value]) ⇒ instance
+         * @desc 设置或获取maxDate，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         */
         maxDate:function (val) {
             return this.option('maxDate', val);
         },
 
+        /**
+         * @name minDate
+         * @grammar minDate([value]) ⇒ instance
+         * @desc 设置或获取minDate，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         */
         minDate:function (val) {
             return this.option('minDate', val);
         },
 
+        /**
+         * @name date
+         * @grammar date([value]) ⇒ instance
+         * @desc 设置或获取当前date，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         */
         date:function (val) {
             return this.option('date', val);
         },
 
-        goto:function (month, year) {
+        /**
+         * @name goTo
+         * @grammar goTo(month, year) ⇒ instance
+         * @grammar goTo(str) ⇒ instance
+         * @desc 使组件显示某月，当第一参数为str可以+1M, +4M, -5Y, +1Y等等。+1M表示在显示的月的基础上显示下一个月，+4m表示下4个月，-5Y表示5年前
+         */
+        goTo:function (month, year) {
             var data = this._data, offset, period, tmpDate, minDate = this.minDate(), maxDate = this.maxDate();
             if ($.isString(month) && offsetRE.test(month)) {
                 offset = RegExp.$1 == '-' ? -parseInt(RegExp.$2, 10) : parseInt(RegExp.$2, 10);
@@ -252,8 +306,13 @@
             return this;
         },
 
+        /**
+         * @name refresh
+         * @grammar refresh() ⇒ instance
+         * @desc 当修改option后需要调用此方法。
+         */
         refresh:function () {
-            var data = this._data, cells;
+            var data = this._data;
 
             if (!data._invalid) {
                 return;
@@ -265,6 +324,11 @@
             return this;
         },
 
+        /**
+         * @desc 销毁组件。
+         * @name destroy
+         * @grammar destroy()  ⇒ instance
+         */
         destroy:function () {
             var data = this._data, eventHandler = this._eventHandler;
             if (!data._inline) {
@@ -275,5 +339,19 @@
             data._container.remove();
             return this.$super('destroy');
         }
+
+        /**
+         * @name Trigger Events
+         * @theme event
+         * @desc 组件内部触发的事件
+         *
+         * ^ 名称 ^ 处理函数参数 ^ 描述 ^
+         * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
+         * | show | event, ui | 当组件显示后触发 |
+         * | hide | event, ui | 当组件隐藏后触发 |
+         * | beforehide | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
+         * | valuecommit | event, date, dateStr, ui | 当被设置日期后触发date为ate对象, dateStr为日期字符串|
+         * | destory | event | 组件在销毁的时候触发 |
+         */
     });
 })(Zepto);
