@@ -57,7 +57,7 @@
      *
      * **Demo**
      * <codepreview href="../gmu/_examples/widget/datepicker/datepicker.html">
-     * ../gmu/_examples/widget/tabs/tabs.html
+     * ../gmu/_examples/widget/datepicker/datepicker.html
      * </codepreview>
      */
     $.ui.define('datepicker', {
@@ -221,7 +221,7 @@
         /**
          * @name option
          * @grammar option(key[, value]) ⇒ instance
-         * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         option:function (key, val) {
             var data = this._data, date, dateStr;
@@ -253,7 +253,7 @@
         /**
          * @name maxDate
          * @grammar maxDate([value]) ⇒ instance
-         * @desc 设置或获取maxDate，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         * @desc 设置或获取maxDate，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         maxDate:function (val) {
             return this.option('maxDate', val);
@@ -262,7 +262,7 @@
         /**
          * @name minDate
          * @grammar minDate([value]) ⇒ instance
-         * @desc 设置或获取minDate，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         * @desc 设置或获取minDate，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         minDate:function (val) {
             return this.option('minDate', val);
@@ -271,7 +271,7 @@
         /**
          * @name date
          * @grammar date([value]) ⇒ instance
-         * @desc 设置或获取当前date，如果想要Option生效需要调用[Refresh](datepicker.js#refresh)方法。
+         * @desc 设置或获取当前date，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         date:function (val) {
             return this.option('date', val);
