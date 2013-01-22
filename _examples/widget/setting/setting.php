@@ -50,6 +50,13 @@ $arr = array(
         "icon" => 'tabs.png',
         "href" => 'tabs/tabs.html',
     ),
+    'datepicker' => array(
+        "name" => 'Datepicker',
+        "description" => '日历控件',
+        "group" => 'Components',
+        "icon" => 'tabs.png',
+        "href" => 'datepicker/datepicker.html',
+    ),
     'toolbar' => array(
         "name" => 'Toolbar',
         "description" => '工具栏',

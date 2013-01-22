@@ -132,7 +132,7 @@
         },
 
         _eventHandler:function (e) {
-            var match, data = this._data, match;
+            var match, data = this._data;
             switch(e.type) {
                 case 'ortchange':
                     this._fitToContent(this._getPanel());
