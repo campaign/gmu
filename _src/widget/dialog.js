@@ -297,16 +297,16 @@
 
         /**
          * @name content
-         * @grammar content([value, [isAppend]]) ⇒ value
-         * @desc 设置或者获取弹出框内容。value接受带html标签字符串和zepto对象,若参数isAppend为true，则追加内容。
+         * @grammar content([value]) ⇒ value
+         * @desc 设置或者获取弹出框内容。value接受带html标签字符串和zepto对象。
          * @example
          * $('#dialog').dialog('content', '内容');
          * $('#dialog').dialog('content', '<div>内容</div>');
          * $('#dialog').dialog('content', $('#content'));
          */
-        content: function(value, isAppend) {
+        content: function(value) {
             var data = this._data;
-            value && data._content[isAppend ? 'append' : 'html'](data.content = value);
+            value!==undefined && data._content.empty().append(data.content = value);
             return data.content;
         },
 

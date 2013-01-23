@@ -5,6 +5,16 @@ module("widget/dropmenu",{
             padding: '2em',
             position: 'relative'
         }));
+        $('#container').html('<a id="btn1" data-icon="arrow-d" data-iconpos="right">下拉菜单</a><div id="dropmenu1"><ul>' +
+                '<li><a>item1</a></li><li><a><span class="ui-icon ui-icon-home"></span>主页</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-grid"></span>设置</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-delete"></span>删除</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-check"></span>检查</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-refresh"></span>刷新</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-forward"></span>前进</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-back"></span>后退</a></li>' +
+                '<li><a><span class="ui-icon ui-icon-info"></span>信息</a></li>' +
+                '</ul></div>');
     },
     teardown: function(){
         $('#container').remove();
@@ -25,16 +35,6 @@ test("只为加载css用",function(){
 test("竖向", function(){
     expect(4);
     stop();
-    $('#container').html('<a id="btn1" data-icon="arrow-d" data-iconpos="right">下拉菜单</a><div id="dropmenu1"><ul>' +
-        '<li><a>item1</a></li><li><a><span class="ui-icon ui-icon-home"></span>主页</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-grid"></span>设置</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-delete"></span>删除</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-check"></span>检查</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-refresh"></span>刷新</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-forward"></span>前进</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-back"></span>后退</a></li>' +
-        '<li><a><span class="ui-icon ui-icon-info"></span>信息</a></li>' +
-        '</ul></div>');
     ua.importsrc('widget/button', function(){
         var btn = $('#btn1').button();
         var dropmenu = $('#dropmenu1').dropmenu({
@@ -61,8 +61,19 @@ test("竖向", function(){
                     clientY: -100
                 }]
             });
+            //PC
+            ua.mousedown($("#dropmenu1 ul")[0], {
+                clientX: 0,
+                clientY: 0
+            });
+            ua.mousemove($("#dropmenu1 ul")[0], {
+                clientX: 0,
+                clientY: -100
+            });
             setTimeout(function(){
                 ta.touchend($("#dropmenu1 ul")[0]);
+                //PC
+                ua.mouseup($("#dropmenu1 ul")[0]);
                 setTimeout(function(){
                     approximateEqual(s.y, -100, "The dropmenu scrolled");
                     ua.click(btn[0]);
@@ -78,53 +89,101 @@ test("竖向", function(){
 test("横向", function(){
     expect(4);
     stop();
-    $('#container').html('<a id="btn1" data-icon="arrow-d" data-iconpos="right">下拉菜单</a><div id="dropmenu1"><ul>' +
-        '<li><a><span class="ui-icon ui-icon-home"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-grid"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-delete"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-check"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-refresh"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-forward"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-back"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-info"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-delete"></span></a></li>' +
-        '<li><a><span class="ui-icon ui-icon-gear"></span></a></li>' +
-    '</ul></div>');
-    ua.importsrc('widget/button', function(){
-        var btn = $('#btn1').button();
-        var dropmenu = $('#dropmenu1').dropmenu({
-            direction:'horizontal',
-            btn: $('#btn1'),
-            width: 144,
-            iScroll: true
-        }).dropmenu('this');
-        ok(dropmenu.data('_btn').is('#btn1'), 'btn设置正确');
-        ua.click(btn[0]);
-        ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
-        var s = dropmenu.data('_iScroll');
+    var btn = $('#btn1').button();
+    var dropmenu = $('#dropmenu1').dropmenu({
+        direction:'horizontal',
+        btn: $('#btn1'),
+        width: 144,
+        iScroll: true
+    }).dropmenu('this');
+    ok(dropmenu.data('_btn').is('#btn1'), 'btn设置正确');
+    ua.click(btn[0]);
+    ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
+    var s = dropmenu.data('_iScroll');
+    setTimeout(function(){
+        ta.touchstart($("#dropmenu1 ul")[0], {
+            touches: [{
+                clientX: 0,
+                clientY: 0
+            }]
+        });
+        ta.touchmove($("#dropmenu1 ul")[0], {
+            touches: [{
+                clientX: -100,
+                clientY: 0
+            }]
+        });
+        //PC
+        ua.mousedown($("#dropmenu1 ul")[0], {
+	        clientX: 0,
+	        clientY: 0
+        });
+        ua.mousemove($("#dropmenu1 ul")[0], {
+            clientX: -100,
+            clientY: 0
+        });
         setTimeout(function(){
-            ta.touchstart($("#dropmenu1 ul")[0], {
-                touches: [{
-                    clientX: 0,
-                    clientY: 0
-                }]
-            });
-            ta.touchmove($("#dropmenu1 ul")[0], {
-                touches: [{
-                    clientX: -150,
-                    clientY: 0
-                }]
-            });
+            ta.touchend($("#dropmenu1 ul")[0]);
+            //PC
+            ua.mouseup($("#dropmenu1 ul")[0]);
             setTimeout(function(){
-                ta.touchend($("#dropmenu1 ul")[0]);
-                setTimeout(function(){
-                    approximateEqual(s.x, -150, "The dropmenu scrolled");
-                    ua.click(btn[0]);
-                    ok(ua.isShown(dropmenu._el[0]), "再次点击btn，dropmenu隐藏");
-                    dropmenu.destroy();
-                    start();
-                }, 400);
+                approximateEqual(s.x, -100, "The dropmenu scrolled");
+                ua.click(btn[0]);
+                ok(ua.isShown(dropmenu._el[0]), "再次点击btn，dropmenu隐藏");
+                dropmenu.destroy();
+                start();
             }, 400);
-        }, 100);
-    }, '$.ui.button', 'widget/dropmenu');
+        }, 400);
+    }, 100);
 });
+
+test("disablePlugin=true", function(){
+    expect(2);
+    var btn = $('#btn1').button();
+    var dropmenu = $('#dropmenu1').dropmenu({
+    	disablePlugin: true,
+        btn:  $('#btn1'),
+        height: 137,
+        iScroll: true
+    }).dropmenu('this');
+    ua.click(btn[0]);
+    equals($(".ui-dropmenu .iscroll-wrap").length, 0, "disable plugin");
+    ok($(".ui-dropmenu-items").height() > 137,  "disable plugin");
+});
+
+
+test("destroy",function(){
+    ua.destroyTest(function(w,f){
+        w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
+        var container = w.$("<div id='container'></div>");
+        w.$("body").append(container.css({
+            padding: '2em',
+            position: 'relative'
+        }));
+        w.$('<a id="btn">btn</a>').appendTo('#container');
+        var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        var obj =  w.$.ui.dropmenu({
+        	btn: '#btn',
+            items: [
+                {
+                    text: 'test'
+                }
+            ],
+            height: 137,
+            iScroll: true
+        });
+        obj.destroy();
+
+        var el2= w.dt.eventLength();
+        var ol = w.dt.objLength(obj);
+        var dl2 =w.dt.domLength(w);
+
+        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
+        equal(el1,el2,"The event is ok");
+        ok(ol==0,"The instance is destroy");
+        equals(w.$("#container").length, 1, "组件之外的dom没有被移除");
+        this.finish();
+    })
+}) ;
