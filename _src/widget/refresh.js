@@ -128,7 +128,7 @@
          * @grammar afterDataLoading(dir)  ⇒ instance
          * @desc - ''dir'' \'up\' 或者 \'down\'
          *
-         * 当组件调用reday，在ready中通过ajax请求内容回来后，需要调用此方法，来改变refresh状态。
+         * 当组件调用ready，在ready中通过ajax请求内容回来后，需要调用此方法，来改变refresh状态。
          */
         afterDataLoading: function (dir) {
             var me = this,
