@@ -49,6 +49,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 0 8px 0 6px;
+    color:#323232;
 }
 #back_btn:before, #back_btn:after {
     content: '\0020';

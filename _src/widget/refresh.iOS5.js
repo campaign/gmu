@@ -10,6 +10,8 @@
     /**
      * @name 说明
      * @desc Refresh iOS5插件，支持iOS5和以上设备，使用系统自带的内滚功能。
+     * @desc **Options** 在refresh的基础上增加参数
+     * - ''threshold'' {Number}: (可选) 加载的阀值，默认向上或向下拉动距离超过5px，即可触发拉动操作，该值只能为正值，若该值是10，则需要拉动距离大于15px才可触发加载操作
      */
     $.ui.refresh.register(function () {
         return {

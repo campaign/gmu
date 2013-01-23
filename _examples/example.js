@@ -114,13 +114,12 @@
                 toolbar = $.ui.toolbar({
                     title: document.title,
                     container: $header,
-                    useFix:true,
+                    useFix:!($.os.ios && parseInt($.os.version) == 4),
                     btns: btn,
                     backButtonClick: function(){
                         location.href = that.backUrl;
                     }
                 }), item;
-
             if(btn && btn.length){
                 var pageArr = [];
                 for(var i = pages.length; i--;){
