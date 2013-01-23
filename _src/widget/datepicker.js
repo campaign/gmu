@@ -263,8 +263,8 @@
         },
 
         /**
-         * @name show
-         * @grammar show() ⇒ instance
+         * @name open
+         * @grammar open() ⇒ instance
          * @desc 显示组件
          */
         open:function () {
@@ -281,12 +281,12 @@
                 me.close();
                 return false;
             });
-            return this.trigger('show', this);
+            return this.trigger('open', this);
         },
 
         /**
-         * @name hide
-         * @grammar hide() ⇒ instance
+         * @name close
+         * @grammar close() ⇒ instance
          * @desc 隐藏组件
          */
         close:function () {
@@ -376,7 +376,7 @@
         /**
          * @name date
          * @grammar date([value]) ⇒ instance
-         * @desc 设置或获取当前date，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
+         * @desc 设置或获取当前选中的日期，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         selectedDate:function (val) {
             return this.option('selectedDate', val);
@@ -454,9 +454,9 @@
          *
          * ^ 名称 ^ 处理函数参数 ^ 描述 ^
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
-         * | show | event, ui | 当组件显示后触发 |
-         * | hide | event, ui | 当组件隐藏后触发 |
-         * | beforehide | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
+         * | open | event, ui | 当组件显示后触发 |
+         * | close | event, ui | 当组件隐藏后触发 |
+         * | beforeclose | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
          * | valuecommit | event, date, dateStr, ui | 当被设置日期后触发date为ate对象, dateStr为日期字符串|
          * | destory | event | 组件在销毁的时候触发 |
          */
