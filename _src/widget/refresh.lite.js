@@ -20,10 +20,14 @@
         return {
             pluginName: 'lite',
             _init: function () {
-                var me = this;
+                var me = this,
+                    data = me._data,
+                    $el = me.root();
 
                 me._initOrg();
-                me.root().on('touchstart touchmove touchend touchcancel', $.proxy(me._eventHandler, me));
+                $el.on('touchstart touchmove touchend touchcancel', $.proxy(me._eventHandler, me));
+                data.wrapperH = me.root().height();
+                data.wrapperTop = me.root().offset().top;
                 return me;
             },
             _changeStyle: function (dir, state) {
@@ -45,7 +49,7 @@
                     startY = data._startY,
                     movedY = startY - e.touches[0].pageY,
                     winHeight = window.innerHeight,
-                    threshold = data.threshold || (winHeight / 2);     //默认值为可视区域高度的一半
+                    threshold = data.threshold || (data.wrapperH < winHeight ? (data.wrapperH / 2 + data.wrapperTop || 0) : winHeight / 2);     //默认值为可视区域高度的一半，若wrapper高度不足屏幕一半时，则为list的一半
 
                 if (!me.status('down') || movedY < 0) return;
                 if (!data['_refreshing'] && (startY >= document.body.scrollHeight - winHeight + threshold) && movedY > 10) {    //下边按钮，上拉加载
