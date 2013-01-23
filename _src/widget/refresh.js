@@ -9,7 +9,7 @@
 (function($, undefined) {
     /**
      * @name $.ui.refresh
-     * @grammar $.ui.refresh(options) ⇒ instance
+     * @grammar $.ui.refresh(options) ⇒ self
      * @grammar refresh(options) ⇒ self
      * @desc **Options**
      * - ''ready'' {Function}: (必选) 当点击按钮，或者滑动达到可加载内容条件时，此方法会被调用。需要在此方法里面进行ajax内容请求，并在请求完后，调用afterDataLoading()，通知refresh组件，改变状态。
