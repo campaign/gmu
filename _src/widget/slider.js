@@ -156,13 +156,13 @@
             });
             for(i = 0; i < length; i++) {
                 items[i].style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
-                dotIndex[i] = loop ? (i > length/2 - 1  ? i - length/2 : i) : i;
+                dotIndex[i] = loop ? (i > length/2 - 1 ? i - length/2 : i) : i;
                 if(i < l) {
                     j = lazyImgs.shift();
-                    j.src = j.getAttribute('lazyload');
+                    j && (j.src = j.getAttribute('lazyload'));
                     if(o.loop) {
-                        j = allImgs[i + length / 2];
-                        j.src = j.getAttribute('lazyload');
+                        j = allImgs[i + length/2];
+                        j && (j.src = j.getAttribute('lazyload'));
                     }
                 }
             }
