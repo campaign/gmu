@@ -3,6 +3,7 @@ body {
     background: #686868;
 }
 #progressbar {
+    width:250px;
     margin:30px 50px;
 }
 

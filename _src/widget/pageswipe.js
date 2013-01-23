@@ -30,7 +30,6 @@
             iconWidth:          55,
             springBackDis:      15,
             _stamp:             0,
-            _locked:            false,
             _isShow:            false
         },
         _create: function() {
@@ -55,9 +54,8 @@
                 _toolbar = $(me.data('toolbar')).fix({top:0}).find('div').get(0),
                 _eventHandler = $.proxy(me._eventHandler, me);
             _index.width(_end);
-            _wheel.on('touchstart touchmove touchend touchcancel', _eventHandler);
+            _content.on('touchstart', _eventHandler);
             $(window).on('ortchange', _eventHandler);
-            _content.on('tap', _eventHandler);
             me.data({
                 _wheel:         _wheel[0],
                 _index:         _index[0],
@@ -78,77 +76,12 @@
         _eventHandler: function(e) {
             var me = this;
             switch (e.type) {
-                case 'touchmove':
-                    me._touchMove(e);
-                    break;
                 case 'touchstart':
-                    me._touchStart(e);
-                    break;
-                case 'touchcancel':
-                case 'touchend':
-                    me._touchEnd();
-                    break;
-                case 'tap':
                     me.data('_isShow') && me.hide();
                     break;
                 case 'ortchange':
                     me._resize.call(me);
                     break;
-            }
-        },
-
-        /**
-         * touchStart事件处理
-         */
-        _touchStart: function(e) {
-            var me = this,
-                toolbar = me.data('_toolbar');
-            me.data({
-                top:        document.body.scrollTop,
-                pageX:      e.touches[0].pageX,
-                pageY:      e.touches[0].pageY,
-                S:          false,      //isScrolling
-                T:          false,      //isTested
-                X:          0           //horizontal moved
-            });
-            me.data('_wheel').style.webkitTransitionDuration = '0ms';
-            toolbar && (toolbar.style.webkitTransitionDuration = '0ms');
-        },
-
-        /**
-         * touchMove事件处理
-         */
-        _touchMove: function(e) {
-            var me = this,
-                o = me._data,
-                X =  e.touches[0].pageX - o.pageX,
-                _isShow = o._isShow;
-            if(!o.T) {
-                var S = Math.abs(X) < Math.abs(e.touches[0].pageY - o.pageY);
-                !S && !_isShow && X < 0 && (o._index.style.top = document.body.scrollTop + 'px');
-                o.T = true;
-                o.S = S;
-            }
-            if(!o.S) {
-                e.preventDefault();
-                X = o.X = _isShow ? (X > 0 ? X : 0) - o._end : (X < 0 ? X : 0);
-                o._wheel.style.webkitTransform = 'translate3d(' + X + 'px,0,0)';
-                o._toolbar && (o._toolbar.style.webkitTransform = 'translate3d(' + X + 'px,0,0)');
-            } else o._isShow && e.preventDefault();
-        },
-
-        /**
-         * touchEnd事件处理
-         */
-        _touchEnd: function() {
-            var me = this,
-                o = me._data,
-                X = o.X,
-                _end = o._end,
-                s = o.springBackDis;
-            if(o.T && !o.S) {
-                if(!o._isShow) (X < -s && o.top === document.body.scrollTop) ? me.show() : X < 0 ? me.hide() : '';
-                else X > s - _end ? me.hide() : (X > - _end && X < s - _end) ? me.show() : '';
             }
         },
 

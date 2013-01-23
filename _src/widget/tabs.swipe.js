@@ -10,6 +10,7 @@
         verticalDistanceThreshold = 70, // y方向上只要大于70就不算
         scrollSupressionThreshold = 30, //如果x方向移动大于这个直就禁掉滚动
         tabs = [],
+        eventBinded = false,
         isFromTabs = function (target) {
             for (var i = tabs.length; i--;) {
                 if ($.contains(tabs[i], target)) return true;
@@ -17,12 +18,7 @@
             return false;
         }
 
-    function tabsSwipeEvents(el) {
-        var $el = $(el);
-        tabsSwipeEvents = function (el) {
-            tabs.push(el.get ? el.get(0): el);
-        }
-        tabsSwipeEvents($el);
+    function tabsSwipeEvents() {
         $(document).on('touchstart.tabs', function (e) {
             var point = e.touches ? e.touches[0] : e, start, stop;
 
@@ -72,7 +68,8 @@
                 var data = this._data;
                 this._initOrg();
                 if (data.swipe) {
-                    tabsSwipeEvents(data._content);
+                    tabs.push(data._content.get(0));
+                    eventBinded =  eventBinded || (tabsSwipeEvents(), true);
                     this._el.on('tabsSwipeLeft tabsSwipeRight', $.proxy(this._eventHandler, this));
                 }
             },
@@ -92,6 +89,15 @@
                     default://tap
                         return this._eventHandlerOrg(e);
                 }
+            },
+            destroy: function(){
+                var data = this._data, idx;
+                if (data.swipe) {
+                    ~(idx = $.inArray(data._content.get(0), tabs)) && tabs.splice(idx, 1);
+                    this._el.off('tabsSwipeLeft tabsSwipeRight', this._eventHandler);
+                    tabs.length || ($(document).off('touchstart.tabs'), eventBinded = false);
+                }
+                return this.destroyOrg();
             }
         }
     });

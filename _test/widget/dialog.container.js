@@ -1,7 +1,4 @@
-module("webapp.dialog.plugin",{
-
-});
-
+module("webapp.dialog.plugin");
 
 test("container",function() {
     expect(8);
@@ -30,6 +27,28 @@ test("container",function() {
             start();
         }, 300);
     });
+});
+
+test("disablePlugin = true",function() {
+    expect(2);
+    stop();
+    var container = document.createElement('div');
+    document.body.appendChild(container);
+    $(container).attr('class' , 'container');
+    $(container).attr( "id", "container" );
+    $(container).css( {height:500,width:300} );
+    var dialog = $.ui.dialog({
+    	disablePlugin: true,
+        content : 'text',
+        container : '#container'
+    });
+    setTimeout(function(){
+        ok(dialog._data._container.is('body') , "container是body");
+        ok(dialog.getWrap().parent().is('body'),"container是body");
+        dialog.destroy();
+        $(container).remove();
+        start();
+    }, 300);
 });
 
 test("destroy",function(){

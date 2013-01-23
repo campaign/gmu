@@ -169,7 +169,7 @@
                 return o._percent;
             } else {
                 value = parseFloat(value);
-                if(!value) return me;
+                if(isNaN(value)) return me;
                 value = value > 100 ? 100 : value < 0 ? 0 : value;
                 o._percent = value;
                 duration = ';-webkit-transition-duration:' + o.transitionDuration + 'ms';

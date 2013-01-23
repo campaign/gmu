@@ -222,7 +222,7 @@ test("参数 － offset", function(){
     }).show();
     
     equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
-    equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() + 1, "dropmenu的位置偏下1px");
+    equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() - 1, "dropmenu的位置偏上1px");
     
     obj.destroy();
     
@@ -239,7 +239,7 @@ test("参数 － offset", function(){
     }).show();
     
     equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
-    equals(obj._el.offset().top, $(btn).offset().top - obj._el.height() - 1, "dropmenu的位置偏上1px");
+    equals(obj._el.offset().top, $(btn).offset().top - obj._el.height() + 1, "dropmenu的位置偏下1px");
     
     obj.destroy();
     
@@ -710,7 +710,7 @@ test("多实例", function(){
     });
     
     equals(obj.root().attr("class"), 'ui-dropmenu', '样式相互区分');
-    equals(obj2.root().attr("class"), 'ui-dropmenu custom', '样式相互区分');
+    equals(obj2.root().attr("class"), 'custom ui-dropmenu', '样式相互区分');
     
     $('#btn').trigger('click');
     ok(obj.data('_isShow') && !obj2.data('_isShow'), '点击btn，把第一个dropmenu显示出来了');
@@ -911,7 +911,5 @@ test("事件", function(){
     start();
 });
 
-//lili 没有mode参数了么，点击item不能替换button的值了么（如果没有提供此功能，需要构造一个类似的用例），点击item不能关闭dropmenu了么？
 //lili 还有isScroll这个参数么
 //lili 创建模式没有测试
-//lili dropmenu.iscroll没有用例

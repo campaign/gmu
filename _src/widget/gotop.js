@@ -28,13 +28,12 @@
     $.ui.define('gotop', {
         _data: {
             container:          '',
-            useAnimation:       true,
             useFix:             true,
+            useAnimation:       false,
             position:           {bottom: 10, right: 10},
         	afterScroll:        null,
             iScrollInstance:    null,
-            disablePlugin:      false,
-            _isShow:            false
+            disablePlugin:      false
         },
 
         _create: function() {
@@ -73,10 +72,6 @@
             switch (e.type) {
                 case 'touchmove':
                     me.hide();
-                    clearTimeout(me.data('_TID'));
-                    me.data('_TID', $.later(function(){
-                        me._check.call(me);
-                    }, 300));
                     break;
                 case 'scroll':
                     clearTimeout(me.data('_TID'));
@@ -148,10 +143,8 @@
          */
 
         show: function() {
-            var me = this;
-            me.data('root').style.display = 'block'; //写style让浏览器repaint,不能用zepto方法
-            me.data('_isShow', true);
-            return me;
+            this._data.root.style.display = 'block';
+            return this;
         },
 
         /**
@@ -167,12 +160,8 @@
          * demo.hide();
          */
         hide: function() {
-            var me = this;
-            if(me.data('_isShow')) {
-                me.data('root').style.display = 'none';
-                me.data('_isShow', false);
-            }
-            return me;
+            this._data.root.style.display = 'none';
+            return this;
         }
         /**
          * @name Trigger Events
