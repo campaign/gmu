@@ -111,7 +111,7 @@
                 e.preventDefault();
                 isPrev = match.is('.ui-datepicker-prev');
                 $.later(function(){
-                    me.goTo(isPrev ? '-' : '+' + '1M');
+                    me.goTo((isPrev ? '-' : '+') + '1M');
                 });
             }
         },
