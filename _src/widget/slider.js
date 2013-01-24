@@ -14,7 +14,7 @@
      * css选择器, 或者zepto对象
      * **Options**
      * - ''container'' {selector|zepto}: (可选)放置的父容器
-     * - ''content'' {Array}: (必选)内容,格式为：[ {href:'图片跳转URL', pic:'图片路径', title:'图片下方文字'}, {...}]
+     * - ''content'' {Array}: (必选)内容,格式为：\[ {href:'图片跳转URL', pic:'图片路径', title:'图片下方文字'}, {...}\]
      * - ''viewNum'' {Number}: (可选, 默认:1) 可以同时看到几张图片
      * - ''imgInit'' {Number}: (可选, 默认:2)初始加载几张图片
      * - ''imgZoom'' {Boolean}: (可选, 默认:false)是否缩放图片,设为true时可以将超出边界的图片等比缩放
