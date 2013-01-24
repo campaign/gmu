@@ -90,6 +90,12 @@ foreach ($setting as $item) {
     <script type="text/javascript" src="../../_src/core/zepto.js"></script>
     <script type="text/javascript" src="../../_src/core/zepto.extend.js"></script>
     <script type="text/javascript" src="../../_src/core/zepto.ui.js"></script>
+    <script type="text/javascript" src="../../_src/core/zepto.highlight.js"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $(function(){$('.thelist ul li').highlight('ui-state-hover');});
+        })(Zepto);
+    </script>
 </head>
 <body>
 <div id="wrap">
@@ -120,9 +126,6 @@ foreach ($setting as $item) {
         data-path="../load.php"
         data-backurl="../../"
         data-page="">
-    (function ($) {
-       $('.thelist ul li').highlight('ui-state-hover');
-    })(Zepto);
 </script>
 </body>
 </html>
