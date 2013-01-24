@@ -158,6 +158,7 @@
                 dirArr = dir ? [dir] : ['up', 'down'];
             $.each(dirArr, function (i, dir) {
                 var $elem = data['$' + dir + 'Elem'];
+                if (!$elem.length) return;
                 //若是enable操作，直接显示，disable则根据text是否是true来确定是否隐藏
                 able ? $elem.show() : (hide ?  $elem.hide() : me._setStyle(dir, 'disable'));
                 me.status(dir, able);
