@@ -8,13 +8,13 @@
 (function($, undefined) {
     /**
      * @name 说明
-     * @desc 在使用iscroll的页面上使用gotop组件时，需要加入该插件
-     *
-     * 使用iscroll时需要传入iScroll实例，用来判定显示与隐藏
+     * @desc 在使用iScroll的页面上使用gotop组件时，需要加入该插件
+     * **Options**
+     * - ''iScrollInstance'' {Object}: (必选)创建好的iScroll实例,使用iscroll时需要传入iScroll实例,用来判定显示与隐藏【useAnimation参数会失效】
      *
      * <code>
      * $('#gotop').gotop({
-     *     iScrollInstance: iscroll //创建好的iscroll实例
+     *     iScrollInstance: iscroll //创建好的iScroll实例
      * });
      * </code>
      * @desc
