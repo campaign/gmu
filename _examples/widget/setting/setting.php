@@ -105,14 +105,21 @@ $arr = array(
         "group" => 'Components',
         "icon" => 'imglazyload.png',
         "href" => 'imglazyload/imglazyload.html',
-    )/*,
+    ),
     'linechart' => array(
         "name" => 'LineChart',
         "description" => '折线图',
         "group" => 'Chart',
         "icon" => 'adddesktop.png',
         "href" => '../chart/linechart/linechart.html',
-    )*/
+    ),
+    'barchart' => array(
+        "name" => 'BarChart',
+        "description" => '柱图图',
+        "group" => 'Chart',
+        "icon" => 'adddesktop.png',
+        "href" => '../chart/barchart/barchart_demo.html',
+    )
 );
 
 $detect = new Mobile_Detect();
