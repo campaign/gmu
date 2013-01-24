@@ -29,27 +29,13 @@
             <span class="ui-icon ui-icon-refresh ui-icon-shadow ui-iconsize-18">&nbsp;</span></span></a>
         </div>
 </div>
-</body>
 
-<script id="bootstrap" src="../../example.js"
-        type="text/javascript"
-        data-theme="default"
-        data-use="chart/core/Chart.js, chart/line/lineChart.js"
-        data-backurl="../../"
-        data-page="折线图|linechart.html">
-    //<![CDATA[
-    /**
-     * JS:
-     *   Zepto:
-     *     zepto.js
-     *   GMU:
-     *     core/zepto.extend.js
-     *     core/zepto.imglazyload.js
-     *
-     * CSS:
-     *     无样式依赖
-     *
-     */
+<script type="text/javascript" src="../../../_src/core/zepto.js"></script>
+<script type="text/javascript" src="../../../_src/core/zepto.extend.js"></script>
+<script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
+<script type="text/javascript" src="../../../_src/chart/base/Chart.js"></script>
+<script type="text/javascript" src="../../../_src/chart/line/lineChart.js"></script>
+<script type="text/javascript">
     $(function() {
 
         if($.os.android){
@@ -128,29 +114,35 @@
             var resizeEvt = 'onorientationchange' in window ? 'orientationchange' : 'resize';
 
             window.addEventListener(resizeEvt, function () {
-                    $.later(refreshLayout);
+                $.later(refreshLayout);
             }, false);
 
 
             $('#refresh').on('click', function (event) {
                 event.preventDefault();
-               setChartData();
+                setChartData();
             });
 
             /*
 
-            //fix for android
-            if($.os.android){
-                $.later(function(){
-                    //判断是否变化了大小
-                    if(chartWidth != window.innerWidth - 20){
-                        refreshLayout();
-                    }
-                },500);
-            }
-            */
+             //fix for android
+             if($.os.android){
+             $.later(function(){
+             //判断是否变化了大小
+             if(chartWidth != window.innerWidth - 20){
+             refreshLayout();
+             }
+             },500);
+             }
+             */
         }
     });
-    //]]>
 </script>
+<script id="bootstrap" src="../../example.js"
+        type="text/javascript"
+        data-theme="default"
+        data-use="chart/core/Chart.js, chart/line/lineChart.js"
+        data-backurl="../../"
+        data-page="折线图|linechart.html"></script>
+</body>
 </html>
