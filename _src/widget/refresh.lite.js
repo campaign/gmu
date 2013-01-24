@@ -9,6 +9,8 @@
     /**
      * @name 说明
      * @desc Refresh lite插件，支持拉动加载。
+     * @desc **Options** 在refresh的基础上增加参数
+     * - ''threshold'' {Number}: (可选) 加载的阀值，默认手指在屏幕的一半，并且拉动距离超过10px即可触发加载操作，配置该值后，可以将手指在屏幕位置进行修重情重改，若需要实现连续加载效果，可将该值配置很大，如1000等
      * **Demo**
      * <codepreview href="../gmu/_examples/widget/refresh/refresh_lite.html">
      * ../gmu/_examples/widget/refresh/refresh_lite.html
@@ -18,10 +20,14 @@
         return {
             pluginName: 'lite',
             _init: function () {
-                var me = this;
+                var me = this,
+                    data = me._data,
+                    $el = me.root();
 
                 me._initOrg();
-                me.root().on('touchstart touchmove touchend touchcancel', $.proxy(me._eventHandler, me));
+                $el.on('touchstart touchmove touchend touchcancel', $.proxy(me._eventHandler, me));
+                data.wrapperH = me.root().height();
+                data.wrapperTop = me.root().offset().top;
                 return me;
             },
             _changeStyle: function (dir, state) {
@@ -43,7 +49,7 @@
                     startY = data._startY,
                     movedY = startY - e.touches[0].pageY,
                     winHeight = window.innerHeight,
-                    threshold = data.threshold || (winHeight / 2);     //默认值为可视区域高度的一半
+                    threshold = data.threshold || (data.wrapperH < winHeight ? (data.wrapperH / 2 + data.wrapperTop || 0) : winHeight / 2);     //默认值为可视区域高度的一半，若wrapper高度不足屏幕一半时，则为list的一半
 
                 if (!me.status('down') || movedY < 0) return;
                 if (!data['_refreshing'] && (startY >= document.body.scrollHeight - winHeight + threshold) && movedY > 10) {    //下边按钮，上拉加载

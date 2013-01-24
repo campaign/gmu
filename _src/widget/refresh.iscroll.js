@@ -9,6 +9,8 @@
     /**
      * @name 说明
      * @desc Refresh iscroll插件，支持拉动加载，内滚采用iscroll方式，体验更加贴近native。
+     * @desc **Options** 在refresh的基础上增加参数
+     * - ''threshold'' {Number}: (可选) 加载的阀值，默认向上或向下拉动距离超过5px，即可触发拉动操作，该值只能为正值，若该值是10，则需要拉动距离大于15px才可触发加载操作
      * **Demo**
      * <codepreview href="../gmu/_examples/widget/refresh/refresh_iscroll.html">
      * ../gmu/_examples/widget/refresh/refresh_iscroll.html
@@ -27,9 +29,9 @@
                 $.extend(data, {
                     useTransition: true,
                     speedScale: 1,
-                    topOffset: data['$upElem'] ? data['$upElem'].height() : 0,
-                    threshold: 0
+                    topOffset: data['$upElem'] ? data['$upElem'].height() : 0
                 });
+                data.threshold = data.threshold || 5;
 
                 $el.wrapAll($('<div class="ui-refresh-wrapper"></div>').height(wrapperH)).css('height', 'auto');
                 me._loadIscroll();
