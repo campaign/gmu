@@ -162,6 +162,20 @@
                 me.value((o._height - touch.pageY + rect.top) / o._height * 100);
         },
 
+        /**
+         * @desc 获取/设置progressbar的值
+         * @name value
+         * @grammar value() => value   /  value(value) => self
+         * @example
+         * //setup mode
+         * $('#progressbar').progressbar('value');
+         * $('#progressbar').progressbar('value', 30);
+         *
+         * //render mode
+         * var demo = $.ui.progressbar();
+         * demo.value();
+         * demo.value(30);
+         */
         value: function(value) {
             var me = this,
                 o = me._data,
