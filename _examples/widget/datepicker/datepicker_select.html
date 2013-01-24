@@ -102,7 +102,7 @@
    <div class="filter clearfix">
        <a id="datestart" href="javascript:void(0)">2013-01-20<span class="ui-icon-down"></span></a>
        <a id="dateend" href="javascript:void(0)">2013-01-25<span class="ui-icon-down"></span></a>
-       <a class="search" href="#">搜素</a>
+       <a class="search" href="#">搜索</a>
    </div>
    <div id="datepicker_wrap">
        <div id="dp_start">
@@ -124,7 +124,7 @@
         $(function(){//dom ready
             var open = null, today = new Date();
             $('#datepicker_start').datepicker({//初始化开始时间的datepicker
-                defaultDate:$('#datestart').text(),//设置初始日期为文本内容
+                date:$('#datestart').text(),//设置初始日期为文本内容
                 minDate: new Date(today.getFullYear(), today.getMonth(), 1),//设置最小日期为当月第一天，既上一月的不能选
                 maxDate: $('#dateend').text(),//设置最大日期为结束日期，结束日期以后的天不能选
                 valuecommit: function(e, date, dateStr){//当选中某个日期时。
@@ -139,7 +139,7 @@
                 }
             });
             $('#datepicker_end').datepicker({//初始化结束时间的datepicker
-                defaultDate:$('#dateend').text(),//设置初始日期为文本内容
+                date:$('#dateend').text(),//设置初始日期为文本内容
                 minDate: $('#datestart').text(),//设置最小日期为开始日期，开始日期以前的天不能选
                 valuecommit: function(e, date, dateStr){//当选中某个日期时。
                     $('#datepicker_start').datepicker('maxDate', date).datepicker('refresh');//将开始时间的datepicker的最达日期设成所选日期

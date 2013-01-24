@@ -42,12 +42,70 @@
         }
     }
 
+    function slideUpFrame(div, okcb, nocb){
+        this.id = slideUpFrame.id = (slideUpFrame.id || 0) + 1;
+        this.div = div;
+        this.divHolder = div.parent();
+        this.okcb = okcb;
+        this.nocb = nocb;
+        this._init();
+    }
+    $.extend(slideUpFrame.prototype, {
+        _init : function(){
+            var header;
+            this.root = $('<div class="ui-slideup"><div class="header"></div><div class="frame"></div></div>');
+            this.frame = $('.frame', this.root).append(this.div);
+            header = $('.header', this.root);
+            this.okcb && header.append('<a class="ok-btn" href="javascript:void(0)">Done</a>');
+            this.nocb && header.append('<a class="no-btn" href="javascript:void(0)">Cancel</a>');
+            this.open();
+        },
+        refresh: function(cb){
+            var me = this;
+            this.root.css({
+                top: (window.innerHeight + window.pageYOffset) + 'px'
+            }).appendTo(document.body).animate({
+                translateY: '-'+this.root.height()+'px',
+                translateZ: '0'
+            }, 400, 'ease-out', function(){
+                cb && cb.apply(me, [this]);
+            });
+        },
+        open: function(){
+            var me = this, count = slideUpFrame.openCount = ( slideUpFrame.openCount || 0) +1;
+            if(count==1){
+                $(document).on('touchmove.slideup', function(e){e.preventDefault()});
+            }
+            this.refresh(function(){
+                me.root.on('click.slideup'+me.id, '.ok-btn, .no-btn', function(){
+                    var ok = $(this).is('.ok-btn');
+                    me[(ok?'ok':'no')+'cb'].apply(me)!==false && me.close();
+                }).find('.ok-btn, .no-btn').highlight('ui-state-hover');
+            });
+        },
+        close: function(cb){
+            var me =this, count = slideUpFrame.openCount = slideUpFrame.openCount - 1;
+            this.root.off('click.slideup'+this.id).animate({
+                translateY: '0',
+                translateZ: '0'
+            }, 200, 'ease-out', function(){
+                cb && cb();
+                me.divHolder.append(me.div);
+                me.root.remove();
+                if(count==0){
+                    $(document).off('touchmove.slideup');
+                }
+            }).find('.ok-btn, .no-btn').highlight();
+        }
+    });
+
+
     /**
      * @name $.ui.datepicker
      * @grammar $.ui.datepicker(options) ⇒ instance
      * @grammar datepicker(options) ⇒ self
      * @desc **Options**
-     * - ''defaultDate'' {Date|String}: (可选，默认：today) 初始化日期
+     * - ''date'' {Date|String}: (可选，默认：today) 初始化日期
      * - ''firstDay'' {Number}: (可选，默认：1)  设置新的一周从星期几开始，星期天用0表示, 星期一用1表示, 以此类推.
      * - ''minDate'' {Date|String}: (可选，默认：null)  设置可以选择的最小日期
      * - ''maxDate'' {Date|String}: (可选，默认：null)  设置可以选择的最大日期
@@ -62,7 +120,7 @@
      */
     $.ui.define('datepicker', {
         _data:{
-            defaultDate:null, //默认日期
+            date:null, //默认日期
             firstDay:1, //星期天用0表示, 星期一用1表示, 以此类推.
             maxDate:null, //可以选择的日期范围
             minDate:null,
@@ -72,14 +130,15 @@
 
         _init:function () {
             var data = this._data, el = this.root(), eventHandler = $.proxy(this._eventHandler, this);
-            this.date(data.defaultDate || (!data._inline && el.val() ? $.datepicker.parseDate(el.val()) : null) || new Date())
+            this.date(data.date || (!data._inline && el.val() ? $.datepicker.parseDate(el.val()) : null) || new Date())
                 .minDate(data.minDate)
                 .maxDate(data.maxDate)
                 .refresh();
             data._container.addClass('ui-datepicker').on('click', eventHandler).highlight();
             if (!data._inline) {
                 el.on('click', eventHandler);
-                data._container.hide();
+                data._container.hide().on('swipeLeft swipeRight', eventHandler);
+                $(window).on('ortchange', eventHandler);
             }else data._isShow = true;
             data._inited = true;
         },
@@ -87,7 +146,7 @@
         _setup:function () {
             var data = this._data, el = this.root();
             data._inline = !el.is('input');
-            data._container = data._inline ? el : $(data.container || ($('<div></div>').insertAfter(el)));
+            data._container = data._inline ? el : $(data.container || ($('<div></div>').appendTo(document.body)));
         },
 
         _create:function () {
@@ -96,23 +155,33 @@
 
         _eventHandler:function (e) {
             var match, me = this, data = me._data, root = data._container, target,
-                cell, isPrev;
-            target = e.target;
-            if(!data._inline && me._isFrom(target, me.root())){
-                me.root().blur();
-                this.show();
-                e.preventDefault();
-            } else if ((match = $(target).closest('.ui-datepicker-calendar tbody a', root.get(0))) && match.length) {
-                e.preventDefault();
-                cell = match.parent();
-                this.date(new Date(cell.attr('data-year'), cell.attr('data-month'), match.text()));
-                this[data._inline?'refresh':'hide']();
-            } else if ((match = $(target).closest('.ui-datepicker-prev, .ui-datepicker-next', root.get(0))) && match.length) {
-                e.preventDefault();
-                isPrev = match.is('.ui-datepicker-prev');
-                $.later(function(){
-                    me.goTo((isPrev ? '-' : '+') + '1M');
-                });
+                cell;
+            switch(e.type){
+                case 'swipeLeft':
+                case 'swipeRight':
+                    me.goTo((e.type == 'swipeRight' ? '-' : '+') + '1M');
+                    break;
+                case 'ortchange':
+                    return data._frame && data._frame.refresh();;
+                    break;
+                default:
+                    target = e.target;
+                    if(!data._inline && me._isFrom(target, me.root())){
+                        me.root().blur();
+                        this.toggle();
+                        e.preventDefault();
+                    } else if ((match = $(target).closest('.ui-datepicker-calendar tbody a', root.get(0))) && match.length) {
+                        e.preventDefault();
+                        cell = match.parent();
+                        this.selectedDate(new Date(cell.attr('data-year'), cell.attr('data-month'), match.text()));
+                        data._inline && this._commit();
+                        this.refresh();
+                    } else if ((match = $(target).closest('.ui-datepicker-prev, .ui-datepicker-next', root.get(0))) && match.length) {
+                        e.preventDefault();
+                        $.later(function(){
+                            me.goTo((match.is('.ui-datepicker-prev') ? '-' : '+') + '1M');
+                        });
+                    }
             }
         },
 
@@ -120,7 +189,7 @@
             var data = this._data, html = '', thead, tbody, i, j, firstDay, day, leadDays, daysInMonth, rows,
                 printDate, drawYear = data._drawYear, drawMonth = data._drawMonth, otherMonth, unselectable,
                 tempDate = new Date(), today = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate()),
-                minDate = this.minDate(), maxDate = this.maxDate(), selectedDate = this.date();
+                minDate = this.minDate(), maxDate = this.maxDate(), selectedDate = this.selectedDate();
 
             firstDay = parseInt(data.firstDay, 10);
             firstDay = (isNaN(firstDay) ? 0 : firstDay);
@@ -185,37 +254,63 @@
             return ret;
         },
 
-        /**
-         * @name show
-         * @grammar show() ⇒ instance
-         * @desc 显示组件
-         */
-        show:function () {
-            var data = this._data, me=this;
-            if (data._isShow)return this;
-            data._inline || $(document).on('click.'+this.id(), function(e){
-                me._isFrom(e.target) || me.hide();
-            });
-            data._isShow = true;
-            this.refresh();
-            data._container.show();
-            return this.trigger('show', this);
+        _commit: function(){
+            var data = this._data, date, dateStr = $.datepicker.formatDate(date = this.selectedDate());
+            data._inline || this.root().val(dateStr);
+            data.date = date;
+            data._inited && this.trigger('valuecommit', [date, dateStr, this]);
+            return this;
         },
 
         /**
-         * @name hide
-         * @grammar hide() ⇒ instance
+         * @name open
+         * @grammar open() ⇒ instance
+         * @desc 显示组件
+         */
+        open:function () {
+            var data = this._data, me = this, date = this.date();
+            if (data._isShow)return this;
+            data._isShow = true;
+            date && this.selectedDate(date);
+            this.refresh();
+            data._frame = new slideUpFrame(data._container.show(), function(){
+                me.close();
+                me._commit();
+                return false;
+            }, function(){
+                me.close();
+                return false;
+            });
+            return this.trigger('open', this);
+        },
+
+        /**
+         * @name close
+         * @grammar close() ⇒ instance
          * @desc 隐藏组件
          */
-        hide:function () {
-            var data = this._data, eventData;
+        close:function () {
+            var data = this._data, me = this, eventData;
             if (!data._isShow)return this;
-            this.trigger(eventData = $.Event('beforehide'), this);
+            this.trigger(eventData = $.Event('beforeclose'), this);
             if(eventData.defaultPrevented)return this;
-            data._inline || $(document).off('click.'+this.id());
             data._isShow = false;
-            data._container.hide();
-            return this.trigger('hide');
+            data._frame.close(function(){
+                data._container.hide();
+                me.trigger('close');
+            });
+            data._frame = null;
+            return me;
+        },
+
+        /**
+         * @name toggle
+         * @grammar toggle() ⇒ instance
+         * @desc 切换组件的显示与隐藏
+         */
+        toggle:function () {
+            var data = this._data;
+            return this[data._isShow?'close':'open']();
         },
 
         /**
@@ -224,21 +319,23 @@
          * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         option:function (key, val) {
-            var data = this._data, date, dateStr;
+            var data = this._data, date;
             if (val !== undefined) {
                 switch (key) {
                     case 'minDate':
                     case 'maxDate':
                         data[key] = val ? $.datepicker.parseDate(val) : null;
                         break;
-                    case 'date':
+                    case 'selectedDate':
                         val = $.datepicker.parseDate(val);
                         data._selectedYear = data._drawYear = val.getFullYear();
                         data._selectedMonth = data._drawMonth = val.getMonth();
                         data._selectedDay = val.getDate();
-                        dateStr = $.datepicker.formatDate(date = this.date());
-                        data._inline || this.root().val(dateStr);
-                        data._inited && this.trigger('valuecommit', [date, dateStr, this]);
+                        data._inited && this.trigger('select', [this.selectedDate(), this]);
+                        break;
+                    case 'date':
+                        this.option('selectedDate', val);
+                        this._commit();
                         break;
                     case 'gap':
                         data[key] = val;
@@ -247,7 +344,7 @@
                 data._invalid = true;
                 return this;
             }
-            return key == 'date' ? new Date(data._selectedYear, data._selectedMonth, data._selectedDay) : data[key];
+            return key == 'selectedDate' ? new Date(data._selectedYear, data._selectedMonth, data._selectedDay) : data[key];
         },
 
         /**
@@ -275,6 +372,15 @@
          */
         date:function (val) {
             return this.option('date', val);
+        },
+
+        /**
+         * @name date
+         * @grammar date([value]) ⇒ instance
+         * @desc 设置或获取当前选中的日期，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
+         */
+        selectedDate:function (val) {
+            return this.option('selectedDate', val);
         },
 
         /**
@@ -313,13 +419,13 @@
          */
         refresh:function () {
             var data = this._data;
-
             if (!data._invalid) {
                 return;
             }
             $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', data._container).highlight();
             data._container.empty().append(this._generateHTML());
             $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', data._container).highlight('ui-state-hover');
+            data._frame && data._frame.refresh();
             data._invalid = false;
             return this;
         },
@@ -334,6 +440,8 @@
             if (!data._inline) {
                 this.root().off('click', eventHandler);
                 $(document).off('click.'+this.id());
+                $(window).off('ortchange', eventHandler);
+                data._container.on('swipeLeft swipeRight', eventHandler);
             }
             $('.ui-datepicker-calendar td:not(.ui-state-disabled)', data._container).highlight();
             data._container.remove();
@@ -347,9 +455,10 @@
          *
          * ^ 名称 ^ 处理函数参数 ^ 描述 ^
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
-         * | show | event, ui | 当组件显示后触发 |
-         * | hide | event, ui | 当组件隐藏后触发 |
-         * | beforehide | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
+         * | open | event, ui | 当组件显示后触发 |
+         * | close | event, ui | 当组件隐藏后触发 |
+         * | beforeclose | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
+         * | select | event, date, ui | 选中日期的时候触发 |
          * | valuecommit | event, date, dateStr, ui | 当被设置日期后触发date为ate对象, dateStr为日期字符串|
          * | destory | event | 组件在销毁的时候触发 |
          */

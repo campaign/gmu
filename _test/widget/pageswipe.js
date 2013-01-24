@@ -28,49 +28,7 @@ test("setup", function() {
     });
 });
 
-test("左右滑动", function() {
-    expect(3);
-    stop();
-    var pageswipe = $('#pageswipe').pageswipe({
-        toolbar:'#toolbar'
-    }).pageswipe('this');
-    ta.touchstart($(".ui-pageswipe-wheel")[0], {
-        touches: [{
-            clientX: 0,
-            clientY: 0
-        }]
-    });
-    ta.touchmove($(".ui-pageswipe-wheel")[0], {
-        touches:[{
-            clientX: -20,      //   滑动的距离大于springBackDis
-            clientY: 0
-        }]
-    });
-    ta.touchend($(".ui-pageswipe-wheel")[0]);
 
-    setTimeout(function(){
-        equals($('.ui-pageswipe-wheel').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'),"The picture slide");
-        equals($('#toolbar div').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'),"The toolbar slide");
-        ta.touchstart($(".ui-pageswipe-wheel")[0], {
-            touches: [{
-                clientX: 0,
-                clientY: 0
-            }]
-        });
-        ta.touchmove($(".ui-pageswipe-wheel")[0], {
-            touches:[{
-                clientX: 20,          //   滑动的距离小于springBackDis
-                clientY: 0
-            }]
-        });
-        ta.touchend($(".ui-pageswipe-wheel")[0]);
-        setTimeout(function(){
-            equals($('.ui-pageswipe-wheel').offset().left, 0,"The picture slide");
-            pageswipe.destroy();
-            start();
-        }, 550);
-    }, 550);
-});
 test("点击切换按钮", function() {
     stop();
     expect(2);
