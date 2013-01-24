@@ -1,37 +1,45 @@
 /**
  * @file
  * @name LineChart
- * @desc 线图
- * @import core/zepto.js, core/zepto.core.js, core/zepto.ui.js, chart/core/Chart.js
+ * @desc 折线图
+ * @import core/zepto.js, core/zepto.extend.js, core/zepto.ui.js, chart/base/Chart.js
  */
 (function(){
     /**
-     * @name       $.ui.LineChart
-     * @grammar    $.ui.LineChart(el [,options]) => instance
-     * @desc
-     * **el**
+     * @name    $.ui.LineChart
+     * @grammar $.ui.LineChart(el, options) ⇒ instance
+     * @grammar $.ui.LineChart(options) ⇒ instance
+     * @grammar LineChart(options) ⇒ self
+     * @desc **el** 
+     * css选择器, 或者zepto对象
+     * 
      * 根元素选择器或者对象
      * **Options**
-     * - ***width*** {Number|Percent}: (可选)图表区域的宽度，可以使像素值或者百分比。若不设置，则为父容器宽度。
-     * - ***height*** {Number|Percent}: (可选)图表区域的高度，可以使像素值或者百分比。若不设置，则为父容器高度。
-     * - ***backgroundColor*** {Number}: (可选)cssbackgroundColor属性。
-     * - ***axisColor*** {Number}: (可选)#xxxxxx格式。坐标轴颜色。
-     * - ***axisLineWidth*** {Number}: (可选)坐标轴线宽度。
-     * - ***gridColor*** {Number}: (可选)#xxxxxx格式。图表网格颜色。
-     * - ***gridLineWidth*** {Number}: (可选)图表网格线宽度。
-     * - ***gridXStep*** {Number}: (可选)横轴间隔数。TODO...
-     * - ***gridYStep*** {Number}: (可选)纵轴间隔数。TODO...
-     *
+     * - ''width''              {Number|Percent}: (可选)图表区域的宽度，可以使像素值或者百分比。若不设置，则为父容器宽度。
+     * - ''height''             {Number|Percent}: (可选)图表区域的高度，可以使像素值或者百分比。若不设置，则为父容器高度。
+     * - ''backgroundColor''    {Number}: (可选)cssbackgroundColor属性。
+     * - ''axisColor''          {Number}: (可选)#xxxxxx格式。坐标轴颜色。
+     * - ''axisLineWidth''      {Number}: (可选)坐标轴线宽度。
+     * - ''gridColor''          {Number}: (可选)#xxxxxx格式。图表网格颜色。
+     * - ''gridLineWidth''      {Number}: (可选)图表网格线宽度。
+     * - ''gridXStep''          {Number}: (可选)横轴间隔数。默认为1。
+     * - ''gridYStep''          {Number}: (可选)纵轴间隔数。默认为1。
+     * - ''showLastSplitLineX'' {Boolean} 是否展示x轴最后一条线。
+     * - ''showLastSplitLineY'' {Boolean} 是否展示y轴最后一条线。
+     * - ''showTouchLine''      {Boolean} 手指按下时是否展示选择线。
+     * - ''enableDrag''         {Boolean} 是否允许拖拽操作。
+     * - ''touchTimeout''       {Number}  手指按下多少毫秒后进入拖拽模式。
+     * 
      * **Demo**
-     * <codepreview href="../demo/webapp/linechart.html">
-     * ../demo/webapp/linechart.html
-     * ../src/css/webapp/linechart.css
+     * <codepreview href="../gmu/_examples/chart/linechart/linchart_demo.html">
+     * ../gmu/_examples/chart/linechart/linchart_demo.html
+     * ../gmu/_examples/chart/linechart/lineChart.css
      * </codepreview>
      */
-    var LineChart = {
+    $.ui.define("LineChart", {
         chartWidth:0,          // 图表宽
         chartHeight:0,         // 图表高
-        tipsHeight:0,          // 标注高
+        tipsHeight:0,          // 标注高度
         maxVal:0,              // y轴的最大值
         minVal:0,              // y轴的最小值
 
@@ -41,6 +49,8 @@
         newLines:[],
         icons:[],
         tips:[],
+        
+        inherit:$.ui.Chart,
 
         _data:{
             chartOffsetX:60,            // 图表内容在容器中x方向上的偏移量
@@ -345,6 +355,9 @@
             me.$touchLine && me.$touchLine.parent() && me.$touchLine.remove();
         },
 
+        /**
+         * @private 
+         */
         draw:function(){
             if(this.invalidHash[this.INVALID_TYPE.INIT]){
                 this._do_init();
@@ -361,10 +374,17 @@
         },
 
         /**
-         * @name setCategoryGrid
-         * @param {Array} 横轴标注
-         * @grammar setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]) => self
-         * @desc 设置横轴标注
+         * @name    setCategoryGrid
+         * @desc    设置横轴标注
+         * @param   {Array} 表示横轴标注。
+         * @grammar setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]) => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('setCategoryGrid', ["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
          */
         setCategoryGrid:function(value){
             this.categorys = (value || []).concat();
@@ -373,10 +393,17 @@
         },
 
         /**
-         * @name setValueGrid
-         * @param  {Array} 纵轴标注
-         * @grammar setValueGrid([0, 20, 40, 60, 80, 100]) => self
-         * @desc 设置纵轴标注
+         * @name    setValueGrid
+         * @desc    设置纵轴标注
+         * @param   {Array} 表示纵轴标注
+         * @grammar setValueGrid([0, 20, 40, 60, 80, 100]) => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('setValueGrid', [0, 20, 40, 60, 80, 100]);
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.setValueGrid([0, 20, 40, 60, 80, 100]);
          */
         setValueGrid:function(value){
             this.values = (value || []).concat();
@@ -385,10 +412,17 @@
         },
 
         /**
-         * @name setWidth
-         * @param  {Number} 设置图表宽度
-         * @grammar setWidth(800) => self
-         * @desc 设置图表宽度
+         * @name    setWidth
+         * @desc    设置图表宽度
+         * @param   {Number} 设置图表宽度
+         * @grammar setWidth(800) => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('setWidth', 800);
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.setWidth(800);
          */
         setWidth:function(value){
             this.chartWidth = value;
@@ -408,10 +442,17 @@
         },
 
         /**
-         * @name setHeight
-         * @param  {Number} 设置图表高度
-         * @grammar setHeight(240) => self
-         * @desc 设置图表高度
+         * @name    setHeight
+         * @desc    设置图表高度
+         * @param   {Number} 设置图表高度
+         * @grammar setHeight(240) => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('setHeight', 240);
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.setHeight(240);
          */
         setHeight:function(value){
             this.chartHeight = value;
@@ -431,9 +472,16 @@
         },
 
         /**
-         * @name clear
-         * @grammar clear() => self
-         * @desc 清除已设置的线
+         * @name    clear
+         * @desc    清除绘制的数据
+         * @grammar clear() => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('clear');
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.clear();
          */
         clear:function(){
             this.lines.splice(0, this.lines.length);
@@ -451,9 +499,16 @@
 
         /**
          * @name setData
-         * @param  {Array} 线数据对象
-         * @grammar setData([{type:"diamond", name:"graph1", data:[100,10,20,30,20,50,60,40,50,40,50,40], color:"#0000ff"}]) => self
-         * @desc 设置线数据对象
+         * @desc 设置数据对象。
+         * @param  {Array} Object数组。数组中每一个元素的格式为{type:..., name:..., data:..., color:...}
+         * @grammar setData([{type:"diamond", name:"graph1", data:[100,10,20,30,20,50,60,40,50,40,50,40], color:"#0000ff"}]) => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('setData', [{type:"diamond", name:"graph1", data:[100,10,20,30,20,50,60,40,50,40,50,40], color:"#0000ff"}]);
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.setData([{type:"diamond", name:"graph1", data:[100,10,20,30,20,50,60,40,50,40,50,40], color:"#0000ff"}]);
          */
         setData:function(arr){
             if(!arr){
@@ -476,19 +531,23 @@
 
         /**
          * @name addData
-         * @param  {Object} 线数据对象
-         * @grammar addData({"type":"baidu.dv.line.LineGraph", "name":"graph5", "data":[80,50,40,80,20,50,70,20,60,20,80,70], color:"#ff00ff"}) => self
-         * @desc 增加线数据对象
+         * @desc 增加数据对象
+         * @param  {Object} 线数据对象，对象的格式为{type:..., name:..., data:..., color:...}
+         * @grammar addData({"type":"baidu.dv.line.LineGraph", "name":"graph5", "data":[80,50,40,80,20,50,70,20,60,20,80,70], color:"#ff00ff"}) => instance
+         * @example
+         * //setup mode
+         * $('#linechart').LineChart('addData', {"type":"baidu.dv.line.LineGraph", "name":"graph5", "data":[80,50,40,80,20,50,70,20,60,20,80,70], color:"#ff00ff"});
+         *
+         * //render mode
+         * var linechart = $.ui.LineChart();
+         * linechart.addData({"type":"baidu.dv.line.LineGraph", "name":"graph5", "data":[80,50,40,80,20,50,70,20,60,20,80,70], color:"#ff00ff"});
          */
         addData:function(obj){
             this._addData(obj);
             $.ui.Chart.prototype.addData.apply(this, [obj]);
             return this;
         }
-    };
-
-    LineChart.inherit = $.ui.Chart;
-    $.ui.define("LineChart", LineChart);
+    });
 
     function drawLines(context, pts){
         var x1 = pts[0].x, y1 = pts[0].y, x2, y2;
