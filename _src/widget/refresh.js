@@ -205,8 +205,8 @@
          *
          * statechnage事件可以用来DIY按钮样式，包括各种状态。组件内部通过了一套，如果statechange事件被阻止了，组件内部的将不会执行。
          * 如:
-         * <codepreview href="../gmu/_examples/webapp/refresh/refresh_iscroll_custom.html">
-         * ../gmu/_examples/webapp/refresh/refresh_iscroll_custom.html
+         * <codepreview href="../gmu/_examples/widget/refresh/refresh_iscroll_custom.html">
+         * ../gmu/_examples/widget/refresh/refresh_iscroll_custom.html
          * </codepreview>
          */
 
