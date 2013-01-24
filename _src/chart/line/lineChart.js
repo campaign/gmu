@@ -31,7 +31,7 @@
      * - ''touchTimeout''       {Number}  手指按下多少毫秒后进入拖拽模式。
      * 
      * **Demo**
-     * <codepreview href="../gmu/_examples/chart/linechart/linchart_demo.html">
+     * <codepreview href="../gmu/_examples/chart/linechart/linechart_demo.html">
      * ../gmu/_examples/chart/linechart/linchart_demo.html
      * ../gmu/_examples/chart/linechart/lineChart.css
      * </codepreview>
