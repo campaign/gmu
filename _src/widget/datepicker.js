@@ -26,8 +26,8 @@
     //@todo 支持各种格式
     $.datepicker = {
         parseDate:function (obj) {
-            if ($.isDate(obj))return obj;
-            return new Date(obj);
+            var dateRE = /^(\d{4})\-(\d{1,2})\-(\d{1,2})$/;
+            return $.isDate(obj)?obj: dateRE.test(obj)? new Date(parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10)-1, parseInt(RegExp.$3, 10)):null;
         },
         formatDate:function (date) {
             var formatNumber = $.datepicker.formatNumber;
