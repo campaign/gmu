@@ -76,8 +76,8 @@
                         return function (e) {
                             var upRefreshed = data['_upRefreshed'],
                                 downRefreshed = data['_downRefreshed'],
-                                upStatus = me.status('up'),
-                                downStatus = me.status('down');
+                                upStatus = me._status('up'),
+                                downStatus = me._status('down');
 
                             if (up && !upStatus && down && !downStatus) return;
                             if (downStatus && down && !downRefreshed && this.y < (this.maxScrollY - threshold)) {    //下边按钮，上拉加载
