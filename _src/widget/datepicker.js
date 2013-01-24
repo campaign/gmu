@@ -331,6 +331,7 @@
                         data._selectedYear = data._drawYear = val.getFullYear();
                         data._selectedMonth = data._drawMonth = val.getMonth();
                         data._selectedDay = val.getDate();
+                        data._inited && this.trigger('select', [this.selectedDate(), this]);
                         break;
                     case 'date':
                         this.option('selectedDate', val);
@@ -457,6 +458,7 @@
          * | open | event, ui | 当组件显示后触发 |
          * | close | event, ui | 当组件隐藏后触发 |
          * | beforeclose | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
+         * | select | event, date, ui | 选中日期的时候触发 |
          * | valuecommit | event, date, dateStr, ui | 当被设置日期后触发date为ate对象, dateStr为日期字符串|
          * | destory | event | 组件在销毁的时候触发 |
          */
