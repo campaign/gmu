@@ -16,7 +16,7 @@
      * @grammar button(options) ⇒ self
      * @desc **el**
      *
-     * css选择器，或者zepto对象
+     * css选择器, 或者zepto对象
      *
      * **Options**
      * - ''disabled'' {Boolean}: (可选，默认：false)禁用与否
