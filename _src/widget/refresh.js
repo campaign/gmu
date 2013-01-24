@@ -56,7 +56,7 @@
                 var $elem = data['$' + dir + 'Elem'],
                     elem = $elem.get(0);
                 if ($elem.length) {
-                    me.status(dir, true);    //初始设置加载状态为可用
+                    me._status(dir, true);    //初始设置加载状态为可用
                     if (!elem.childNodes.length || ($elem.find('.ui-refresh-icon').length && $elem.find('.ui-refresh-label').length)) {    //若内容为空则创建，若不满足icon和label的要求，则不做处理
                         !elem.childNodes.length && me._createBtn(dir);
                         data.refreshInfo || (data.refreshInfo = {});
@@ -67,7 +67,7 @@
                         }
                     }
                     $elem.on('click', function () {
-                        if (!me.status(dir) || data._actDir) return;         //检查是否处于可用状态，同一方向上的仍在加载中，或者不同方向的还未加载完成 traceID:FEBASE-569
+                        if (!me._status(dir) || data._actDir) return;         //检查是否处于可用状态，同一方向上的仍在加载中，或者不同方向的还未加载完成 traceID:FEBASE-569
                         me._setStyle(dir, 'loading');
                         me._loadingAction(dir, 'click');
                     });
@@ -119,7 +119,7 @@
                 readyFn = data.ready;
 
             $.isFunction(readyFn) && readyFn.call(me, dir, type);
-            me.status(dir, false);
+            me._status(dir, false);
             return me;
         },
 
@@ -134,7 +134,7 @@
             var me = this,
                 dir = dir || me._data._actDir;
             me._setStyle(dir, 'loaded');
-            me.status(dir, true);
+            me._status(dir, true);
             return me;
         },
 
@@ -147,7 +147,7 @@
          *
          * 当组件调用reday，在ready中通过ajax请求内容回来后，需要调用此方法，来改变refresh状态。
          */
-        status: function(dir, status) {
+        _status: function(dir, status) {
             var data = this._data;
             return status === undefined ? data['_' + dir + 'Open'] : data['_' + dir + 'Open'] = !!status;
         },
@@ -158,9 +158,10 @@
                 dirArr = dir ? [dir] : ['up', 'down'];
             $.each(dirArr, function (i, dir) {
                 var $elem = data['$' + dir + 'Elem'];
+                if (!$elem.length) return;
                 //若是enable操作，直接显示，disable则根据text是否是true来确定是否隐藏
                 able ? $elem.show() : (hide ?  $elem.hide() : me._setStyle(dir, 'disable'));
-                me.status(dir, able);
+                me._status(dir, able);
             });
             return me;
         },
