@@ -199,6 +199,17 @@
         },
 
         /**
+         * @name refresh
+         * @grammar refresh() => instance
+         * @desc 当外部修改tabs内容好，需要调用refresh让tabs自动更新高度。
+         * @return instance
+         */
+        refresh: function(){
+            this._fitToContent(this._getPanel())
+            return this;
+        },
+
+        /**
          * @desc 销毁组件。
          * @name destroy
          * @grammar destroy()  ⇒ instance
