@@ -16,9 +16,6 @@ module("widget/refresh",{
             '</div> '
 
         $('body').append(html);
-    },
-    teardown: function () {
-        $('.wrapper').remove();
     }
 });
 
@@ -42,14 +39,6 @@ function createDom (dir, $wrapper, w) {
     }
 };
 
-function ready (dir, type, $elem) {
-    var me = this;
-    $.getJSON('../../widget/data/refresh.php', function (data) {
-        render(data, dir, type, $elem);
-        me.afterDataLoading();    //数据加载完成后改变状态
-    });
-};
-
 function render(data, dir, type, $elem) {
     var $list = $elem || $('.data-list'),
         html = (function (data) {      //数据渲染
@@ -68,20 +57,23 @@ test('默认配置项是否正确(只有setup模式)', function () {
     stop();
     ua.loadcss(["reset.css", "widget/refresh/refresh.default.css"], function () {
         var $wrapper = $('.wrapper'),
-            refresh = $wrapper.refresh({
-                ready: ready
-            }).refresh('this');
+            refresh = $wrapper.refresh().refresh('this');
+        
+        equals(refresh._data.ready, null, "默认参数");
+        equals(refresh._data.statechange, null, "默认参数");
         equals(refresh._el.hasClass('wrapper'), true, 'refresh[down]实例成功创建');
-        equals($wrapper.hasClass('ui-refresh'), true, 'refresh[down] wrapper元素加上了ui-refresh的class');
+        equals(refresh._el.hasClass('ui-refresh'), true, 'refresh[down] wrapper元素加上了ui-refresh的class');
         strictEqual($wrapper.find('.ui-refresh-down').length, 1, 'refresh[down]');
         strictEqual($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').length, 1, 'refresh[down] icon元素存在');
         strictEqual($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').length, 1, 'refresh[down] label元素存在');
+        equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+        ok(ua.isShown(refresh._el.find(".ui-refresh-down")[0]), "refresh[down]显示");
         refresh.destroy();
         start();
     })
 });
 
-test('参数options:ready', function () {
+test('参数options:ready & 方法:afterDataLoading', function () {
     createDom('up');
     expect(10);
     stop();
@@ -90,33 +82,35 @@ test('参数options:ready', function () {
         liNum = $wrapper.find('li').length,
         refresh = $wrapper.refresh({
             ready: function (dir, type) {
-                ok(true, 'ready is triggered');
+            	equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
 
                 var me = this;
                 $.getJSON('../../widget/data/refresh.php', function (data) {
                     render(data, dir, type);
-                    me.afterDataLoading();    //数据加载完成后改变状态
-
+                    me.afterDataLoading('up');    //数据加载完成后改变状态
+                    
                     equals(dir, 'up', 'ready参数dir正确');
                     equals(type, 'click', 'ready参数click正确');
                     equals($('.data-list').find('li').length, 20, 'refresh加载完成后列表数量正确');
+                    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
                     refresh.destroy();
                     start();
                 });
             }
-        }).refresh('this')
-    equals(refresh._el.hasClass('wrapper'), true, 'refresh[up]实例成功创建');
-    equals($wrapper.hasClass('ui-refresh'), true, 'refresh[up] wrapper元素加上了ui-refresh的class');
+        }).refresh('this');
+    
     strictEqual($wrapper.find('.ui-refresh-up').length, 1, 'refresh[up]');
     strictEqual($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').length, 1, 'refresh[up] icon元素存在');
-    strictEqual($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').length, 1, 'refresh[up] label元素存在');
+    strictEqual($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').length, 1, 'refresh[up] label元素存在');    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
     equals(liNum, 10, '开始的数据列表数量正确');
+    
     ua.click($('.ui-refresh-up')[0]);
 });
 
 test('参数options:statechange', function () {
     createDom('both');
-    expect(33);
+    expect(29);
     stop();
 
     var count = 0,
@@ -126,7 +120,6 @@ test('参数options:statechange', function () {
         liNum = $wrapper.find('li').length,
         refresh = $wrapper.refresh({
             statechange: function (e, elem, state, dir) {
-                ok(true, state + ' state is triggered');
                 if (count > 1) {
                     e.preventDefault();   //自定义下载
                     switch (state) {
@@ -152,16 +145,22 @@ test('参数options:statechange', function () {
                 count++;
             },
             ready: function (dir, type) {
-                ok(true, 'ready is triggered');
-
                 var me = this;
                 $.getJSON('../../widget/data/refresh.php', function (data) {
-                    render(data, dir, type);
-                    me.afterDataLoading(dir);    //数据加载完成后改变状态
-                    refreshCount++;
-
                     equals(dir, refreshDir, 'ready参数dir正确');
                     equals(type, 'click', 'ready参数click正确');
+                    
+                    refreshCount ==0 && equals($wrapper.find('.ui-refresh-' + dir).find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                    refreshCount ==1 && equals($wrapper.find('.ui-refresh-' + dir).html(), "加载中测试", "label元素的文字内容正确");
+                    
+                    render(data, dir, type);
+                    me.afterDataLoading(dir);    //数据加载完成后改变状态
+                    
+                    refreshCount ==0 && equals($wrapper.find('.ui-refresh-' + dir).find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                    refreshCount ==1 && equals($wrapper.find('.ui-refresh-' + dir).html(), "加载完成测试", "label元素的文字内容正确");
+                    
+                    refreshCount++;
+
                     if (refreshCount > 1) {
                         refresh.destroy();
                         start();
@@ -169,20 +168,20 @@ test('参数options:statechange', function () {
                 });
             }
         }).refresh('this');
-    equals(refresh._el.hasClass('wrapper'), true, 'refresh[both]实例成功创建');
-    equals($wrapper.hasClass('ui-refresh'), true, 'refresh[both] wrapper元素加上了ui-refresh的class');
+    
     strictEqual($wrapper.find('.ui-refresh-up').length, 1, 'refresh[both] refresh up按钮存在');
     strictEqual($wrapper.find('.ui-refresh-down').length, 1, 'refresh[both] refresh down按钮存在');
     strictEqual($wrapper.find('.ui-refresh-icon').length, 2, 'refresh[both] icon元素存在');
     strictEqual($wrapper.find('.ui-refresh-label').length, 2, 'refresh[both] label元素存在');
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
     equals(liNum, 10, '开始的数据列表数量正确');
-    ok(true, '默认加载开始触发statechange');
+   
     ua.click($('.ui-refresh-' + refreshDir)[0]);
     setTimeout(function () {
-        ok(true, '自定样式加载开始触发statechange');
         refreshDir = 'down';
         ua.click($('.ui-refresh-' + refreshDir)[0]);
-    }, 1000);
+    }, 500);
 });
 
 test('多实例', function () {
@@ -264,8 +263,6 @@ test('多实例', function () {
                 refresh1.destroy();
                 refresh2.destroy();
                 refresh3.destroy();
-                $('.wrapper2').remove();
-                $('.wrapper3').remove();
                 start();
             });
         }
@@ -282,7 +279,7 @@ test('多实例', function () {
 
 test('方法：enable,disable测试', function () {
     createDom('both');
-    expect(17)
+    expect(28)
     stop();
     var count = 0,
         $wrapper = $('.wrapper'),
@@ -298,9 +295,9 @@ test('方法：enable,disable测试', function () {
                     render(data, dir, type);
                     me.afterDataLoading();    //数据加载完成后改变状态
 
-                    count === 0 && equals($('.data-list').find('li').length, 20, '第一次refresh正确加载');
                     count++;
                     if (count == 1) {
+                    	equals($('.data-list').find('li').length, 20, '第一次refresh正确加载');
                         refresh.disable(dir);
                         equals(dir, 'up', 'disable方向正确');
                         equals($('.ui-refresh-up .ui-refresh-label').html(), '没有更多内容了', 'disable后的文案正确');
@@ -315,7 +312,19 @@ test('方法：enable,disable测试', function () {
                         equals($('.data-list').find('li').length, 40, 'refresh正确加载');
                         refresh.disable(dir, true);
                         equals($('.ui-refresh-down').css('display'), 'none', 'disable选择hide能正确隐藏');
-                        refresh.destroy();
+                        ua.click($('.ui-refresh-down')[0]);
+                        equals($('.data-list').find('li').length, 40, 'disable后refresh没有加载');
+                        refresh.enable('down');
+                        ua.click($('.ui-refresh-down')[0]);
+                    } else if (count == 4){
+                    	equals($('.data-list').find('li').length, 50, 'refresh正确加载');
+                    	equals($('.ui-refresh-down').css('display'), 'block', 'enable后使refresh显示');
+                    	refresh.disable();
+                    	equals($('.ui-refresh-down .ui-refresh-label').html(), '没有更多内容了', 'disable后的文案正确');
+                    	equals($('.ui-refresh-down').css('display'), 'block', 'disable不选择hide不隐藏');
+                        ua.click($('.ui-refresh-down')[0]);
+                        equals($('.data-list').find('li').length, 50, 'disable后refresh没有加载');
+                    	refresh.destroy();
                         start();
                     }
                 });
@@ -324,7 +333,32 @@ test('方法：enable,disable测试', function () {
     ua.click($('.ui-refresh-up')[0]);
 });
 
+test("交互 － 加载过程中不响应点击", function(){
+    createDom('down');
+    expect(1);
+    
+    var $wrapper = $('.wrapper'),
+        lis = $wrapper.find('li'),
+        count = 0,
+        refresh = $wrapper.refresh({
+            ready: function(){
+            	count ++
+            	ok(true, "ready 被触发");    
+            	if(count == 1){
+            		ua.click($('.ui-refresh-down')[0]);
+            	}
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+    
+    var l = $(target).offset().left+10;
+    var t = $(target).offset().bottom-10;
+    
+    ua.click($('.ui-refresh-down')[0]);
+});
+
 test("destroy", function(){
+	$('.wrapper').remove();
     ua.destroyTest(function(w,f){
     	var dl1 = w.dt.domLength(w);
         var el1= w.dt.eventLength();
