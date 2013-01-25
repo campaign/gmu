@@ -51,52 +51,172 @@ test("只为加载css用",function(){
     });
 });
 
-test('参数options:ready', function () {
-    createDom('both');
-    expect(1);
+test('down-上拉加载', function () {
+    createDom('down');
+    expect(8);
     stop();
 
     var $wrapper = $('.wrapper'),
-        lis = $wrapper.find('li'),
+    	lis = $wrapper.find('li'),
         refresh = $wrapper.refresh({
             ready: function (dir, type) {
-                ok(true, 'ready is triggered');
+            	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+                
+                refresh.afterDataLoading();
+                
+                equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+
                 start();
             }
         }).refresh('this'),
         target = $wrapper.get(0);
 
-    refresh.data('threshold',-5);      //反冲距离
-    setTimeout(function(){
-        var l = $(target).offset().left+10;
-        var t = $(target).offset().top-10;
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
+    
+	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+   
+    ta.touchstart(target);
+    
+    target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
+});
 
-        target.scrollTop = 0;//关键，要不然ios上不动。
-        ta.touchstart(target, {
-            targetTouches:[{
-                clientX: l,
-                clientY: t
-            }]
-        });
-        ta.touchmove(target, {
-            targetTouches:[{
-                clientX: l,
-                clientY: t-100
-            }]
-        });
-        ta.touchend(target);
-    }, 500);
+test('up-下拉加载 & threshold', function () {
+    createDom('up');
+    expect(8);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	lis = $wrapper.find('li'),
+        refresh = $wrapper.refresh({
+        	threshold: -5,
+            ready: function (dir, type) {
+            	equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+                
+                refresh.afterDataLoading();
+                
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+
+                start();
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+	equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    
+    ta.touchstart(target);
+    
+    target.scrollTop = 0;  //scrollTop不能设置赋值，只有通过给threshold传负值触发其加载
+    ta.touchmove(target);
+    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+   
+    ta.touchend(target);
+});
+
+test('both-上拉加载', function () {
+    createDom('both');
+    expect(8);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	lis = $wrapper.find('li'),
+    	count = 0,
+        refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+            	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+
+            	refresh.afterDataLoading();
+            	
+            	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+                
+                start();
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+    
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
+
+    //上拉
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    
+    ta.touchstart(target);
+   
+    target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
+});
+
+test('both-下拉加载', function () {
+    createDom('both');
+    expect(8);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	lis = $wrapper.find('li'),
+    	count = 0,
+        refresh = $wrapper.refresh({
+        	threshold: -5,
+            ready: function (dir, type) {
+        		equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+
+                refresh.afterDataLoading();
+                
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+                
+                start();
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    
+    ta.touchstart(target);
+    
+    target.scrollTop = 0;  //scrollTop不能设置赋值，只有通过给threshold传负值触发其加载
+    ta.touchmove(target);
+    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
 });
 
 test("参数options - statechange", function(){
-    createDom('both');
-    expect(12);
+    createDom('down');
+    expect(4);
     stop();
 
     var $wrapper = $('.wrapper'),
         lis = $wrapper.find('li'),
         count = 0,
         refresh = $wrapper.refresh({
+        	ready: function(){
+        		refresh.afterDataLoading();
+                refresh.disable();
+        	},
             statechange: function(e, $btn, state, dir){
                 count++;
                 switch(state){
@@ -111,194 +231,204 @@ test("参数options - statechange", function(){
                         break;
                     case 'disable':
                         ok(true, "refresh被禁用了！方向:"+dir);
+                        start();
                         break;
                     default:
                         break;
                 }
-                if(count>=12){
-                    start();
-                }
             }
         }).refresh('this'),
         target = $wrapper.get(0);
-    refresh.data('threshold',-5);
 
-    target.scrollTop = 0;
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
 
+    //上拉
+    ta.touchstart(target);
+    target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    ta.touchend(target);
+});
+
+test('参数threshold-不传, 上拉, 小于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(false);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+     var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
+
+    //上拉
+    ta.touchstart(target);
+    target.scrollTop = h + 4; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    ta.touchend(target);
+    
     setTimeout(function(){
-        var l = $(target).offset().left + 10;
-        var t = $(target).offset().top -10;
-        ta.touchstart(target, {
-            targetTouches:[{
-                clientX: l,
-                clientY: t
-            }]
-        });
-        ta.touchmove(target, {
-            targetTouches:[{
-                clientX: l,
-                clientY: t+200
-            }]
-        });
+    	ok(true);
+    	start();
+    }, 400);
+});
 
-        target.scrollTop = 50;
-        ta.touchmove(target, {
-            targetTouches:[{
-                clientX: l,
-                clientY: t-180
-            }]
-        });
+test('参数threshold-传10, 上拉, 小于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
 
-        ta.touchend(target);
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+    		threshold: 10,
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(false);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
 
-        target.scrollTop = 0;
-        ta.touchstart(target, {
-            targetTouches:[{
-                clientX: l,
-                clientY: t
-            }]
-        });
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t + 200
-            }]
-        });
-        ta.touchend(target);
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
 
-        setTimeout(function(){
-            refresh.afterDataLoading();
-            target.scrollTop = -refresh.data('maxScrollY');
-            ta.touchstart(target, {
-                targetTouches:[{
-                    clientX: l,
-                    clientY: t
-                }]
-            });
-            ta.touchmove(target, {
-                targetTouches:[{
-                    clientX: l,
-                    clientY: t -200
-                }]
-            });
+    //上拉
+    ta.touchstart(target);
+    target.scrollTop = h + 9; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    ta.touchend(target);
+    
+    setTimeout(function(){
+    	ok(true);
+    	start();
+    }, 400);
+});
 
-            target.scrollTop = -refresh.data('maxScrollY')-50;
-            ta.touchmove(target, {
-                targetTouches:[{
-                    clientX: l,
-                    clientY: t -150
-                }]
-            });
-            ta.touchend(target);
+test('参数threshold-传10, 上拉, 大于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
 
-            target.scrollTop = -refresh.data('maxScrollY');
-            ta.touchstart(target, {
-                targetTouches:[{
-                    clientX: l,
-                    clientY: t
-                }]
-            });
-            ta.touchmove(target, {
-                targetTouches:[{
-                    clientX: l,
-                    clientY: t-200
-                }]
-            });
-            ta.touchend(target);
-            setTimeout(function(){
-                refresh.afterDataLoading();
-                setTimeout(function(){
-                    refresh.disable();
-                }, 200);
-            }, 500);
-        }, 500);
-    }, 1000);
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+    		threshold: 10,
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(true);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
+
+    //上拉
+    ta.touchstart(target);
+    target.scrollTop = h + 11; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    ta.touchend(target);
+    
+    setTimeout(function(){
+    	start();
+    }, 400);
 });
 
 test("公共方法 － enable&disable", function(){
+    createDom('down');
+    expect(2);
+    stop();
+    
+    var $wrapper = $('.wrapper'),
+        count = 0,
+        refresh = $wrapper.refresh({
+            ready: function(){
+            	setTimeout(function(){
+            		refresh.afterDataLoading();
+            	}, 0);
+            	ok(true, "ready 被触发");      
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+    
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
+
+    //上拉
+    ta.touchstart(target);
+    target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    ta.touchend(target);
+   
+    setTimeout(function(){
+    	refresh.disable('down');
+        
+    	ta.touchstart(target);
+    	target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+        ta.touchmove(target);
+        ta.touchend(target);
+        
+    	setTimeout(function(){
+    		refresh.enable();
+
+    		ta.touchstart(target);
+    		target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    	    ta.touchmove(target);
+            ta.touchend(target);
+    	    
+    	    setTimeout(function(){
+    	    	start();
+    	    }, 10);
+    	}, 10);
+    },10);
+});
+
+test('显示 - topOffset', function () {
     createDom('both');
     expect(2);
     stop();
 
     var $wrapper = $('.wrapper'),
-        lis = $wrapper.find('li'),
+    	lis = $wrapper.find('li'),
+        refresh = $wrapper.refresh().refresh('this');
+    
+    setTimeout(function(){
+        equals($wrapper.height(), 150, "容器高度正确");
+        equals($wrapper.find(".ui-refresh-up").offset().top, $wrapper.offset().top - $wrapper.find(".ui-refresh-up").height(), "topOffset正确");
+        start();
+    }, 500);
+});
+
+test("交互 － 加载过程中不响应滑动动作", function(){
+    createDom('down');
+    expect(1);
+    stop();
+    
+    var $wrapper = $('.wrapper'),
         count = 0,
         refresh = $wrapper.refresh({
             ready: function(){
-                ok(true, '开始加载。。');
+            	ok(true, "ready 被触发");    
             }
         }).refresh('this'),
         target = $wrapper.get(0);
-
-    refresh.data('threshold',-5);
-
+    
+    var h = $wrapper[0].scrollHeight - $wrapper[0].offsetHeight;
+    
+    ta.touchstart(target);
+	target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+    ta.touchmove(target);
+    ta.touchend(target);
+    
     setTimeout(function(){
-        var l = $(target).offset().left+10;
-        var t = $(target).offset().top-10;
-        target.scrollTop = 0;
-        ta.touchstart(target, {
-            touches:[{
-                pageX: l,
-                pageY: t
-            }]
-        });
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t + 200
-            }]
-        });
-
-        ta.touchend(target);//第一次，默认非diabled，所以ready会触发。
-
-
-        setTimeout(function(){
-            refresh.afterDataLoading();
-            refresh.disable();
-
-            ta.touchstart(target, {
-                touches:[{
-                    pageX: l,
-                    pageY: t
-                }]
-            });
-            ta.touchmove(target, {
-                touches:[{
-                    pageX: l,
-                    pageY: t + 200
-                }]
-            });
-
-            ta.touchend(target);//第一次，默认非diabled，所以ready会触发。
-
-            setTimeout(function(){
-
-                refresh.enable();
-                target.scrollTop = 0;
-
-                ta.touchstart(target, {
-                    touches:[{
-                        pageX: l,
-                        pageY: t
-                    }]
-                });
-                ta.touchmove(target, {
-                    touches:[{
-                        pageX: l,
-                        pageY: t + 200
-                    }]
-                });
-
-                ta.touchend(target);
-
-                setTimeout(function(){
-                    start();
-                }, 1000);
-
-            }, 500);
-        }, 500);
-
-    }, 1000);
+    	ta.touchstart(target);
+		target.scrollTop = h + 6; //touchmove的坐标不起作用，以wrapper的scrollTop限制加载
+	    ta.touchmove(target);
+        ta.touchend(target);
+	    
+	    setTimeout(function(){
+	    	start();
+	    }, 10);
+    }, 10);
 });
 
 test('参数disablePlugin:true', function () {
