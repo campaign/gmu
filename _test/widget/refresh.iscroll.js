@@ -19,6 +19,7 @@ module("widget/refresh.iscroll",{
     },
     teardown: function () {
         $('.ui-refresh-wrapper').remove();
+        $('.wrapper').remove();
     }
 });
 
@@ -51,119 +52,236 @@ test("只为加载css用",function(){
     });
 });
 
-test('参数options:ready -up', function () {
-    createDom('up');
-    expect(1);
+test('down-上拉加载', function () {
+    createDom('down');
+    expect(8);
     stop();
 
     var $wrapper = $('.wrapper'),
-        lis = $wrapper.find('li'),
+    	lis = $wrapper.find('li'),
         refresh = $wrapper.refresh({
             ready: function (dir, type) {
-                ok(true, 'ready is triggered');
-                this.afterDataLoading();
-                setTimeout(function(){
-                	refresh.destroy();
-                    start();
-                }, 100);
+            	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+                
+                refresh.afterDataLoading();
+                
+                equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+
+                start();
             }
         }).refresh('this'),
-        target = lis.get(0);
+        target = $wrapper.get(0);
 
-    setTimeout(function(){
-        ta.touchstart(target, {
-            touches: [{
-                target:target,
-                pageX: 0,
-                pageY: 0
-            }]
-        });
-
-        ta.touchmove(target, {
-            touches: [{
-                target:target,
-                pageX: 0,
-                pageY: 200
-            }]
-        });
-
-        ta.touchend(target);
-        
-        //PC
-        ua.mousedown(target, {
-            clientX: 0,
-            clientY: 0
-        });
-
-        ua.mousemove(target, {
-        	clientX: 0,
-            clientY: 200
-        });
-
-        ua.mouseup(target);
-    }, 1000);
+	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    ta.touchstart(target, {
+    	touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: -200
+        }]
+    });
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: -200
+    });
+    
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
+    ua.mouseup(target);
 });
 
-test('参数options:ready - down', function () {
-    createDom('down');
-    expect(1);
+test('up-下拉加载', function () {
+    createDom('up');
+    expect(8);
     stop();
 
     var $wrapper = $('.wrapper'),
-        lis = $wrapper.find('li'),
+    	lis = $wrapper.find('li'),
         refresh = $wrapper.refresh({
-            topOffset: 0,
             ready: function (dir, type) {
-                ok(true, 'ready is triggered');
-                this.afterDataLoading();
-                setTimeout(function(){
-                	refresh.destroy();
-                    start();
-                }, 100);
+            	equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+                
+                refresh.afterDataLoading();
+                
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+
+                start();
             }
         }).refresh('this'),
-        target = lis.get(7);
+        target = $wrapper.get(0);
 
-    setTimeout(function(){
-        var l = $(target).offset().left;
-        var t = $(target).offset().top;
-        ta.touchstart(target, {
-            touches:[{
-                pageX: l,
-                pageY: t
-            }]
-        });
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t - 200
-            }]
-        });
-        ta.touchend(target);
-        //PC
-        ua.mousedown(target, {
-        	clientX: l,
-        	clientY: t
-        });
+	equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    ta.touchstart(target, {
+    	touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 200
+        }]
+    });
 
-        ua.mousemove(target, {
-        	clientX: l,
-        	clientY: t - 200
-        });
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: 200
+    });
+    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
+    ua.mouseup(target);
+});
 
-        ua.mouseup(target);
-    }, 1000);
+test('both-上拉加载', function () {
+    createDom('both');
+    expect(8);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	lis = $wrapper.find('li'),
+    	count = 0,
+        refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+            	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+
+            	refresh.afterDataLoading();
+            	
+            	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+                
+                start();
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    //上拉
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: -200
+        }]
+    });
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: -200
+    });
+    
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
+    ua.mouseup(target);
+});
+
+test('both-下拉加载', function () {
+    createDom('both');
+    expect(8);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	lis = $wrapper.find('li'),
+    	count = 0,
+        refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+        		equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
+
+                refresh.afterDataLoading();
+                
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+                equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+                
+                start();
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
+    
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 200
+        }]
+    });
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: 200
+    });
+    
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
+    equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
+    
+    ta.touchend(target);
+    ua.mouseup(target);
 });
 
 test("参数options - statechange", function(){
-    createDom('both');
-    expect(12);
+    createDom('down');
+    expect(4);
     stop();
 
     var $wrapper = $('.wrapper'),
         lis = $wrapper.find('li'),
         count = 0,
         refresh = $wrapper.refresh({
+        	ready: function(){
+        		refresh.afterDataLoading();
+                refresh.disable();
+        	},
             statechange: function(e, $btn, state, dir){
                 count++;
                 switch(state){
@@ -178,183 +296,445 @@ test("参数options - statechange", function(){
                         break;
                     case 'disable':
                         ok(true, "refresh被禁用了！方向:"+dir);
+                        start();
                         break;
                     default:
                         break;
                 }
-                if(count>=12){
-                	setTimeout(function(){
-                		refresh.destroy();
-                        start();
-                	}, 100);
-                }
             }
         }).refresh('this'),
-        target = lis.get(0);
+        target = $wrapper.get(0);
 
-    setTimeout(function(){
-        var l = $(target).offset().left;
-        var t = $(target).offset().top;
-        ta.touchstart(target, {
-            touches:[{
-                pageX: l,
-                pageY: t
-            }]
-        });
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t + 200
-            }]
-        });
+    var l = $(target).offset().left + 10;
+    var t = $(target).offset().bottom -10;
+    ta.touchstart(target, {
+        touches:[{
+            pageX: l,
+            pageY: t
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: l,
+            pageY: t - 200
+        }]
+    });
 
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t + 150
-            }]
-        });
-        ta.touchend(target);
-        //PC
-        ua.mousedown(target, {
-        	clientX: l,
-        	clientY: t
-        });
-
-        ua.mousemove(target, {
-        	clientX: l,
-        	clientY: t + 200
-        });
-        
-        ua.mousemove(target, {
-        	clientX: l,
-        	clientY: t + 150
-        });
-
-        ua.mouseup(target);
-        
-        ta.touchstart(target, {
-            touches:[{
-                pageX: l,
-                pageY: t
-            }]
-        });
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t + 200
-            }]
-        });
-        ta.touchend(target);
-        //PC
-        ua.mousedown(target, {
-        	clientX: l,
-        	clientY: t
-        });
-
-        ua.mousemove(target, {
-        	clientX: l,
-        	clientY: t + 200
-        });
-
-        ua.mouseup(target);
-
-       setTimeout(function(){
-           refresh.afterDataLoading();
-           ta.touchstart(target, {
-               touches:[{
-                   pageX: l,
-                   pageY: t
-               }]
-           });
-           ta.touchmove(target, {
-               touches:[{
-                   pageX: l,
-                   pageY: t - 200
-               }]
-           });
-
-           ta.touchmove(target, {
-               touches:[{
-                   pageX: l,
-                   pageY: t - 150
-               }]
-           });
-           ta.touchend(target);
-           //PC
-           ua.mousedown(target, {
-        	   clientX: l,
-        	   clientY: t
-           });
-
-           ua.mousemove(target, {
-        	   clientX: l,
-        	   clientY: t - 200
-           });
-           
-           ua.mousemove(target, {
-        	   clientX: l,
-               pageY: t - 150
-           });
-
-           ua.mouseup(target);
-
-           ta.touchstart(target, {
-               touches:[{
-                   pageX: l,
-                   pageY: t
-               }]
-           });
-           ta.touchmove(target, {
-               touches:[{
-                   pageX: l,
-                   pageY: t - 200
-               }]
-           });
-           ta.touchend(target);
-           
-           //PC
-           ua.mousedown(target, {
-        	   clientX: l,
-        	   clientY: t
-           });
-
-           ua.mousemove(target, {
-        	   clientX: l,
-               clientY: t - 200
-           });
-           
-           ua.mouseup(target);
-           
-           setTimeout(function(){
-               refresh.afterDataLoading();
-               setTimeout(function(){
-                   refresh.disable();
-               }, 200);
-           }, 500);
-       }, 500);
-    }, 1000);
-
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: l,
+        clientY: t
+    });
+    ua.mousemove(target, {
+        clientX: l,
+        clientY: t - 200
+    });
+    ua.mouseup(target);
 });
 
-test("公共方法 － enable&disable", function(){
+test('参数threshold-不传, 上拉, 大于默认阈值', function () {
     createDom('both');
-    expect(2);
+    expect(1);
     stop();
 
     var $wrapper = $('.wrapper'),
-        lis = $wrapper.find('li'),
+    	refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(true);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: (- h - 6) * 2
+        }]
+    });
+
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: (- h - 6) * 2 //大于默认阈值5px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	start();
+    }, 400);
+});
+
+test('参数threshold-不传, 上拉, 小于默认阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(false);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: (- h - 4) * 2
+        }]
+    });
+
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: (- h - 4) * 2 //小于默认阈值5px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	ok(true);
+    	start();
+    }, 400);
+});
+
+test('参数threshold-不传, 下拉, 大于默认阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(true);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 6 * 2
+        }]
+    });
+
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: 6 * 2  //大于默认阈值5px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	start();
+    }, 400);
+});
+
+test('参数threshold-不传, 下拉, 小于默认阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(false);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 4 * 2
+        }]
+    });
+
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: 4 * 2 //小于默认阈值5px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	ok(true);
+    	start();
+    }, 400);
+});
+
+test('参数threshold-传20, 上拉, 大于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+    		threshold: 20,
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(true);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: (- h - 21) * 2
+        }]
+    });
+
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: (- h - 21) * 2 //大于默认阈值20px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	start();
+    }, 400);
+});
+
+test('参数threshold-传20, 上拉, 小于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+    		threshold: 20,
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(false);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ta.touchstart(target, {
+        touches:[{
+            pageX: 0,
+            pageY: 0
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: 0,
+            pageY: (- h - 19) * 2
+        }]
+    });
+
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: (- h - 19) * 2 //小于默认阈值20px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	ok(true);
+    	start();
+    }, 400);
+});
+
+test('参数threshold-传20, 下拉, 大于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+    		threshold: 20,
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(true);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: 21 * 2  //大于默认阈值20px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	start();
+    }, 400);
+});
+
+test('参数threshold-传20, 下拉, 小于阈值', function () {
+    createDom('both');
+    expect(1);
+    stop();
+
+    var $wrapper = $('.wrapper'),
+    	refresh = $wrapper.refresh({
+    		threshold: 20,
+            ready: function (dir, type) {
+        		refresh.afterDataLoading();
+                ok(false);
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+
+    var h = $wrapper.height() - $wrapper.parent().height();
+
+    //上拉
+    ua.mousedown(target, {
+        clientX: 0,
+        clientY: 0
+    });
+    ua.mousemove(target, {
+        clientX: 0,
+        clientY: 19 * 2 //小于默认阈值20px
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	ok(true);
+    	start();
+    }, 400);
+});
+
+test("公共方法 － enable&disable", function(){
+    createDom('down');
+    expect(2);
+    stop();
+    
+    var $wrapper = $('.wrapper'),
         count = 0,
         refresh = $wrapper.refresh({
             ready: function(){
-                ok(true, '开始加载。。');
+            	setTimeout(function(){
+            		refresh.afterDataLoading();
+            	}, 0);
+            	ok(true, "ready 被触发");      
             }
         }).refresh('this'),
-        target = lis.get(0);
-
+        target = $wrapper.get(0);
+    
+    var l = $(target).offset().left+10;
+    var t = $(target).offset().bottom-10;
+    target.scrollTop = 0;
+    ta.touchstart(target, {
+        touches:[{
+            pageX: l,
+            pageY: t
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: l,
+            pageY: t -200
+        }]
+    });
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: l,
+        clientY: t
+    });
+    ua.mousemove(target, {
+        clientX: l,
+        clientY: t - 200
+    });
+    ua.mouseup(target);
+   
     setTimeout(function(){
-        var l = $(target).offset().left;
-        var t = $(target).offset().top;
+    	refresh.disable('down');
+        
         ta.touchstart(target, {
             touches:[{
                 pageX: l,
@@ -364,96 +744,142 @@ test("公共方法 － enable&disable", function(){
         ta.touchmove(target, {
             touches:[{
                 pageX: l,
-                pageY: t + 200
+                pageY: t -200
             }]
         });
-
-        ta.touchend(target);//第一次，默认非diabled，所以ready会触发。
-        //PC
-        ua.mousedown(target, {
-     	   clientX: l,
-     	   clientY: t
-        });
-
-        ua.mousemove(target, {
-     	   clientX: l,
-            clientY: t + 200
-        });
+        ta.touchend(target);
         
+        ua.mousedown(target, {
+            clientX: l,
+            clientY: t
+        });
+        ua.mousemove(target, {
+            clientX: l,
+            clientY: t - 200
+        });
         ua.mouseup(target);
+        
+    	setTimeout(function(){
+    		refresh.enable();
 
+    	    ta.touchstart(target, {
+    	        touches:[{
+    	            pageX: l,
+    	            pageY: t
+    	        }]
+    	    });
+    	    ta.touchmove(target, {
+    	        touches:[{
+    	            pageX: l,
+    	            pageY: t -200
+    	        }]
+    	    });
+    	    ta.touchend(target);
+    	    
+    	    ua.mousedown(target, {
+    	        clientX: l,
+    	        clientY: t
+    	    });
+    	    ua.mousemove(target, {
+    	        clientX: l,
+    	        clientY: t - 200
+    	    });
+    	    ua.mouseup(target);
+    	    
+    	    setTimeout(function(){
+    	    	start();
+    	    }, 10);
+    	}, 10);
+    },10);
+});
 
-        setTimeout(function(){
-            refresh.afterDataLoading();
-            refresh.disable();
+test('显示 - topOffset', function () {
+    createDom('both');
+    expect(3);
+    stop();
 
-            ta.touchstart(target, {
-                touches:[{
-                    pageX: l,
-                    pageY: t
-                }]
-            });
-            ta.touchmove(target, {
-                touches:[{
-                    pageX: l,
-                    pageY: t + 200
-                }]
-            });
+    var $wrapper = $('.wrapper'),
+    	lis = $wrapper.find('li'),
+        refresh = $wrapper.refresh().refresh('this');
+    
+    setTimeout(function(){
+    	equals($wrapper.height(), 298, "iscroll高度正确");
+        equals($wrapper.parent().height(), 150, "容器高度正确");
+        equals($wrapper.find(".ui-refresh-up").offset().top, $wrapper.parent().offset().top - $wrapper.find(".ui-refresh-up").height(), "topOffset正确");
+        start();
+    }, 500);
+});
 
-            ta.touchend(target);//第一次，默认非diabled，所以ready会触发。
-            //PC
-            ua.mousedown(target, {
-         	   clientX: l,
-         	   clientY: t
-            });
+test("交互 － 加载过程中不响应滑动动作", function(){
+    createDom('down');
+    expect(1);
+    stop();
+    
+    var $wrapper = $('.wrapper'),
+        count = 0,
+        refresh = $wrapper.refresh({
+            ready: function(){
+            	ok(true, "ready 被触发");    
+            }
+        }).refresh('this'),
+        target = $wrapper.get(0);
+    
+    var l = $(target).offset().left+10;
+    var t = $(target).offset().bottom-10;
 
-            ua.mousemove(target, {
-         	   clientX: l,
-                clientY: t + 200
-            });
-            
-            ua.mouseup(target);
-
-            setTimeout(function(){
-
-                refresh.enable();
-
-                ta.touchstart(target, {
-                    touches:[{
-                        pageX: l,
-                        pageY: t
-                    }]
-                });
-                ta.touchmove(target, {
-                    touches:[{
-                        pageX: l,
-                        pageY: t + 200
-                    }]
-                });
-
-                ta.touchend(target);
-                //PC
-                ua.mousedown(target, {
-             	   clientX: l,
-             	   clientY: t
-                });
-
-                ua.mousemove(target, {
-             	   clientX: l,
-                    clientY: t + 200
-                });
-                
-                ua.mouseup(target);
-
-                setTimeout(function(){
-                	refresh.destroy();
-                    start();
-                }, 1000);
-
-            }, 500);
-        }, 500);
-
-    }, 1000);
+    ta.touchstart(target, {
+        touches:[{
+            pageX: l,
+            pageY: t
+        }]
+    });
+    ta.touchmove(target, {
+        touches:[{
+            pageX: l,
+            pageY: t -200
+        }]
+    });
+    ta.touchend(target);
+    
+    ua.mousedown(target, {
+        clientX: l,
+        clientY: t
+    });
+    ua.mousemove(target, {
+        clientX: l,
+        clientY: t - 200
+    });
+    ua.mouseup(target);
+    
+    setTimeout(function(){
+    	ta.touchstart(target, {
+	        touches:[{
+	            pageX: l,
+	            pageY: t
+	        }]
+	    });
+	    ta.touchmove(target, {
+	        touches:[{
+	            pageX: l,
+	            pageY: t -200
+	        }]
+	    });
+	    ta.touchend(target);
+	    
+	    ua.mousedown(target, {
+	        clientX: l,
+	        clientY: t
+	    });
+	    ua.mousemove(target, {
+	        clientX: l,
+	        clientY: t - 200
+	    });
+	    ua.mouseup(target);
+	    
+	    setTimeout(function(){
+	    	start();
+	    }, 10);
+    }, 10);
 });
 
 test('disablePlugin', function () {
@@ -462,19 +888,17 @@ test('disablePlugin', function () {
     stop();
 
     var $wrapper = $('.wrapper'),
-        lis = $wrapper.find('li'),
         refresh = $wrapper.refresh({
         	disablePlugin: true,
             ready: function (dir, type) {
                 ok(true, 'ready is triggered');
             }
         }).refresh('this'),
-        target = lis.get(0);
+        target = $wrapper.get(0)
 
     setTimeout(function(){
         ta.touchstart(target, {
             touches: [{
-                target:target,
                 pageX: 0,
                 pageY: 0
             }]
@@ -482,7 +906,6 @@ test('disablePlugin', function () {
 
         ta.touchmove(target, {
             touches: [{
-                target:target,
                 pageX: 0,
                 pageY: 200
             }]
@@ -534,3 +957,5 @@ test("destroy", function(){
         this.finish();
     });
 });
+
+//lili data._actDir怎么得来的 up时，在ios上失效
