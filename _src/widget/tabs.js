@@ -135,7 +135,7 @@
             var match, data = this._data;
             switch(e.type) {
                 case 'ortchange':
-                    this._fitToContent(this._getPanel());
+                    this.refresh();
                     break;
                 default:
                     if((match = $(e.target).closest('li', data._nav.get(0))) && match.length) {
