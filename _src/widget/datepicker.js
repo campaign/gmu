@@ -1,5 +1,6 @@
 /**
  * @file 日历组件
+ * @ignore
  * @name Datepicker
  * @desc 日历组件, 可以用来作为日期选择器。
  * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.highlight.js
