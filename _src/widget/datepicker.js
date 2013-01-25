@@ -8,11 +8,6 @@
     var monthNames = ["01月", "02月", "03月", "04月", "05月", "06月",
             "07月", "08月", "09月", "10月", "11月", "12月"],
         dayNames = ["日", "一", "二", "三", "四", "五", "六"],
-        tpl = '<div class="ui-datepicker-header">' +
-            '<a class="ui-datepicker-prev" href="#"><%=prevText%></a>' +
-            '<div class="ui-datepicker-title"><%=year%>年<%=month%></div>' +
-            '<a class="ui-datepicker-next" href="#"><%=nextText%></a>' +
-            '</div>',
         offsetRE = /^(\+|\-)?(\d+)(M|Y)$/i,
         //获取月份的天数
         _getDaysInMonth = function (year, month) {
@@ -45,7 +40,7 @@
     function slideUpFrame(div, okcb, nocb){
         this.id = slideUpFrame.id = (slideUpFrame.id || 0) + 1;
         this.div = div;
-        this.divHolder = div.parent();
+        this.holder = $('<span class="ui-holder"></span>');
         this.okcb = okcb;
         this.nocb = nocb;
         this._init();
@@ -53,19 +48,21 @@
     $.extend(slideUpFrame.prototype, {
         _init : function(){
             var header;
-            this.root = $('<div class="ui-slideup"><div class="header"></div><div class="frame"></div></div>');
-            this.frame = $('.frame', this.root).append(this.div);
+            this.root = $('<div class="ui-slidup-wrap"><div class="ui-slideup"><div class="header"></div><div class="frame"></div></div></div>');
+            this.frame = $('.frame', this.sDiv = $('.ui-slideup', this.root) ).append(this.div.replaceWith(this.holder));
             header = $('.header', this.root);
-            this.okcb && header.append('<a class="ok-btn" href="javascript:void(0)">Done</a>');
-            this.nocb && header.append('<a class="no-btn" href="javascript:void(0)">Cancel</a>');
+            this.okcb && header.append('<a class="ok-btn" href="javascript:void(0)">确认</a>');
+            this.nocb && header.append('<a class="no-btn" href="javascript:void(0)">取消</a>');
             this.open();
         },
         refresh: function(cb){
             var me = this;
             this.root.css({
-                top: (window.innerHeight + window.pageYOffset) + 'px'
-            }).appendTo(document.body).animate({
-                translateY: '-'+this.root.height()+'px',
+                top: ( window.pageYOffset) + 'px',
+                height: window.innerHeight+'px'
+            });
+            this.sDiv.animate({
+                translateY: '-'+this.sDiv.height()+'px',
                 translateZ: '0'
             }, 400, 'ease-out', function(){
                 cb && cb.apply(me, [this]);
@@ -73,15 +70,13 @@
         },
         open: function(){
             var me = this, count = slideUpFrame.openCount = ( slideUpFrame.openCount || 0) +1;
-            if(count==1){
-                $(document).on('touchmove.slideup', function(e){e.preventDefault()});
-            }
-            this.refresh(function(){
-                me.root.on('click.slideup'+me.id, '.ok-btn, .no-btn', function(){
-                    var ok = $(this).is('.ok-btn');
-                    me[(ok?'ok':'no')+'cb'].apply(me)!==false && me.close();
-                }).find('.ok-btn, .no-btn').highlight('ui-state-hover');
-            });
+            count==1 && $(document).on('touchmove.slideup', function(e){e.preventDefault()});
+            me.root.on('click.slideup'+me.id, '.ok-btn, .no-btn', function(){
+                me[($(this).is('.ok-btn')?'ok':'no')+'cb'].apply(me)!==false && me.close();
+            }).appendTo(document.body)
+                .find('.ok-btn, .no-btn')
+                .highlight('ui-state-hover');
+            me.refresh();
         },
         close: function(cb){
             var me =this, count = slideUpFrame.openCount = slideUpFrame.openCount - 1;
@@ -90,11 +85,9 @@
                 translateZ: '0'
             }, 200, 'ease-out', function(){
                 cb && cb();
-                me.divHolder.append(me.div);
+                me.holder.replaceWith(me.div);
                 me.root.remove();
-                if(count==0){
-                    $(document).off('touchmove.slideup');
-                }
+                count==0 && $(document).off('touchmove.slideup');
             }).find('.ok-btn, .no-btn').highlight();
         }
     });
@@ -136,7 +129,7 @@
                 .refresh();
             data._container.addClass('ui-datepicker').on('click', eventHandler).highlight();
             if (!data._inline) {
-                el.on('click', eventHandler);
+                el.on('click', eventHandler).attr('readonly', true);
                 data._container.hide().on('swipeLeft swipeRight', eventHandler);
                 $(window).on('ortchange', eventHandler);
             }else data._isShow = true;
@@ -194,12 +187,11 @@
             firstDay = parseInt(data.firstDay, 10);
             firstDay = (isNaN(firstDay) ? 0 : firstDay);
 
-            html += $.parseTpl(tpl, {
-                prevText:'&lt;&lt;',
-                nextText:'&gt;&gt;',
-                year:data._drawYear,
-                month:monthNames[data._drawMonth]
-            });
+            html += '<div class="ui-datepicker-header">' +
+                '<a class="ui-datepicker-prev" href="#">&lt;&lt;</a>' +
+                '<div class="ui-datepicker-title">'+data._drawYear+'年'+monthNames[data._drawMonth]+'</div>' +
+                '<a class="ui-datepicker-next" href="#">&gt;&gt;</a>' +
+                '</div>';
 
             thead = '<thead><tr>';
             for (i = 0; i < 7; i++) {
