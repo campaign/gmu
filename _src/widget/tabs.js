@@ -149,6 +149,7 @@
             var data = this._data, $content = data._content;
             data._plus === undefined && (data._plus = parseFloat($content.css('border-top-width'))+parseFloat($content.css('border-bottom-width')))
             $content.height( div.height() + data._plus);
+            return this;
         },
 
         /**
@@ -205,8 +206,7 @@
          * @return instance
          */
         refresh: function(){
-            this._fitToContent(this._getPanel())
-            return this;
+            return this._fitToContent(this._getPanel());
         },
 
         /**
