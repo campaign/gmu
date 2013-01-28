@@ -221,7 +221,7 @@
             } else top = this.__caculate(data.pos, position, boxWidth, boxHeight);
 
             if(align == 'auto'){
-                winStart = window.pageXOffset;
+                winStart = 0;//window.pageXOffset;
                 winLength = window.innerWidth;
                 left = this.__caculate(align = 'center', position, boxWidth, boxHeight);
                 if(!this._isInRange(left, boxWidth, winStart, winLength)){
