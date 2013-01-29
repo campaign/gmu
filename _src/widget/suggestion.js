@@ -338,7 +338,7 @@
                 renderEvent ? renderEvent.apply(me) : me._bindSuggestionListEvent();
                 me._bindCloseEvent()._show();
                 if (me.data('useIscroll')) {
-                    data.s.length >= 2 ? $content.css('height', me.data('height') || 66) : $content.css('height', 33);
+                    data.s.length >= 2 ? $content.css('height', me.data('height') || 66) : $content.css('height', 38);
                     var iscroll = (me.data('iScroll') || me.data('iScroll', new iScroll($content.get(0), {
                         topOffset: 0,
                         hScroll: false,
