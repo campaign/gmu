@@ -307,11 +307,12 @@
         },
 
         /**
+         * @ignore
          * @name option
          * @grammar option(key[, value]) ⇒ instance
          * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
-        option:function (key, val) {
+        _option:function (key, val) {
             var data = this._data, date;
             if (val !== undefined) {
                 switch (key) {
@@ -327,7 +328,7 @@
                         data._inited && this.trigger('select', [this.selectedDate(), this]);
                         break;
                     case 'date':
-                        this.option('selectedDate', val);
+                        this._option('selectedDate', val);
                         this._commit();
                         break;
                     case 'gap':
@@ -346,7 +347,7 @@
          * @desc 设置或获取maxDate，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         maxDate:function (val) {
-            return this.option('maxDate', val);
+            return this._option('maxDate', val);
         },
 
         /**
@@ -355,7 +356,7 @@
          * @desc 设置或获取minDate，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         minDate:function (val) {
-            return this.option('minDate', val);
+            return this._option('minDate', val);
         },
 
         /**
@@ -364,7 +365,7 @@
          * @desc 设置或获取当前date，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         date:function (val) {
-            return this.option('date', val);
+            return this._option('date', val);
         },
 
         /**
@@ -373,7 +374,7 @@
          * @desc 设置或获取当前选中的日期，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         selectedDate:function (val) {
-            return this.option('selectedDate', val);
+            return this._option('selectedDate', val);
         },
 
         /**
