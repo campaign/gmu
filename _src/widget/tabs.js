@@ -135,7 +135,7 @@
             var match, data = this._data;
             switch(e.type) {
                 case 'ortchange':
-                    this._fitToContent(this._getPanel());
+                    this.refresh();
                     break;
                 default:
                     if((match = $(e.target).closest('li', data._nav.get(0))) && match.length) {
@@ -149,6 +149,7 @@
             var data = this._data, $content = data._content;
             data._plus === undefined && (data._plus = parseFloat($content.css('border-top-width'))+parseFloat($content.css('border-bottom-width')))
             $content.height( div.height() + data._plus);
+            return this;
         },
 
         /**
@@ -196,6 +197,16 @@
                 data.transition ||  me._fitToContent(to.div);
             }
             return me;
+        },
+
+        /**
+         * @name refresh
+         * @grammar refresh() => instance
+         * @desc 当外部修改tabs内容好，需要调用refresh让tabs自动更新高度。
+         * @return instance
+         */
+        refresh: function(){
+            return this._fitToContent(this._getPanel());
         },
 
         /**

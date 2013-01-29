@@ -45,7 +45,7 @@ function createChart(){
 
 test("create方式创建 & 参数默认",function(){
     stop();
-    expect(36);
+    expect(37);
     ua.loadcss(["chart/barChart.css"], function(){
         var barChart;
         barChart = $.ui.BarChart("#barchart", {"width":840, "height":170});
@@ -76,7 +76,7 @@ test("create方式创建 & 参数默认",function(){
                 } ]);
                 
         $.later(function(){
-            //测试lineChart显示
+            //测试barChart显示
             ok(ua.isShown(barChart._el[0]), "The barChart shows");
             equals(barChart._el.attr("id"), "barchart", "The el is right");
             
@@ -100,6 +100,7 @@ test("create方式创建 & 参数默认",function(){
             equals(barChart.data("gridYStep"), 1);
             equals(barChart.data("showLastSplitLineX"), true);
             equals(barChart.data("showLastSplitLineY"), true);
+            equals(barChart.data("barWidth"), 12);
             
             // 测试标注个数
             equals($(".category-label", barChart._el).length,12, "gridXStep");
@@ -139,7 +140,7 @@ test("create方式创建 & 参数默认",function(){
 
 test("setup方式创建",function(){
     stop();
-    expect(36);
+    expect(37);
     
     // 搭建骨架
     $("#barchart").append('<div class="tips-container"></div>');
@@ -195,6 +196,7 @@ test("setup方式创建",function(){
         equals(barChart.data("gridYStep"), 1);
         equals(barChart.data("showLastSplitLineX"), true);
         equals(barChart.data("showLastSplitLineY"), true);
+        equals(barChart.data("barWidth"), 12);
         
         // 测试标注个数
         equals($(".category-label", barChart._el).length,12, "gridXStep");
@@ -270,7 +272,7 @@ test("初始化大小：百分比",function(){
 test("初始化其他参数设置,还需要人力看是否正常",function(){
     stop();
 
-    expect(20);
+    expect(21);
     var barChart;
     //默认值
     barChart = $.ui.BarChart("#barchart", {"width":600, "height":200, 
@@ -284,7 +286,8 @@ test("初始化其他参数设置,还需要人力看是否正常",function(){
                                                 chartOffsetX:70,
                                                 chartOffsetY:15,
                                                 showLastSplitLineX:false,
-                                                showLastSplitLineY:false});
+                                                showLastSplitLineY:false,
+                                                barWidth:10});
 
     barChart.setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
     barChart.setValueGrid([0, 20, 40, 60, 80, 100]);
@@ -329,6 +332,7 @@ test("初始化其他参数设置,还需要人力看是否正常",function(){
         equals(barChart.data("chartOffsetY"), 15);
         equals(barChart.data("showLastSplitLineX"), false);
         equals(barChart.data("showLastSplitLineY"), false);
+        equals(barChart.data("barWidth"), 10);
 
         //实际数值
         equals(barChart.canvas.css("backgroundColor"),"rgb(204, 204, 204)","backgroundColor背景色");
