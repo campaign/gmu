@@ -46,12 +46,12 @@
             cHeight = $container.height(),
             detect = {
                 init:function (top, height) {    //初始条件
-                    return cTop >= top - opts.threshold - cHeight && cTop <= top + height + cHeight;
+                    return cTop >= top - opts.threshold - cHeight && cTop <= top + height;
                 },
                 'default':function (top, height) {      //每次滚动时发生变化，滚动条件
                     var cTop = $container.scrollTop(),
                         cHeight = $container.height();
-                    return cTop >= top - opts.threshold - cHeight && cTop <= top + height + cHeight;
+                    return cTop >= top - opts.threshold - cHeight && cTop <= top + height;
                 }
             };
 
