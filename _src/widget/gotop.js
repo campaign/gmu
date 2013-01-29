@@ -29,6 +29,7 @@
         _data: {
             container:          '',
             useFix:             true,
+            useHide:            true,
             useAnimation:       false,
             position:           {bottom: 10, right: 10},
         	afterScroll:        null,
@@ -52,7 +53,8 @@
             var me = this,
                 root = me.root(),
                 _eventHandler = $.proxy(me._eventHandler, me);
-            $(document).on('touchmove touchend touchcancel scrollStop', _eventHandler);
+            me.data('useHide') && $(document).on('touchmove', _eventHandler);
+            $(document).on('touchend touchcancel scrollStop', _eventHandler);
             $(window).on('scroll ortchange', _eventHandler);
             root.on('click', _eventHandler);
             me.on('destroy', function() {
