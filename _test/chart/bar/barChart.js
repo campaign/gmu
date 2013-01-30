@@ -1,6 +1,6 @@
 module("bar/BarChart", {
     setup: function(){
-        $("body").append('<div id="barchart" style="width:840px; height:170px;"></div>');
+        $("body").append('<div id="barchart" style="width:900px; height:210px;"></div>');
         console.log("setup");
     },
     teardown: function(){
@@ -13,7 +13,7 @@ module("bar/BarChart", {
 
 function createChart(){
     var barChart;
-    barChart = $.ui.BarChart("#barchart", {"width":840, "height":170});
+    barChart = $.ui.BarChart("#barchart");
     barChart.setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
     barChart.setValueGrid([0, 4, 8, 12, 16, 20]);
     
@@ -45,10 +45,10 @@ function createChart(){
 
 test("create方式创建 & 参数默认",function(){
     stop();
-    expect(37);
+    expect(41);
     ua.loadcss(["chart/barChart.css"], function(){
         var barChart;
-        barChart = $.ui.BarChart("#barchart", {"width":840, "height":170});
+        barChart = $.ui.BarChart("#barchart");
         barChart.setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
         barChart.setValueGrid([0, 4, 8, 12, 16, 20]);
         barChart.setData([
@@ -82,13 +82,13 @@ test("create方式创建 & 参数默认",function(){
             
             // 测试默认属性
             equals(barChart.canvas[0].offsetWidth, 840);
-            equals(barChart.canvas[0].offsetHeight, 170);
+            equals(barChart.canvas[0].offsetHeight, 160);
             equals(barChart.canvas[0].offsetLeft, 60);
             equals(barChart.canvas[0].offsetTop, $(".tips-container").height() + 5);
             equals(barChart.canvas.css("backgroundColor"), "rgba(0, 0, 0, 0)");
             
             equals(barChart.data("width"), 840);
-            equals(barChart.data("height"), 170);
+            equals(barChart.data("height"), 160);
             equals(barChart.data("chartOffsetX"), 60);
             equals(barChart.data("chartOffsetY"), 5);
             equals(barChart.data("backgroundColor"), "rgba(0, 0, 0, 0)");
@@ -132,6 +132,10 @@ test("create方式创建 & 参数默认",function(){
             equals($(".tip-color", barChart._el)[0].textContent, "数据1:");
             equals($(".tip-color", barChart._el)[1].style["backgroundColor"], "rgb(51, 102, 204)");//3366cc
             equals($(".tip-color", barChart._el)[1].textContent, "数据2:");
+            equals($(".tip-color", barChart._el)[2].style["backgroundColor"], "rgb(255, 68, 17)");//ff4411
+            equals($(".tip-color", barChart._el)[2].textContent, "数据3:");
+            equals($(".tip-color", barChart._el)[3].style["backgroundColor"], "rgb(102, 51, 187)");//6633bb
+            equals($(".tip-color", barChart._el)[3].textContent, "数据4:");
             
             start();
         }, 100);
@@ -140,13 +144,13 @@ test("create方式创建 & 参数默认",function(){
 
 test("setup方式创建",function(){
     stop();
-    expect(37);
+    expect(41);
     
     // 搭建骨架
     $("#barchart").append('<div class="tips-container"></div>');
     $("#barchart").append('<canvas class="chart-canvas"></canvas>');
     
-    var barChart = $("#barchart").BarChart({width:840, height:170}).BarChart("setCategoryGrid", ["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]).BarChart("setValueGrid",[0, 4, 8, 12, 16, 20]).BarChart("setData", [
+    var barChart = $("#barchart").BarChart().BarChart("setCategoryGrid", ["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]).BarChart("setValueGrid",[0, 4, 8, 12, 16, 20]).BarChart("setData", [
         [
             {
                 "name":"数据1",
@@ -170,7 +174,7 @@ test("setup方式创建",function(){
             "data":[9, 11, 8, 9, 12, 10, 11, 11, 8, 4, 10, 6]
         }
     ]).BarChart(this).BarChart("this");
-    
+
     $.later(function(){
         //测试lineChart显示
         ok(ua.isShown(barChart._el[0]), "The barChart shows");
@@ -178,13 +182,13 @@ test("setup方式创建",function(){
         
         // 测试默认属性
         equals(barChart.canvas[0].offsetWidth, 840);
-        equals(barChart.canvas[0].offsetHeight, 170);
+        equals(barChart.canvas[0].offsetHeight, 160);
         equals(barChart.canvas[0].offsetLeft, 60);
         equals(barChart.canvas[0].offsetTop, $(".tips-container").height() + 5);
         equals(barChart.canvas.css("backgroundColor"), "rgba(0, 0, 0, 0)");
         
         equals(barChart.data("width"), 840);
-        equals(barChart.data("height"), 170);
+        equals(barChart.data("height"), 160);
         equals(barChart.data("chartOffsetX"), 60);
         equals(barChart.data("chartOffsetY"), 5);
         equals(barChart.data("backgroundColor"), "rgba(0, 0, 0, 0)");
@@ -228,33 +232,13 @@ test("setup方式创建",function(){
         equals($(".tip-color", barChart._el)[0].textContent, "数据1:");
         equals($(".tip-color", barChart._el)[1].style["backgroundColor"], "rgb(51, 102, 204)");//3366cc
         equals($(".tip-color", barChart._el)[1].textContent, "数据2:");
+        equals($(".tip-color", barChart._el)[2].style["backgroundColor"], "rgb(255, 68, 17)");//ff4411
+        equals($(".tip-color", barChart._el)[2].textContent, "数据3:");
+        equals($(".tip-color", barChart._el)[3].style["backgroundColor"], "rgb(102, 51, 187)");//6633bb
+        equals($(".tip-color", barChart._el)[3].textContent, "数据4:");
             
         start();
     }, 100);
-});
-
-test("初始化大小：数值",function(){
-    stop();
-    var barChart;
-    //默认值
-    barChart = $.ui.BarChart("#barchart", {"width":600, "height":200});
-    $.later(function(){
-        equals(barChart.canvas[0].offsetWidth, 600,"直接设置宽度数值");
-        equals(barChart.canvas[0].offsetHeight, 200,"直接设置宽度数值");
-        start();
-    },50);
-});
-
-test("初始化大小：默认值",function(){
-    stop();
-    var barChart;
-    //默认值
-    barChart = $.ui.BarChart("#barchart", {});
-    $.later(function(){
-        equals(barChart.canvas[0].width,  840,"不设置的话，宽度默认320");
-        equals(barChart.canvas[0].height, 160,"不设置的话，160");
-        start();
-    },50);
 });
 
 test("初始化大小：百分比",function(){
@@ -263,8 +247,8 @@ test("初始化大小：百分比",function(){
     var barChart;
     barChart = $.ui.BarChart("#barchart", {"width":"50%", "height":"50%"});
     $.later(function(){
-        approximateEqual(barChart.canvas.width(), 840/2,1,"百分比是父容器宽度的百分比");
-        approximateEqual(barChart.canvas.height(), 170/2, 1,"百分比是父容器高度的百分比");
+        approximateEqual(barChart.canvas.width(), 900/2,1,"百分比是父容器宽度的百分比");
+        approximateEqual(barChart.canvas.height(), 210/2, 1,"百分比是父容器高度的百分比");
         start();
     },50);
 });
@@ -328,13 +312,13 @@ test("初始化其他参数设置,还需要人力看是否正常",function(){
         equals(barChart.data("gridLineWidth"), 2);
         equals(barChart.data("gridXStep"), 2);
         equals(barChart.data("gridYStep"), 2);
-        equals(barChart.data("chartOffsetX"), 70);
-        equals(barChart.data("chartOffsetY"), 15);
         equals(barChart.data("showLastSplitLineX"), false);
         equals(barChart.data("showLastSplitLineY"), false);
         equals(barChart.data("barWidth"), 10);
 
         //实际数值
+        equals(barChart.canvas[0].offsetWidth, 600);
+        equals(barChart.canvas[0].offsetHeight, 200);
         equals(barChart.canvas.css("backgroundColor"),"rgb(204, 204, 204)","backgroundColor背景色");
         equals(barChart.canvas[0].offsetLeft,70,"chartOffsetX");
         approximateEqual(barChart.canvas[0].offsetTop,15+$("#barchart .tips-container")[0].offsetHeight,1,"chartOffsetY");
@@ -348,7 +332,7 @@ test("初始化其他参数设置,还需要人力看是否正常",function(){
 
 test("点击交互&数据选中事件", function(){
     stop();
-    expect(5);
+    expect(7);
     var barChart = createChart();
 
     var container, canvas;
@@ -360,6 +344,8 @@ test("点击交互&数据选中事件", function(){
         equals(event.data[0].name, "数据4");
         // 测试tip显示值
         equals($(".tips-container>.tip-group>.tip-content", barChart._el)[0].textContent, "");
+        equals($(".tips-container>.tip-group>.tip-content", barChart._el)[1].textContent, "");
+        equals($(".tips-container>.tip-group>.tip-content", barChart._el)[2].textContent, "");
         equals($(".tips-container>.tip-group>.tip-content", barChart._el)[3].textContent, "11");
 
         $.later(function(){
@@ -407,26 +393,29 @@ test("测试setCategoryGrid&setValueGrid接口", function(){
     var barChart = createChart();
     
     $.later(function(){
-        equals(barChart.categorys.length, 12);
-        equals(barChart.categorys[0], "09pm");
-        equals(barChart.categorys[1], "10pm");
-        equals(barChart.categorys[2], "11pm");
-        equals(barChart.categorys[3], "12pm");
-        equals(barChart.categorys[4], "01am");
-        equals(barChart.categorys[5], "02am");
-        equals(barChart.categorys[6], "03am");
-        equals(barChart.categorys[7], "04am");
-        equals(barChart.categorys[8], "05am");
-        equals(barChart.categorys[9], "06am");
-        equals(barChart.categorys[10], "07am");
-        equals(barChart.categorys[11], "08am");
-        equals(barChart.values.length, 6);
-        equals(barChart.values[0], 0);
-        equals(barChart.values[1], 4);
-        equals(barChart.values[2], 8);
-        equals(barChart.values[3], 12);
-        equals(barChart.values[4], 16);
-        equals(barChart.values[5], 20);
+    	var categorys = $(".category-label", barChart._el),
+    	values = $(".value-label", barChart._el);
+    	
+        equals(categorys.length, 12);
+        equals(categorys[0].textContent, "09pm");
+        equals(categorys[1].textContent, "10pm");
+        equals(categorys[2].textContent, "11pm");
+        equals(categorys[3].textContent, "12pm");
+        equals(categorys[4].textContent, "01am");
+        equals(categorys[5].textContent, "02am");
+        equals(categorys[6].textContent, "03am");
+        equals(categorys[7].textContent, "04am");
+        equals(categorys[8].textContent, "05am");
+        equals(categorys[9].textContent, "06am");
+        equals(categorys[10].textContent, "07am");
+        equals(categorys[11].textContent, "08am");
+        equals(values.length, 6);
+        equals(values[0].textContent, 0);
+        equals(values[1].textContent, 4);
+        equals(values[2].textContent, 8);
+        equals(values[3].textContent, 12);
+        equals(values[4].textContent, 16);
+        equals(values[5].textContent, 20);
         start();
     }, 50);
 });
@@ -454,9 +443,6 @@ test("测试setData接口", function(){
     stop();
     expect(18);
     
-    // lineChart.setData([{type:"diamond", name:"graph1", data:[100,10,20,30,20,50,60,40,50,40,50,40], color:"#0000ff"},
-                // {type:"circle", name:"graph2", data:[30,70,100,50,60,10,20,50,80,30,10,80], color:"#ff0000"}]);
-
     var barChart;
     barChart = $.ui.BarChart("#barchart", {"width":688, "height":178});
     barChart.setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
@@ -583,24 +569,22 @@ test("测试setWidth&setHeight接口", function(){
         
         barChart.setWidth(800);
         barChart.setHeight(400);
-    }, 50);
-    
-    $.later(function(){
-        equals(barChart.canvas[0].offsetWidth, 800);
-        equals(barChart.canvas[0].offsetHeight, 400);
         
-        // equals($("#linechart .value-label")[0].offsetTop,800);
-        // equals($("#linechart .category-label").last()[0].offsetLeft,400);
-        approximateEqual($(".value-label", barChart._el)[0].offsetTop,
-            (barChart.canvas[0].offsetHeight + barChart.canvas[0].offsetTop - $(".value-label", barChart._el)[0].offsetHeight - barChart.BAR_CHART_OFFSET),1,
-            "value-label的第一个标注的定位是：#canvas的高度加上canvas在父容器的top再减去这个标注的高度再减去barChart的BAR_CHART_OFFSET#");
-
-        approximateEqual($(".category-label", barChart._el).last()[0].offsetLeft,
-            (barChart.canvas[0].offsetLeft + barChart.canvas[0].offsetWidth - $(".category-label", barChart._el).last()[0].offsetWidth * 0.5 - barChart.BAR_CHART_OFFSET - (0.5 * (barChart.data("width") - 2 * barChart.BAR_CHART_OFFSET) / 12)),1,
-            "category-label的最后一个标注的定位是：#canvas的宽度减去这个标注的宽度的一半再减去barChart的BAR_CHART_OFFSET再减去barChart宽度的12分之一的一半");
+        $.later(function(){
+            equals(barChart.canvas[0].offsetWidth, 800);
+            equals(barChart.canvas[0].offsetHeight, 400);
             
-        start();
-    }, 1500);
+            approximateEqual($(".value-label", barChart._el)[0].offsetTop,
+                (barChart.canvas[0].offsetHeight + barChart.canvas[0].offsetTop - $(".value-label", barChart._el)[0].offsetHeight - barChart.BAR_CHART_OFFSET),1,
+                "value-label的第一个标注的定位是：#canvas的高度加上canvas在父容器的top再减去这个标注的高度再减去barChart的BAR_CHART_OFFSET#");
+
+            approximateEqual($(".category-label", barChart._el).last()[0].offsetLeft,
+                (barChart.canvas[0].offsetLeft + barChart.canvas[0].offsetWidth - $(".category-label", barChart._el).last()[0].offsetWidth * 0.5 - barChart.BAR_CHART_OFFSET - (0.5 * (barChart.data("width") - 2 * barChart.BAR_CHART_OFFSET) / 12)),1,
+                "category-label的最后一个标注的定位是：#canvas的宽度减去这个标注的宽度的一半再减去barChart的BAR_CHART_OFFSET再减去barChart宽度的12分之一的一半");
+                
+            start();
+        }, 50);
+    }, 50);
 });
 
 test("测试调用顺序1", function(){
@@ -705,4 +689,39 @@ test("测试调用顺序2", function(){
             start();
         });
     }, 50);
+});
+
+test("destroy",function(){
+    ua.destroyTest(function(w,f){
+    	$("#barchart").remove();
+    	var dl1 = w.dt.domLength(w);
+        var el1= w.dt.eventLength();
+
+        w.$("body").append('<div id="barchart" style="width:900px; height:210px;"></div>');
+        
+        var barChart = w.$.ui.BarChart("#barchart");
+        barChart.setCategoryGrid(["09pm","10pm","11pm","12pm","01am","02am","03am","04am","05am","06am","07am","08am"]);
+        barChart.setValueGrid([0, 4, 8, 12, 16, 20]);
+        barChart.setData([
+                    {
+                        "name":"数据1",
+                        "color":"#ffcc33",
+                        "data":[11, 14, 15, 12, 11, 13, 11, 12, 15, 3, 5, 2]
+                    }
+                ]);
+        
+        var me = this;
+        $.later(function(){
+        	barChart.destroy();
+            
+            var el2= w.dt.eventLength();
+            var ol = w.dt.objLength(barChart);
+            var dl2 =w.dt.domLength(w);
+
+            equal(dl1,dl2,"The dom is ok");
+            equal(el1,el2,"The event is ok");
+            ok(ol==0,"The toolbar is destroy");
+            me.finish();        
+        },100);
+    });
 });
