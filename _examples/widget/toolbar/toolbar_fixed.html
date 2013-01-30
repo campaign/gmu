@@ -56,6 +56,7 @@
     //创建按钮
     var btn = $('.btn').button({label:'切换'}),
         dropmenu = $.ui.dropmenu({
+            cacheParentOffset: false,
             btn: btn,
             align:'right',
             items:[

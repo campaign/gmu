@@ -36,7 +36,7 @@
                     _end = iscroll.options.onScrollEnd;
                 iscroll.options.onScrollMove = function() {
                     _move && _move.call(iscroll, arguments);
-                    me.hide();
+                    o.useHide && me.hide();
                 };
                 iscroll.options.onScrollEnd = function() {
                     _end && _end.call(iscroll, arguments);
