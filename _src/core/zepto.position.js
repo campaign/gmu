@@ -96,6 +96,10 @@
             height: elem.height(),
             top: raw.pageYOffset,
             left: raw.pageXOffset
+        }: raw.preventDefault && (raw = raw.touches?raw.touches[0]:raw) ? {
+            width: 0,
+            height: 0,
+            offset: { top: raw.pageY, left: raw.pageX }
         }: elem.offset();
     }
 
@@ -289,6 +293,7 @@
             offsets = {};
 
         dimensions = getDimensions( target );
+        target[0].preventDefault && (opts.at = "left top");
         targetWidth = dimensions.width;
         targetHeight = dimensions.height;
         basePosition = {
