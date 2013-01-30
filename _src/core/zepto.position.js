@@ -265,12 +265,12 @@
         },
         flipfit: {
             left: function() {
-                $.ui.position.flip.left.apply( this, arguments );
-                $.ui.position.fit.left.apply( this, arguments );
+                $.position.flip.left.apply( this, arguments );
+                $.position.fit.left.apply( this, arguments );
             },
             top: function() {
-                $.ui.position.flip.top.apply( this, arguments );
-                $.ui.position.fit.top.apply( this, arguments );
+                $.position.flip.top.apply( this, arguments );
+                $.position.fit.top.apply( this, arguments );
             }
         }
     });
