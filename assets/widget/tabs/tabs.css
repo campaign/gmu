@@ -7,7 +7,6 @@
 	margin: 0;
     z-index: 11;
 	position: relative;
-    -webkit-transform: translateZ(0);
 }
 .ui-tabs-content {
 	position: relative;
