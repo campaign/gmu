@@ -1,12 +1,26 @@
 /**
  *  @file 基于Zepto的位置设置获取组件
  *  @name position
- *  @desc 定位组件
+ *  @desc 定位插件
  *  @import core/zepto.extend.js
  */
 //offset
 (function($, undefined){
     var _offset = $.fn.offset, offset ={};
+
+    /**
+     * @name offset
+     * @grammar offset()  ⇒ array
+     * @grammar offset(coordinates)  ⇒ self
+     * @grammar offset(function(index, oldOffset){ ... })  ⇒ self
+     * @desc 扩展offset方法，让它支持设置制定坐标。
+     * @example $('p').offset({top: 50, left: 50});//将p设置到坐标点（50， 50）位置。
+     *
+     * $('p').offset(function(index, oldOffset){//将p的位置向做移动50px
+     *     oldOffset.left -=50;
+     *     return oldOffset;
+     * });
+     */
     $.fn.offset = function(options){
         //如果传入的不是object，则直接调用老的offset.
         if(!$.isPlainObject(options))return _offset.apply(this, arguments);
@@ -111,6 +125,20 @@
         };
     }
 
+    /**
+     * @name position
+     * @grammar position()  ⇒ array
+     * @grammar position(opts)  ⇒ self
+     * @desc 获取元素相对于相对父级元素（父级最近为position为relative｜abosolute｜fixed的元素）的坐标位置。
+     *
+     * 如果传入了opts，则把所选元素设置成制定位置。参数格式如下。
+     * -- ''my'' //默认为'center'// 设置中心点。可以为'left top', 'center bottom', 'right center'...
+     *   同时还可以设置偏移量。如 'left+5 center-20%'。
+     * -- ''at'' //默认为'center'// 设置定位到目标元素的什么位置。参数格式同my参数一致。
+     * -- ''of'' //默认为null// 设置目标元素
+     * -- ''collision'' //默认为null// 碰撞检测回调方法。传入function.
+     * -- ''using''  传入function，如果没有传入position将通过css方法设置，可以传入一个function在方法中，通过animate方法来设置，这样就有了动画效果，而不是瞬间变化。
+     */
     $.fn.position = function (opts) {
         if (!opts || !opts.of) {
             return _position.call(this);
