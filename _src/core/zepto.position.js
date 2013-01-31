@@ -29,14 +29,11 @@
         //如果是static定位，则需要把定位设置成relative，否则top，left值无效。
         position === "static" && $el.css("position", "relative");
 
-        if ( calculatePosition ) {//如果定位是absolute或者fixed，同时top或者left中存在auto定位。
-            curPosition = $el.position();
-            curTop = curPosition.top;
-            curLeft = curPosition.left;
-        } else {
-            curTop = parseFloat( curCSSTop ) || 0;
-            curLeft = parseFloat( curCSSLeft ) || 0;
-        }
+        //如果定位是absolute或者fixed，同时top或者left中存在auto定位。
+        curPosition = calculatePosition?$el.position():curPosition;
+        curTop = curPosition.top || parseFloat( curCSSTop ) || 0;
+        curLeft = curPosition.left || parseFloat( curCSSLeft ) || 0;
+
         //如果options是一个方法，则调用此方法来获取options，同时传入当前offset
         options = $.isFunction( options )?options.call( elem, i, curOffset ):options;
 
@@ -65,7 +62,7 @@
         },
         rhorizontal = /left|center|right/,
         rvertical = /top|center|bottom/,
-        roffset = /[\+\-]\d+%?/,
+        roffset = /([\+\-]\d+%?)/,
         rposition = /^\w+/,
         rpercent = /%$/;
 
@@ -135,19 +132,15 @@
         };
 
         $.each( [ "my", "at" ], function() {
-            var pos = ( opts[ this ] || "" ).split( " " ),
-                horizontalOffset,
-                verticalOffset;
+            var pos = ( opts[ this ] || "" ).split( " " );
 
             pos.length ===1 && pos[rhorizontal.test( pos[ 0 ] )?"push":"unshift"]("center");
             pos[ 0 ] = rhorizontal.test( pos[ 0 ] ) ? pos[ 0 ] : "center";
             pos[ 1 ] = rvertical.test( pos[ 1 ] ) ? pos[ 1 ] : "center";
 
-            horizontalOffset = roffset.exec( pos[ 0 ] );
-            verticalOffset = roffset.exec( pos[ 1 ] );
             offsets[ this ] = [
-                horizontalOffset ? horizontalOffset[ 0 ] : 0,
-                verticalOffset ? verticalOffset[ 0 ] : 0
+                roffset.test(pos[ 0 ]) ? RegExp.$1 : 0,
+                roffset.test(pos[ 1 ]) ? RegExp.$1 : 0
             ];
             opts[ this ] = [
                 rposition.exec( pos[ 0 ] )[ 0 ],
