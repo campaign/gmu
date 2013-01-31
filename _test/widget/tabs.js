@@ -1,6 +1,19 @@
 module('plugin/widget/tabs', {
     setup: function() {
         $("body").append("<div id='container' ></div>");
+        
+        items1 = [
+      	            {title:'tab1', content:'content1', href:'http://www.baidu.com'},
+    	            {title:'tab2', content:'content2'},
+    	            {title:'tab3', content:'content3'},
+    	            {title:'tab4', content:'content4'}
+    	        ]
+        items2 = [
+                      {title:'tab1', content:'content1', href:'http://www.baidu.com'},
+                      {title:'tab2', content:'content2'},
+                      {title:'tab3', content:'content3', href:'http://gmu.baidu.com'},
+                      {title:'tab4', content:'content3', href:'http://gmu.baidu.com'}
+                     ]
     },
     teardown : function() {
         $('#container').remove();
@@ -19,97 +32,124 @@ function setup() {
         '</div>');
 };
 
-function fullsetup() {
-    $('body').append('<div id="fullsetup" class="ui-tabs">'
-        + '<ul class="ui-tabs-nav">'
-        + '<li><a href="#content1">Tab1</a></li>'
-        + '<li><a href="#content2">Tab2</a></li>'
-        + '<li class="ui-state-active"><a href="#content3">Tab3</a></li>'
-        + '</ul>'
-        + '<div class="ui-viewport ui-tabs-content">'
-        + '<div id="content1" class="ui-panel ui-tabs-panel slide">content1</div>'
-        + '<div id="content2" class="ui-panel ui-tabs-panel slide">content2</div>'
-        + '<div id="content3" class="ui-panel ui-tabs-panel slide ui-state-active">content3</div>'
-        + '</div></div>');
+function setup1() {
+    $("body").append('<div id="setup"><ul>' +
+        '<li><a href="#conten1">Tab1</a></li>' +
+        '<li class="ui-state-active"><a href="#conten2">Tab2</a></li>' +
+        '<li><a href="#conten3">Tab3</a></li>' +
+        '</ul>' +
+        '<div id="conten1">content1</div>' +
+        '<div id="conten2" class="ui-state-active"><input type="checkbox" id="input1" /><label for="input1">选中我后tabs不可切换</label></div>' +
+        '<div id="conten3">content3</div>' +
+        '</div>');
 };
 
-test("默认配置项，在什么都不传的情况下是否正确(render模式)", function(){
-    var tabs = $.ui.tabs({
-        container: '#container',
-        items: [
-            {title:'tab1', content:'content1'},
-            {title:'tab2', content:'content2'},
-            {title:'tab3', content:'content3'},
-            {title:'tab4', content:'content4'}
-        ]
+test("el不传", function(){
+	 stop();
+	 ua.loadcss(["transitions.css", "widget/tabs/tabs.css","widget/tabs/tabs.default.css"], function(){
+		var tabs = $.ui.tabs({
+	        items: items1
+	    })
+	    equals(tabs._el.attr("class"), "ui-tabs", "The el is right");
+		equals(tabs._el.parent()[0], document.body, "The container is right");
+	    tabs.destroy();
+	    start();
+	});
+});
+
+test("el(selector)", function(){
+	$("body").append("<div id='test' ><div class='custom' ></div></div>");
+	 var tabs = $.ui.tabs(".custom", {
+        items: items1
     })
+    equals(tabs._el.attr("class"), "custom ui-tabs", "The el is right");
+	equals(tabs._el.parent().attr("id"), "test", "The container is right");
+    tabs.destroy();
+    $("#test").remove();
+});
+
+test("el(zepto) & container & 默认配置项", function(){
+	 var tabs = $.ui.tabs({
+        container: '#container',
+        items: items1
+    })
+    equals(tabs._data.items,items1,"The default items is right");
     equals(tabs._data.active,0,"The default active is right");
-    equals(tabs._el.hasClass('ui-tabs'), true, 'The tabs has class ui-tabs');
-    equals($('.ui-tabs-nav li', tabs._el).length, 4, 'The tabs nav number is right');
-    equals($('.ui-tabs-content .ui-tabs-panel', tabs._el).length, 4, 'The tabs pannel number is right');
-    strictEqual($('.ui-tabs-nav li', tabs._el).eq(tabs._data.active).hasClass('ui-state-active'),true,"The active tab has ui-state-active");
     equals(tabs._data.transition, 'slide', "The default transition is right");
     equals(tabs._data.activate, null,"The default activate is right");
     equals(tabs._data.beforeActivate, null,"The default beforeActivate is right");
     equals(tabs._data.animateComplete, null,"The default animateComplete is right");
+	    
+    equals(tabs._el.attr("class"), "ui-tabs", "The el is right");
+	equals(tabs._el.parent().attr("id"), "container", "The container is right");
+	ok(ua.isShown($('.ui-tabs-nav', tabs._el)[0]), 'The tabs nav shows');
+	ok(ua.isShown($('.ui-tabs-content', tabs._el)[0]), 'The tabs content shows');
+    equals($('.ui-tabs-nav li', tabs._el).length, 4, 'The tabs nav number is right');
+    equals($('.ui-tabs-content .ui-tabs-panel', tabs._el).length, 4, 'The tabs pannel number is right');
+    equals($('.ui-tabs-nav li', tabs._el)[0].className,"ui-state-active","The active tab has ui-state-active");
+    equals($('.ui-tabs-content .ui-tabs-panel', tabs._el)[0].className, "ui-panel ui-tabs-panel slide ui-state-active","The active tab has ui-state-active");
     tabs.destroy();
 });
 
-test("多实例，render/setup/fullsetup，配置项参数测试",function(){
-    stop();
-    ua.loadcss(["transitions.css", "widget/tabs/tabs.css","widget/tabs/tabs.default.css"], function(){
-        var tabs1 = $.ui.tabs({
-            items: [
-                {title:'tab1', content:'content1', href:'http://www.baidu.com'},
-                {title:'tab2', content:'content2'},
-                {title:'tab3', content:'content3', href:'http://gmu.baidu.com'},
-                {title:'tab4', content:'content3', href:'http://gmu.baidu.com'}
-            ],
-            active: 1
-        });
-        setup();
-        var tabs2 = $('#setup').tabs({
-            active: 4,
-            transition: false
-        }).tabs('this');
-        fullsetup();
-        var tabs3 = $('#fullsetup').tabs({
-            active: 1
-        }).tabs('this');
+test("active", function(){
+	 var tabs = $.ui.tabs({
+       items: items1,
+       active: 2
+   })
+   equals(tabs._data.active,2,"The default active is right");
+   
+   ok($('.ui-tabs-nav li', tabs._el).eq(2).hasClass("ui-state-active"),"The active tab has ui-state-active");
+   ok($('.ui-tabs-content .ui-tabs-panel', tabs._el).eq(2).hasClass("ui-state-active"),"The active tab has ui-state-active");
+   tabs.destroy();
+});
 
-        equals($('.ui-tabs').length, 3, '三个实例已创建');
-        equals($('.ui-tabs-nav li', tabs1._el).length, 4, 'render实例tab nav数量正确');
-        equals($('.ui-tabs-content .ui-tabs-panel', tabs1._el).length, 4, 'render实例tab pannel数量正确');
-        strictEqual($('.ui-tabs-nav li', tabs1._el).eq(1).hasClass('ui-state-active'), true, 'render实例tab nav active tab正确');
-        strictEqual($('.ui-tabs-content .ui-tabs-panel', tabs1._el).eq(1).hasClass('ui-state-active'), true, 'render实例tab content active tab正确');
-        equals($('.ui-tabs-content .ui-tabs-panel', tabs1._el).eq(1).html(), 'content2', 'render实例tab pannel内容正确');
-        strictEqual($('.ui-tabs-content .slide', tabs1._el).length, 4, 'transition参数正确应用');
+test("transition", function(){
+	 var tabs = $.ui.tabs({
+      items: items1,
+      transition: ''
+  })
+  equals(tabs._data.transition,'',"The default active is right");
+  
+  ok(!$('.ui-tabs-content .ui-tabs-panel', tabs._el).hasClass("slide"),"The active tab has slide");
+  tabs.destroy();
+});
 
-        equals($('.ui-tabs-nav li', tabs2._el).length, 3, 'setup实例tab nav数量正确');
-        equals($('.ui-tabs-content .ui-tabs-panel', tabs2._el).length, 3, 'setup实例tab pannel数量正确');
-        strictEqual($('.ui-tabs-nav li', tabs2._el).eq(2).hasClass('ui-state-active'), true, 'setup实例tab nav active tab正确');
-        strictEqual($('.ui-tabs-content .ui-tabs-panel', tabs2._el).eq(2).hasClass('ui-state-active'), true, 'setup实例tab content active tab正确');
-        equals($('.ui-tabs-content .ui-tabs-panel', tabs2._el).eq(2).html(), 'content3', 'setup实例tab pannel内容正确');
-        strictEqual($('.ui-tabs-content .slide', tabs2._el).length, 0, 'transition参数正确应用');
+test("setup & 默认配置项", function(){
+	setup1();
+    var tabs = $('#setup').tabs().tabs('this');
+    equals(tabs._data.items.length,3,"The default items is right");
+    equals(tabs._data.active,1,"The default active is right");
+    equals(tabs._data.transition, 'slide', "The default transition is right");
+    equals(tabs._data.activate, null,"The default activate is right");
+    equals(tabs._data.beforeActivate, null,"The default beforeActivate is right");
+    equals(tabs._data.animateComplete, null,"The default animateComplete is right");
+	    
+    equals(tabs._el.attr("id"), "setup", "The el is right");
+    equals(tabs._el.attr("class"), "ui-tabs", "The el is right");
+	equals(tabs._el.parent()[0], document.body, "The container is right");
+	ok(ua.isShown($('.ui-tabs-nav', tabs._el)[0]), 'The tabs nav shows');
+	ok(ua.isShown($('.ui-tabs-content', tabs._el)[0]), 'The tabs content shows');
+    equals($('.ui-tabs-nav li', tabs._el).length, 3, 'The tabs nav number is right');
+    equals($('.ui-tabs-content .ui-tabs-panel', tabs._el).length, 3, 'The tabs pannel number is right');
+    equals($('.ui-tabs-nav li', tabs._el)[1].className,"ui-state-active","The active tab has ui-state-active");
+    equals($('.ui-tabs-content .ui-tabs-panel', tabs._el)[1].className, "ui-state-active ui-panel ui-tabs-panel slide","The active tab has ui-state-active");
+    tabs.destroy();
+});
 
-        equals($('.ui-tabs-nav li', tabs3._el).length, 3, 'fullsetup实例tab nav数量正确');
-        equals($('.ui-tabs-content .ui-tabs-panel', tabs3._el).length, 3, 'fullsetup实例tab pannel数量正确');
-        strictEqual($('.ui-tabs-nav li', tabs3._el).eq(1).hasClass('ui-state-active'), true, 'fullsetup实例tab nav active tab正确');
-        strictEqual($('.ui-tabs-content .ui-tabs-panel', tabs3._el).eq(1).hasClass('ui-state-active'), true, 'fullsetup实例tab content active tab正确');
-        equals($('.ui-tabs-content .ui-tabs-panel', tabs3._el).eq(1).html(), 'content2', 'fullsetup实例tab pannel内容正确');
-        setTimeout(function () {
-            tabs1.destroy();
-            tabs2.destroy();
-            tabs3.destroy();
-            $('#setup').remove();
-            $('#fullsetup').remove();
-            start();
-        }, 300)
-    });
-})
+test("setup & 参数active", function(){
+	setup1();
+    var tabs = $('#setup').tabs({
+    	active:2
+    }).tabs('this');
+    equals(tabs._data.active,2,"The default active is right");
+    
+    ok($('.ui-tabs-nav li', tabs._el).eq(2).hasClass("ui-state-active"),"The active tab has ui-state-active");
+    ok($('.ui-tabs-content .ui-tabs-panel', tabs._el).eq(2).hasClass("ui-state-active"),"The active tab has ui-state-active");
+    tabs.destroy();
+});
 
-test("事件测试&接口测试:switchTo,beforeActivate,activate,animateComplete",function(){
-    expect(22);
+test("事件测试(beforeActivate,activate,animateComplete)&交互测试&接口测试(switchTo)",function(){
+    expect(28);
     stop();
     setup();
     var tabs = $('#setup').tabs({
@@ -131,18 +171,15 @@ test("事件测试&接口测试:switchTo,beforeActivate,activate,animateComplete
             strictEqual(tabs._el.find('.ui-tabs-nav li').eq(1).hasClass('ui-state-active'), true, '切换后active tab index是1');
             strictEqual(tabs._el.find('.ui-tabs-content .ui-tabs-panel').eq(0).hasClass('ui-state-active'), false, '切换后active tab content index不是0');
             strictEqual(tabs._el.find('.ui-tabs-content .ui-tabs-panel').eq(1).hasClass('ui-state-active'), true, '切换后active tab content index是1');
+            ok(!ua.isShown(tabs._el.find('.ui-tabs-content .ui-tabs-panel')[0]), '非active的tab隐藏');
+            ok(!ua.isShown(tabs._el.find('.ui-tabs-content .ui-tabs-panel')[2]), '非active的tab隐藏');
             ta.tap(tabs2._el.find('.ui-tabs-nav li').get(2));
         }
     }).tabs('this');
 
     var count = 0,
         tabs2 = $.ui.tabs({
-        items: [
-            {title:'tab1', content:'content1', href:'http://www.baidu.com'},
-            {title:'tab2', content:'content2'},
-            {title:'tab3', content:'content3', href:'http://gmu.baidu.com'},
-            {title:'tab4', content:'content3', href:'http://gmu.baidu.com'}
-        ],
+        items: items2,
         active: 1,
         transition: false,
         activate : function(){
@@ -151,6 +188,8 @@ test("事件测试&接口测试:switchTo,beforeActivate,activate,animateComplete
             strictEqual(tabs2._el.find('.ui-tabs-nav li').eq(2).hasClass('ui-state-active'), true, '切换后active tab是2');
             strictEqual(tabs2._el.find('.ui-tabs-content .ui-tabs-panel').eq(1).hasClass('ui-state-active'), false, '切换后active tab content 不是1');
             strictEqual(tabs2._el.find('.ui-tabs-content .ui-tabs-panel').eq(2).hasClass('ui-state-active'), true, '切换后active tab content 是2');
+            ok(!ua.isShown(tabs2._el.find('.ui-tabs-content .ui-tabs-panel')[0]), '非active的tab隐藏');
+            ok(!ua.isShown(tabs2._el.find('.ui-tabs-content .ui-tabs-panel')[1]), '非active的tab隐藏');
             ta.tap(tabs2._el.find('.ui-tabs-nav li').get(1));
             setTimeout(function () {
                 tabs.destroy();
@@ -170,7 +209,38 @@ test("事件测试&接口测试:switchTo,beforeActivate,activate,animateComplete
 
     equals(tabs._el.find('.ui-tabs-nav li').eq(0).hasClass('ui-state-active'), true, '未切换前active tab index是0');
     equals(tabs._el.find('.ui-tabs-content .ui-tabs-panel').eq(0).hasClass('ui-state-active'), true, '未切换前active tab content index是0');
+    ok(!ua.isShown(tabs._el.find('.ui-tabs-content .ui-tabs-panel')[1]), '非active的tab隐藏');
+    ok(!ua.isShown(tabs._el.find('.ui-tabs-content .ui-tabs-panel')[2]), '非active的tab隐藏');
     tabs.switchTo(1);
+});
+
+test("屏幕旋转  & 接口(refresh)", function(){
+	stop();
+	ua.frameExt(function(w, f){
+		var me = this;
+		ua.loadcss(["transitions.css", "widget/tabs/tabs.css","widget/tabs/tabs.default.css"], function(){
+			var tabs = w.$.ui.tabs({
+		        items: [
+		  	            {title:'tab1', content:'<p>content1 content1 content1 content1 content1 content1 content1 content1 content1 content1</p>'},
+			            {title:'tab2', content:'content2'},
+			            {title:'tab3', content:'content3'},
+			            {title:'tab4', content:'content4'}
+			        ]
+		    });
+			setTimeout(function(){
+				equals(w.$(".ui-tabs-content", tabs._el).height(), w.$(".ui-tabs-panel", tabs._el).height() + 1, "The height is right");
+				
+				$(f).css("width", 150).css("height", 300);
+				var e = $.support.orientation ? 'orientationchange' : 'resize';
+				ta.trigger(e, w);
+				setTimeout(function(){
+					equals(w.$(".ui-tabs-content", tabs._el).height(), w.$(".ui-tabs-panel", tabs._el).height() + 1, "The height is right");
+					
+					me.finish();
+				}, 600);
+			}, 300);
+		}, w);
+	});
 });
 
 test("destroy",function(){
@@ -180,12 +250,7 @@ test("destroy",function(){
         var el1= w.dt.eventLength();
 
         var tabs =  w.$.ui.tabs({
-            items: [
-                {title:'tab1', content:'content1', href:'http://www.baidu.com'},
-                {title:'tab2', content:'content2'},
-                {title:'tab3', content:'content3', href:'http://gmu.baidu.com'},
-                {title:'tab4', content:'content3', href:'http://gmu.baidu.com'}
-            ]
+            items: items2
         });
         tabs.destroy();
         var el2= w.dt.eventLength();
