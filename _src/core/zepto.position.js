@@ -132,12 +132,12 @@
      * @desc 获取元素相对于相对父级元素（父级最近为position为relative｜abosolute｜fixed的元素）的坐标位置。
      *
      * 如果传入了opts，则把所选元素设置成制定位置。参数格式如下。
-     * -- ''my'' //默认为'center'// 设置中心点。可以为'left top', 'center bottom', 'right center'...
+     * - ''my'' //默认为'center'// 设置中心点。可以为'left top', 'center bottom', 'right center'...
      *   同时还可以设置偏移量。如 'left+5 center-20%'。
-     * -- ''at'' //默认为'center'// 设置定位到目标元素的什么位置。参数格式同my参数一致。
-     * -- ''of'' //默认为null// 设置目标元素
-     * -- ''collision'' //默认为null// 碰撞检测回调方法。传入function.
-     * -- ''using''  传入function，如果没有传入position将通过css方法设置，可以传入一个function在方法中，通过animate方法来设置，这样就有了动画效果，而不是瞬间变化。
+     * - ''at'' //默认为'center'// 设置定位到目标元素的什么位置。参数格式同my参数一致。
+     * - ''of'' //默认为null// 设置目标元素
+     * - ''collision'' //默认为null// 碰撞检测回调方法。传入function.
+     * - ''using''  传入function，如果没有传入position将通过css方法设置，可以传入一个function在方法中，通过animate方法来设置，这样就有了动画效果，而不是瞬间变化。
      */
     $.fn.position = function (opts) {
         if (!opts || !opts.of) {
