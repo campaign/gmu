@@ -137,9 +137,9 @@
 
         _init:function () {
             var data = this._data, el = this.root(), eventHandler = $.proxy(this._eventHandler, this);
-            this.date(data.date || (!data._inline && el.val() ? $.datepicker.parseDate(el.val()) : new Date()) )
-                .minDate(data.minDate)
+            this.minDate(data.minDate)
                 .maxDate(data.maxDate)
+                .date(data.date || (!data._inline && el.val() ? $.datepicker.parseDate(el.val()) : new Date()) )
                 .refresh();
             data._div.addClass('ui-datepicker').on('click', eventHandler).highlight();
             if (!data._inline) {
@@ -313,7 +313,7 @@
          * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         _option:function (key, val) {
-            var data = this._data, date;
+            var data = this._data, date, minDate, maxDate;
             if (val !== undefined) {
                 switch (key) {
                     case 'minDate':
@@ -321,7 +321,10 @@
                         data[key] = val ? $.datepicker.parseDate(val) : null;
                         break;
                     case 'selectedDate':
+                        minDate = data.minDate;
+                        maxDate = data.maxDate;
                         val = $.datepicker.parseDate(val);
+                        val = minDate && minDate>val ? minDate : maxDate && maxDate < val ? maxDate: val;
                         data._selectedYear = data._drawYear = val.getFullYear();
                         data._selectedMonth = data._drawMonth = val.getMonth();
                         data._selectedDay = val.getDate();
