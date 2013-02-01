@@ -53,8 +53,8 @@
                         opts.width == '100%' && me.css('width', document.body.offsetWidth);
                     };
                 $(document).on('scrollStop', checkFixed);
-                return me;
             }, 300);
+            return me;
         }
     });
 }(Zepto));

@@ -33,7 +33,7 @@ test("只为加载css用",function(){
 });
 
 test("竖向", function(){
-    expect(4);
+    expect(7);
     stop();
     ua.importsrc('widget/button', function(){
         var btn = $('#btn1').button();
@@ -47,6 +47,10 @@ test("竖向", function(){
         ok(dropmenu.data('_btn').is('#btn1'), 'btn设置正确');
         ua.click(btn[0]);
         ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
+        equals($(".iscroll-wrap .ui-dropmenu-items li", dropmenu._el).length, 9, "iscroll容器正确");
+        ok($(".ui-dropmenu-items", dropmenu._el).height() > $(".iscroll-wrap", dropmenu._el).height(), "iscroll高度正确");
+        var t = $(".ui-dropmenu-items", dropmenu._el).offset().top;
+        
         var s = dropmenu.data('_iScroll');
         setTimeout(function(){
             ta.touchstart($("#dropmenu1 ul")[0], {
@@ -76,6 +80,7 @@ test("竖向", function(){
                 ua.mouseup($("#dropmenu1 ul")[0]);
                 setTimeout(function(){
                     approximateEqual(s.y, -100, "The dropmenu scrolled");
+                    equals($(".ui-dropmenu-items", dropmenu._el).offset().top, t - 100, "The dropmenu scrolled");
                     ua.click(btn[0]);
                     ok(ua.isShown(dropmenu._el[0]), "再次点击btn，dropmenu隐藏");
                     dropmenu.destroy();
@@ -87,7 +92,7 @@ test("竖向", function(){
 });
 
 test("横向", function(){
-    expect(4);
+    expect(7);
     stop();
     var btn = $('#btn1').button();
     var dropmenu = $('#dropmenu1').dropmenu({
@@ -99,6 +104,10 @@ test("横向", function(){
     ok(dropmenu.data('_btn').is('#btn1'), 'btn设置正确');
     ua.click(btn[0]);
     ok(ua.isShown(dropmenu._el[0]), "点击btn，dropmenu显示");
+    equals($(".iscroll-wrap .ui-dropmenu-items li", dropmenu._el).length, 9, "iscroll容器正确");
+    ok($(".ui-dropmenu-items", dropmenu._el).width() > $(".iscroll-wrap", dropmenu._el).width(), "iscroll高度正确");
+    var l = $(".ui-dropmenu-items", dropmenu._el).offset().left;
+    
     var s = dropmenu.data('_iScroll');
     setTimeout(function(){
         ta.touchstart($("#dropmenu1 ul")[0], {
@@ -128,6 +137,7 @@ test("横向", function(){
             ua.mouseup($("#dropmenu1 ul")[0]);
             setTimeout(function(){
                 approximateEqual(s.x, -100, "The dropmenu scrolled");
+                equals($(".ui-dropmenu-items", dropmenu._el).offset().left, l - 100, "The dropmenu scrolled");
                 ua.click(btn[0]);
                 ok(ua.isShown(dropmenu._el[0]), "再次点击btn，dropmenu隐藏");
                 dropmenu.destroy();
@@ -136,6 +146,29 @@ test("横向", function(){
         }, 400);
     }, 100);
 });
+
+test("iScroll参数", function(){
+    expect(7);
+    stop();
+    var btn = $('#btn1').button();
+    var dropmenu = $('#dropmenu1').dropmenu({
+        direction:'horizontal',
+        btn: $('#btn1'),
+        width: 144,
+        iScroll: {
+        	useTransition: true
+        }
+    }).dropmenu('this');
+    
+    ua.click(btn[0]);
+    var s = dropmenu.data('_iScroll');
+    ok(s.options.useTransition, "The options are right");
+    
+    dropmenu.destroy();
+    start();
+            
+});
+
 
 test("disablePlugin=true", function(){
     expect(2);
