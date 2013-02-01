@@ -36,10 +36,12 @@
         },
 
         _setup: function(mode) {
-            var me = this,
-                root = me.root(),
-                children = root.children('div');
-            root.addClass('ui-pageswipe').append($('<div class="ui-pageswipe-wheel"></div>').append(children.first().addClass('ui-pageswipe-content')).append(children.last().addClass('ui-pageswipe-index')));
+            if(!mode) {
+                var me = this,
+                    root = me.root(),
+                    children = root.children('div');
+                root.addClass('ui-pageswipe').append($('<div class="ui-pageswipe-wheel"></div>').append(children.first().addClass('ui-pageswipe-content')).append(children.last().addClass('ui-pageswipe-index')));
+            }
         },
 
         _init: function() {
