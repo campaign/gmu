@@ -148,7 +148,7 @@ test("横向", function(){
 });
 
 test("iScroll参数", function(){
-    expect(7);
+    expect(1);
     stop();
     var btn = $('#btn1').button();
     var dropmenu = $('#dropmenu1').dropmenu({
