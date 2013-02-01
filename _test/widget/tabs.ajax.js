@@ -30,6 +30,7 @@ test("只为加载css用",function(){
 
 test("加载成功&事件测试:beforeLoad,load,beforeRender", function(){
     stop()
+    expect(11)
     setup('html')
     var count = 0,
         status = '';
@@ -110,7 +111,48 @@ test("第一次加载还未完成，第二次加载开始，则第一次取消�
     ta.tap($('#tabs .ui-tabs-nav li').get(2));
 });
 
-test("事件&rend后内容高度能自适应", function(){
+test("切换到已经加载过的内容，不再次加载", function(){
+    stop()
+    setup('html');
+    expect(9);
+    var count = 0;
+    $('#tabs').tabs({
+        transition: '',
+        ajax: {
+            type: 'GET',
+            contentType: 'application/x-www-form-urlencoded'
+        },
+        beforeLoad: function(e, xhr, settings){
+            ok(true, 'beforeLoad has triggered');
+        },
+        beforeRender : function(event, response, panel, index, xhr){
+            ok(true, 'beforeRender has triggered');
+        },
+        load : function(event, panel){
+        	count ++;
+            ok(true, 'load has triggered');
+        	if(count == 1){
+        		ok(true, '第二次点击开始');
+        	    ta.tap($('#tabs .ui-tabs-nav li').get(2));
+        	}
+        	if(count == 2){
+        		ok(true, '第三次点击开始');
+        	    ta.tap($('#tabs .ui-tabs-nav li').get(1));
+        	}
+            setTimeout(function () {
+                $('#tabs').tabs('destroy');
+                start();
+            }, 3200);
+        },
+        loadError: function () {
+            ok(true, 'load error triggered');
+        }
+    });
+    ok(true, '第一次点击开始');
+    ta.tap($('#tabs .ui-tabs-nav li').get(1));
+});
+
+test("事件&render后内容高度能自适应", function(){
     stop()
     setup('html')
     $('#tabs').tabs({
