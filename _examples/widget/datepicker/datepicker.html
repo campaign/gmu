@@ -32,13 +32,22 @@
 <body>
 
 <div class="section">
-    <input id="datestart" type="text" value="2013-01-15" />
+    <input id="datestart" readonly="readonly" type="text" value="2013-01-15" />
 </div>
 
 <script type="text/javascript">
 (function($, undefined){
     $(function(){
-        $('#datestart').datepicker();
+        var input = $('#datestart'),
+                dp = $.ui.datepicker({
+                    date: input.val(),
+                    valuecommit: function(e, date, datestr){
+                        input.val(datestr);
+                    }
+                });
+        input.on('click', function(){
+            dp.toggle();
+        });
     });
 })(Zepto);
 </script>

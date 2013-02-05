@@ -39,12 +39,19 @@
 <script type="text/javascript">
     (function($, undefined){
         $(function(){
-            var date = new Date().getDate();
-            $('#datestart').datepicker({
-                minDate: (new Date()).setDate(date-10),
-                maxDate: new Date().setDate(date+10)
+            var input = $('#datestart'),
+                    date = new Date(),
+                    dp = $.ui.datepicker({
+                        date: input.val(),
+                        valuecommit: function(e, date, datestr){
+                            input.val(datestr);
+                        },
+                        minDate: new Date(date.getFullYear(), date.getMonth(), date.getDate()-10),
+                        maxDate: new Date(date.getFullYear(), date.getMonth(), date.getDate()+10)
+                    });
+            input.on('click', function(){
+                dp.toggle();
             });
-
         });
     })(Zepto);
 </script>
