@@ -369,13 +369,19 @@
                 return;
             }
             sugs = sugs.slice(0, listCount);
+            query = this._htmlEncode(query);
             $.each(sugs, function(index, item) {
+                item = me._htmlEncode(item);
                 var str = $.trim(item).replace(query, '<span>' + query + '</span>');
                 if (usePlus) str += '<div class="ui-suggestion-plus" data-item="' + item + '"></div>';
                 html += '<li><div class="ui-suggestion-result">' + str + '</div></li>';
             });
             return html + '</ul>';
-        },  
+        },
+
+        _htmlEncode: function(str){
+            return $('<div></div>').text(str).html();
+        },
         
         /** 
          * 提交搜索提示

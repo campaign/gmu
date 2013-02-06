@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
     <!--demo展示所用css end-->
     <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/datepicker/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="../../../assets/widget/datepicker/datepicker.default.css" />
     <!--组件依赖css end-->
 
@@ -38,7 +39,9 @@
 <script type="text/javascript">
     (function($, undefined){
         $(function(){
-            $('#datepicker').datepicker();
+            $('#datepicker').datepicker({
+                inline: true
+            });
         });
     })(Zepto);
 </script>

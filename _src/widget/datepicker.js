@@ -22,7 +22,7 @@
     //@todo 支持各种格式
     $.datepicker = {
         parseDate:function (obj) {
-            var dateRE = /^(\d{4})\-(\d{1,2})\-(\d{1,2})$/;
+            var dateRE = /^(\d{4})(?:\-|\/)(\d{1,2})(?:\-|\/)(\d{1,2})$/;
             return $.isDate(obj)?obj: dateRE.test(obj)? new Date(parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10)-1, parseInt(RegExp.$3, 10)):null;
         },
         formatDate:function (date) {
@@ -38,22 +38,25 @@
         }
     }
 
-    function slideUpFrame(div, okcb, nocb){
+    function slideUpFrame(div, cb){
         this.id = slideUpFrame.id = (slideUpFrame.id || 0) + 1;
         this.div = div;
-        this.holder = $('<span class="ui-holder"></span>');
-        this.okcb = okcb;
-        this.nocb = nocb;
+        this.cb = cb;
         this._init();
     }
     $.extend(slideUpFrame.prototype, {
         _init : function(){
-            var header;
-            this.root = $('<div class="ui-slidup-wrap"><div class="ui-slideup"><div class="header"></div><div class="frame"></div></div></div>');
+            this.holder = $('<span class="ui-holder"></span>');
+            this.root = $('<div class="ui-slidup-wrap">' +
+                    '<div class="ui-slideup">' +
+                        '<div class="header">' +
+                            '<span class="ok-btn" href="">确认</span>' +
+                            '<span class="no-btn" href="">取消</span>' +
+                        '</div>' +
+                        '<div class="frame"></div>' +
+                    '</div>' +
+                '</div>');
             this.frame = $('.frame', this.sDiv = $('.ui-slideup', this.root) ).append(this.div.replaceWith(this.holder));
-            header = $('.header', this.root);
-            this.okcb && header.append('<a class="ok-btn" href="javascript:void(0)">确认</a>');
-            this.nocb && header.append('<a class="no-btn" href="javascript:void(0)">取消</a>');
             this.open();
         },
         refresh: function(cb){
@@ -70,18 +73,19 @@
             });
         },
         open: function(){
-            var me = this, count = slideUpFrame.openCount = ( slideUpFrame.openCount || 0) +1;
+            var me = this, count = slideUpFrame.count = ( slideUpFrame.count || 0) +1;
             count==1 && $(document).on('touchmove.slideup', function(e){e.preventDefault()});
             me.root.on('click.slideup'+me.id, '.ok-btn, .no-btn', function(){
-                me[($(this).is('.ok-btn')?'ok':'no')+'cb'].apply(me)!==false && me.close();
+                me.cb.call(me, $(this).is('.ok-btn')) !== false && me.close();
             }).appendTo(document.body)
                 .find('.ok-btn, .no-btn')
                 .highlight('ui-state-hover');
             me.refresh();
         },
         close: function(cb){
-            var me =this, count = slideUpFrame.openCount = slideUpFrame.openCount - 1;
-            this.root.off('click.slideup'+this.id).animate({
+            var me =this, count = slideUpFrame.count = slideUpFrame.count - 1;
+            this.root.off('click.slideup'+this.id);
+            this.sDiv.animate({
                 translateY: '0',
                 translateZ: '0'
             }, 200, 'ease-out', function(){
@@ -104,7 +108,6 @@
      * - ''minDate'' {Date|String}: (可选，默认：null)  设置可以选择的最小日期
      * - ''maxDate'' {Date|String}: (可选，默认：null)  设置可以选择的最大日期
      * - ''container'' {selector}: (可选，默认：null)  当selector为input时，默认在input后面创建一个div存放datepicker，可以手动指定.
-     * - ''gap'' {Boolean}: (可选，默认：true)  如果为true，星期条与天数列表之间有5px的间隙。否则没有。
      * - ''events'' 所有[Trigger Events](#datepicker_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
      *
      * **Demo**
@@ -118,59 +121,57 @@
             firstDay:1, //星期天用0表示, 星期一用1表示, 以此类推.
             maxDate:null, //可以选择的日期范围
             minDate:null,
-            container:null, //如果为非inline模式，且不想再input的下面直接生成结构那就指定container.
-            gap:true//是否显示间隙，星期列表与天数列表之间
-        },
-
-        _init:function () {
-            var data = this._data, el = this.root(), eventHandler = $.proxy(this._eventHandler, this);
-            this.date(data.date || (!data._inline && el.val() ? $.datepicker.parseDate(el.val()) : null) || new Date())
-                .minDate(data.minDate)
-                .maxDate(data.maxDate)
-                .refresh();
-            data._container.addClass('ui-datepicker').on('click', eventHandler).highlight();
-            if (!data._inline) {
-                el.on('click', eventHandler).attr('readonly', true);
-                data._container.hide().on('swipeLeft swipeRight', eventHandler);
-                $(window).on('ortchange', eventHandler);
-            }else data._isShow = true;
-            data._inited = true;
+            inline: false,
+            swipe: false
         },
 
         _setup:function () {
-            var data = this._data, el = this.root();
-            data._inline = !el.is('input');
-            data._container = data._inline ? el : $(data.container || ($('<div></div>').appendTo(document.body)));
+            var el = this.root(), data = this._data;
+            data.container && el.appendTo(data.container);
         },
 
         _create:function () {
-            throw new Exception("此组件不支持render模式");
+            var data = this._data;
+            this.root($('<div></div>').appendTo(data.container || document.body));
+        },
+
+        _init:function () {
+            var data = this._data, div = this.root(), eventHandler = $.proxy(this._eventHandler, this);
+
+            this.minDate(data.minDate)
+                .maxDate(data.maxDate)
+                .date(data.date || new Date())
+                .refresh();
+
+            div.addClass('ui-datepicker').on('click', eventHandler).highlight();
+            data.swipe && div.on('swipeLeft swipeRight', eventHandler);
+            if (!data.inline) {
+                div.hide();
+                $(window).on('ortchange', eventHandler);
+            } else data._isShow = true;
+            data._inited = true;
         },
 
         _eventHandler:function (e) {
-            var match, me = this, data = me._data, root = data._container, target,
-                cell;
+            var match, me = this, data = me._data, root = me.root()[0], target,
+                cell,date;
             switch(e.type){
                 case 'swipeLeft':
                 case 'swipeRight':
                     me.goTo((e.type == 'swipeRight' ? '-' : '+') + '1M');
                     break;
                 case 'ortchange':
-                    return data._frame && data._frame.refresh();;
-                    break;
+                    return data._frame && data._frame.refresh();
                 default:
                     target = e.target;
-                    if(!data._inline && me._isFrom(target, me.root())){
-                        me.root().blur();
-                        this.toggle();
-                        e.preventDefault();
-                    } else if ((match = $(target).closest('.ui-datepicker-calendar tbody a', root.get(0))) && match.length) {
+                    if ((match = $(target).closest('.ui-datepicker-calendar tbody a', root)) && match.length) {
                         e.preventDefault();
                         cell = match.parent();
-                        this.selectedDate(new Date(cell.attr('data-year'), cell.attr('data-month'), match.text()));
-                        data._inline && this._commit();
+                        this.trigger('dayclick', date = new Date(cell.attr('data-year'), cell.attr('data-month'), match.text()));
+                        this.selectedDate(date);
+                        data.inline && this._commit();
                         this.refresh();
-                    } else if ((match = $(target).closest('.ui-datepicker-prev, .ui-datepicker-next', root.get(0))) && match.length) {
+                    } else if ((match = $(target).closest('.ui-datepicker-prev, .ui-datepicker-next', root)) && match.length) {
                         e.preventDefault();
                         $.later(function(){
                             me.goTo((match.is('.ui-datepicker-prev') ? '-' : '+') + '1M');
@@ -181,18 +182,17 @@
 
         _generateHTML:function () {
             var data = this._data, html = '', thead, tbody, i, j, firstDay, day, leadDays, daysInMonth, rows,
-                printDate, drawYear = data._drawYear, drawMonth = data._drawMonth, otherMonth, unselectable,
+                printDate, drawYear = data._drawYear, drawMonth = data._drawMonth,
                 tempDate = new Date(), today = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate()),
                 minDate = this.minDate(), maxDate = this.maxDate(), selectedDate = this.selectedDate();
 
-            firstDay = parseInt(data.firstDay, 10);
-            firstDay = (isNaN(firstDay) ? 0 : firstDay);
+            firstDay = (isNaN(firstDay = parseInt(data.firstDay, 10)) ? 0 : firstDay);
 
             html += '<div class="ui-datepicker-header">' +
-                '<a class="ui-datepicker-prev" href="#">&lt;&lt;</a>' +
-                '<div class="ui-datepicker-title">'+data._drawYear+'年'+monthNames[data._drawMonth]+'</div>' +
-                '<a class="ui-datepicker-next" href="#">&gt;&gt;</a>' +
-                '</div>';
+                        '<a class="ui-datepicker-prev" href="#">&lt;&lt;</a>' +
+                        '<div class="ui-datepicker-title">'+drawYear+'年'+monthNames[drawMonth]+'</div>' +
+                        '<a class="ui-datepicker-next" href="#">&gt;&gt;</a>' +
+                    '</div>';
 
             thead = '<thead><tr>';
             for (i = 0; i < 7; i++) {
@@ -202,8 +202,7 @@
             }
             thead += '</thead></tr>';
 
-            tbody = '<tbody>';
-            tbody += data.gap ? '<tr class="ui-datepicker-gap"><td colspan="7">&#xa0;</td></tr>' : '';
+            tbody = '<tbody><tr class="ui-datepicker-gap"><td colspan="7">&#xa0;</td></tr>';
             daysInMonth = _getDaysInMonth(drawYear, drawMonth);
             leadDays = (_getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
             rows = Math.ceil((leadDays + daysInMonth) / 7);
@@ -211,22 +210,7 @@
             for (i = 0; i < rows; i++) {
                 tbody += '<tr>';
                 for (j = 0; j < 7; j++) {
-                    otherMonth = (printDate.getMonth() !== drawMonth);
-                    unselectable = otherMonth || (minDate && printDate < minDate) || (maxDate && printDate > maxDate);
-                    tbody += "<td class='" +
-                        ((j + firstDay + 6) % 7 >= 5 ? " ui-datepicker-week-end" : "") + // highlight weekends
-                        (otherMonth ? " ui-datepicker-other-month" : "") + // highlight days from other months
-                        (unselectable ? " ui-datepicker-unselectable ui-state-disabled" : "") + // highlight unselectable days
-                        (otherMonth || unselectable ? '' :
-                            (printDate.getTime() === selectedDate.getTime() ? " ui-datepicker-current-day" : "") + // highlight selected day
-                                (printDate.getTime() === today.getTime() ? " ui-datepicker-today" : "")
-                            ) + "'" + // highlight today (if different)
-                        (unselectable ? "" : " data-month='" + printDate.getMonth() + "' data-year='" + printDate.getFullYear() + "'") + ">" + // actions
-                        (otherMonth ? "&#xa0;" : // display for other months
-                            (unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<a class='ui-state-default" +
-                                (printDate.getTime() === today.getTime() ? " ui-state-highlight" : "") +
-                                (printDate.getTime() === selectedDate.getTime() ? " ui-state-active" : "") + // highlight selected day
-                                "' href='#'>" + printDate.getDate() + "</a>")) + "</td>"; // display selectable date
+                    tbody += this._renderDay(j, printDate, firstDay, drawMonth, selectedDate, today, minDate, maxDate);
                     printDate.setDate(printDate.getDate() + 1);
                 }
                 tbody += '</tr>';
@@ -236,20 +220,27 @@
             return html;
         },
 
-        _isFrom:function (target, parent) {
-            var ret = false, data = this._data;
-            $.each(parent?parent:(this._el.add(data._container)), function () {
-                if (this === target || $.contains(this, target)) {
-                    ret = true;
-                    return false;
-                }
-            });
-            return ret;
+        _renderDay: function(j, printDate, firstDay, drawMonth, selectedDate, today, minDate, maxDate){
+            var otherMonth, unselectable;
+            otherMonth = (printDate.getMonth() !== drawMonth);
+            unselectable = otherMonth || (minDate && printDate < minDate) || (maxDate && printDate > maxDate);
+            return "<td class='" +
+                ((j + firstDay + 6) % 7 >= 5 ? " ui-datepicker-week-end" : "") + // highlight weekends
+                (unselectable ? " ui-datepicker-unselectable ui-state-disabled" : "") + // highlight unselectable days
+                (otherMonth || unselectable ? '' :
+                    (printDate.getTime() === selectedDate.getTime() ? " ui-datepicker-current-day" : "") + // highlight selected day
+                        (printDate.getTime() === today.getTime() ? " ui-datepicker-today" : "")
+                    ) + "'" + // highlight today (if different)
+                (unselectable ? "" : " data-month='" + printDate.getMonth() + "' data-year='" + printDate.getFullYear() + "'") + ">" + // actions
+                (otherMonth ? "&#xa0;" : // display for other months
+                    (unselectable ? "<span class='ui-state-default'>" + printDate.getDate() + "</span>" : "<a class='ui-state-default" +
+                        (printDate.getTime() === today.getTime() ? " ui-state-highlight" : "") +
+                        (printDate.getTime() === selectedDate.getTime() ? " ui-state-active" : "") + // highlight selected day
+                        "' href='#'>" + printDate.getDate() + "</a>")) + "</td>"; // display selectable date
         },
 
         _commit: function(){
             var data = this._data, date, dateStr = $.datepicker.formatDate(date = this.selectedDate());
-            data._inline || this.root().val(dateStr);
             data.date = date;
             data._inited && this.trigger('valuecommit', [date, dateStr, this]);
             return this;
@@ -261,20 +252,17 @@
          * @desc 显示组件
          */
         open:function () {
-            var data = this._data, me = this, date = this.date();
-            if (data._isShow)return this;
+            var me = this, el = me.root(), data = me._data, date = me.date();
+            if (data.inline || data._isShow)return me;
             data._isShow = true;
-            date && this.selectedDate(date);
-            this.refresh();
-            data._frame = new slideUpFrame(data._container.show(), function(){
+            date && me.selectedDate(date);
+            me.refresh();
+            data._frame = new slideUpFrame(el.show(), function(confirm){
                 me.close();
-                me._commit();
-                return false;
-            }, function(){
-                me.close();
+                confirm && me._commit();
                 return false;
             });
-            return this.trigger('open', this);
+            return me.trigger('open', me);
         },
 
         /**
@@ -283,13 +271,13 @@
          * @desc 隐藏组件
          */
         close:function () {
-            var data = this._data, me = this, eventData;
-            if (!data._isShow)return this;
-            this.trigger(eventData = $.Event('beforeclose'), this);
-            if(eventData.defaultPrevented)return this;
+            var me = this, el = me.root(), data = me._data, eventData;
+            if (data.inline || !data._isShow)return me;
+            me.trigger(eventData = $.Event('beforeclose'), me);
+            if(eventData.defaultPrevented)return me;
             data._isShow = false;
             data._frame.close(function(){
-                data._container.hide();
+                el.hide();
                 me.trigger('close');
             });
             data._frame = null;
@@ -313,7 +301,7 @@
          * @desc 设置或获取Option，如果想要Option生效需要调用[Refresh](#datepicker_refresh)方法。
          */
         _option:function (key, val) {
-            var data = this._data, date;
+            var data = this._data, date, minDate, maxDate;
             if (val !== undefined) {
                 switch (key) {
                     case 'minDate':
@@ -321,7 +309,10 @@
                         data[key] = val ? $.datepicker.parseDate(val) : null;
                         break;
                     case 'selectedDate':
+                        minDate = data.minDate;
+                        maxDate = data.maxDate;
                         val = $.datepicker.parseDate(val);
+                        val = minDate && minDate>val ? minDate : maxDate && maxDate < val ? maxDate: val;
                         data._selectedYear = data._drawYear = val.getFullYear();
                         data._selectedMonth = data._drawMonth = val.getMonth();
                         data._selectedDay = val.getDate();
@@ -330,9 +321,6 @@
                     case 'date':
                         this._option('selectedDate', val);
                         this._commit();
-                        break;
-                    case 'gap':
-                        data[key] = val;
                         break;
                 }
                 data._invalid = true;
@@ -412,13 +400,13 @@
          * @desc 当修改option后需要调用此方法。
          */
         refresh:function () {
-            var data = this._data;
+            var data = this._data, el = this.root();
             if (!data._invalid) {
                 return;
             }
-            $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', data._container).highlight();
-            data._container.empty().append(this._generateHTML());
-            $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', data._container).highlight('ui-state-hover');
+            $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', el).highlight();
+            el.empty().append(this._generateHTML());
+            $('.ui-datepicker-calendar td:not(.ui-state-disabled), .ui-datepicker-header a', el).highlight('ui-state-hover');
             data._frame && data._frame.refresh();
             data._invalid = false;
             return this;
@@ -430,15 +418,15 @@
          * @grammar destroy()  ⇒ instance
          */
         destroy:function () {
-            var data = this._data, eventHandler = this._eventHandler;
-            if (!data._inline) {
+            var data = this._data, el = this.root(), eventHandler = this._eventHandler;
+            if (!data.inline) {
                 this.root().off('click', eventHandler);
                 $(document).off('click.'+this.id());
                 $(window).off('ortchange', eventHandler);
-                data._container.on('swipeLeft swipeRight', eventHandler);
+                el.on('swipeLeft swipeRight', eventHandler);
             }
-            $('.ui-datepicker-calendar td:not(.ui-state-disabled)', data._container).highlight();
-            data._container.remove();
+            $('.ui-datepicker-calendar td:not(.ui-state-disabled)', el).highlight();
+            data._div.remove();
             return this.$super('destroy');
         }
 

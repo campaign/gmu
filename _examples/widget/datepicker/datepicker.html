@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
     <!--demo展示所用css end-->
     <!--组件依赖css begin-->
+    <link rel="stylesheet" type="text/css" href="../../../assets/widget/datepicker/datepicker.css" />
     <link rel="stylesheet" type="text/css" href="../../../assets/widget/datepicker/datepicker.default.css" />
     <!--组件依赖css end-->
 
@@ -31,13 +32,22 @@
 <body>
 
 <div class="section">
-    <input id="datestart" type="text" value="2013-01-15" />
+    <input id="datestart" readonly="readonly" type="text" value="2013-01-15" />
 </div>
 
 <script type="text/javascript">
 (function($, undefined){
     $(function(){
-        $('#datestart').datepicker();
+        var input = $('#datestart'),
+                dp = $.ui.datepicker({
+                    date: input.val(),
+                    valuecommit: function(e, date, datestr){
+                        input.val(datestr);
+                    }
+                });
+        input.on('click', function(){
+            dp.toggle();
+        });
     });
 })(Zepto);
 </script>

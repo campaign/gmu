@@ -7,70 +7,141 @@ module('webapp.pageswipe', {
         });
     },
     teardown: function() {
-        $('#pageswipe').remove();
+        $('#toolbar').remove();
     }
 });
 
-test("setup", function() {
-    expect(3);
+test("setup, 默认参数", function() {
+    expect(8);
     stop();
     ua.loadcss(["reset.css", "widget/pageswipe/pageswipe.css","../_test/widget/css/pageswipe/pageswipe_demo.css"], function() {
-        setTimeout(function() {
-            var pageswipe = $('#pageswipe').pageswipe({
-                toolbar:'#toolbar'
-            }).pageswipe('this');
-            equals(pageswipe._el.find(".ui-pageswipe-wheel").length, 1, "The wheel is right");
-            equals(pageswipe._el.find(".ui-pageswipe-content").length, 1 , "The content are right");
-            equals(pageswipe._el.find(".ui-pageswipe-index").length, 1 , "The index are right");
-            pageswipe.destroy();
-            start();
-        }, 100);
+        var pageswipe = $('#pageswipe').pageswipe().pageswipe('this');
+        
+        equals(pageswipe._data.iconWidth, 55, "The data is right");
+        ok(ua.isShown(pageswipe._el[0]), "The pageswipe shows");
+        equals(pageswipe._el.find(".ui-pageswipe-wheel .ui-pageswipe-content").length, 1 , "The content is right");
+        equals(pageswipe._el.find(".ui-pageswipe-wheel .ui-pageswipe-index").length, 1 , "The index is right");
+        equals(pageswipe._el.find(".ui-pageswipe-content").width(), window.innerWidth, "The content is right");
+        equals(pageswipe._el.find(".ui-pageswipe-content").height(), 400, "The content is right");
+        equals(pageswipe._el.find(".ui-pageswipe-index").width(), window.innerWidth - 55, "The content is right");
+        equals(pageswipe._el.find(".ui-pageswipe-index").height(), 400, "The content is right");
+        pageswipe.destroy();
+        start();
     });
+});
+
+test("setup, 自定义参数", function() {
+    expect(8);
+    var pageswipe = $('#pageswipe').pageswipe({
+    	toolbar: "#toolbar",
+    	iconWidth: 40
+    }).pageswipe('this');
+    
+    equals(pageswipe._data.iconWidth, 40, "The data is right");
+    ok(ua.isShown(pageswipe._el[0]), "The pageswipe shows");
+    equals(pageswipe._el.find(".ui-pageswipe-wheel .ui-pageswipe-content").length, 1 , "The content is right");
+    equals(pageswipe._el.find(".ui-pageswipe-wheel .ui-pageswipe-index").length, 1 , "The index is right");
+    equals(pageswipe._el.find(".ui-pageswipe-content").width(), window.innerWidth, "The content is right");
+    equals(pageswipe._el.find(".ui-pageswipe-content").height(), 400, "The content is right");
+    equals(pageswipe._el.find(".ui-pageswipe-index").width(), window.innerWidth - 40, "The content is right");
+    equals(pageswipe._el.find(".ui-pageswipe-index").height(), 400, "The content is right");
+    pageswipe.destroy();
 });
 
 
 test("点击切换按钮", function() {
     stop();
-    expect(2);
+    expect(8);
     var pageswipe = $('#pageswipe').pageswipe({
         toolbar:'#toolbar'
     }).pageswipe('this');
     ta.tap($('.switch')[0]);
     setTimeout(function(){
-        equals($('.ui-pageswipe-wheel').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'),"The picture slide");
+        equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 55),"The picture slide");
+        equals($('.ui-pageswipe-index').offset().left, 55,"The picture slide");
         ta.tap($('.switch')[0]);
         setTimeout(function(){
-            equals($('.ui-pageswipe-wheel').offset().left, 0,"The picture slide");
-            pageswipe.destroy();
-            start();
+            equals($('.ui-pageswipe-content').offset().left, 0,"The picture slide");
+            equals($('.ui-pageswipe-index').offset().left, window.innerWidth,"The picture slide");
+            ta.tap($('.switch')[0]);
+            setTimeout(function(){
+                equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 55),"The picture slide");
+                equals($('.ui-pageswipe-index').offset().left, 55,"The picture slide");
+                ta.touchstart($('.ui-pageswipe-content')[0]);
+                setTimeout(function(){
+                    equals($('.ui-pageswipe-content').offset().left, 0,"The picture slide");
+                    equals($('.ui-pageswipe-index').offset().left, window.innerWidth,"The picture slide");
+                    pageswipe.destroy();
+                    start();
+                }, 550);
+            }, 550);
         }, 550);
     }, 550);
 });
 
 test("show(), hide(), toggle()", function() {
     stop();
-    expect(4);
+    expect(8);
     var pageswipe = $('#pageswipe').pageswipe({
-        toolbar:'#toolbar'
+        toolbar:'#toolbar',
+        iconWidth: 40
     }).pageswipe('this');
     pageswipe.show();
     setTimeout(function () {
-        equals($('.ui-pageswipe-wheel').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'), "The picture slide");
+    	equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 40),"The picture slide");
+        equals($('.ui-pageswipe-index').offset().left, 40,"The picture slide");
+        pageswipe.toggle();
+        setTimeout(function () {
+        	equals($('.ui-pageswipe-content').offset().left, 0,"The picture slide");
+            equals($('.ui-pageswipe-index').offset().left, window.innerWidth,"The picture slide");
             pageswipe.toggle();
             setTimeout(function () {
-                equals($('.ui-pageswipe-wheel').offset().left, 0, "The picture slide");
-                pageswipe.toggle();
+            	equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 40),"The picture slide");
+                equals($('.ui-pageswipe-index').offset().left, 40,"The picture slide");
+                pageswipe.hide();
                 setTimeout(function () {
-                    equals($('.ui-pageswipe-wheel').offset().left, $('#pageswipe').offset().width * -1 + pageswipe.data('iconWidth'), "The picture slide");
-                    pageswipe.hide();
-                    setTimeout(function () {
-                        equals($('.ui-pageswipe-wheel').offset().left, 0, "The picture slide");
-                        pageswipe.destroy();
-                        start();
-                }, 500);
-            }, 500);
-        }, 500);
+                	equals($('.ui-pageswipe-content').offset().left, 0,"The picture slide");
+                    equals($('.ui-pageswipe-index').offset().left, window.innerWidth,"The picture slide");
+                    pageswipe.destroy();
+                    start();
+	            }, 500);
+	        }, 500);
+	    }, 500);
     }, 500);
+});
+
+test("屏幕旋转", function() {
+    expect(4);
+    stop();
+    ua.frameExt(function(w, f){
+		var me = this;
+    	ua.loadcss(["reset.css", "widget/pageswipe/pageswipe.css","../_test/widget/css/pageswipe/pageswipe_demo.css"], function() {
+	    	$("#toolbar, #pageswipe").remove();
+	    	w.$('body').append('<div id="toolbar"><div><span class="switch">切换</span></div></div><div id="pageswipe"><div><p>内容部分</p></div><div>索引</div></div> ');
+	    	
+	    	var pageswipe = w.$('#pageswipe').pageswipe().pageswipe('this');
+			
+	    	pageswipe.show();
+	        setTimeout(function () {
+	        	equals(w.$('.ui-pageswipe-content').offset().left, -(w.innerWidth - 55),"The picture slide");
+	            equals(w.$('.ui-pageswipe-index').offset().left, 55,"The picture slide");
+	
+	            $(f).css("width", 150).css("height", 300);
+				var e = $.support.orientation ? 'orientationchange' : 'resize';
+				ta.trigger(e, w);
+				
+				setTimeout(function () {
+					pageswipe.show();
+		            setTimeout(function () {
+		            	equals(w.$('.ui-pageswipe-content').offset().left, -(w.innerWidth - 55),"The picture slide");
+		                equals(w.$('.ui-pageswipe-index').offset().left, 55,"The picture slide");
+		                pageswipe.destroy();
+		                me.finish();
+		    	    }, 500);
+				}, 500);
+	        }, 500);
+    	}, w);
+    });
 });
 
 test("destroy()", function() {
