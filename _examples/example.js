@@ -137,6 +137,7 @@
                     cacheParentOffset: false
                 }).bindButton(btn);
             }
+            $(document.body).trigger('pageready');
         }
     }).initHeader();
 
