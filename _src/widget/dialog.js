@@ -147,7 +147,8 @@
         },
 
         _calculate: function(){
-            var me = this, data = me._data, size, $win, root = document.body, ret = {}, isBody = data._cIsBody;
+            var me = this, data = me._data, size, $win, root = document.body,
+                ret = {}, isBody = data._cIsBody, round = Math.round;
 
             data.mask && (ret.mask = isBody ? {
                 width:  root.clientWidth,
@@ -161,9 +162,9 @@
             $win = $(window);
             ret.wrap = {
                 left: '50%',
-                marginLeft: -size.width/2 +'px',
-                top: isBody?$win.height() / 2 + window.pageYOffset:'50%',
-                marginTop: -size.height/2 +'px'
+                marginLeft: -round(size.width/2) +'px',
+                top: isBody?round($win.height() / 2) + window.pageYOffset:'50%',
+                marginTop: -round(size.height/2) +'px'
             }
             return ret;
         },
