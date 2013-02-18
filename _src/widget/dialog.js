@@ -5,35 +5,23 @@
  * @import core/zepto.ui.js, core/zepto.highlight.js
  */
 (function($, undefined) {
-    var actualSize = function(el){
-            var clone = $(el).first().clone(), size ={};
-            clone.css({
-                position:'absolute !important',
-                left:'-99999px',
-                display:'block !important'
-            }).appendTo(document.body);
-
-            size['width'] = clone.width();
-            size['height'] = clone.height();
-            clone.remove();
-            return size;
-        },
-        tpl = '<% if(mask){ %><div class="ui-mask"></div><% } %>' +
-            '<div class="ui-dialog">'+
-                '<% if(title){ %>'+'<div class="ui-dialog-title">'+
+    var tpl = {
+        close: '<a class="ui-dialog-close" title="关闭"><span class="ui-icon ui-icon-delete"></span></a>',
+        mask: '<div class="ui-mask"></div>',
+        title: '<div class="ui-dialog-title">'+
                     '<h3><%=title%></h3>'+
-                    '<% if(closeBtn){ %><a class="ui-dialog-close white" title="关闭"><span class="ui-icon ui-icon-delete white"></span></a><% } %>'+
-                '</div>'+
-                '<% } else if(closeBtn){ %><a class="ui-dialog-close white" title="关闭"><span class="ui-icon ui-icon-delete white"></span></a><% } %>'+
-                '<div class="ui-dialog-content"></div>'+
-                '<% if(btns){ %>'+
-                    '<div class="ui-dialog-btns">'+
-                    '<% for(var i=0, length=btns.length; i<length; i++){var item = btns[i]; %>'+
-                        '<a class="ui-btn ui-btn-<%=item.index%>" data-key="<%=item.key%>"><%=item.text%></a>'+
-                    '<% } %>'+
-                    '</div>'+
-                '<% } %>' +
-            '</div> ';
+                '</div>',
+        wrap: '<div class="ui-dialog">'+
+            '<div class="ui-dialog-content"></div>'+
+            '<% if(btns){ %>'+
+            '<div class="ui-dialog-btns">'+
+            '<% for(var i=0, length=btns.length; i<length; i++){var item = btns[i]; %>'+
+            '<a class="ui-btn ui-btn-<%=item.index%>" data-key="<%=item.key%>"><%=item.text%></a>'+
+            '<% } %>'+
+            '</div>'+
+            '<% } %>' +
+            '</div> '
+    };
 
     /**
      * @name $.ui.dialog
@@ -78,7 +66,8 @@
             content: null,
             scrollMove: true,//是否禁用掉scroll，在弹出的时候
             container: null,
-            maskClick: null
+            maskClick: null,
+            position: null //需要dialog.position插件才能用
         },
 
         /**
@@ -96,19 +85,13 @@
             data.title = data.title || this._el.attr('title');
         },
 
-        _getContainer: function(){
-            return $(document.body);
-        },
-
         _init: function(){
-            var me = this, data = me._data, btns, i= 0, eventHanlder = $.proxy(me._eventHandler, me), vars = {}, $all;
+            var me = this, data = me._data, btns,
+                i= 0, eventHanlder = $.proxy(me._eventHandler, me), vars = {};
 
-            data._container = me._getContainer();
-            $.each(['mask', 'title', 'closeBtn'], function(){
-                vars[this] = data[this] || '';
-            });
-
-            vars['btns'] = btns= [];
+            data._container = $(data.container || document.body);
+            (data._cIsBody = data._container.is('body')) || data._container.addClass('ui-dialog-container');
+            vars.btns = btns= [];
             data.buttons && $.each(data.buttons, function(key){
                 btns.push({
                     index: ++i,
@@ -116,36 +99,27 @@
                     key: key
                 });
             });
-
-            $all = $($.parseTpl(tpl, vars));
-            data._wrap = $all.filter('.ui-dialog');
-            data._mask = data.mask ? $all.not(data._wrap) : null;
+            data._mask = data.mask ? $(tpl.mask).appendTo(data._container) : null;
+            data._wrap = $($.parseTpl(tpl.wrap, vars)).appendTo(data._container);
             data._content = $('.ui-dialog-content', data._wrap);
-            data._title = data.title ? $('.ui-dialog-title', data._wrap):null;
-            data._close = data.closeBtn && $('.ui-dialog-close', data._wrap).highlight('ui-dialog-close-hover');
-            me._el = me._el || data._content;
+
+            data._title = $(tpl.title);
+            data._close = data.closeBtn && $(tpl.close).highlight('ui-dialog-close-hover');
+            me._el = me._el || data._content;//如果不需要支持render模式，此句要删除
 
             me.title(data.title);
             me.content(data.content);
 
             btns.length && $('.ui-dialog-btns .ui-btn', data._wrap).highlight('ui-state-hover');
-
             data._wrap.css({
                 width: data.width,
                 height: data.height
             });
 
-            $all.appendTo(data._container);
-
-            //bind events
+            //bind events绑定事件
             $(window).on('ortchange', eventHanlder);
             data._wrap.on('click', eventHanlder);
             data._mask && data._mask.on('click', eventHanlder);
-
-            data._pos = {
-                x:'center',
-                y:'center'
-            };
             data.autoOpen && me.root().one('init', function(){me.open();});
         },
 
@@ -153,14 +127,13 @@
             var me = this, match, wrap, data = me._data, fn;
             switch(e.type){
                 case 'ortchange':
-                    data._size = null;
                     this.refresh();
                     break;
                 case 'touchmove':
                     data.scrollMove && e.preventDefault();
                     break;
                 case 'click':
-                    if(data._mask && ($.contains(data._mask[0], e.target) || data._mask[0] == e.target )){
+                    if(data._mask && ($.contains(data._mask[0], e.target) || data._mask[0] === e.target )){
                         return me.trigger('maskClick');
                     }
                     wrap = data._wrap.get(0);
@@ -170,51 +143,30 @@
                         fn = data.buttons[match.attr('data-key')];
                         fn && fn.apply(me, arguments);
                     }
-                    break;
             }
-        },
-
-        /**
-         * @name position
-         * @grammar position(x, y) ⇒ instance
-         * @desc 用来设置弹出框的位置，如果不另外设置，组件默认为上下左右居中对齐。位置参数接受，数值，百分比，带单位的数值，或者'center'。
-         * 如: 100， 100px, 100em, 10%, center;
-         * @notice 暂时不支持 left, right, top, bottom.
-         */
-        position: function(x, y){
-            var data = this._data;
-            $.extend(data._pos, {x:x, y:y});
-            return this.refresh();
         },
 
         _calculate: function(){
-            var me = this, data = me._data, pos = data._pos, css, size, $win, root = document.body, result = {};
+            var me = this, data = me._data, size, $win, root = document.body,
+                ret = {}, isBody = data._cIsBody, round = Math.round;
 
-            if (data._mask) {
-                result.mask = {
-                    width:  root.clientWidth,
-                    height: Math.max(root.scrollHeight, root.clientHeight)-1//不减1的话uc浏览器再旋转的时候不触发resize.
-                }
+            data.mask && (ret.mask = isBody ? {
+                width:  root.clientWidth,
+                height: Math.max(root.scrollHeight, root.clientHeight)-1//不减1的话uc浏览器再旋转的时候不触发resize.奇葩！
+            }:{
+                width: '100%',
+                height: '100%'
+            });
+
+            size = data._wrap.offset();
+            $win = $(window);
+            ret.wrap = {
+                left: '50%',
+                marginLeft: -round(size.width/2) +'px',
+                top: isBody?round($win.height() / 2) + window.pageYOffset:'50%',
+                marginTop: -round(size.height/2) +'px'
             }
-            css = {};
-            size = data._size;
-            if(pos.x =='center'){
-                css.left = '50%';
-                css.marginLeft = -size.width/2 +'px';
-            } else {
-                css.left = pos.x;
-                css.marginLeft = '0';
-            }
-            if(pos.y =='center'){
-                $win = $(window);
-                css.top = $win.height() / 2 + window.pageYOffset;
-                css.marginTop = -size.height/2 +'px';
-            } else {
-                css.top = pos.y;
-                css.marginTop = '0';
-            }
-            result.wrap = css;
-            return result;
+            return ret;
         },
 
         /**
@@ -225,9 +177,8 @@
         refresh: function(){
             var me = this, data = me._data, ret;
             if(data._isOpen) {
-                data._size = data._size || actualSize(data._wrap);
                 ret = this._calculate();
-                'mask' in ret && data._mask.css(ret.mask);
+                ret.mask && data._mask.css(ret.mask);
                 data._wrap.css(ret.wrap);
             }
             return me;
@@ -243,14 +194,10 @@
             var data = this._data;
             data._isOpen = true;
 
-            if(x!==undefined){
-                this.position(x, y);
-            } else {
-                this.refresh();
-            }
-
             data._wrap.css('display', 'block');
             data._mask && data._mask.css('display', 'block');
+
+            x !== undefined && this.position ? this.position(x, y) : this.refresh();
 
             $(document).on('touchmove', $.proxy(this._eventHandler, this));
             return this.trigger('open');
@@ -283,16 +230,13 @@
          * @example $('#dialog').dialog('title', '标题<span>xxx</span>');
          */
         title: function(value) {
-            var data = this._data;
-            if(value) {
-                $('h3', data._title).html(data.title = value);
-                data._close && data._close.appendTo(data._title);
-            } else if(value !== undefined) {
-                data._title && (data._title.remove(), data._title = null);
-                data.title = value;
-                data._close && data._close.appendTo(data._wrap);
+            var data = this._data, setter = value !== undefined;
+            if(setter){
+                value = (data.title = value) ? '<h3>'+value+'</h3>' : value;
+                data._title.html(value)[value?'prependTo':'remove'](data._wrap);
+                data._close && data._close.prependTo(data.title? data._title : data._wrap);
             }
-            return data.title;
+            return setter ? this : data.title;
         },
 
         /**
@@ -304,10 +248,10 @@
          * $('#dialog').dialog('content', '<div>内容</div>');
          * $('#dialog').dialog('content', $('#content'));
          */
-        content: function(value) {
-            var data = this._data;
-            value!==undefined && data._content.empty().append(data.content = value);
-            return data.content;
+        content: function(val) {
+            var data = this._data, setter = val!==undefined;
+            setter && data._content.empty().append(data.content = val);
+            return setter ? this: data.content;
         },
 
         /**
