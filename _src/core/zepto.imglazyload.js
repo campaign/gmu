@@ -28,6 +28,7 @@
      * $('.lazy-load').imglazyload().on('error', function (e) {
      *     e.preventDefault();      //该图片不再加载
      * });
+     *
      */
     var pedding;
     $.fn.imglazyload = function (opts) {
