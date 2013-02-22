@@ -25,6 +25,10 @@
     -webkit-border-radius: 3px;
 }
 
+.ui-dialog .ui-dialog-close .ui-icon {
+    background-image: url("../../icons-36-white.png");
+}
+
 .ui-dialog .ui-dialog-close-hover {
     background-color: rgba(255, 255, 255, 0.4);
 }

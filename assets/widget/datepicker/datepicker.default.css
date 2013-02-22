@@ -80,30 +80,6 @@
     background: #ccc;
 }
 
-.ui-holder {
-    position: absolute !important;
-    clip: rect(1px 1px 1px 1px);
-    left: -10000px;
-}
-
-.ui-slidup-wrap {
-    position: absolute;
-    left: 0;
-    z-index: 150;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.4);
-    overflow: hidden;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    -webkit-transform: translateZ(0);
-}
-
-.ui-slideup {
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    left: 0;
-}
-
 .ui-slideup .header {
     line-height: 43px;
     height: 43px;
@@ -113,7 +89,7 @@
     background: url(./datepicker-header.png) repeat-x;
     overflow: hidden;
 }
-.ui-slideup .header .ok-btn, .ui-slideup .header .no-btn {
+.ui-slideup .ok-btn, .ui-slideup .no-btn {
     position: absolute;
     top: 7px;
     height: 20px;
@@ -128,17 +104,17 @@
     text-decoration: none;
     display: block;
 }
-.ui-slideup .header .ok-btn {
+.ui-slideup .ok-btn {
     right: 7px;
     float: right;
     -webkit-border-image: url(done.png) 5;
 }
-.ui-slideup .header .no-btn {
+.ui-slideup .no-btn {
     left: 7px;
     float: left;
     -webkit-border-image: url(cancel.png) 5;
 }
-.ui-slideup .header .ok-btn.ui-state-hover, .ui-slideup .header .no-btn.ui-state-hover{
+.ui-slideup .ok-btn.ui-state-hover, .ui-slideup .no-btn.ui-state-hover{
     opacity: 0.4;
 }
 .ui-slideup .frame {

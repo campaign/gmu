@@ -74,6 +74,7 @@
                 left: offset.left - parentOffset.left
             }
         },
+        round = Math.round,
         rhorizontal = /left|center|right/,
         rvertical = /top|center|bottom/,
         roffset = /([\+\-]\d+%?)/,
@@ -87,8 +88,8 @@
         ];
     }
 
-    function parseCss( element, property ) {
-        return parseInt( element.css( property ), 10 ) || 0;
+    function parseCss( elem, prop ) {
+        return parseInt( elem.css( prop ), 10 ) || 0;
     }
 
     function getDimensions( elem ) {
@@ -110,18 +111,18 @@
         }: elem.offset();
     }
 
-    function getWithinInfo(element){
-        var withinElement = $( element = (element || window) ),
-            _isWindow = element == window,
-            offset = _isWindow? { left: 0, top: 0 } : withinElement.offset();
+    function getWithinInfo(elem){
+        var withinElem = $( elem = (elem || window) ),
+            _isWindow = elem == window,
+            offset = _isWindow? { left: 0, top: 0 } : withinElem.offset();
         return {
-            element: withinElement,
+            element: withinElem,
             isWindow: _isWindow,
             offset: offset,
-            width: offset.width || withinElement.width(),
-            height: offset.height || withinElement.height(),
-            scrollLeft: _isWindow?element.pageXOffset:element.scrollLeft,
-            scrollTop: _isWindow?element.pageYOffset:element.scrollTop
+            width: offset.width || withinElem.width(),
+            height: offset.height || withinElem.height(),
+            scrollLeft: _isWindow?elem.pageXOffset:elem.scrollLeft,
+            scrollTop: _isWindow?elem.pageYOffset:elem.scrollTop
         };
     }
 
@@ -137,6 +138,7 @@
      * - ''at'' //默认为'center'// 设置定位到目标元素的什么位置。参数格式同my参数一致。
      * - ''of'' //默认为null// 设置目标元素
      * - ''collision'' //默认为null// 碰撞检测回调方法。传入function.
+     * - ''within'' //默认为window，碰撞检测对象。
      * - ''using''  传入function，如果没有传入position将通过css方法设置，可以传入一个function在方法中，通过animate方法来设置，这样就有了动画效果，而不是瞬间变化。
      */
     $.fn.position = function (opts) {
@@ -201,6 +203,10 @@
             position.top -= (tmp = opts.my[ 1 ]) === "bottom"?elemHeight:tmp==="center"?elemHeight/2:0;
             position.left += myOffset[ 0 ];
             position.top += myOffset[ 1 ];
+
+            position.left = round(position.left);
+            position.top = round(position.top);
+
             collisionPosition = {
                 marginLeft: marginLeft,
                 marginTop: marginTop

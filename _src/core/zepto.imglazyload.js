@@ -58,17 +58,16 @@
         pedding = $.slice(this).reverse();
         if (opts.refresh) return this;      //更新pedding值
 
-        function _load(div, index) {
+        function _load(div) {
             var $div = $(div), $img;
             $.isFunction(opts.startload) && opts.startload.call($div);
             $img = $('<img />').on('load',function () {
                 $div.trigger('loadcomplete').replaceWith($img);
                 $img.off('load');
-                splice.call(pedding, index, 1);
             }).on('error',function () {     //图片加载失败处理
                 var errorEvent = $.Event('error');       //派生错误处理的事件
                 $div.trigger(errorEvent);
-                errorEvent.defaultPrevented && splice.call(pedding, index, 1);
+                errorEvent.defaultPrevented || pedding.push(div);
                 $img.off('error').remove();
             }).attr('src', $div.attr(opts.urlName));
         }
@@ -78,7 +77,7 @@
             for (i = pedding.length; i--;) {
                 $image = $(div = pedding[i]);
                 offset = $image.offset();
-                detect[type || 'default'](offset.top, offset.height) && _load(div, i);
+                detect[type || 'default'](offset.top, offset.height) && (splice.call(pedding, i, 1), _load(div));;
             }
         }
 
