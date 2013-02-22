@@ -21,17 +21,13 @@
 <body style="height: 2000px;">
     <a href="javascript:;" id="clear" style="display: inline-block;padding: 30px;">清除LocalStorage</a>
 
-    <div id="add2"></div>
 <script>
     //创建组件
-    $('#add2').add2desktop({icon:'icon.png'});
-
-    //  var demo = $.ui.add2desktop({icon:'icon.png'});
+      var demo = $.ui.add2desktop({icon:'icon.png'});
 
     //清除LocalStorage
     $('#clear').on('click',function(){
-        $('#add2').add2desktop('key','');
-//        demo.key('');
+        demo.key('');
         alert('已清除');
     });
 </script>
