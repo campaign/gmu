@@ -1,5 +1,6 @@
 <?php
     $searchUrl = 'http://nssug.baidu.com/su?&sugParams&prod=baike&ie=uft-8';
+    header('content-type:application/json');
     if(!empty($_GET['wd'])) {
         // 判断是否为bae环境
         if(!file_exists("../../bae_config.php")){
