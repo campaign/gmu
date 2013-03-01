@@ -98,7 +98,8 @@ var TouchAction = {
 	 * @method initNativeTouches
 	 * @static
 	 */
-	initNativeTouches: function(touchlist, touches, target){
+	initNativeTouches: function(touches, target){
+		var touchlists = [];
 		var i = 0;
 		do{
 			var identifier = touches[i] && touches[i].identifier || 0;
@@ -106,9 +107,10 @@ var TouchAction = {
 			var touchesPageY = touches[i] && (touches[i].pageY || touches[i].clientY) || 0;
 			var touchesScreenX = touches[i] && touches[i].screenX || 0;
 			var touchesScreenY = touches[i] && touches[i].screenY || 0;
-			touchlist[i] = document.createTouch(null, target, identifier, touchesPageX, touchesPageY, touchesScreenX, touchesScreenY);
+			touchlists[i] = document.createTouch(null, target, identifier, touchesPageX, touchesPageY, touchesScreenX, touchesScreenY);
 			i ++;
 		} while(i < touches.length);
+		return touchlists;
 	},
 	
 	/**
@@ -125,7 +127,7 @@ var TouchAction = {
 	 */
 	initGenericTouches: function(touchlist, touches, target){
 		var i = 0;
-		function Touch(target){
+		function Touch(target, identifier, touchesPageX, touchesPageY, touchesScreenX, touchesScreenY){
 			this.target = target;
 			this.identifier = identifier;
 			this.pageX = this.clientX = touchesPageX;
@@ -142,6 +144,7 @@ var TouchAction = {
 			touchlist[i] = new Touch(target, identifier, touchesPageX, touchesPageY, touchesScreenX, touchesScreenY);
 			i ++;
 		} while(i < touches.length);
+		touchlist.length = i;
 	},
 	
 	/**
@@ -154,9 +157,16 @@ var TouchAction = {
 	 * @method createNativeTouchList
 	 * @static
 	 */
-	createNativeTouchList: function(touches, target){
-		var touchlist = document.createTouchList();
-		this.initNativeTouches(touchlist, touches, target);
+	createNativeTouchList: function(touches, target){		
+		if(touches){
+			var touchlist, touchlists = this.initNativeTouches(touches, target);
+			if(touchlists.length == 1)
+				touchlist = document.createTouchList(touchlists[0]);
+		    if(touchlists.length == 2)
+				touchlist = document.createTouchList(touchlists[0], touchlists[1]);
+		}
+		else
+			var touchlist = document.createTouchList();
 		return touchlist;
 	},
 	
@@ -178,7 +188,8 @@ var TouchAction = {
 		    }
 		}
 		var touchlist = new TouchList();
-		this.initGenericTouches(touchlist, touches, target);
+		if(touches)
+			this.initGenericTouches(touchlist, touches, target);
 		return touchlist;
 	},
 	
@@ -235,8 +246,10 @@ var TouchAction = {
 	 */
 	simulateTouchEvent: function(type, target, options){
 		options = options || {};
-		options.touches = options.touches || [];
-		options.targetTouches = options.targetTouches || [];
+		if(type != "touchend" && type !="touchcancel"){
+			options.touches = options.touches || [];
+			options.targetTouches = options.targetTouches || [];
+		}
 		options.changedTouches = options.changedTouches || [];
 		var bubbles = typeof options.bubbles != 'undefined' ? options.bubbles : true ;
 		var cancelable = typeof options.cancelable != 'undefined' ? options.cancelable : (type != "touchcancel");
