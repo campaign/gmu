@@ -78,7 +78,9 @@
        * added by chenluyang
        * @reason 直接调用jsonp时补全所需参数
        */
-    for (key in $.ajaxSettings) if (options[key] === undefined) options[key] = $.ajaxSettings[key]
+      //modified by gmu, fix ajax issue in android2.3/4.0
+      //orignal:for (key in $.ajaxSettings) if (options[key] === undefined) options[key] = $.ajaxSettings[key]
+    for (key in $.ajaxSettings) if (typeof options[key] === "undefined") options[key] = $.ajaxSettings[key]
     var callbackName = 'jsonp' + (++jsonpID),
       script = document.createElement('script'),
       abort = function(){
