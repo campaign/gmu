@@ -86,17 +86,17 @@ test("el zepto & container & create mode", function(){
 	var container = document.createElement("div");
 	$(container).attr("id", "container");
 	document.body.appendChild(container);
-	
+
 	var nav = $.ui.navigator($("<div class = 'ui-navigator my'></div>"), {
 		container: "#container",
         content: content1
     });
 	equals(window.location.href, l, "Doesn't jump to the default tab url");  //defTab上带锚点，默认选中时不跳转
-	
+
 	ok(ua.isShown(nav._el[0]), "The navigator shows");
 	equals(nav._el.attr("class"), "ui-navigator my", "The class is right");
 	equals(nav._el.parent().attr("id"), "container", "The container is right");
-	
+
 	equals(nav._el.width(), $("body").width(), "The width is right");
 	equals(nav._el.height(), 44, "The height is right");
 
@@ -115,14 +115,14 @@ test("el selector & no container & className & create mode", function(){
 	var nav = $.ui.navigator(".ui-navigator", {
         content: content1
     });
-	
+
 	ok(ua.isShown(nav._el[0]), "The navigator shows");
 	equals(nav._el.attr("class"), "ui-navigator", "The class is right");
 	equals(nav._el.parent().attr("id"), "test1", "The container is right");
-	
+
 	equals(nav._el.width(), $("body").width(), "The width is right");
 	equals(nav._el.height(), 44, "The height is right");
-	
+
 	nav.destroy();
 	$("#test1").remove();
 });
@@ -194,10 +194,10 @@ test("defTab in three mode & 多实例", function(){
         defTab: 2
     });
 	equals(window.location.href, l, "Create mode doesn't jump to the default tab url"); //defTab上带链接，默认选中时不跳转
-	
+
 	equals(nav._data.defTab, 2, "Create mode the _data is right");
 	equals(nav._data._lastIndex, 2, "Create mode  the _data is right");
-	
+
 	ok(ua.isShown(nav._el[0]), "Create mode the navigator shows");
 	equals(nav._el.attr("class"), "ui-navigator", "Create mode  the class is right");
 	equals(nav._el.parent().attr("tagName").toLowerCase(), "body", "Create mode the container is right");
@@ -248,7 +248,7 @@ test("select tab & switchTo() & ontabselect & getCurTab()", function(){ //switch
         }
     });
 	var a = nav._el.find('ul li a');
-	
+
 	ua.click(a[0]);
     equals(nav._data._lastIndex, 0, "The lastIndex is right");
     equals(a[0].className, "cur", "The defTab is right");
@@ -299,9 +299,9 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
 
     var a = nav._el.find('ul li a');
     var b = nav._el.find('.ui-navigator-fix');
-    
+
     equals(window.location.href, l + "#test3", "DefTab doesn't jump to the cur tab url");
-    
+
     ua.click(a[0]);      //点击同一个tab
     equals(nav._data._lastIndex, 1, "The lastIndex is right");
     equals(a[0].className, "cur", "The tab select is right");
@@ -332,7 +332,7 @@ test("select tab & switchTo() & getCurTab() & setup mode & fixTab", function(){ 
     equals(window.location.href, l + "#test1", "DefTab doesn't jump to the cur tab url");
     equals(nav.getCurTab().index, 0, "The getCurTab() is right");
     equals(nav.getCurTab().info.text, "首页fix", "The getCurTab() is right");
-    
+
     ua.click(b[0]);      //点击同一个fix tab
     equals(nav._data._lastIndex, 0, "The lastIndex is right");
     equals(a[4].className, "", "The defTab is right");

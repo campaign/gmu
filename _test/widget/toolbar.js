@@ -20,19 +20,19 @@ test("el(zepto)", function() {
             equals(toolbar._data.backButtonHref, "", "The _data buttonText is right");
 			equals(toolbar._data.container, undefined, "The _data container is right");
 			equals(toolbar._data.btns, "", "The _data tools is right");
-			
+
 			equals(toolbar._el.parent().attr("tagName").toLowerCase(), "body", "The container is body");
 			equals(toolbar._el.attr("class"), "ui-toolbar", "The el class is right");
-			
+
 			equals(toolbar._el.offset().left, $("body").offset().left, "The left is right");
 			equals(toolbar._el.offset().top, $(".ui-toolbar").offset().top, "The top is right");
 			equals(toolbar._el.offset().width, $("body").offset().width, "The width is right");
-			equals(toolbar._el.offset().height, 42, "The height is right");
-			
+			equals(toolbar._el.offset().height, window.screen.width>=768?50:42, "The height is right");
+
 			equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "返回", "The buttonText is right");
 			equals(toolbar._el.find(".ui-toolbar-title").text(), null, "The title is right");
 			equals(toolbar._el.find(".ui-toolbar-right").children().length, 0 , "The btns are right");
-			
+
 			toolbar.destroy();
 			start();
 		}, 100);
@@ -100,7 +100,7 @@ test("full setup", function() {
 	equals(toolbar._el.offset().left, $("body").offset().left, "The left is right");
 	equals(toolbar._el.offset().top, $(".ui-toolbar").offset().top, "The top is right");
 	equals(toolbar._el.offset().width, $("body").offset().width, "The width is right");
-	equals(toolbar._el.offset().height, 42, "The height is right");
+	equals(toolbar._el.offset().height, window.screen.width >= 768 ? 50 : 42, "The height is right");
 
 	equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "首页", "The buttonText is right");
 	equals(toolbar._el.find(".ui-toolbar-title").text(), "标题", "The titleText is right");
@@ -188,12 +188,13 @@ test('window scroll(fix)', function() {
             }
             w.$("body").append(html);
             w.scrollTo(0, 200);
+	        ta.scrollStop(w.document);
+	        var toolbar = w.$.ui.toolbar();
+	        toolbar.root().fix({top:0, left:0});
             setTimeout(function(){
-                var toolbar = w.$.ui.toolbar();
-                toolbar.root().fix({top:0, left:0});
                 equals(toolbar._el.css("display"), "block", "The toolbar is show");
                 equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                equals(toolbar._el.height() , 42 , "the height is ok");
+                equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42 , "the height is ok");
                 approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
                 equals(toolbar._el.offset(true).top, 0, 'the pos is right');
                 w.scrollTo(0, 300);
@@ -201,16 +202,16 @@ test('window scroll(fix)', function() {
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
                     equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                    equals(toolbar._el.height() , 42 , "the height is ok");
+                    equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42 , "the height is ok");
                     ok(Math.abs(w.pageYOffset - 300) <= 1, "The pageYOffset is " + w.pageYOffset);
-                    equals(toolbar._el.offset().top-300,0, 'the pos is right');
+	                approximateEqual(toolbar._el.offset().top-300,0, 'the pos is right');
                     approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
                     w.scrollTo(0,0);
                     ta.scrollStop(w.document);
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
                         equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                        equals(toolbar._el.height() , 42 , "the height is ok");
+                        equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42 , "the height is ok");
                         equals(toolbar._el.offset().top, 0, 'the pos is right');
                         approximateEqual(toolbar._el.offset().left, 0,'the pos is right');
                         w.$("br").remove();
@@ -239,13 +240,13 @@ test('useFix', function() {
                 html += "<br />";
             }
             w.$("body").append(html);
+            w.scrollTo(0, 500);
 	        setTimeout(function(){
-	            w.scrollTo(0, 500);
-	            ta.scrollStop(w);
+		        ta.scrollStop(w);
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
                     equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                    equals(toolbar._el.height() , 42 , "the height is ok");
+                    equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42, "the height is ok");
                     ok(Math.abs(w.pageYOffset - 500) <= 1, "The pageYOffset is " + w.pageYOffset);
                     equals(toolbar._el.offset().top, 500, 'the pos is right');
                     equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -254,7 +255,7 @@ test('useFix', function() {
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
                         equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                        equals(toolbar._el.height() , 42 , "the height is ok");
+                        equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42, "the height is ok");
                         equals(toolbar._el.offset().top, t, 'the pos is right');
                         equals(toolbar._el.offset().left, 0,'the pos is right');
                         w.$("br").remove();
@@ -290,13 +291,13 @@ test('setup & useFix', function() {
                 html += "<br />";
             }
             w.$("body").append(html);
+	        w.scrollTo(0, 500);
 	        setTimeout(function(){
-	            w.scrollTo(0, 500);
 	            ta.scrollStop(w);
                 setTimeout(function(){
                     equals(toolbar._el.css("display"), "block", "The toolbar is show");
                     equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                    equals(toolbar._el.height() , 42 , "the height is ok");
+                    equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42, "the height is ok");
                     ok(Math.abs(w.pageYOffset - 500) <= 1, "The pageYOffset is " + w.pageYOffset);
                     equals(toolbar._el.offset().top, 500, 'the pos is right');
                     equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -305,7 +306,7 @@ test('setup & useFix', function() {
                     setTimeout(function(){
                         equals(toolbar._el.css("display"), "block", "The toolbar is show");
                         equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-                        equals(toolbar._el.height() , 42 , "the height is ok");
+                        equals(toolbar._el.height() , window.screen.width >= 768 ? 50 : 42, "the height is ok");
                         equals(toolbar._el.offset().top, t, 'the pos is right');
                         equals(toolbar._el.offset().left, 0,'the pos is right');
                         w.$("br").remove();

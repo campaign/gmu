@@ -29,10 +29,12 @@ test("no el", function(){
 	stop();
 	ua.loadcss(["reset.css", "widget/gotop/gotop.css"], function(){
 		var gotop = $.ui.gotop({});
-		equals(gotop._el.attr("class"), "ui-gotop", "The el is right");
-		equals(gotop._el.parent()[0].tagName.toLowerCase(), "body", "The container is right");
-		gotop.destroy();
-		start();
+		setTimeout(function(){
+			equals(gotop._el.attr("class"), "ui-gotop", "The el is right");
+			equals(gotop._el.parent()[0].tagName.toLowerCase(), "body", "The container is right");
+			gotop.destroy();
+			start();
+		},200);
 	});
 });
 
@@ -78,16 +80,16 @@ test("useAnimation = false", function(){
         setTimeout(function(){
             ok(ua.isShown(gotop._el[0]), "The gotop shows");
             ok(Math.abs(window.pageYOffset - 1500) <= 1, "The pageYOffset is right");
-            equals(gotop._el.offset().left, $("html").offset().width  - 50 - 10, "The gotop left is right");
-            equals(gotop._el.offset().top, window.pageYOffset + $(window).height() - 50 - 10, "The gotop top is right");
+            equals(gotop._el.offset().left, $("html").offset().width  - (window.screen.width>=768?60:50) - 10, "The gotop left is right");
+            equals(gotop._el.offset().top, window.pageYOffset + $(window).height() -(window.screen.width >= 768 ? 60 : 50) - 10, "The gotop top is right");
             ua.click(gotop._el[0]);
             ok(window.pageYOffset <= 1, "scroll to top");
             ok(!ua.isShown(gotop._el[0]), "The gotop hides");
             window.scrollTo(0, 0);
             gotop.destroy();
             start();
-        }, 300);
-    }, 100);
+        },400);
+    }, 300);
 });
 
 test("afterScroll & useAnimation = true", function(){
@@ -96,6 +98,7 @@ test("afterScroll & useAnimation = true", function(){
 	enSetup();
 	var a, b;
 	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {
+		useAnimation:true,
 		afterScroll: function(){
 		    b = new Date();
 			ok(b - a > 160, "useAnimation=true");
@@ -104,7 +107,7 @@ test("afterScroll & useAnimation = true", function(){
 			setTimeout(function(){
 				gotop.destroy();
 				start();
-			}, 0);
+			}, 100);
 		},
         position: {right: 8, bottom: 8}
 	});
@@ -113,10 +116,10 @@ test("afterScroll & useAnimation = true", function(){
 		ta.scrollStop(document);
 		setTimeout(function(){
 			ok(ua.isShown(gotop._el[0]), "The gotop shows");
-			ua.click(gotop._el[0]);
 			a = new Date();
+			ua.click(gotop._el[0]);
 		}, 300);
-	});
+	},100);
 });
 
 test("position", function(){
@@ -125,10 +128,10 @@ test("position", function(){
 	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {position: {bottom: 20, right: 30}});
 	gotop.show();
 	ok(ua.isShown(gotop._el[0]), "The gotop shows");
-	equals(gotop._el.offset().height, 50, "The gotop height is right");
-	equals(gotop._el.offset().width, 50, "The gotop width is right");
-	equals(gotop._el.offset().left, $("html").offset().width - 50 - 30, "The gotop left is right");
-	equals(gotop._el.offset().top, document.documentElement.clientHeight - 50 - 20, "The gotop top is right");
+	equals(gotop._el.offset().height, window.screen.width>=768?60:50, "The gotop height is right");
+	equals(gotop._el.offset().width, window.screen.width >= 768 ? 60 : 50, "The gotop width is right");
+	equals(gotop._el.offset().left, $("html").offset().width - (window.screen.width >= 768 ? 60:50) - 30, "The gotop left is right");
+	equals(gotop._el.offset().top, document.documentElement.clientHeight -(window.screen.width >= 768 ? 60 :50) - 20, "The gotop top is right");
 	gotop.destroy();
     start();
 });
@@ -145,14 +148,16 @@ test("useFix = false", function(){
 			ta.scrollStop(document);
 			setTimeout(function(){
 				ok(ua.isShown(gotop._el[0]), "The gotop shows");
-				equals(gotop._el.offset().left, $("html").offset().width  - 50 - 30, "The gotop left is right");
-	            equals(gotop._el.offset().top, window.pageYOffset + $(window).height() - 50 - 20, "The gotop top is right");
+				equals(gotop._el.offset().left, $("html").offset().width  -	(window.screen.width >= 768 ? 60 :	50) - 30, "The gotop left is right");
+	            equals(gotop._el.offset().top, window.pageYOffset + $(window).height() - (window.screen.width >= 768 ? 60 :50) - 20, "The gotop top is right");
+				window.scrollTo(0, 0);
+				ta.scrollStop(document);
 				gotop.destroy();
 			    start();
 			}, 300);
-		});
+		},400);
 	}, "Zepto", "widget/gotop");
-    
+
 });
 
 test("show() & hide()", function(){
@@ -161,12 +166,12 @@ test("show() & hide()", function(){
 	var gotop = $.ui.gotop($('<div class="ui-gotop">'), {});
 	gotop.show();
 	ok(ua.isShown(gotop._el[0]), "The gotop shows");
-	equals(gotop._el.offset().height, 50, "The gotop height is right");
-	equals(gotop._el.offset().width, 50, "The gotop width is right");
-	equals(gotop._el.offset().left, $("html").offset().width - 50 - 10, "The gotop left is right");
-	equals(gotop._el.offset().top, document.documentElement.clientHeight - 50 - 10, "The gotop top is right");
+	equals(gotop._el.offset().height, (window.screen.width >= 768 ? 60 :50), "The gotop height is right");
+	equals(gotop._el.offset().width, (window.screen.width >= 768 ? 60 :50), "The gotop width is right");
+	equals(gotop._el.offset().left, $("html").offset().width - (window.screen.width >= 768 ? 60 :50) - 10, "The gotop left is right");
+	equals(gotop._el.offset().top, document.documentElement.clientHeight -	(window.screen.width >= 768 ? 60 :50) - 10, "The gotop top is right");
 	equals(gotop._el.find('div').css("background-position"), "50% 50%", "The position is right");
-	equals(gotop._el.find('div').css("-webkit-background-size"), "18px 15px", "The position is right");
+	equals(gotop._el.find('div').css("-webkit-background-size"), window.screen.width>=768?"22px 18px":"18px 15px", "The position is right");
 	gotop.hide();
 	ok(!ua.isShown(gotop._el[0]), "The gotop hides");
 	gotop.destroy();
@@ -190,8 +195,9 @@ test("basic operations", function(){
 			setTimeout(function(){
 				ok(ua.isShown(gotop._el[0]), "The gotop shows");
 				ok(Math.abs(window.pageYOffset - 1500) <= 1, "The pageYOffset is right");
-				equals(gotop._el.offset().left, $("html").offset().width - 50 - 8, "The gotop left is right");
-				equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 8, "The gotop top is right"); //window.innerHeight表示的是加上控制台的页面高度
+				equals(gotop._el.offset().left, $("html").offset().width -(window.screen.width>= 768 ? 60 :50) - 8, "The gotop left is right");
+				equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight -
+						(window.screen.width >= 768 ? 60 : 50) - 8, "The gotop top is right"); //window.innerHeight表示的是加上控制台的页面高度
 				ta.touchmove(document); //touchmove and then scroll
                 ok(!ua.isShown(gotop._el[0]), "The gotop hides");
                 window.scrollTo(0, 1500);
@@ -199,8 +205,10 @@ test("basic operations", function(){
                 setTimeout(function(){
                     ok(ua.isShown(gotop._el[0]), "The gotop shows");
                     ok(Math.abs(window.pageYOffset - 1500) <= 1, "The pageYOffset is right");
-                    equals(gotop._el.offset().left, $("html").offset().width - 50 - 8, "The gotop left is right");
-                    equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight - 50 - 8, "The gotop top is right");
+                    equals(gotop._el.offset().left, $("html").offset().width -
+		                    (window.screen.width >= 768 ? 60 : 50) - 8, "The gotop left is right");
+                    equals(gotop._el.offset().top, window.pageYOffset + window.innerHeight -
+		                    (window.screen.width >= 768 ? 60 : 50) - 8, "The gotop top is right");
                     ua.click(gotop._el[0]); //click gotop
                     setTimeout(function(){
                     	ok(window.pageYOffset <= 1, "scroll to top");
@@ -219,16 +227,18 @@ test("basic operations", function(){
                                 ta.touchcancel(document);
                                 setTimeout(function(){
                                     ok(ua.isShown(gotop._el[0]), "The gotop shows");
-                                    gotop.destroy();
+	                                window.scrollTo(0, 0);
+	                                ta.scrollStop(document);
+	                                gotop.destroy();
                                     start()
-                                }, 500);
-                            }, 500);
-                        }, 300);
-                    }, 500);
-                }, 300);
-			}, 300);
-		}, 100);
-	}, 100);
+                                }, 800);
+                            }, 800);
+                        }, 600);
+                    }, 800);
+                }, 600);
+			}, 600);
+		}, 400);
+	}, 400);
 });
 test("fix && ortchange 转屏", function(){
     expect(9);
@@ -247,8 +257,9 @@ test("fix && ortchange 转屏", function(){
             setTimeout(function(){
                 approximateEqual(w.pageYOffset, 200, "window scrolled");
                 ok(ua.isShown(gotop._el[0]), "The gotop shows");
-                equals(gotop._el.offset().left, 300 - 10 - 50, "The left is right");
-                equals(gotop._el.offset().top, w.pageYOffset + 150 - 10 - 50, "The top is right");
+                equals(gotop._el.offset().left, 300 - 10 - (window.screen.width >= 768 ? 60 : 50), "The left is right");
+                equals(gotop._el.offset().top, w.pageYOffset + 150 - 10 -
+		                (window.screen.width >= 768 ? 60 : 50), "The top is right");
                 $(f).css({width:150, height:300});
                 w.$("body").css("height", 300);
                 ta.trigger("ortchange", w);
@@ -259,9 +270,13 @@ test("fix && ortchange 转屏", function(){
                     setTimeout(function(){
                     	approximateEqual(w.pageYOffset, 400, "window scrolled");
                         ok(ua.isShown(gotop._el[0]), "The gotop shows");
-                        equals(gotop._el.offset().left, 150 - 10 - 50, "The left is right");
-                        equals(gotop._el.offset().top, w.pageYOffset + 300 - 10 - 50, "The top is right");
-                        gotop.destroy();
+                        equals(gotop._el.offset().left, 150 - 10 -
+		                        (window.screen.width >= 768 ? 60 : 50), "The left is right");
+                        equals(gotop._el.offset().top, w.pageYOffset + 300 - 10 -
+		                        (window.screen.width >= 768 ? 60 : 50), "The top is right");
+	                    window.scrollTo(0, 0);
+	                    ta.scrollStop(document);
+	                    gotop.destroy();
                         me.finish();
                     }, 500);
                 }, 500);
@@ -282,9 +297,12 @@ test("setup 模式", function(){
         setTimeout(function(){
             equals(gotop._el.attr("class"), "ui-gotop", "The el is right");
             ok(ua.isShown(gotop._el[0]), "The gotop shows");
+	        window.scrollTo(0, 0);
+	        ta.scrollStop(document);
+	        gotop.destroy();
             start();
-        }, 200);
-    });
+        }, 500);
+    },100);
 });
 
 test("destroy", function(){

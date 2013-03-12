@@ -84,7 +84,7 @@ test("参数 － align", function(){
         btn: '#btn'
     }).show();
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu默认为align center');
-    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, "dropmenu位置居中");
+	approximateEqual(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, 1,"dropmenu位置居中");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -112,7 +112,7 @@ test("参数 － align", function(){
         align: 'center'
     }).show();
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu被设置成居中对齐');
-    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, "dropmenu位置居中");
+	approximateEqual(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2,1, "dropmenu位置居中");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -126,7 +126,7 @@ test("参数 － align", function(){
         align: 'right'
     }).show();
     ok(obj.root().hasClass('ui-alignright'), 'dropmenu被设置成居右对齐');
-    equals(obj._el.offset().right, $(btn).offset().right, "dropmenu位置居右");
+	approximateEqual(obj._el.offset().right, $(btn).offset().right,1, "dropmenu位置居右");
     obj.destroy();
 
     $('#container').css({
@@ -205,9 +205,9 @@ test("参数 － offset", function(){
         btn: '#btn'
     }).show();
 
-    equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2 - 10, "dropmenu位置居中偏左10px");
+	approximateEqual(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2 - 10, 1,"dropmenu位置居中偏左10px");//居中偏左
     equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() + 20, "dropmenu的位置偏下20px");
-    
+
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -220,12 +220,12 @@ test("参数 － offset", function(){
         btn: '#btn',
         align: 'left'
     }).show();
-    
+
     equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
     equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() - 1, "dropmenu的位置偏上1px");
-    
+
     obj.destroy();
-    
+
     obj = $.ui.dropmenu({
         items: [
             {
@@ -237,12 +237,12 @@ test("参数 － offset", function(){
         align: 'left',
         pos: 'up',
     }).show();
-    
+
     equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
     equals(obj._el.offset().top, $(btn).offset().top - obj._el.height() + 1, "dropmenu的位置偏下1px");
-    
+
     obj.destroy();
-    
+
     $('#btn').css({
         position: 'absolute',
         left: 0
@@ -264,9 +264,9 @@ test("参数 － offset", function(){
 
     equals(obj._el.offset().left, 3, "dropmenu位置居左偏右3px");
     equals(obj._el.offset().top, $(btn).offset().top + $(btn).height() + 5, "dropmenu的位置偏下5px");
-    
+
     obj.destroy();
-    
+
     start();
 });
 
@@ -499,7 +499,7 @@ test("参数 － autoClose", function(){
 
     //lili 为什么用设置负top的方式使之隐藏
     obj.destroy();
-    
+
     var obj = $.ui.dropmenu({
         items: [
             {
@@ -518,7 +518,7 @@ test("参数 － autoClose", function(){
 
     ua.click(document.body);
     ok(obj.data('_isShow'), '点击其他地方，还应该是显示的');
-    
+
     obj.destroy();
     start();
 });
@@ -650,7 +650,7 @@ test("参数 － el & container", function(){
     obj.destroy();
 
     $("<div id='test1'></div>").appendTo(document.body);
-    
+
     obj = $.ui.dropmenu("#test1", {
         items: [
             {
@@ -666,7 +666,7 @@ test("参数 － el & container", function(){
     ok(obj.root().parent().is('body'), 'container设置正确');
     obj.destroy();
     start();
-    
+
     obj = $.ui.dropmenu($("<div class='ui-dropmenu'>"), {
         items: [
             {
@@ -708,10 +708,10 @@ test("多实例", function(){
         autoClose: false,
         container: '#container'
     });
-    
+
     equals(obj.root().attr("class"), 'ui-dropmenu', '样式相互区分');
     equals(obj2.root().attr("class"), 'custom ui-dropmenu', '样式相互区分');
-    
+
     $('#btn').trigger('click');
     ok(obj.data('_isShow') && !obj2.data('_isShow'), '点击btn，把第一个dropmenu显示出来了');
 
@@ -746,7 +746,7 @@ test("基本操作", function(){
         ],
         btn: '#btn'
     });
-    
+
     ok(obj.root().offset().top<0, "dropmenu默认不可见");
     $('#btn').trigger('click');
     ok(obj.root().offset().top>0, "点击按钮变成可见");
