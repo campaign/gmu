@@ -1010,7 +1010,7 @@ window.Zepto = Zepto
          * @original
          * android = ua.match(/(Android)\s+([\d.]+)/),
          */
-      android = ua.match(/(Android).*?([\d.]+)/) || /HTC/.test(ua),
+      android = ua.match(/(Android).*?([\d.]+)/) || /HTC|Adr/i.test(ua),
       ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
       iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
       webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),
@@ -1306,7 +1306,9 @@ window.Zepto = Zepto
 
   $.ajax = function(options){
     var settings = $.extend({}, options || {})
-    for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
+    //modified by gmu, fix ajax issue in android2.3/4.0
+    //orignal: for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
+    for (key in $.ajaxSettings) if (typeof settings[key] === "undefined") settings[key] = $.ajaxSettings[key]
 
     ajaxStart(settings)
 

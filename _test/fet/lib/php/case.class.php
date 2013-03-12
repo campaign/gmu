@@ -33,15 +33,13 @@ class Testcase
     {
         /*加载库文件*/
         print '<script type="text/javascript" src="../lib/js/jquery-1.5.1.js"></script>' . "\n";
-        print '<script type="text/javascript" src="../lib/js/tangram.js"></script>' . "\n";
-        print '<script type="text/javascript" src="../lib/js/TMock.js"></script>' . "\n";
+//        print '<script type="text/javascript" src="../lib/js/tangram.js"></script>' . "\n";
+//        print '<script type="text/javascript" src="../lib/js/TMock.js"></script>' . "\n";
         print '<script type="text/javascript" src="../lib/js/testrunner.js"></script>' . "\n";
         print '<script type="text/javascript" src="../lib/js/ext_qunit.js"></script>' . "\n";
         print '<script type="text/javascript" src="../lib/js/UserAction.js"></script>' . "\n";
         print '<script type="text/javascript" src="../lib/js/TouchAction.js"></script>' . "\n";
-//            print '<script type="text/javascript" src="../lib/js/zepto.js"></script>' . "\n";
-//            print '<script type="text/javascript" src="../../../third-party/iscroll/iscroll.js"></script>'."\n";
-
+        
         print '<link media="screen" href="../lib/css/qunit.css" type="text/css" rel="stylesheet" />' . "\n";
     }
 
