@@ -55,9 +55,11 @@ test('默认参数 & container & source & events', function() {
                 equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
                 equal(sugg._data.wrapper.offset().left, $(input).parent().offset().left, "The left is same as input");
                 equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-                approximateEqual(sugg._data.wrapper.offset().height, 102, "The height is right");
+                approximateEqual(sugg._data.wrapper.offset().height,
+		                (window.screen.width >= 768 ? 40 : 33)+66+3, "The height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
-                equal(sugg._data.wrapper.find(".ui-suggestion-button").height(), 34, "The button height is right");
+                equal(sugg._data.wrapper.find(".ui-suggestion-button").height(),
+		                (window.screen.width >= 768 ? 40 : 33)+1, "The button height is right");//根据屏幕宽度获取的button高度值(border)
                 equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
                 ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
             }, 100);
@@ -110,10 +112,11 @@ test('height', function() {
             equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-            approximateEqual(sugg._data.wrapper.offset().height, 436, "The height is right");
+            approximateEqual(sugg._data.wrapper.offset().height, 400+3+
+		            (window.screen.width >= 768 ? 40 : 33), "The height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 400, "The content height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
-            
+
             sugg.destroy();
             start();
         }, 100);
@@ -136,7 +139,8 @@ test('width', function() {
             equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is right");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is same as input");
-            approximateEqual(sugg._data.wrapper.offset().height, 102, "The height is right");
+            approximateEqual(sugg._data.wrapper.offset().height,
+		            window.screen.width >= 768 ? 109 : 102, "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -164,7 +168,8 @@ test('offset', function() {
             equal(sugg._data.wrapper.offset().width, 300, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $(input).offset().left + 10, "The left is right");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height + 20, "The top is same as input");
-            approximateEqual(sugg._data.wrapper.offset().height, 135, "The height is right");
+            approximateEqual(sugg._data.wrapper.offset().height, 99+3+
+		            (window.screen.width >= 768 ? 40 : 33) , "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -1157,9 +1162,11 @@ test('setup', function() {
             equal(sugg._data.wrapper.offset().width, $("#inputId").parent().offset().width, "The width is same as input");
             equal(sugg._data.wrapper.offset().left, $("#inputId").offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $("#inputId").offset().top + $("#inputId").offset().height, "The top is right");
-            approximateEqual(sugg._data.wrapper.offset().height, 102, "The height is right");
+            approximateEqual(sugg._data.wrapper.offset().height,
+		            (window.screen.width >= 748 ? 40 : 33)+66+3, "The height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-button").height(), 34, "The button height is right");
+            equal(sugg._data.wrapper.find(".ui-suggestion-button").height(),
+		            (window.screen.width >= 748 ? 40 : 33)+1, "The button height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
             ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
         }, 200);
@@ -1185,7 +1192,7 @@ test("destroy", function(){
         var el1= w.dt.eventLength();
 
         w.$("body").append('<input id="sugg-input" class="com-search-input ">');
-        
+
         var sugg = w.$.ui.suggestion({
             container: "#sugg-input",
             source: upath + "data/suggestion.php"

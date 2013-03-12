@@ -63,9 +63,9 @@ test('down-上拉加载', function () {
             ready: function (dir, type) {
             	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
                 equals($wrapper.find('.ui-refresh-down').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
-                
+
                 refresh.afterDataLoading();
-                
+
                 equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
                 equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
 
@@ -85,22 +85,22 @@ test('down-上拉加载', function () {
     ta.touchmove(target, {
         touches:[{
             pageX: 0,
-            pageY: -200
+            pageY: -300
         }]
     });
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
     });
     ua.mousemove(target, {
         clientX: 0,
-        clientY: -200
+        clientY: -300
     });
-    
+
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
-    
+
     ta.touchend(target);
     ua.mouseup(target);
 });
@@ -116,9 +116,9 @@ test('up-下拉加载', function () {
             ready: function (dir, type) {
             	equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载中...", "label元素的文字内容正确");
                 equals($wrapper.find('.ui-refresh-up').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
-                
+
                 refresh.afterDataLoading();
-                
+
                 equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
                 equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
 
@@ -150,10 +150,10 @@ test('up-下拉加载', function () {
         clientX: 0,
         clientY: 200
     });
-    
+
     equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
     equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
-    
+
     ta.touchend(target);
     ua.mouseup(target);
 });
@@ -172,10 +172,10 @@ test('both-上拉加载', function () {
                 equals($wrapper.find('.ui-refresh-down').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
 
             	refresh.afterDataLoading();
-            	
+
             	equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
                 equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
-                
+
                 start();
             }
         }).refresh('this'),
@@ -184,7 +184,7 @@ test('both-上拉加载', function () {
     //上拉
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
-    
+
     ta.touchstart(target, {
         touches:[{
             pageX: 0,
@@ -194,22 +194,22 @@ test('both-上拉加载', function () {
     ta.touchmove(target, {
         touches:[{
             pageX: 0,
-            pageY: -200
+            pageY: -300
         }]
     });
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
     });
     ua.mousemove(target, {
         clientX: 0,
-        clientY: -200
+        clientY: -300
     });
-    
+
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
-    
+
     ta.touchend(target);
     ua.mouseup(target);
 });
@@ -228,18 +228,18 @@ test('both-下拉加载', function () {
                 equals($wrapper.find('.ui-refresh-up').find('.ui-loading').attr("class"), "ui-loading", "icon显示正确");
 
                 refresh.afterDataLoading();
-                
+
                 equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
                 equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
-                
+
                 start();
             }
         }).refresh('this'),
         target = $wrapper.get(0);
-    
+
     equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
     equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon", "icon显示正确");
-    
+
     ta.touchstart(target, {
         touches:[{
             pageX: 0,
@@ -252,7 +252,7 @@ test('both-下拉加载', function () {
             pageY: 200
         }]
     });
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -261,10 +261,10 @@ test('both-下拉加载', function () {
         clientX: 0,
         clientY: 200
     });
-    
+
     equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-label').text(), "松开立即加载", "label元素的文字内容正确");
     equals($wrapper.find('.ui-refresh-up').find('.ui-refresh-icon').attr("class"), "ui-refresh-icon ui-refresh-flip", "icon显示正确");
-    
+
     ta.touchend(target);
     ua.mouseup(target);
 });
@@ -316,19 +316,19 @@ test("参数options - statechange", function(){
     ta.touchmove(target, {
         touches:[{
             pageX: l,
-            pageY: t - 200
+            pageY: t - 300
         }]
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: l,
         clientY: t
     });
     ua.mousemove(target, {
         clientX: l,
-        clientY: t - 200
+        clientY: t - 300
     });
     ua.mouseup(target);
 });
@@ -364,7 +364,7 @@ test('参数threshold-不传, 上拉, 大于默认阈值', function () {
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -374,7 +374,7 @@ test('参数threshold-不传, 上拉, 大于默认阈值', function () {
         clientY: (- h - 6) * 2 //大于默认阈值5px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	start();
     }, 400);
@@ -397,7 +397,7 @@ test('参数threshold-不传, 上拉, 小于默认阈值', function () {
     var h = $wrapper.height() - $wrapper.parent().height();
 
     //上拉
-    
+
     ta.touchstart(target, {
         touches:[{
             pageX: 0,
@@ -412,7 +412,7 @@ test('参数threshold-不传, 上拉, 小于默认阈值', function () {
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -422,7 +422,7 @@ test('参数threshold-不传, 上拉, 小于默认阈值', function () {
         clientY: (- h - 4) * 2 //小于默认阈值5px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	ok(true);
     	start();
@@ -460,7 +460,7 @@ test('参数threshold-不传, 下拉, 大于默认阈值', function () {
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -470,7 +470,7 @@ test('参数threshold-不传, 下拉, 大于默认阈值', function () {
         clientY: 6 * 2  //大于默认阈值5px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	start();
     }, 400);
@@ -507,7 +507,7 @@ test('参数threshold-不传, 下拉, 小于默认阈值', function () {
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -517,7 +517,7 @@ test('参数threshold-不传, 下拉, 小于默认阈值', function () {
         clientY: 4 * 2 //小于默认阈值5px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	ok(true);
     	start();
@@ -556,7 +556,7 @@ test('参数threshold-传20, 上拉, 大于阈值', function () {
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -566,7 +566,7 @@ test('参数threshold-传20, 上拉, 大于阈值', function () {
         clientY: (- h - 21) * 2 //大于默认阈值20px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	start();
     }, 400);
@@ -604,7 +604,7 @@ test('参数threshold-传20, 上拉, 小于阈值', function () {
     });
 
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -614,7 +614,7 @@ test('参数threshold-传20, 上拉, 小于阈值', function () {
         clientY: (- h - 19) * 2 //小于默认阈值20px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	ok(true);
     	start();
@@ -639,6 +639,25 @@ test('参数threshold-传20, 下拉, 大于阈值', function () {
     var h = $wrapper.height() - $wrapper.parent().height();
 
     //上拉
+	ta.touchstart(target, {
+		touches:[
+			{
+				pageX:0,
+				pageY:0
+			}
+		]
+	});
+	ta.touchmove(target, {
+		touches:[
+			{
+				pageX:0,
+				pageY:21 * 2
+			}
+		]
+	});
+
+	ta.touchend(target);
+
     ua.mousedown(target, {
         clientX: 0,
         clientY: 0
@@ -648,7 +667,7 @@ test('参数threshold-传20, 下拉, 大于阈值', function () {
         clientY: 21 * 2  //大于默认阈值20px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	start();
     }, 400);
@@ -681,7 +700,7 @@ test('参数threshold-传20, 下拉, 小于阈值', function () {
         clientY: 19 * 2 //小于默认阈值20px
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	ok(true);
     	start();
@@ -692,19 +711,19 @@ test("公共方法 － enable&disable", function(){
     createDom('down');
     expect(2);
     stop();
-    
+
     var $wrapper = $('.wrapper'),
         count = 0,
         refresh = $wrapper.refresh({
-            ready: function(){
+	        ready:function (dir, type) {
             	setTimeout(function(){
             		refresh.afterDataLoading();
-            	}, 0);
-            	ok(true, "ready 被触发");      
+            	}, 10);
+            	ok(true, "ready 被触发");
             }
         }).refresh('this'),
         target = $wrapper.get(0);
-    
+
     var l = $(target).offset().left+10;
     var t = $(target).offset().bottom-10;
     target.scrollTop = 0;
@@ -717,50 +736,51 @@ test("公共方法 － enable&disable", function(){
     ta.touchmove(target, {
         touches:[{
             pageX: l,
-            pageY: t -200
+            pageY: t -300
         }]
     });
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: l,
         clientY: t
     });
     ua.mousemove(target, {
         clientX: l,
-        clientY: t - 200
+        clientY: t - 300
     });
     ua.mouseup(target);
-   
+
     setTimeout(function(){
     	refresh.disable('down');
-        
-        ta.touchstart(target, {
-            touches:[{
-                pageX: l,
-                pageY: t
-            }]
-        });
-        ta.touchmove(target, {
-            touches:[{
-                pageX: l,
-                pageY: t -200
-            }]
-        });
-        ta.touchend(target);
-        
-        ua.mousedown(target, {
-            clientX: l,
-            clientY: t
-        });
-        ua.mousemove(target, {
-            clientX: l,
-            clientY: t - 200
-        });
-        ua.mouseup(target);
-        
+        setTimeout(function(){
+	        ta.touchstart(target, {
+	            touches:[{
+	                pageX: l,
+	                pageY: t
+	            }]
+	        });
+	        ta.touchmove(target, {
+	            touches:[{
+	                pageX: l,
+	                pageY: t -300
+	            }]
+	        });
+	        ta.touchend(target);
+
+	        ua.mousedown(target, {
+	            clientX: l,
+	            clientY: t
+	        });
+	        ua.mousemove(target, {
+	            clientX: l,
+	            clientY: t - 300
+	        });
+	        ua.mouseup(target);
+
+        },200);
     	setTimeout(function(){
-    		refresh.enable();
+   		refresh.enable();
 
     	    ta.touchstart(target, {
     	        touches:[{
@@ -771,21 +791,21 @@ test("公共方法 － enable&disable", function(){
     	    ta.touchmove(target, {
     	        touches:[{
     	            pageX: l,
-    	            pageY: t -200
+    	            pageY: t -300
     	        }]
     	    });
     	    ta.touchend(target);
-    	    
+
     	    ua.mousedown(target, {
     	        clientX: l,
     	        clientY: t
     	    });
     	    ua.mousemove(target, {
     	        clientX: l,
-    	        clientY: t - 200
+    	        clientY: t - 300
     	    });
     	    ua.mouseup(target);
-    	    
+
     	    setTimeout(function(){
     	    	start();
     	    }, 10);
@@ -801,9 +821,9 @@ test('显示 - topOffset', function () {
     var $wrapper = $('.wrapper'),
     	lis = $wrapper.find('li'),
         refresh = $wrapper.refresh().refresh('this');
-    
+
     setTimeout(function(){
-    	equals($wrapper.height(), 298, "iscroll高度正确");
+    	equals($wrapper.height(), window.screen.width>=768? 306:298, "iscroll高度正确");
         equals($wrapper.parent().height(), 150, "容器高度正确");
         equals($wrapper.find(".ui-refresh-up").offset().top, $wrapper.parent().offset().top - $wrapper.find(".ui-refresh-up").height(), "topOffset正确");
         start();
@@ -814,16 +834,16 @@ test("交互 － 加载过程中不响应滑动动作", function(){
     createDom('down');
     expect(1);
     stop();
-    
+
     var $wrapper = $('.wrapper'),
         count = 0,
         refresh = $wrapper.refresh({
             ready: function(){
-            	ok(true, "ready 被触发");    
+            	ok(true, "ready 被触发");
             }
         }).refresh('this'),
         target = $wrapper.get(0);
-    
+
     var l = $(target).offset().left+10;
     var t = $(target).offset().bottom-10;
 
@@ -840,7 +860,7 @@ test("交互 － 加载过程中不响应滑动动作", function(){
         }]
     });
     ta.touchend(target);
-    
+
     ua.mousedown(target, {
         clientX: l,
         clientY: t
@@ -850,7 +870,7 @@ test("交互 － 加载过程中不响应滑动动作", function(){
         clientY: t - 200
     });
     ua.mouseup(target);
-    
+
     setTimeout(function(){
     	ta.touchstart(target, {
 	        touches:[{
@@ -865,7 +885,7 @@ test("交互 － 加载过程中不响应滑动动作", function(){
 	        }]
 	    });
 	    ta.touchend(target);
-	    
+
 	    ua.mousedown(target, {
 	        clientX: l,
 	        clientY: t
@@ -875,7 +895,7 @@ test("交互 － 加载过程中不响应滑动动作", function(){
 	        clientY: t - 200
 	    });
 	    ua.mouseup(target);
-	    
+
 	    setTimeout(function(){
 	    	start();
 	    }, 10);
@@ -912,7 +932,7 @@ test('disablePlugin', function () {
         });
 
         ta.touchend(target);
-        
+
         //PC
         ua.mousedown(target, {
             clientX: 0,
@@ -925,7 +945,7 @@ test('disablePlugin', function () {
         });
 
         ua.mouseup(target);
-        
+
         setTimeout(function(){
         	equals(refresh._data.useTransition, undefined, "disable plugin");
         	refresh.destroy();
@@ -943,7 +963,7 @@ test("destroy", function(){
     	var html = '<div class="wrapper"><ul class="data-list"><li>测试数据1</li></ul></div>';
     	w.$('body').append(html);
     	createDom('up', null, w);
-    	
+
         var refresh = w.$(".wrapper").refresh("this");
         refresh.destroy();
 

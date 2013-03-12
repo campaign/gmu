@@ -88,8 +88,8 @@ test("show(), hide(), toggle()", function() {
     }).pageswipe('this');
     pageswipe.show();
     setTimeout(function () {
-    	equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 40),"The picture slide");
-        equals($('.ui-pageswipe-index').offset().left, 40,"The picture slide");
+    	approximateEqual($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 40),1,"The picture slide");
+	    approximateEqual($('.ui-pageswipe-index').offset().left, 40,1,"The picture slide");
         pageswipe.toggle();
         setTimeout(function () {
         	equals($('.ui-pageswipe-content').offset().left, 0,"The picture slide");
@@ -123,8 +123,8 @@ test("屏幕旋转", function() {
 			
 	    	pageswipe.show();
 	        setTimeout(function () {
-	        	equals(w.$('.ui-pageswipe-content').offset().left, -(w.innerWidth - 55),"The picture slide");
-	            equals(w.$('.ui-pageswipe-index').offset().left, 55,"The picture slide");
+		        approximateEqual(w.$('.ui-pageswipe-content').offset().left, -(w.innerWidth - 55),1,"The picture slide");
+		        approximateEqual(w.$('.ui-pageswipe-index').offset().left, 55,1,"The picture slide");
 	
 	            $(f).css("width", 150).css("height", 300);
 				var e = $.support.orientation ? 'orientationchange' : 'resize';

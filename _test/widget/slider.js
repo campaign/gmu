@@ -811,8 +811,11 @@ test("stop() & resume()",function(){
 
 test("多实例",function(){
     stop();
+	$("body").css("width",$("body").css("width"));//创建slider后，再向body添加元素，会造成iframe被充宽
+	var slider_time = isAndroid4 ? 500 : 180;
     var slider = $.ui.slider("#ui-slider-test", {
         content: content2,
+	    autoPlay:false,
         animationTime:1,
         click:function(){
             equal($(this).attr("id"),"ui-slider-test","The class is right");
@@ -825,6 +828,7 @@ test("多实例",function(){
     var slider1 = $.ui.slider("#ui-slider-test1", {
         content: content2,
         animationTime:1,
+	    autoPlay:false,
         click:function(){
             equal($(this).attr("id"),"ui-slider-test1","The class is right");
         }
@@ -880,7 +884,7 @@ test("事件 & 点击图片(点击链接和触发事件) ",function(){
     setTimeout(function(){
         slider.destroy();
         start();
-    },slider_time);
+    },slider_time+100);
 });
 
 test("基本操作( 滑动图片，点击前进后退按钮, 文字/小图片/页码相应翻页 )", function() {

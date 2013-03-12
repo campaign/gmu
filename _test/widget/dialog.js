@@ -5,7 +5,7 @@ module("webapp - dialog",{
 test("默认配置项，在什么都不传的情况下是否正确",function(){
     expect(10);
     stop();
-    ua.loadcss(["reset.css", "widget/dialog/dialog.css", "widget/dialog/dialog.default.css","widget/button/button.css","widget/button/button.default.css"], function(){
+    ua.loadcss(["reset.css", "widget/dialog/dialog.css"], function(){
         var dialog = $.ui.dialog();
         strictEqual(dialog.data('autoOpen'), true, '默认配置中autoOpen为true');
         strictEqual(dialog.data('buttons'), null, '默认配置中buttons为null');

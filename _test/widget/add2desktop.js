@@ -189,14 +189,15 @@ if($.os.ios && canShow){
    	    			html += "<br />";
    	    		}
    	    		w.$("body").append(html);
-                 w.scrollTo(0, 200);
+			    w.scrollTo(0, 200);
+			    ta.scrollStop(w);
+			    w.localStorage.removeItem("_gmu_adddesktop_key");
+			    var add2desktop = w.$.ui.add2desktop({
+				    hide:function () {
+					ok(true, 'The hide is trigger');
+				    }
+			    });
    	            setTimeout(function(){
-                    w.localStorage.removeItem("_gmu_adddesktop_key");
-   	 				var add2desktop = w.$.ui.add2desktop({
-   	 					hide : function () {
-   	 						ok(true , 'The hide is trigger');
-   	 					}
-   	 				});
                     equals(add2desktop._el.css("display"), "block", "The add2desktop is show");
                     equals(add2desktop._el.width() , 187 , "the width is ok");
                     equals(add2desktop._el.height() , 70 , "the height is ok");
@@ -209,7 +210,7 @@ if($.os.ios && canShow){
                         equals(add2desktop._el.width() , 187 , "the width is ok");
                         equals(add2desktop._el.height() , 70 , "the height is ok");
                         ok(Math.abs(w.pageYOffset - 300) <= 1, "The pageYOffset is " + w.pageYOffset);
-                        equals(add2desktop._el.offset().top-300, w.innerHeight - 70 - 12 , 'the pos is right');
+	                    approximateEqual(add2desktop._el.offset().top-300, w.innerHeight - 70 - 12 , 1, 'the pos is right');
                         approximateEqual(add2desktop._el.offset().left, w.document.documentElement.clientWidth * 0.5 - 92,'the pos is right');
                         w.scrollTo(0,0);
                         ta.scrollStop(w);
@@ -223,9 +224,9 @@ if($.os.ios && canShow){
                             add2desktop.destroy();
                             $(s2).remove();
                             start();
-                        },200);
-                    },200);
-   	            }, 200);
+                        },400);
+                    },400);
+   	            }, 400);
    	         };
         }, w);
 	});
