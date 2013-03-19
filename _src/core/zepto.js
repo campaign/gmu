@@ -1010,7 +1010,7 @@ window.Zepto = Zepto
          * @original
          * android = ua.match(/(Android)\s+([\d.]+)/),
          */
-      android = ua.match(/(Android).*?([\d.]+)/) || /HTC/.test(ua),
+      android = ua.match(/(Android).*?([\d.]+)/) || /HTC/i.test(ua),
       ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
       iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
       webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/),

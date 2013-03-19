@@ -40,7 +40,7 @@ test("左右滑动无动画", function(){
     equals(1, tabs._data.active);
     ok($(".ui-tabs-nav li", tabs._el).eq(1).hasClass("ui-state-active"));
     ok($(".ui-tabs-panel", tabs._el).eq(1).hasClass("ui-state-active"));
-    
+
     ua.loadcss(["reset.css","transitions.css", "widget/tabs/tabs.css","widget/tabs/tabs.default.css"], function(){
         ta.touchstart($(".ui-panel")[1], {
             touches: [{
@@ -67,7 +67,7 @@ test("左右滑动无动画", function(){
         });
         ta.touchmove($(".ui-panel")[2], {
             touches:[{
-                clientX: -50,      
+                clientX: -50,
                 clientY: 0
             }]
         });
@@ -75,7 +75,7 @@ test("左右滑动无动画", function(){
         equals(2, tabs._data.active, '滑到最后一个后，不再响应滑动')
         ok($(".ui-tabs-nav li", tabs._el).eq(2).hasClass("ui-state-active"));
         ok($(".ui-tabs-panel", tabs._el).eq(2).hasClass("ui-state-active"));
-        
+
         ta.touchstart($(".ui-panel")[2], {
             touches: [{
                 clientX: 0,
@@ -84,7 +84,7 @@ test("左右滑动无动画", function(){
         });
         ta.touchmove($(".ui-panel")[2], {
             touches:[{
-                clientX: 50,      
+                clientX: 50,
                 clientY: 0
             }]
         });
@@ -107,7 +107,7 @@ test("左右滑动无动画", function(){
         });
         ta.touchend($(".ui-panel")[1]);
         equals(1, tabs._data.active, 'x方向滑动距离偏小，停留在原tab')
-        
+
         ta.touchstart($(".ui-panel")[1], {
             touches: [{
                 clientX: 0,
@@ -151,7 +151,7 @@ test("左右滑动有动画", function(){
     ta.touchend($(".ui-panel")[0]);
     ok($(".ui-panel").eq(0).hasClass('out'), '向右滑动（滑出）')
     ok($(".ui-panel").eq(1).hasClass('in'), '向右滑动（滑入）')
-    
+
     setTimeout(function(){
         ok(!$(".ui-panel").eq(0).hasClass('out'), '滑动结束')
         ok(!$(".ui-panel").eq(1).hasClass('in'), '滑动结束')
@@ -181,10 +181,10 @@ test("左右滑动有动画", function(){
             equals(0, tabs._data.active, '向左滑动')
 	        ok($(".ui-tabs-nav li", tabs._el).eq(0).hasClass("ui-state-active"))
 	        ok($(".ui-tabs-panel", tabs._el).eq(0).hasClass("ui-state-active"))
-        
+
             start()
-        }, 400)
-    }, 400)
+	        }, 400)
+	    }, 400)
 })
 
 test("disablePlugin=true", function(){
