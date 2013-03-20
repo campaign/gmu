@@ -67,7 +67,7 @@
     //上一个group
     preGroup = getNextGroup();
 
-    $(document).one('pageready', function(){
+    $(document).one('pageready', function(){//等demo的公共头部完工了
         slider = $.ui.slider('#slider', {
             showDot: false,
             index: preGroup.length,//当前group中的第一个
@@ -86,6 +86,8 @@
             this.update(prev ? group.concat(content) : content.concat(group));
         });
     });
+
+    //FYI：如果item里面的结构不合意，可以转入一个itemRender为key的Fn给构造器.
 </script>
 
 <!--demo公用头部展示所用js，可以不用加载 begin-->

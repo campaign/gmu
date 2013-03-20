@@ -1,3 +1,12 @@
+/**
+ * @file Slider － 内容可动态修改插件
+ * @name Button － 内容可动态修改插件
+ * @short Button.dynamic
+ * @desc 此插件扩充slider， 让内容可以动态修改，
+ *
+ *
+ * @import widget/slider.js
+ */
 (function($){
     var itemRender = function(item){
         return '<div class="ui-slider-item">' +
@@ -19,6 +28,7 @@
 
                 this._initConfig();
                 data.autoPlay = false;//disable auto play
+                data.loop = false;//disable loop
 
                 group = $('<div class="ui-slider-group"></div>');
                 this._renderItems(content, data.index || 0, group, data);
@@ -105,7 +115,7 @@
 
                     data.index -= delta;
 
-                    group.children().each(function(i){
+                    data.items = group.children().each(function(i){
                         this.style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
                     data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
@@ -190,7 +200,7 @@
 
                 group = this.root().find('.ui-slider-group').empty();
                 this._renderItems(data.content = content, index, group, data);
-                group.children()
+                data.items = group.children()
                     .each(function(i){
                         this.style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
