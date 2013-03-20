@@ -1,4 +1,4 @@
-(function($, undefined){
+(function($){
     var itemRender = function(item){
         return '<div class="ui-slider-item">' +
             '<a href="' + item.href + '"><img lazyload="' + item.pic + '"/></a>' +
@@ -14,21 +14,14 @@
             },
 
             _create: function(){
-                var data = this._data,
-                    i = 0, item,
-                    render, group,
+                var data = this._data, group,
                     content = data.content;
+
                 this._initConfig();
+                data.autoPlay = false;//disable auto play
 
-                render = data.itemRender || itemRender;//allow customize render
                 group = $('<div class="ui-slider-group"></div>');
-
-                for(; i<3 && (item = content[i]); i++)
-                    group.append(
-                        $(render(item))
-                            .addClass('ui-slider-item')
-                            .attr('data-index', i)
-                    );
+                this._renderItems(content, data.index || 0, group, data);
 
                 (this.root() || this.root($('<div></div>')))
                     .addClass('ui-slider')
@@ -39,7 +32,42 @@
                     );
 
                 this._addDots();
-                this._delta = 0;
+            },
+
+            _renderItems: function(content, index, group, data){
+                var arr, active, rest, item, i,
+                    render = data.itemRender || itemRender;//allow customize render
+
+                arr = content.slice(index, index + 3);
+                this._active  = active = content[index];
+                rest = 3 - arr.length;
+                rest && (arr = content.slice(index-rest, index).concat(arr));
+
+                data.index = $.inArray(active, this._pool = arr);
+
+                for( i = 0; i<3 && (item = arr[i]); i++)
+                    group.append(render(item));
+
+                this._loadImages(group.find('img[lazyload]'));
+            },
+
+            _init: function(onlyRefresh){
+                var data = this._data,
+                    index;
+
+                onlyRefresh || this._initOrg();
+                if(data.showDot) {
+                    index = $.inArray(this._active, data.content);
+                    this.root()
+                        .find('p.ui-slider-dots')
+                        .children()
+                        .removeClass('ui-slider-dot-select')
+                        .eq(index)
+                        .addClass('ui-slider-dot-select');
+                }
+                data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
+                this._updateList();
+                this.trigger('slide', [index, this._active]);
             },
 
             _transitionEnd: function(){
@@ -52,59 +80,57 @@
                     root = this.root(),
                     content = data.content,
                     length = content.length,
-                    index = this._index || 0,
-                    activeEl = root.find('[data-index="'+index+'"]'),
-                    pos = activeEl.index(),
-                    delta = pos - 1,
-                    next = index + delta,
                     item, elem, width = data.width,
                     group = root.find('.ui-slider-group'),
-                    render = data.itemRender || itemRender;
+                    render = data.itemRender || itemRender,
+                    index, pos, delta, next;
 
-                if(!~pos)return ;
+                index = $.inArray(this._active, content);
+                pos = data.index;
+                delta = pos - 1;
+                next = index + delta;
 
                 if(delta && next < length && next >= 0 ){
                     //need to move
                     item = content[next];
-                    elem = $(render(item))
-                        .addClass('ui-slider-item')
-                        .attr('data-index', next);
-
-                    elem.find('img[lazyload]').each(function(){
-                        this.src = this.getAttribute('lazyload');
-                    });
+                    elem = $(render(item));
+                    this._loadImages(elem.find('img[lazyload]'));
 
                     group.children().eq(1-delta)
                         .remove();
-
                     group[delta<0?'prepend':'append'](elem);
 
+                    this._pool.splice(1-delta, 1);
+                    this._pool[delta<0?'unshift':'push'](item);
+
                     data.index -= delta;
-                    this._delta += delta;
 
                     group.children().each(function(i){
                         this.style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
-
                     data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
-
+                }
+                if(index === 0 || index === length -1){
+                    //到达边缘
+                    this.trigger('edge', [index === 0, this._active]);
                 }
             },
 
-            /**
-             * 添加底部圆点及两侧箭头
-             */
             _addDots:function() {
                 var me = this,
                     root = me.root(),
                     length = me.data('content').length,
                     html = [];
                 if(me.data('showDot')) {
+                    root.find('p.ui-slider-dots').remove();
                     html.push('<p class="ui-slider-dots">');
                     while(length--) html.push('<b></b>');
                     html.push('</p>');
                 }
-                me.data('showArr') && (html.push('<span class="ui-slider-pre"><b></b></span><span class="ui-slider-next"><b></b></span>'));
+                me.data('showArr') &&
+                    !root.find('.ui-slider-pre').length &&
+                    html.push('<span class="ui-slider-pre"><b></b></span><span class="ui-slider-next"><b></b></span>');
+
                 root.append(html.join(''));
             },
 
@@ -113,101 +139,65 @@
              */
             _move:function(index) {
                 var data = this._data,
-                    dots = data.dots;
+                    _index;
 
-                this._index = index + this._delta;
-
-                this.trigger('slide', this._index);
-                if(data.showDot) {
-                    data.dot.className = '';
-                    data.dot = dots[this._index];
-                    data.dot.className = 'ui-slider-dot-select';
-                }
                 data.index = index;
+                this._active = this._pool[index];
+
+                _index = $.inArray(this._active, data.content);
+
+                this.trigger('slide', [_index, this._active]);
+                if(data.showDot) {
+                    this.root()
+                        .find('p.ui-slider-dots')
+                        .children()
+                        .removeClass('ui-slider-dot-select')
+                        .eq(_index)
+                        .addClass('ui-slider-dot-select');
+                }
+
                 data.wheel.style.cssText += '-webkit-transition:' + data.animationTime + 'ms;-webkit-transform:translate3d(-' + index * data.width + 'px,0,0);';
             },
 
-            /**
-             * @desc 获取当前位置
-             * @name index
-             * @grammar index() => value
-             * @example
-             * var demo = $.ui.slider();
-             * demo.index();
-             */
-            index: function(){
-                return this._index || 0;
-            },
+            _loadImages: function(imgs){
+                var data = this._data;
 
-            /**
-             * @desc 获取总数量
-             * @name length
-             * @grammar length() => value
-             * @example
-             * var demo = $.ui.slider();
-             * demo.length();
-             */
-            length: function(){
-                return this.data('content').length;
-            },
+                data.imgZoom && imgs.on('load', function(){
+                    var h = this.height,
+                        w = this.width,
+                        width = data.width,
+                        height = data.height,
+                        min_h = Math.min(h, height),
+                        min_w = Math.min(w, width);
 
-            /**
-             * @desc 修改内容。
-             * @name update
-             * @grammar update(content) => undefined
-             * @grammar update(content, true) => undefined
-             * @example
-             * var demo = $.ui.slider();
-             * demo.update();
-             */
-            update: function(content, end){
-                var data = this._data,
-                    root = this.root(),
-                    group = root.find('.ui-slider-group'),
-                    arr, index, i, len,
-                    width = data.width,
-                    dots, html, start,
-                    render = data.itemRender || itemRender;
+                    $(this).off('load', arguments.callee);
 
-                data.content = content = content.concat();
-                arr = end? content.slice(-3) : content.slice(0, 3);
-                index = end? content.length-1 : 0;
-                data.index = end?2: 0;
-                this._delta = index - data.index;
-                start = end? content.length-3 : 0;
-
-                group.empty();
-                for(i =0, len = arr.length; i<len; i++){
-                    group.append(
-                        $(render(arr[i]))
-                            .addClass('ui-slider-item')
-                            .attr('data-index', start + i)
-                            .css({
-                                width: width + 'px',
-                                position: 'absolute',
-                                '-webkit-transform': 'translate3d(' + i * width + 'px,0,0)',
-                                zIndex: 900-i
-                            })
-                    );
-                }
-                data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * width + 'px,0,0);';
-                group.find('img[lazyload]').each(function(){
-                    this.src = this.getAttribute('lazyload');
+                    this.style.cssText += h/height > w/width ?
+                        ('height:' + min_h + 'px;' + 'width:' + min_h/h * w + 'px;') :
+                        ('height:' + min_w/w * h + 'px;' + 'width:' + min_w + 'px');
                 });
 
-                if(data.showDot) {
-                    dots = root.find('.ui-slider-dots');
-                    html = '';
-                    i = content.length;
-                    while(i--)html+='<b></b>';
-                    dots.html(html);
-                    dots = dots.children().toArray();
-                    console.log(dots);
-                    data.dots = dots;
-                    data.dot = dots[index];
-                    data.dot.className = 'ui-slider-dot-select';
-                }
+                imgs.each(function(){
+                    this.src = this.getAttribute('lazyload');
+                });
+            },
+
+            update: function(content){
+                var data = this._data,  group, width = data.width,
+                    index = $.inArray(this._active, content);
+
+                ~index || (index = data._direction>0 ? 0: content.length-1);
+
+                group = this.root().find('.ui-slider-group').empty();
+                this._renderItems(data.content = content, index, group, data);
+                group.children()
+                    .each(function(i){
+                        this.style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
+                    });
+
+                this._addDots();
+                this._init(true);
             }
-        }
+        };
     });
 })(Zepto);
