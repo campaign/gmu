@@ -69,8 +69,7 @@
                 if(data.showDot) {
                     index = $.inArray(this._active, data.content);
                     this.root()
-                        .find('p.ui-slider-dots')
-                        .children()
+                        .find('p.ui-slider-dots b')
                         .removeClass('ui-slider-dot-select')
                         .eq(index)
                         .addClass('ui-slider-dot-select');
@@ -159,14 +158,25 @@
                 this.trigger('slide', [_index, this._active]);
                 if(data.showDot) {
                     this.root()
-                        .find('p.ui-slider-dots')
-                        .children()
+                        .find('p.ui-slider-dots b')
                         .removeClass('ui-slider-dot-select')
                         .eq(_index)
                         .addClass('ui-slider-dot-select');
                 }
-
                 data.wheel.style.cssText += '-webkit-transition:' + data.animationTime + 'ms;-webkit-transform:translate3d(-' + index * data.width + 'px,0,0);';
+            },
+
+            _touchStart:function(e) {
+                var data = this._data,
+                    target, current, matrix;
+
+                this._touchStartOrg.apply(this, arguments);
+                target = -data.index * data.width;
+                matrix = getComputedStyle(data.wheel, null)['webkitTransform'].replace(/[^0-9\-.,]/g, '').split(',');
+                current = +matrix[4];
+                if(target !== current) {
+                    this._updateList();
+                }
             },
 
             _loadImages: function(imgs){
