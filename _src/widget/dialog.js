@@ -279,7 +279,7 @@
          * | open | event | 当弹出框弹出后触发 |
          * | beforeClose | event | 在弹出框关闭之前触发，可以通过e.preventDefault()来阻止 |
          * | close | event | 在弹出框关闭之后触发 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 })(Zepto);

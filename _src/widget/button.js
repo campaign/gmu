@@ -307,7 +307,7 @@
          * | click | event | 当按钮点击时触发，当按钮为disabled状态时，不会触发 |
          * | statechange | event, state(disabled的值) | 当按钮disabled状态发生变化时触发 |
          * | change | event | 当按钮类型为''checkbox''或者''radio''时，选中状态发生变化时触发 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 })(Zepto);

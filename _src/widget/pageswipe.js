@@ -175,7 +175,7 @@
          * | init | event | 组件初始化的时候触发 |
          * | show | event | 显示时触发的事件 |
          * | hide | event | 隐藏时触发的事件 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 

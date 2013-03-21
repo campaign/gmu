@@ -238,7 +238,7 @@
          * | dragMove | event | 拖动进度条过程中触发的事件 |
          * | dragEnd | event | 拖动进度条结束时触发的事件 |
          * | valueChange | event | 隐藏后触发的事件 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 
