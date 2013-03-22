@@ -26,9 +26,9 @@
                 var data = this._data, group,
                     content = data.content;
 
-                this._initConfig();
                 data.autoPlay = false;//disable auto play
                 data.loop = false;//disable loop
+                data.viewNum = 1; //disable multi items per page.
 
                 group = $('<div class="ui-slider-group"></div>');
                 this._renderItems(content, data.index || 0, group, data);
@@ -40,7 +40,6 @@
                         $('<div class="ui-slider-wheel"></div>')
                             .append(group)
                     );
-
                 this._addDots();
             },
 
@@ -54,6 +53,7 @@
                 rest && (arr = content.slice(index-rest, index).concat(arr));
 
                 data.index = $.inArray(active, this._pool = arr);
+                this._index = index;
 
                 for( i = 0; i<3 && (item = arr[i]); i++)
                     group.append(render(item));
@@ -61,30 +61,32 @@
                 this._loadImages(group.find('img[lazyload]'));
             },
 
-            _init: function(onlyRefresh){
-                var data = this._data,
-                    index;
+            _init: function(){
+                this._initOrg();
+                this._adjustPos()
+                    ._updateNav();
+                this.trigger('slide', [this._index || 0, this._active]);
+            },
 
-                onlyRefresh || this._initOrg();
+            _updateNav: function(duration){
+                var data = this._data;
                 if(data.showDot) {
-                    index = $.inArray(this._active, data.content);
                     this.root()
                         .find('p.ui-slider-dots b')
                         .removeClass('ui-slider-dot-select')
-                        .eq(index)
+                        .eq(this._index)
                         .addClass('ui-slider-dot-select');
                 }
-                data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
-                this._updateList();
-                this.trigger('slide', [index, this._active]);
+                data.wheel.style.cssText += '-webkit-transition:'+(duration||'0')+'ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
+                return this;
             },
 
             _transitionEnd: function(){
                 this._transitionEndOrg();
-                this._updateList();
+                this._adjustPos();
             },
 
-            _updateList: function(){
+            _adjustPos: function(){
                 var data = this._data,
                     root = this.root(),
                     content = data.content,
@@ -123,6 +125,7 @@
                     //到达边缘
                     this.trigger('edge', [index === 0, this._active]);
                 }
+                return this;
             },
 
             _addDots:function() {
@@ -141,6 +144,7 @@
                     html.push('<span class="ui-slider-pre"><b></b></span><span class="ui-slider-next"><b></b></span>');
 
                 root.append(html.join(''));
+                return this;
             },
 
             /**
@@ -152,18 +156,10 @@
 
                 data.index = index;
                 this._active = this._pool[index];
-
-                _index = $.inArray(this._active, data.content);
+                this._index = _index = $.inArray(this._active, data.content);
 
                 this.trigger('slide', [_index, this._active]);
-                if(data.showDot) {
-                    this.root()
-                        .find('p.ui-slider-dots b')
-                        .removeClass('ui-slider-dot-select')
-                        .eq(_index)
-                        .addClass('ui-slider-dot-select');
-                }
-                data.wheel.style.cssText += '-webkit-transition:' + data.animationTime + 'ms;-webkit-transform:translate3d(-' + index * data.width + 'px,0,0);';
+                this._updateNav(data.animationTime);
             },
 
             _touchStart:function(e) {
@@ -175,7 +171,7 @@
                 matrix = getComputedStyle(data.wheel, null)['webkitTransform'].replace(/[^0-9\-.,]/g, '').split(',');
                 current = +matrix[4];
                 if(target !== current) {
-                    this._updateList();
+                    this._adjustPos();
                 }
             },
 
@@ -199,15 +195,16 @@
 
                 imgs.each(function(){
                     this.src = this.getAttribute('lazyload');
+                    this.removeAttribute('lazyload');
                 });
             },
 
             update: function(content){
                 var data = this._data,  group, width = data.width,
-                    index = $.inArray(this._active, content);
+                    active,
+                    index = $.inArray(active = this._active, content);
 
                 ~index || (index = data._direction>0 ? 0: content.length-1);
-
                 group = this.root().find('.ui-slider-group').empty();
                 this._renderItems(data.content = content, index, group, data);
                 data.items = group.children()
@@ -215,8 +212,10 @@
                         this.style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
 
-                this._addDots();
-                this._init(true);
+                this._addDots()
+                    ._adjustPos()
+                    ._updateNav();
+                active!==this._active && this.trigger('slide', [index || 0, this._active]);
             }
         };
     });
