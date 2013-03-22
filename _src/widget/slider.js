@@ -17,6 +17,7 @@
      * - ''content'' {Array}: (必选)内容,格式为：\[ {href:'图片跳转URL', pic:'图片路径', title:'图片下方文字'}, {...}\]
      * - ''viewNum'' {Number}: (可选, 默认:1) 可以同时看到几张图片
      * - ''imgInit'' {Number}: (可选, 默认:2)初始加载几张图片
+     * - ''itemRender'' {Function}: (可选)render模式时，使用的自定义内容构造函数，接受一个从0开始的index参数，返回空值时构造结束
      * - ''imgZoom'' {Boolean}: (可选, 默认:false)是否缩放图片,设为true时可以将超出边界的图片等比缩放
      * - ''loop'' {Boolean}: (可选, 默认:false)设为true时,播放到最后一张时继续正向播放第一张(无缝滑动)，设为false则反向播放倒数第2张
      * - ''stopPropagation'' {Boolean}: (可选, 默认:false)是否在横向滑动的时候阻止冒泡(慎用,会导致上层元素接受不到touchMove事件)
@@ -38,6 +39,7 @@
         _data:{
             viewNum:                1,
             imgInit:                2,
+            itemRender:             null,
             imgZoom:                false,
             loop:                   false,
             stopPropagation:        false,
@@ -62,7 +64,16 @@
             (me.root() || me.root($('<div></div>'))).addClass('ui-slider').appendTo(me.data('container') || (me.root().parent().length ? '' : document.body)).html(
             '<div class="ui-slider-wheel"><div class="ui-slider-group">' +
             (function() {
-                for(; j = content[i]; i++) k.push('<div class="ui-slider-item"><a href="' + j.href + '"><img lazyload="' + j.pic + '"/></a>' + (j.title ? '<p>' + j.title + '</p>': '') + '</div>');
+                if(me.data('itemRender')) {
+                    var render = me.data('itemRender'),
+                        item = render.call(me, i++);
+                    while(item) {
+                        k.push('<div class="ui-slider-item">' + item + '</div>');
+                        item = render.call(me, i++);
+                    }
+                } else {
+                    for(; j = content[i]; i++) k.push('<div class="ui-slider-item"><a href="' + j.href + '"><img lazyload="' + j.pic + '"/></a>' + (j.title ? '<p>' + j.title + '</p>': '') + '</div>');
+                }
                 k.push(me.data('loop') ? '</div><div class="ui-slider-group">' + k.join('') + '</div></div>' : '</div></div>');
                 return k.join('');
             }()));
