@@ -129,7 +129,7 @@
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
          * | beforeshow | event | 显示前触发的事件 |
          * | afterhide | event | 隐藏后触发的事件 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 

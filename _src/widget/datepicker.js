@@ -463,7 +463,7 @@
          * | beforeclose | event, ui | 组件隐藏之前触发，可以通过e.preventDefault()来阻止 |
          * | select | event, date, ui | 选中日期的时候触发 |
          * | valuecommit | event, date, dateStr, ui | 当被设置日期后触发date为ate对象, dateStr为日期字符串|
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 })(Zepto);

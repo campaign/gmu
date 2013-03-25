@@ -342,7 +342,7 @@
          * ^ 名称 ^ 处理函数参数 ^ 描述 ^
          * | init | event | 组件初始化的时候触发，不管是render模式还是setup模式都会触发 |
          * | itemClick | event, item(object包含icon, text, href信息) | 当某个菜单项被点击时触发 |
-         * | destory | event | 组件在销毁的时候触发 |
+         * | destroy | event | 组件在销毁的时候触发 |
          */
     });
 
