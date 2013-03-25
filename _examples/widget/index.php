@@ -123,7 +123,6 @@ foreach ($setting as $item) {
         type="text/javascript"
         data-jspath = '../../_src/'
         data-csspath = '../../assets/'
-        data-path="../load.php"
         data-backurl="../../"
         data-page="">
 </script>
