@@ -11,13 +11,14 @@
      * @desc 图片延迟加载
      * **Options**
      * - ''placeHolder''     {String}:              (可选, 默认值:\'\')图片显示前的占位符
-     * - ''container''       {Array|Selector}:      (可选, 默认值:window)图片延迟加载容器
+     * - ''container''       {Array|Selector}:      (可选, 默认值:window)图片延迟加载容器，若innerScroll为true，则传外层wrapper容器即可
      * - ''threshold''       {Array|Selector}:      (可选, 默认值:0)阀值，为正值则提前加载
-     * - ''dataName''        {String}:              (可选, 默认值:data-url)图片url名称
+     * - ''urlName''         {String}:              (可选, 默认值:data-url)图片url名称
      * - ''eventName''       {String}:              (可选, 默认值:scrollStop)绑定事件方式
      * - ''refresh''         {Boolean}              (可选, 默认值:false)是否是更新操作，若是页面追加图片，可以将该参数设为false
+     * - ''innerScroll''     {Boolean}              (可选, 默认值:false)是否是内滚，若内滚，则不绑定eventName事件，用户需在外部绑定相应的事件，可调$.fn.imglazyload.detect去检测图片是否出现在container中
+     * - ''isVertical''      {Boolean}              (可选, 默认值:true)是否竖滚
      * - ''startload''       {Function}             (可选, 默认值:null)开始加载前的事件，该事件作为参数，不是trigger的
-     *
      *
      * **events**
      * - ''startload'' 开始加载图片
@@ -38,27 +39,32 @@
                 urlName:'data-url',
                 placeHolder:'',
                 eventName:'scrollStop',
-                startload: null,
-                refresh: false
+                refresh: false,
+                innerScroll: false,
+                isVertical: true,
+                startload: null
             }, opts),
-            $container = $(opts.container),
-            cTop = $container.scrollTop(),
-            cHeight = $container.height(),
-            detect = {
-                init:function (top, height) {    //初始条件
-                    return cTop >= top - opts.threshold - cHeight && cTop <= top + height;
-                },
-                'default':function (top, height) {      //每次滚动时发生变化，滚动条件
-                    var cTop = $container.scrollTop(),
-                        cHeight = $container.height();
-                    return cTop >= top - opts.threshold - cHeight && cTop <= top + height;
-                }
+            $viewPort = $(opts.container),
+            isVertical = opts.isVertical,
+            isWindow = $.isWindow($viewPort.get(0)),
+            OFFSET = {
+                win: [isVertical ? 'scrollY' : 'scrollX', isVertical ? 'innerHeight' : 'innerWidth'],
+                img: [isVertical ? 'top' : 'left', isVertical ? 'height' : 'width']
             };
 
-        pedding = $.slice(this).reverse();
-        if (opts.refresh) return this;      //更新pedding值
+        !isWindow && (OFFSET['win'] = OFFSET['img']);   //若container不是window，则OFFSET中取值同img
 
-        function _load(div) {
+        function isInViewport(offset) {      //图片出现在可视区的条件
+            var viewOffset = isWindow ? window : $viewPort.offset(),
+                viewTop = viewOffset[OFFSET.win[0]],
+                viewHeight = viewOffset[OFFSET.win[1]];
+            return viewTop >= offset[OFFSET.img[0]] - opts.threshold - viewHeight && viewTop <= offset[OFFSET.img[0]] + offset[OFFSET.img[1]];
+        }
+
+        pedding = $.slice(this).reverse();
+        if (opts.refresh) return this;      //更新pedding值，用于在页面追加图片
+
+        function _load(div) {     //加载图片，并派生事件
             var $div = $(div), $img;
             $.isFunction(opts.startload) && opts.startload.call($div);
             $img = $('<img />').on('load',function () {
@@ -72,24 +78,27 @@
             }).attr('src', $div.attr(opts.urlName));
         }
 
-        function _detect(type) {
+        function _detect() {     //检测图片是否出现在可视区，并对满足条件的开始加载
             var i, $image, offset, div;
             for (i = pedding.length; i--;) {
                 $image = $(div = pedding[i]);
                 offset = $image.offset();
-                detect[type || 'default'](offset.top, offset.height) && (splice.call(pedding, i, 1), _load(div));;
+                isInViewport(offset) && (splice.call(pedding, i, 1), _load(div));
             }
         }
 
-        $(document).ready(function () {
+        $(document).ready(function () {    //页面加载时条件检测
             opts.placeHolder && $(pedding).append(opts.placeHolder);     //初化时将placeHolder存入
-            _detect('init');
-        });
-
-        (opts.container === window ? $(document) : $container).on(opts.eventName + ' ortchange', function () {
             _detect();
         });
 
+        !opts.innerScroll && $(window).on(opts.eventName + ' ortchange', function () {    //不是内滚时，在window上绑定事件
+            _detect();
+        });
+
+        $.fn.imglazyload.detect = _detect;    //暴露检测方法，供外部调用
+
         return this;
     };
+
 })(Zepto);
