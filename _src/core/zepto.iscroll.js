@@ -6,7 +6,7 @@
     var m = Math,_bindArr = [],
         dummyStyle = doc.createElement('div').style,
         vendor = (function () {
-            var vendors = 't,webkitT,MozT,msT,OT'.split(','),
+            var vendors = 'webkitT,MozT,msT,OT,t'.split(','),
                 t,
                 i = 0,
                 l = vendors.length;
