@@ -29,6 +29,7 @@
                 data.autoPlay = false;//disable auto play
                 data.loop = false;//disable loop
                 data.viewNum = 1; //disable multi items per page.
+                data.showDot = false; // disable dot display.
 
                 group = $('<div class="ui-slider-group"></div>');
                 this._renderItems(content, data.index || 0, group, data);
@@ -63,22 +64,8 @@
 
             _init: function () {
                 this._initOrg();
-                this._adjustPos()
-                    ._updateNav();
+                this._adjustPos();
                 this.trigger('slide', [this._index || 0, this._active]);
-            },
-
-            _updateNav: function (duration, forgetDot) {
-                var data = this._data;
-                if (data.showDot && !forgetDot) {
-                    this.root()
-                        .find('p.ui-slider-dots b')
-                        .removeClass('ui-slider-dot-select')
-                        .eq(this._index)
-                        .addClass('ui-slider-dot-select');
-                }
-                data.wheel.style.cssText += '-webkit-transition:' + (duration || '0') + 'ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
-                return this;
             },
 
             _transitionEnd: function () {
@@ -118,30 +105,12 @@
                     data.items = group.children().each(function (i) {
                         this.style.cssText += 'width:' + width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
-                    this._updateNav(0, true);
+                    data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * width + 'px,0,0);';
                 }
                 if (index === 0 || index === length - 1) {
                     //到达边缘
                     this.trigger('edge', [index === 0, this._active]);
                 }
-                return this;
-            },
-
-            _addDots: function () {
-                var me = this,
-                    root = me.root(),
-                    length = me.data('content').length,
-                    html = [];
-                if (me.data('showDot')) {
-                    root.find('p.ui-slider-dots').remove();
-                    html.push('<p class="ui-slider-dots">');
-                    while (length--) html.push('<b></b>');
-                    html.push('</p>');
-                }
-                me.data('showArr') && !root.find('.ui-slider-pre').length &&
-                html.push('<span class="ui-slider-pre"><b></b></span><span class="ui-slider-next"><b></b></span>');
-
-                root.append(html.join(''));
                 return this;
             },
 
@@ -157,7 +126,7 @@
                 this._index = _index = $.inArray(this._active, data.content);
 
                 this.trigger('slide', [_index, this._active]);
-                this._updateNav(data.animationTime);
+                data.wheel.style.cssText += '-webkit-transition:' + (data.animationTime || '0') + 'ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
             },
 
             _touchStart: function (e) {
@@ -210,8 +179,7 @@
                         this.style.cssText += 'width:' + width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
 
-                this._addDots()
-                    ._adjustPos();
+                this._adjustPos();
                 active !== this._active && this.trigger('slide', [index || 0, this._active]);
             }
         };
