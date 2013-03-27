@@ -154,7 +154,6 @@
 
                 imgs.each(function () {
                     this.src = this.getAttribute('lazyload');
-                    this.removeAttribute('lazyload');
                 });
             },
 
