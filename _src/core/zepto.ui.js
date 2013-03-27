@@ -167,7 +167,7 @@
             //obj 'this'时返回
             //其他都是返回zepto实例
             //修改返回值为空的时，返回值不对的问题
-            return $.isUndefined(ret) ? (opts == 'this' ? obj : this) : ret;
+            return ($.isUndefined(ret) || ret === null) ? (opts == 'this' ? obj : this) : ret;
         };
     }
     /**
