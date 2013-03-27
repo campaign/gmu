@@ -166,7 +166,8 @@
             //ret 为真就是要返回ui实例之外的内容
             //obj 'this'时返回
             //其他都是返回zepto实例
-            return ret || (opts == 'this' ? obj : this);
+            //修改返回值为空的时，返回值不对的问题
+            return $.isUndefined(ret) ? (opts == 'this' ? obj : this) : ret;
         };
     }
     /**
