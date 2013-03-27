@@ -62,11 +62,21 @@
             (me.root() || me.root($('<div></div>'))).addClass('ui-slider').appendTo(me.data('container') || (me.root().parent().length ? '' : document.body)).html(
             '<div class="ui-slider-wheel"><div class="ui-slider-group">' +
             (function() {
-                for(; j = content[i]; i++) k.push('<div class="ui-slider-item"><a href="' + j.href + '"><img lazyload="' + j.pic + '"/></a>' + (j.title ? '<p>' + j.title + '</p>': '') + '</div>');
+                for(; j = content[i]; i++) k.push(me._itemRender(j));
                 k.push(me.data('loop') ? '</div><div class="ui-slider-group">' + k.join('') + '</div></div>' : '</div></div>');
                 return k.join('');
             }()));
             me._addDots();
+        },
+
+        _itemRender: function (item) {
+            var data = this._data;
+            if(data.itemRender) {
+                return data.itemRender.call(this, item);
+            }
+            return '<div class="ui-slider-item">' +
+                '<a href="' + item.href + '"><img lazyload="' + item.pic + '"/></a>' +
+                (item.title ? '<p>' + item.title + '</p>' : '') + '</div>';
         },
 
         _setup: function(mode) {
@@ -306,6 +316,7 @@
             }
             o.index = index;
             o.wheel.style.cssText += '-webkit-transition:' + o.animationTime + 'ms;-webkit-transform:translate3d(-' + index * o.width + 'px,0,0);';
+            this._setTimeout();
         },
 
         /**
@@ -326,7 +337,6 @@
                 }
                 o._stepLength = 1;
             }
-            me._setTimeout();
         },
 
         /**
