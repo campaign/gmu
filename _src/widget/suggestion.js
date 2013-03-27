@@ -160,13 +160,14 @@
          */
         _setPos: function() {
             var me = this,
+                win = window,
                 $elem = me.data('wrapper'),
                 $input = me.root(),
                 height = parseFloat($elem.height()),
                 customOffset = me.data('offset'),
                 pos =  parseFloat(me.data('pos')),
-                uVal = $input.offset(true).top,
-                dVal = $(window).height() - $input.offset(true).bottom;
+                uVal = $input.offset().top - win.pageYOffset,
+                dVal = $(win).height() - uVal;
 
             if (me.data('posAdapt') && uVal > dVal) {
                 $elem.css('top', -height - (customOffset.y || 0) + 'px');
@@ -296,9 +297,9 @@
                     $('[src="' + url + '"]').remove();
                     delete window[cb];
                 };
-                $.ajaxJSONP({
+                $.ajax({
                     url: url,
-                    type: 'json'
+                    dataType: 'jsonp'
                 });
             }
             return me;
