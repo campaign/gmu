@@ -56,8 +56,10 @@
             },
 
             _init: function () {
+                var data = this._data;
                 this._initOrg();
                 this._adjustPos();
+                data.wheel.style.cssText += '-webkit-transition:0ms;-webkit-transform:translate3d(-' + data.index * data.width + 'px,0,0);';
                 this.trigger('slide', [this._index || 0, this._active]);
             },
 
