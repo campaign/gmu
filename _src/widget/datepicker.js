@@ -3,7 +3,7 @@
  * @ignore
  * @name Datepicker
  * @desc 日历组件, 可以用来作为日期选择器。
- * @import core/zepto.extend.js, core/zepto.ui.js, core/zepto.highlight.js
+ * @import core/touch.js, core/zepto.extend.js, core/zepto.ui.js, core/zepto.highlight.js
  */
 (function ($, undefined) {
     var monthNames = ["01月", "02月", "03月", "04月", "05月", "06月",

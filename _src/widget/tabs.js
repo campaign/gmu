@@ -2,7 +2,7 @@
  * @file 选项卡组件
  * @desc 选项卡组件
  * @name Tabs
- * @import core/zepto.ui.js,core/zepto.highlight.js
+ * @import core/touch.js, core/zepto.ui.js,core/zepto.highlight.js
  * @importCSS transitions.css, loading.css
  */
 (function ($, undefined) {

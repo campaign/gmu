@@ -3,7 +3,7 @@
  * @file 图片轮播组件
  * @name Slider
  * @desc 图片轮播组件
- * @import core/zepto.extend.js, core/zepto.ui.js
+ * @import core/touch.js, core/zepto.extend.js, core/zepto.ui.js
  */
 
 (function($, undefined) {

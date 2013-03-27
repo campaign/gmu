@@ -3,7 +3,7 @@
  * @file 进度条组件
  * @name progressbar
  * @desc 提供一个可调整百分比的进度条
- * @import core/zepto.extend.js, core/zepto.ui.js
+ * @import core/touch.js, core/zepto.extend.js, core/zepto.ui.js
  */
 
 (function($, undefined) {
