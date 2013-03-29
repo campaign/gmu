@@ -16,7 +16,7 @@
 /**
  * @grammar $.proxy(fn, context)  ⇒ function
  * @grammar $.proxy(context, property)  ⇒ function
- * @name $.proxy
+ * @name $.proxy v1.0+
  * @desc 使函数能在指定的上下文中执行。
  * @example var obj = {name: 'Zepto'},
  * handler = function(){ console.log("hello from + ", this.name) }
@@ -87,7 +87,7 @@
  * @grammar one(type, function(e){ ... })  ⇒ self
  * @grammar one({ type: handler, type2: handler2, ... })  ⇒ self
  * @name one
- * @desc 添加事件句柄，运行一次后就取消，保证句柄只运行一次。
+ * @desc 添加事件句柄，运行一次后就移除，保证句柄只运行一次。
  */
 
 /**
