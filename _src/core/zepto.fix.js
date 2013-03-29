@@ -32,7 +32,7 @@
             me.css(opts).css('position', 'fixed').attr('isFixed', true);
             setTimeout(function() {
                 var buff = $('<div style="position:fixed;top:10px;"></div>').appendTo('body'),
-                    top = buff.offset(true).top,
+                    top = buff.offset().top,
                     checkFixed = function() {
                         if(window.pageYOffset > 0) {
                             if(buff.offset(true).top !== top) {
