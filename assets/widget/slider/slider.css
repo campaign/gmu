@@ -18,7 +18,7 @@
     -webkit-transition-duration: 0ms;
     -webkit-animation-timing-function:ease-out;
 }
-.ui-slider-wheel a {
+.ui-slider-item > a {
     display: block;
     text-decoration: none;
 }
@@ -38,7 +38,7 @@
     overflow: hidden;
 }
 
-.ui-slider-item p {
+.ui-slider-item > p {
     position: absolute;
     bottom: 0;
     width: 100%;
