@@ -9,7 +9,7 @@
  * @grammar $(<Zepto collection>)  ⇒ same collection
  * @grammar $(<DOM nodes>)  ⇒ collection
  * @grammar $(htmlString)  ⇒ collection
- * @_grammar $(htmlString, attributes)  ⇒ collection v1.0+
+ * @grammar $(htmlString, attributes)  ⇒ collection v1.0+
  * @grammar Zepto(function($){ ... })
  * @name $()
  * @desc 可使用CSS选择器，DOM节点或HTML字符串来建立Zepto集合对象。
@@ -31,7 +31,6 @@
  */
 
 /**
- * @ignore
  * @grammar $.camelCase(string)  ⇒ string
  * @name $.camelCase v1.0+
  * @desc 将带有破折号的字符串转成“驼峰式”。不影响已经是驼峰式的字符串。
@@ -40,7 +39,6 @@
  */
 
 /**
- * @ignore
  * @grammar $.contains(parent, node)  ⇒ boolean
  * @name $.contains     v1.0+
  * @desc 检查父节点是否包含第二个参数中的DOM节点。若两者为同一个元素也返回false。
@@ -63,10 +61,10 @@
 
 /**
  * @grammar $.extend(target, [source, [source2, ...]])  ⇒ target
- * @_grammar $.extend(true, target, [source, ...])  ⇒ target v1.0+
+ * @grammar $.extend(true, target, [source, ...])  ⇒ target v1.0+
  * @name $.extend
  * @desc 每个源对象的属性用来扩展目标对象，并重写目标对象的属性。
- * @_desc 默认为浅拷贝，第一个参数（可选）设置为***ture***可以触发深拷贝。
+ * @desc 默认为浅拷贝，第一个参数（可选）设置为***ture***可以触发深拷贝。
  * @example var target = { one: 'patridge' },
  *    source = { two: 'turtle doves' }
  *
@@ -84,7 +82,6 @@
  */
 
 /**
- * @ignore
  * @grammar $.grep(items, function(item){ ... })  ⇒ array
  * @name $.grep
  * @desc 获取一个新的数组，只包含回调函数返回ture的对象。
@@ -93,7 +90,7 @@
 
 /**
  * @grammar $.inArray(element, array, [fromIndex])  ⇒ number
- * @name $.inArray
+ * @name $.inArray  v1.0+
  * @desc 获取元素在数组中的位置， 若没有找到，则返回***-1***。
  */
 
@@ -121,15 +118,34 @@
  */
 
 /**
+ * @grammar $.isWindow(object)  ⇒ boolean
+ * @name $.isWindow    v1.0+
+ * @desc 如果对象是窗体对象则返回true。这对每个都有自己的窗体，并且使用普通的***obj === window*** 方法检测会失败的iframes特别有用。
+ */
+
+/**
  * @grammar $.map(collection, function(item, index){ ... })  ⇒ collection
  * @name $.map
  * @desc 遍历所有集合中的元素，移除函数返回值为***null***和***undefined***的元素。
  */
 
 /**
+ * @grammar $.parseJSON(string)  ⇒ string
+ * @name $.parseJSON    v1.0+
+ * @desc 原生***JSON.parse*** 的别名。
+ */
+
+/**
  * @grammar $.trim(string)  ⇒ string
- * @name $.trim
+ * @name $.trim     v1.0+
  * @desc 去掉字符串开头和结尾的空白符。
+ */
+
+/**
+ * @grammar $.type(string)  ⇒ string
+ * @name $.type     v1.0+
+ * @desc 取得一个对象的字符串格式的类型，可能的类型为：*** null undefined boolean number string function array date regexp object error***。
+ * @desc 对于别的对象该函数只是简单的返回“object”，要检测出一个对象是否是一个纯粹对象（plain object），请用<a href="#$.isplainobject">isPlainObject</a>
  */
 
 /**
@@ -208,15 +224,19 @@
 
 /**
  * @grammar clone()  ⇒ collection
- * @name clone
+ * @name clone  v1.0+
  * @desc 深克隆集合中的所有元素。
+ * @desc 该方法并不像jQuery中那样有一个复制数据以及事件到新元素的选项。
  */
 
 
 /**
  * @grammar closest(selector, [context])  ⇒ collection
+ * @grammar closest(collection) ⇒ collection v1.0+
+ * @grammer closest(element) ⇒collection v1.0+
  * @name closest
- * @desc 从当前元素遍历向上找到第一个匹配的元素，可以设定上下文。
+ * @desc 从当前元素遍历向上找到第一个匹配的元素，可以设定上下文。这个方法类似于<a href="#parents">parents(selector)</a>,但是它只返回第一个匹配的祖先元素。
+ * @desc 如果传入一个Zepto集合或一个元素，返回的结果必须匹配传入的集合或元素而不是选择器。
  * @example var input = $('input[type=text]')
  *    input.closest('form')
  */
@@ -231,7 +251,7 @@
 
 /**
  * @grammar contents()  ⇒ collection
- * @name contents
+ * @name contents v1.0+
  * @desc 获取集合中每个元素的子元素，包括文字节点和注释节点。
  */
 
@@ -258,7 +278,7 @@
  * @name data
  * @desc 读写DOM元素的data-*属性。
  *
- * @_desc 当读取属性的时候，以下的转化需要注意:
+ * @desc 当读取属性的时候，以下的转化需要注意:
  *
  * “true”, “false”, 和 “null” 会被转化成对应的类型;
  * number values are converted to actual numeric types;
@@ -295,17 +315,20 @@
 
 /**
  * @grammar filter(selector)  ⇒ collection
- * @_grammar filter(function(index){ ... })  ⇒ collection v1.0+
+ * @grammar filter(function(index){ ... })  ⇒ collection v1.0+
  * @name filter
- * @desc 过滤集合中的元素，只留下匹配选择器的元素。
- *
+ * @desc 过滤集合中的元素，只留下匹配选择器的元素。如果传入了一个函数，则只保留函数返回真值的元素。在该函数内部，***this***关键字指向当前元素。
+ * @desc 如果想排除集合中元素的话，请用<a href="#not">not</a>
  */
 
 
 /**
  * @grammar find(selector)  ⇒ collection
+ * @grammer find(collection) ⇒ collection v1.0+
+ * @grammer find(element) ⇒ collection v1.0+
  * @name find
  * @desc 在当前上下文中寻找指定元素。
+ * @desc 如果传入一个Zepto集合或一个元素，则只会保留那些是当前集合子级的元素。
  * @example var form = $('#myform')
  * form.find('input, select')
  */
@@ -338,10 +361,9 @@
 
 
 /**
- * @ignore
  * @grammar has(selector)  ⇒ collection
  * @grammar has(node)  ⇒ collection
- * @name has
+ * @name has  v1.0+
  * @desc 保留子孙匹配选择器的元素，或包含特定节点的元素。
  * @example $('ol > li').has('a[href]')
  * //=> get only LI elements that contain links
@@ -446,9 +468,9 @@
 
 /**
  * @grammar next()  ⇒ collection
- * @_grammar next(selector)  ⇒ collection v1.0+
+ * @grammar next(selector)  ⇒ collection v1.0+
  * @name next
- * @desc 获取下一个兄弟节点。
+ * @desc 获取下一个兄弟节点，可以传入一个选择器参数。
  * @example $('dl dt').next()   //=> the DD elements
  */
 
@@ -465,15 +487,17 @@
 
 /**
  * @grammar offset()  ⇒ object
+ * @grammar offset(coordinates)  ⇒ object v1.0+
+ * @grammar offset(function(index, oldOffset){ ... })  ⇒ object v1.0+
  * @name offset
  * @desc 获取元素在文档中的位置，返回值属性包含：top, left, width and height。
+ * @desc 当传入一个带有***left***和***top***属性的对象时，会用这些值来把集合中的每一个元素相对于document定位。
  */
 
 
 /**
- * @ignore
  * @grammar offsetParent()  ⇒ collection
- * @name offsetParent
+ * @name offsetParent v1.0+
  * @desc 返回首个祖先节点CSS***position***属性是"relative", "absolute", "fixed"。
  */
 
@@ -508,9 +532,9 @@
 
 
 /**
- * @ignore
  * @grammar position()  ⇒ object
- * @name position
+ * @name position v1.0+
+ * @desc 取得集合中第一个元素的位置，相对于它的<a href="#offsetparent">offsetParent</a>。这在一个绝对定位的元素与另一个元素对齐时很有用。
  * @desc 获取集合首个元素的position值，包含***top***，***left***值。
  *
  * @example var pos = element.position()
@@ -541,9 +565,9 @@
 
 /**
  * @grammar prev()  ⇒ collection
- * @_grammar prev(selector)  ⇒ collection v1.0+
+ * @grammar prev(selector)  ⇒ collection v1.0+
  * @name prev
- * @desc 获取前一个兄弟节点。
+ * @desc 获取集合中每个元素的前一个兄弟节点，可以传入选择器参数。
  */
 
 
@@ -551,8 +575,8 @@
  * @grammar prop(name)  ⇒ value
  * @grammar prop(name, value)  ⇒ self
  * @grammar prop(name, function(index, oldValue){ ... })  ⇒ self
- * @name prop
- * @desc 读写DOM元素的属性。
+ * @name prop v1.0+
+ * @desc 读写DOM元素的属性。这个方法在读取像***checked***和***selected***等在不同时间可能随着用户行为而变化的属性值时，应该比<a href="#attr">attr</a>方法更优先使用。
  */
 
 
@@ -607,9 +631,8 @@
 
 
 /**
- * @ignore
  * @grammar scrollTop()  ⇒ number
- * @name scrollTop
+ * @name scrollTop v1.0+
  * @desc 获取window或可滚动元素在当前页面滚动的像素值。
  */
 
@@ -699,9 +722,9 @@
 
 /**
  * @grammar wrap(structure)  ⇒ self
- * @_grammar wrap(function(index){ ... })  ⇒ self v1.0+
+ * @grammar wrap(function(index){ ... })  ⇒ self v1.0+
  * @name wrap
- * @desc 用DOM结构包装集合元素。
+ * @desc 用DOM结构包装集合元素。参数可以为一个元素、几个可以被当做HTML字符串或DOM节点传入的嵌套的元素，或者是一个每个元素都会调用并返回前两种类型值的函数。
  * @example // wrap each button in a separate span:
  * $('.buttons a').wrap('<span>')
  * // wrap each code block in a div and pre:
@@ -720,9 +743,9 @@
 
 /**
  * @grammar wrapInner(structure)  ⇒ self
- * @_grammar wrapInner(function(index){ ... })  ⇒ self v1.0+
+ * @grammar wrapInner(function(index){ ... })  ⇒ self v1.0+
  * @name wrapInner
- * @desc 将元素内部的内容用一个Wrap包装起来。
+ * @desc 将元素内部的内容用一个Wrap包装起来。参数可以为一个元素、几个可以被当做HTML字符串或DOM节点传入的嵌套的元素，或者是一个每个元素都会调用并返回前两种类型值的函数。
  * @example // wrap the contents of each navigation link in a span:
  * $('nav a').wrapInner('<span>')
  *

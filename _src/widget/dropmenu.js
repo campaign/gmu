@@ -184,13 +184,13 @@
                 case 'up':
                     return position.top - boxHeight;
                 case 'down':
-                    return position.bottom;
+                    return position.top + position.height;
                 case 'left':
                     return position.left;
                 case 'center':
                     return position.left + position.width / 2 - boxWidth / 2;
                 default: //right
-                    return position.right - boxWidth;
+                    return position.left + position.width - boxWidth;
             }
         },
 

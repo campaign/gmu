@@ -65,14 +65,10 @@
             '<div class="ui-slider-wheel"><div class="ui-slider-group">' +
             (function() {
                 if(me.data('itemRender')) {
-                    var render = me.data('itemRender'),
-                        item = render.call(me, i++);
-                    while(item) {
-                        k.push('<div class="ui-slider-item">' + item + '</div>');
-                        item = render.call(me, i++);
-                    }
+                    var render = me.data('itemRender');
+                    while(j = render.call(me, i++)) k.push('<div class="ui-slider-item">' + j + '</div>');
                 } else {
-                    for(; j = content[i]; i++) k.push('<div class="ui-slider-item"><a href="' + j.href + '"><img lazyload="' + j.pic + '"/></a>' + (j.title ? '<p>' + j.title + '</p>': '') + '</div>');
+                    while(j = content[i++]) k.push('<div class="ui-slider-item"><a href="' + j.href + '"><img lazyload="' + j.pic + '"/></a>' + (j.title ? '<p>' + j.title + '</p>': '') + '</div>');
                 }
                 k.push(me.data('loop') ? '</div><div class="ui-slider-group">' + k.join('') + '</div></div>' : '</div></div>');
                 return k.join('');

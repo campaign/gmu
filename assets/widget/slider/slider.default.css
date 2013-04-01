@@ -7,7 +7,7 @@
     background:#E7E7E7 url(ui-slider-imgbg.png) center center no-repeat;
 }
 
-.ui-slider-item p {
+.ui-slider-item > p {
     color: #fff;
     background: rgba(0, 0, 0, 0.5);
     padding: 6px 0;
@@ -67,7 +67,7 @@
 
 /*css for pad*/
 @media all and (min-device-width:768px) and (max-device-width: 1024px){
-    .ui-slider-item p {
+    .ui-slider-item > p {
         font-size: 16px;
         padding: .5em 0;
         text-indent: .8em;
