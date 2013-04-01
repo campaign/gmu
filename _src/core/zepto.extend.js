@@ -5,91 +5,7 @@
  * @import core/zepto.js
  */
 
-
-//     Zepto.js
-//     (c) 2010-2012 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
-
-// The following code is heavily inspired by jQuery's $.fn.data()
-
-;(function($) {
-    var data = {}, dataAttr = $.fn.data, camelize = $.camelCase,
-        exp = $.expando = 'Zepto' + (+new Date())
-
-    // Get value from node:
-    // 1. first try key as given,
-    // 2. then try camelized key,
-    // 3. fall back to reading "data-*" attribute.
-    function getData(node, name) {
-        var id = node[exp], store = id && data[id]
-        if (name === undefined) return store || setData(node)
-        else {
-            if (store) {
-                if (name in store) return store[name]
-                var camelName = camelize(name)
-                if (camelName in store) return store[camelName]
-            }
-            return dataAttr.call($(node), name)
-        }
-    }
-
-    // Store value under camelized key on node
-    function setData(node, name, value) {
-        var id = node[exp] || (node[exp] = ++$.uuid),
-            store = data[id] || (data[id] = attributeData(node))
-        if (name !== undefined) store[camelize(name)] = value
-        return store
-    }
-
-    // Read all "data-*" attributes from a node
-    function attributeData(node) {
-        var store = {}
-        $.each(node.attributes, function(i, attr){
-            if (attr.name.indexOf('data-') == 0)
-                store[camelize(attr.name.replace('data-', ''))] =
-                    $.zepto.deserializeValue(attr.value)
-        })
-        return store
-    }
-
-    $.fn.data = function(name, value) {
-        return value === undefined ?
-            // set multiple values via object
-            $.isPlainObject(name) ?
-                this.each(function(i, node){
-                    $.each(name, function(key, value){ setData(node, key, value) })
-                }) :
-                // get value from first element
-                this.length == 0 ? undefined : getData(this[0], name) :
-            // set value on all elements
-            this.each(function(){ setData(this, name, value) })
-    }
-
-    $.fn.removeData = function(names) {
-        if (typeof names == 'string') names = names.split(/\s+/)
-        return this.each(function(){
-            var id = this[exp], store = id && data[id]
-            if (store) $.each(names, function(){ delete store[camelize(this)] })
-        })
-    }
-})(Zepto);
-
 (function($){
-    var rootNodeRE = /^(?:body|html)$/i;
-    $.extend($.fn, {
-        offsetParent: function() {
-            return $($.map(this, function(el){
-                var parent = el.offsetParent || document.body
-                while (parent && !rootNodeRE.test(parent.nodeName) && $(parent).css("position") == "static")
-                    parent = parent.offsetParent
-                return parent
-            }));
-        },
-        scrollTop: function(){
-            if (!this.length) return
-            return ('scrollTop' in this[0]) ? this[0].scrollTop : this[0].scrollY
-        }
-    });
     $.extend($, {
         contains: function(parent, node) {
             /**
@@ -347,7 +263,7 @@
                 //fnbody = "new RegExp('" + name + "]', 'i').test($.toString(obj))";
                 fnbody = "new RegExp('" + name + "]', 'i').test(Object.prototype.toString.call(obj))";//解决zepto与jQuery共存时报错的问题，$被jQuery占用了。
         }
-        $['is' + name] = new Function('obj', "return " + fnbody);
+        $['is' + name] = $['is' + name] || new Function('obj', "return " + fnbody);
     });
 
 })(Zepto);
@@ -373,16 +289,15 @@
      *     console.log('this is qq browser');
      * }
      */
-    $.extend($.browser, {
+    $.extend( br, {
         qq: /qq/i.test(ua),
-        chrome: /chrome/i.test(ua) || /CriOS/i.test(ua),
         uc: /UC/i.test(ua) || /UC/i.test(na)
-    });
+    } );
 
-    $.browser.uc = $.browser.uc || !$.browser.qq && !$.browser.chrome && !/safari/i.test(ua);
+    br.uc = br.uc || !br.qq && !br.chrome && !br.firefox && !/safari/i.test(ua);
 
     try {
-        $.browser.version = br.uc ? na.match(/UC(?:Browser)?\/([\d.]+)/)[1] : br.qq ? ua.match(/MQQBrowser\/([\d.]+)/)[1] : br.chrome ? ua.match(/(?:CriOS|Chrome)\/([\d.]+)/)[1] : br.version;
+        br.version = br.uc ? na.match(/UC(?:Browser)?\/([\d.]+)/)[1] : br.qq ? ua.match(/MQQBrowser\/([\d.]+)/)[1] : br.version;
     } catch (e) {}
 
 
@@ -402,11 +317,10 @@
      * }
      */
     $.support = $.extend($.support || {}, {
-        orientation: !($.browser.uc || (parseFloat($.os.version)<5 && ($.browser.qq || $.browser.chrome))) && !($.os.android && parseFloat($.os.version) > 3) && "orientation" in window && "onorientationchange" in window,
+        orientation: !(br.uc || (parseFloat($.os.version)<5 && (br.qq || br.chrome))) && !($.os.android && parseFloat($.os.version) > 3) && "orientation" in window && "onorientationchange" in window,
         touch: "ontouchend" in document,
         cssTransitions: "WebKitTransitionEvent" in window,
         has3d: 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix()
-
     });
 
 })(Zepto);
