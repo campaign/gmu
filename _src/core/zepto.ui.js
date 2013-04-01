@@ -12,7 +12,7 @@
         record = (function(){
             var data = {},
                 id = 0,
-                iKey = "GMUWidget"+(+Date()); //internal key.
+                iKey = "GMUWidget"+(+ new Date()); //internal key.
 
             return function( obj, val){
                 var key = obj[ iKey ] || ( obj[ iKey ] = id++ );
@@ -20,6 +20,7 @@
                 if( val ) {
                     data[ key ] = val;
                 } else if( arguments.length > 1) {
+                    delete obj[ iKey ];
                     delete data[ key ];
                 }
 
@@ -172,9 +173,9 @@
 
             $.each( this, function( i, el ){
 
-                obj = record( el ) || record( el, $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
+                obj = record( el ) || $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
                     setup: true
-                } ) ) );
+                } ) );
 
                 ret = $.isString( opts ) && $.isFunction( obj[ opts ] ) ? obj[opts].apply(obj, args) : undefined;
 
@@ -262,6 +263,8 @@
             $el.on('tap', function(e) {
                 (e['bubblesList'] || (e['bubblesList'] = [])).push(me);
             });
+
+            record( $el[0], me );
         },
 
         /**
