@@ -22,7 +22,7 @@
 
 
 //Core.js
-;(function($) {
+;(function($, undefined) {
     //扩展在Zepto静态类上
     $.extend($, {
         /**
@@ -250,21 +250,25 @@
      * console.log($.isUndefined(0));// => false
      * console.log($.isUndefined(a));// => true
      */
-    $.each("String Boolean RegExp Number Date Object Null Undefined".split(" "), function(i, name) {
-        var fnbody = '';
+    $.each("String Boolean RegExp Number Date Object Null Undefined".split(" "), function( i, name ){
+        var fn;
+
+        if( 'is' + name in $ ) return;//already defined then ignore.
+
         switch (name) {
             case 'Null':
-                fnbody = 'obj === null';
+                fn = function(obj){ return obj === null; };
                 break;
             case 'Undefined':
-                fnbody = 'obj === undefined';
+                fn = function(obj){ return obj === undefined; };
                 break;
             default:
-                //fnbody = "new RegExp('" + name + "]', 'i').test($.toString(obj))";
-                fnbody = "new RegExp('" + name + "]', 'i').test(Object.prototype.toString.call(obj))";//解决zepto与jQuery共存时报错的问题，$被jQuery占用了。
+                fn = function(obj){ return new RegExp(name + ']', 'i').test( toString(obj) )};
         }
-        $['is' + name] = $['is' + name] || new Function('obj', "return " + fnbody);
+        $['is'+name] = fn;
     });
+
+    var toString = $.toString;
 
 })(Zepto);
 
