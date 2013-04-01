@@ -6,6 +6,28 @@
  * @import core/zepto.js, core/zepto.extend.js
  */
 (function($, undefined) {
+    var id = 1,
+        _blankFn = function(){},
+        tpl = '<%=name%>-<%=id%>',
+        record = (function(){
+            var data = {},
+                id = 0,
+                iKey = "GMUWidget"+(+Date()); //internal key.
+
+            return function( obj, val){
+                var key = obj[ iKey ] || ( obj[ iKey ] = id++ );
+
+                if( val ) {
+                    data[ key ] = val;
+                } else if( arguments.length > 1) {
+                    delete data[ key ];
+                }
+
+                return data[ key ];
+            }
+        })();
+
+
     $.ui = $.ui || {
         version: '2.0.3',
 
@@ -88,11 +110,6 @@
             return obj instanceof (name===undefined ? _widget: $.ui[name] || _blankFn);
         }
     };
-
-    var id = 1,
-        _blankFn = function(){},
-        tpl = '<%=name%>-<%=id%>',
-        uikey = 'gmu-widget';
         
     /**
      * generate guid
@@ -147,27 +164,30 @@
      * 强制setup模式
      * @grammar $(selector).dialog(opts);
      */
-    function _zeptoLize(name) {
-        $.fn[name] = function(opts) {
+    function _zeptoLize( name ) {
+        $.fn[ name ] = function(opts) {
+            var ret,
+                obj,
+                args = $.slice(arguments, 1);
 
-            var ret, obj,args = $.slice(arguments, 1);
-            $.each(this,function(i,el){
-                obj = $(el).data(uikey + name) ||  $.ui[name](el, $.extend($.isPlainObject(opts) ?  opts : {},{
+            $.each( this, function( i, el ){
+
+                obj = record( el ) || record( el, $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
                     setup: true
-                }));
-                if ($.isString(opts)) {
-                    ret = $.isFunction(obj[opts]) && obj[opts].apply(obj, args);
-                    if (opts == 'this' || ret !== obj && ret !== undefined) {
-                        return false;
-                    }
-                    ret = null;
+                } ) ) );
+
+                ret = $.isString( opts ) && $.isFunction( obj[ opts ] ) ? obj[opts].apply(obj, args) : undefined;
+
+                if( ret !== undefined && ret !== obj || opts === "this" && ( ret = obj ) ) {
+                    return false;
                 }
+                ret = undefined;
             });
             //ret 为真就是要返回ui实例之外的内容
             //obj 'this'时返回
             //其他都是返回zepto实例
             //修改返回值为空的时，返回值不对的问题
-            return ret || ret === '' ? ret : (opts == 'this' ? obj : this);
+            return ret !== undefined ? ret : this;
         };
     }
     /**
@@ -213,22 +233,22 @@
 
             //触发plugins
             var me = this;
-            $.each(plugins,function(i,fn){
-                var result = fn.apply(me);
-                if(result && $.isPlainObject(result)){
+            $.each( plugins, function( i, fn ){
+                var result = fn.apply( me );
+                if(result && $.isPlainObject(result) ){
                     var plugins = me._data.disablePlugin;
-                    if(!plugins || $.isString(plugins) && plugins.indexOf(result.pluginName) == -1){
-                        delete result.pluginName
-                        $.each(result,function(key,val){
+                    if( !plugins || $.isString(plugins) && !~plugins.indexOf() ){
+                        delete result.pluginName;
+                        $.each(result,function( key, val ){
                             var orgFn;
-                            if((orgFn = me[key]) && $.isFunction(val)){
+                            if((orgFn = me[key]) && $.isFunction( val ) ){
                                 me[key] = function(){
                                     me[key + 'Org'] = orgFn;
                                     return val.apply(me,arguments);
                                 }
                             }else
                                 me[key] = val;
-                        })
+                        });
                     }
                 }
             });
@@ -242,8 +262,6 @@
             $el.on('tap', function(e) {
                 (e['bubblesList'] || (e['bubblesList'] = [])).push(me);
             });
-            // record this
-            $el.data(uikey + this._id.split('-')[0],this);
         },
 
         /**
@@ -260,7 +278,6 @@
 
         /**
          * @interface: use in setup mod
-         * @param {Boolean} data-mode use tpl mode
          * @name _setup
          * @desc 接口定义，子类中需要重新实现此方法，此方法在setup模式时被调用。第一个行参用来分辨时fullsetup，还是setup
          *
@@ -322,9 +339,10 @@
             });
             $el = this.trigger('destroy').off().root();
             $el.find('*').off();
-            $el.removeData(uikey).off().remove();
+            record( $el[0], null);
+            $el.off().remove();
             this.__proto__ = null;
-            $.each(this, function(key, val) {
+            $.each(this, function(key) {
                 delete That[key];
             });
         },
