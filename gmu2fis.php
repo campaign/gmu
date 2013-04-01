@@ -263,12 +263,17 @@ class GMU2FIS {
     }
 
     protected function parseZepto(){
-        $this->components['core/zepto.js'] = $this->parseFile(BASE_DIR.'_src/core/zepto.js', array(
+        $component = $this->parseFile(BASE_DIR.'_src/core/zepto.js', array(
             'name' => 'zepto',
             'export' => 'Zepto',
             'component' => 'zepto',
             'relativePath' => 'core/zepto.js'
         ));
+
+        $component['content'] = str_replace('window.Zepto = Zepto', '', $component['content']);
+        $component['content'] = str_replace('\'$\' in window || (window.$ = Zepto)', '', $component['content']);
+
+        $this->components['core/zepto.js'] = $component;
     }
 
     protected function parseBase(){
