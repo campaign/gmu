@@ -370,7 +370,7 @@
                 return;
             }
             sugs = sugs.slice(0, listCount);
-            query = this._htmlEncode(query);
+            query = this._htmlEncode(query) || null;    //FEBASE-736 修改query为空时,replace替换错误的bug
             $.each(sugs, function(index, item) {
                 item = me._htmlEncode(item);
                 var str = $.trim(item).replace(query, '<span>' + query + '</span>');
