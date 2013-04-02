@@ -43,6 +43,7 @@
 
             destroy:function () {
                 this.off('activate', this._onActivate);
+                this.xhr && this.xhr.abort();
                 return this.destroyOrg();
             },
 
