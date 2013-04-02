@@ -56,7 +56,6 @@
     var flag = false, active =  /^#tabs(\d+)$/.test(location.hash) && parseInt(RegExp.$1)-1 || 0;
     $('#tabs1').tabs({
         active: active,
-        swipe: true,
         activate: function(e, to){
             var index = to.index+1;
             if(flag)return ;

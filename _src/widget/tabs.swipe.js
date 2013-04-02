@@ -59,7 +59,7 @@
 
     /**
      * @name 说明
-     * @desc tabs插件, 添加 swipe功能，zepto的swipeLeft, swipeRight有问题，所以在这另外实现了一套。
+     * @desc tabs插件, 添加 swipe功能，zepto的swipeLeft, swipeRight不太准，所以在这另外实现了一套。
      */
     $.ui.tabs.register(function () {
         return {
@@ -67,11 +67,9 @@
             _init:function () {
                 var data = this._data;
                 this._initOrg();
-                if (data.swipe) {
-                    tabs.push(data._content.get(0));
-                    eventBinded =  eventBinded || (tabsSwipeEvents(), true);
-                    this._el.on('tabsSwipeLeft tabsSwipeRight', $.proxy(this._eventHandler, this));
-                }
+                tabs.push(data._content.get(0));
+                eventBinded =  eventBinded || (tabsSwipeEvents(), true);
+                this._el.on('tabsSwipeLeft tabsSwipeRight', $.proxy(this._eventHandler, this));
             },
             _eventHandler:function (e) {
                 var data = this._data, items, index;
@@ -92,11 +90,9 @@
             },
             destroy: function(){
                 var data = this._data, idx;
-                if (data.swipe) {
-                    ~(idx = $.inArray(data._content.get(0), tabs)) && tabs.splice(idx, 1);
-                    this._el.off('tabsSwipeLeft tabsSwipeRight', this._eventHandler);
-                    tabs.length || ($(document).off('touchstart.tabs'), eventBinded = false);
-                }
+                ~(idx = $.inArray(data._content.get(0), tabs)) && tabs.splice(idx, 1);
+                this._el.off('tabsSwipeLeft tabsSwipeRight', this._eventHandler);
+                tabs.length || ($(document).off('touchstart.tabs'), eventBinded = false);
                 return this.destroyOrg();
             }
         }

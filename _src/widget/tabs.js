@@ -30,7 +30,6 @@
      * - ''active'' {Number}: (可选，默认：0) 初始时哪个为选中状态，如果时setup模式，如果第2个li上加了ui-state-active样式时，active值为1
      * - ''items'' {Array}: 在render模式下需要必须设置 格式为\[{title:\'\', content:\'\', href:\'\'}\]
      *   href可以不设，可以用来设置ajax内容。
-     * - ''swipe'' {Boolean}: 需要引入tabs.swipe插件才有效，是否设置手势来左右切换内容。
      * - ''transition'' {\'\'|\'slide\'}: 设置切换动画
      * - ''events'' 所有[Trigger Events](#tabs_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
      *
@@ -86,18 +85,18 @@
                     $.each(items, function(key, val){
                         id = 'tabs_'+uid();
                         nav.push({
-                            href: '#'+id,
+                            href: val.href || '#'+id,
                             title: val.title
                         });
                         contents.push({
-                            content: val.content,
+                            content: val.content || '',
                             id: id
                         });
                         items[key].id = id;
                     });
                     data._nav = $($.parseTpl(tpl.nav, {items: nav, active: data.active})).prependTo($el);
                     data._content = $($.parseTpl(tpl.content, {items: contents, active: data.active, transition: data.transition})).appendTo($el);
-                    data.container = data.container || 'body';
+                    data.container = data.container || ($el.parent().length ? null : 'body');
             }
             data.container && $el.appendTo(data.container);
             me._fitToContent(me._getPanel());
