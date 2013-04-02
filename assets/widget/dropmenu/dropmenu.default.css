@@ -141,4 +141,7 @@
     .ui-dropmenu.ui-horizontal .ui-dropmenu-items li{
         padding: 6px 4px 6px;
     }
+    .ui-dropmenu.ui-horizontal .ui-dropmenu-items li:last-child {
+        padding: 6px 4px;
+    }
 }
