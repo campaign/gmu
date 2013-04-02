@@ -270,7 +270,7 @@
         },
 
         _eventHandler:function (e) {
-            var me = this, match, data = this._data, el, itemData, eventData, _prevented;
+            var me = this, match, data = this._data, el, itemData, eventData, _prevented, li;
             switch (e.type) {
                 case 'ortchange':
                     data._parentOffset = this._getParentOffset();//TRACE FEBASE-658 转屏后，parentOffset不对了，要重新计算一次。
@@ -279,10 +279,10 @@
                 default:
                     el = me._el.get(0);
                     if((match = $(e.target).closest('.ui-dropmenu-items li', el)) && match.length){
-                        eventData = $.Event('itemClick', {target:match[0]});
-                        eventData.data = itemData = data.items[match.index()];//获取data.items中对应的item.
-                        _prevented = itemData && itemData.click && itemData.click.apply(me, [eventData].concat(itemData)) === false;//如果item中有click则先调用item.click
-                        (_prevented = _prevented || eventData.defaultPrevented ) || me.trigger(eventData, itemData);//如果item.click返回的是false,或者在里面调用了e.preventDefault(). itemClick事件就不派送了。
+                        eventData = $.Event('itemClick');
+                        itemData = data.items[match.index()];//获取data.items中对应的item.
+                        _prevented = itemData && itemData.click && itemData.click.apply(me, [eventData, itemData, match[0]]) === false;//如果item中有click则先调用item.click
+                        (_prevented = _prevented || eventData.defaultPrevented ) || me.trigger(eventData, [itemData, match[0]]);//如果item.click返回的是false,或者在里面调用了e.preventDefault(). itemClick事件就不派送了。
                         (_prevented || eventData.defaultPrevented ) && e.preventDefault();//如果itemClick中的事件有被阻止就把本来的click给阻止掉，这样a连接就不会跳转了。
                     } else me.toggle();
             }
