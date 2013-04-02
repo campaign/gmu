@@ -113,7 +113,6 @@
                     data._items = me._findElement('.ui-dropmenu-items');
                     data.container = data.container || 'body';
             }
-            data._arrow && data._arrow.css(data.arrowPos || defaultArrowPos[data.align]);
             data.container && $el.appendTo(data.container);
         },
 
@@ -235,6 +234,8 @@
                 .addClass(align == 'left' ? 'ui-alignleft' : align == 'right' ? 'ui-alignright' : 'ui-aligncenter');
 
             offset = data.offset || defaultOffset[pos=='up'?'up':'down'];
+
+            data._arrow && data._arrow.css(data.arrowPos || defaultArrowPos[align]);
 
             return {
                 top:top + offset.y - parentOffset.top,
