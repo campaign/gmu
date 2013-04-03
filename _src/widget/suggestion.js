@@ -25,6 +25,8 @@
      * - ''shareName''        {String}:                    (可选)共享缓存key
      * - ''autoClose''        {Boolean}:                   (可选)点击input之外自动关闭
      * - ''usePlus''          {Boolean}:                   (可选)是否启用+号
+     * - ''status''           {Boolean}:                   (可选)是否开启事件，可在close时设为false，则下次sug不再弹出
+     * - ''useIscroll''      {Boolean}:                   (可选)是否启用iscroll，启用则sug可内滚
      * - ''height''           {Number}:                    (可选)设置高度
      * - ''width''            {Number}:                    (可选)设置宽度
      * - ''minChars''         {Number}:                    (可选, 默认: 0)最小输入字符: 0
