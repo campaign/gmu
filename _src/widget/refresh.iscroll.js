@@ -96,7 +96,7 @@
                     })(),
                     onScrollEnd: function (e) {
                         var actDir = data._actDir;
-                        if (actDir) {
+                        if (actDir && me._status(actDir)) {   //trace FEBASE-716
                             me._setStyle(actDir, 'loading');
                             me._loadingAction(actDir, 'pull');
                         }
