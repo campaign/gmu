@@ -96,17 +96,13 @@
 
 <script type="text/javascript">
     (function () {
-        var sug = $('#input').suggestion({
+        $('#input').suggestion({
             usePlus: true,
-            source: "../../data/suggestion.php"
-        }).suggestion('this');
-
-        $('#input').quickdelete();
-
-        console.log(sug);
-        sug.on('close', function () {    //关闭按钮点击一次后，sug不再出现
-            this.data('status', false);
-        });
+            source: "../../data/suggestion.php",
+            close: function () {        //关闭按钮点击一次后，sug不再出现
+                this.data('status', false);
+            }
+        }).quickdelete();
     })();
 </script>
 
