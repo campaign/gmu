@@ -11,20 +11,19 @@
         tpl = '<%=name%>-<%=id%>',
         record = (function(){
             var data = {},
-                id = 0,
-                iKey = "GMUWidget"+(+ new Date()); //internal key.
+                id = 0;
 
-            return function( obj, val){
-                var key = obj[ iKey ] || ( obj[ iKey ] = id++ );
+            return function( obj, key, val){
+                var dkey = obj[ key ] || ( obj[ key ] = id++ );
 
                 if( val ) {
-                    data[ key ] = val;
+                    data[ dkey ] = val;
                 } else if( arguments.length > 1) {
-                    delete obj[ iKey ];
-                    delete data[ key ];
+                    delete obj[ key ];
+                    delete data[ dkey ];
                 }
 
-                return data[ key ];
+                return data[ dkey ];
             }
         })();
 
@@ -79,6 +78,7 @@
                         id: _guid()
                     })
                 });
+
                 obj._createWidget.call(obj, el, options,Class.plugins);
                 return obj;
             }, data);
@@ -173,7 +173,7 @@
 
             $.each( this, function( i, el ){
 
-                obj = record( el ) || $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
+                obj = record( el, name ) || $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
                     setup: true
                 } ) );
 
@@ -264,7 +264,7 @@
                 (e['bubblesList'] || (e['bubblesList'] = [])).push(me);
             });
 
-            record( $el[0], me );
+            record( $el[0], me._id.split('-')[0], me );
         },
 
         /**
@@ -335,18 +335,18 @@
          * @desc 注销组件
          */
         destroy: function() {
-            var That = this,
+            var me = this,
                 $el;
             $.each(this.data('components') || [], function(id, obj) {
                 obj.destroy();
             });
             $el = this.trigger('destroy').off().root();
             $el.find('*').off();
-            record( $el[0], null);
+            record( $el[0], me._id.split('-')[0], null);
             $el.off().remove();
             this.__proto__ = null;
             $.each(this, function(key) {
-                delete That[key];
+                delete me[key];
             });
         },
 
