@@ -245,7 +245,7 @@
         _bindSuggestionListEvent: function() {
             var me = this,
                 $input =  me.root();
-            me.data('wrapper').find(".ui-suggestion-result").on('click', function(e) {
+            me.data('wrapper').find(".ui-suggestion-result").on('tap', function(e) {
                 var elem = e.target;
                 if (elem && elem.className == 'ui-suggestion-plus') {
                     $input.val(elem.getAttribute('data-item')).trigger('input');
@@ -348,6 +348,8 @@
                     })));
                     iscroll.scrollTo(0, 0);
                     iscroll.refresh();
+                } else {
+                    $content.on('touchstart', function(e){e.preventDefault()});
                 }
             } else me.hide();
             
@@ -429,20 +431,26 @@
          */
         _localStorage: function(value) {
             var me = this,
+                ret,
+                localdata,
+                data,
                 shareName = me.data('shareName'),
                 id = me.data('isSharing') ? shareName ? shareName + '-SUG-Sharing-History' : 'SUG-Sharing-History' : me.data('id');
 
-            if (value === null) window.localStorage[id] = "";
-            else if (value !== undefined) {
-                var localdata = window.localStorage[id],
+            try{
+                if (value === null) window.localStorage[id] = "";
+                else if (value !== undefined) {
+                    localdata = window.localStorage[id];
                     data = localdata ? localdata.split(encodeURIComponent(',')) : [];
 
-                if ($.inArray(value, data) != -1) return;
-                data.unshift(value);
-                window.localStorage[id] = data.join(encodeURIComponent(','));
-            }
-
-            return window.localStorage[id];
+                    if (~$.inArray(value, data) ) {
+                        data.unshift(value);
+                        window.localStorage[id] = data.join(encodeURIComponent(','));
+                    }
+                }
+                ret = window.localStorage[id];
+            } catch(e){}
+            return ret;
         },
 
         /** 
