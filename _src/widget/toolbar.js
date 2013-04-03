@@ -101,7 +101,7 @@
                     $(window).off('touchmove touchend touchcancel scroll scrollStop', check);
                     $(document).off('touchend touchcancel', offHandle);
                     placeholder.off().remove();
-                })
+                }).on('init', check);
             }
             backbtn.highlight('ui-state-hover').is('a') || backbtn.click(me.data('backButtonClick'));
             return me;
