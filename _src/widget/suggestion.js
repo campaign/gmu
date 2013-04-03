@@ -443,7 +443,7 @@
                     localdata = window.localStorage[id];
                     data = localdata ? localdata.split(encodeURIComponent(',')) : [];
 
-                    if (~$.inArray(value, data) ) {
+                    if (!~$.inArray(value, data) ) {
                         data.unshift(value);
                         window.localStorage[id] = data.join(encodeURIComponent(','));
                     }
