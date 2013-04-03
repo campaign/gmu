@@ -9,21 +9,20 @@
     var id = 1,
         _blankFn = function(){},
         tpl = '<%=name%>-<%=id%>',
+        uikey = 'GMUWidget',
         record = (function(){
             var data = {},
-                id = 0;
+                id = 0,
+                iKey = uikey+(+ new Date()); //internal key.
 
             return function( obj, key, val){
-                var dkey = obj[ key ] || ( obj[ key ] = id++ );
+                var dkey = obj[ iKey ] || ( obj[ iKey ] = id++ ),
+                    store = data[dkey] || (data[dkey] = {});
 
-                if( val ) {
-                    data[ dkey ] = val;
-                } else if( arguments.length > 1) {
-                    delete obj[ key ];
-                    delete data[ dkey ];
-                }
+                !$.isUndefined(key) && (store[key] = val);
+                $.isNull(val) && delete store[key];
 
-                return data[ dkey ];
+                return store[ key ];
             }
         })();
 
@@ -173,7 +172,7 @@
 
             $.each( this, function( i, el ){
 
-                obj = record( el, name ) || $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
+                obj = record( el, uikey + name ) || $.ui[name]( el, $.extend( $.isPlainObject(opts) ? opts : {}, {
                     setup: true
                 } ) );
 
@@ -264,7 +263,7 @@
                 (e['bubblesList'] || (e['bubblesList'] = [])).push(me);
             });
 
-            record( $el[0], me._id.split('-')[0], me );
+            record( $el[0], uikey + me._id.split('-')[0], me );
         },
 
         /**
@@ -342,7 +341,7 @@
             });
             $el = this.trigger('destroy').off().root();
             $el.find('*').off();
-            record( $el[0], me._id.split('-')[0], null);
+            record( $el[0], uikey + me._id.split('-')[0], null);
             $el.off().remove();
             this.__proto__ = null;
             $.each(this, function(key) {
