@@ -30,7 +30,6 @@
     <script type="text/javascript" src="../../../_src/core/zepto.ui.js"></script>
     <script type="text/javascript" src="../../../_src/core/zepto.highlight.js"></script>
     <script type="text/javascript" src="../../../_src/widget/tabs.js"></script>
-    <script type="text/javascript" src="../../../_src/widget/tabs.swipe.js"></script>
     <!--组件依赖js end-->
 </head>
 <body>
@@ -67,14 +66,13 @@
 <script>
     window.scrollTo(0, 1);//收起地址栏
 
-    $('#tabs1').tabs({swipe: true});
+    $('#tabs1').tabs();
     $('#tabs1').on('beforeActivate', function(e){
         $('#input1').prop('checked') && e.preventDefault();
     });
 
     $('#tabs2').tabs({
-        transition:'',
-        swipe: true
+        transition:''
     });
 </script>
 <!--demo公用头部展示所用js，可以不用加载 begin-->

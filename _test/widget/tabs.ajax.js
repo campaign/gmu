@@ -28,6 +28,73 @@ test("只为加载css用",function(){
     });
 });
 
+test("测试ajax Render模式",function(){
+    stop();
+    expect(11);
+
+    var count = 0,
+        status = '',
+        tabs;
+
+    tabs = $.ui.tabs({
+        ajax: {
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded'
+        },
+        items: [
+            {
+                title: 'Tab1',
+                content: 'content1'
+            },
+            {
+                title: 'Ajax1',
+                href : '../../widget/data/tabs/proxy.php?file=sample.html'
+            },
+            {
+                title: 'Ajax2',
+                href : '../../widget/data/tabs/proxy.php?file=sample.html'
+            }
+        ],
+        beforeLoad: function(e, xhr, settings){
+            if (count == 1) {
+                e.preventDefault();
+                ok(true, 'beforeLoad is prevented');
+            }
+            ok(true, 'beforeLoad has triggered')
+            status += 'beforeLoad '
+            var ui = this;
+            settings.data = $.param({
+                index: ui.data('active')
+            });
+        },
+        beforeRender : function(event, response, panel, index, xhr){
+            status += 'beforeRender '
+            ok(true, 'beforeRender has triggered')
+            equal(1, index, '加载页面index正确')
+        },
+        load : function(event, panel){
+            count++;
+            status += 'load';
+            ok(true, 'load has triggered');
+            equal('beforeLoad beforeRender load', status);
+            equals($(panel).find('h3').length, 1, 'content h3 loaded');
+            equals($(panel).find('p').length, 1, 'content p loaded');
+            if (count == 1) {
+                ok(true, '第二次点击开始');
+                ta.tap(tabs.root().find('.ui-tabs-nav li').get(2));
+                setTimeout(function () {
+                    tabs.destroy();
+                    start();
+                }, 300);
+            }
+        }
+    });
+
+    ta.tap(tabs.root().find('.ui-tabs-nav li').get(1));
+    ok(true, '第一次点击开始');
+
+});
+
 test("加载成功&事件测试:beforeLoad,load,beforeRender", function(){
     stop()
     expect(11)

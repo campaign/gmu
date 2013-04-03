@@ -35,7 +35,7 @@
                 var data = this._data, items = data.items, i, length;
                 this._initOrg();
                 for (i = 0, length = items.length; i < length; i++) {
-                    idRE.test(items[i].href) || (items[i].isAjax = true);
+                    items[i].href && !idRE.test(items[i].href) && (items[i].isAjax = true);
                 }
                 this.on('activate', this._onActivate);
                 items[data.active].isAjax && this.load(data.active);//如果当前是ajax
@@ -43,6 +43,7 @@
 
             destroy:function () {
                 this.off('activate', this._onActivate);
+                this.xhr && this.xhr.abort();
                 return this.destroyOrg();
             },
 
