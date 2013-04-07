@@ -311,7 +311,7 @@
          * @desc 获取input值
          * @name getValue
          * @grammar getValue() => string
-         * @example $('#input').suggestion().getValue();
+         * @example $('#input').suggestion('getValue');
          */
         getValue: function() {
             return $.trim(this.root().val());
