@@ -334,9 +334,6 @@
         destroy: function() {
             var me = this,
                 $el;
-            $.each(this.data('components') || [], function(id, obj) {
-                obj.destroy();
-            });
             $el = this.trigger('destroy').off().root();
             $el.find('*').off();
             record( $el[0], me._id.split('-')[0], null);
@@ -345,21 +342,6 @@
             $.each(this, function(key) {
                 delete me[key];
             });
-        },
-
-        /**
-         * @name component
-         * @grammar component() ⇒ array
-         * @grammar component(subInstance) ⇒ instance
-         * @grammar component(createFn) ⇒ instance
-         * @desc 获取或者设置子组件, createFn为组件构造器，必须返回组件的实例。
-         */
-        component: function(createFn) {
-            var list = this.data('components') || this.data('components', []);
-            try {
-                list.push($.isFunction(createFn) ? createFn.apply(this) : createFn);
-            } catch(e) {}
-            return this;
         },
 
         /**
