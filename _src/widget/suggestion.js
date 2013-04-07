@@ -249,11 +249,13 @@
                 $input =  me.root();
             me.data('wrapper').find(".ui-suggestion-result").on('tap', function(e) {
                 var elem = e.target;
-                if (elem && elem.className == 'ui-suggestion-plus') {
-                    $input.val(elem.getAttribute('data-item')).trigger('input');
-                } else {
-                    me._select(this)._submit();
-                }
+                setTimeout(function(){
+                    if (elem && elem.className == 'ui-suggestion-plus') {
+                        $input.val(elem.getAttribute('data-item')).trigger('input');
+                    } else {
+                        me._select(this)._submit();
+                    }
+                }, 400);
             }).highlight('ui-suggestion-result-highlight');
             return me;
         },
