@@ -37,14 +37,6 @@ test('plugin', function() {
     $.ui.klass($('<div></div>'), {a: 1}).test().destroy();
 });
 
-test('component', function() {
-    var ins = $.ui.klass($("<div></div>")).component(function() {
-        return $.ui.klass($("<div></div>"));
-    });
-    equal(ins.data('components').length, 1, 'one component is add');
-    ins.destroy();
-});
-
 test('on trigger', function() {
     expect(3);
     stop();
