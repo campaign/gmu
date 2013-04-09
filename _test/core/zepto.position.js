@@ -170,15 +170,167 @@ test("position at", function(){
     start();
 });
 
-test("position custom collision", function(){
+test("position of=window", function(){
+    expect(10);
+    stop();
+    var p = $('#position'), offset1, offset2;
+
+    offset2 = {
+    		left: 0,
+    		top: 0,
+    		width: window.innerWidth,
+    		height: window.innerHeight
+    }
+    
+    p.position({
+    	of: window,
+        my: 'left top',
+        at: 'left top'
+    });
+
+    offset1 = p.offset();
+
+    equals(offset1.top, offset2.top, "my: left top; at: left top; top");
+    equals(offset1.left, offset2.left, "my: left top; at: left top; left");
+
+
+    p.position({
+    	of: window,
+        my: 'left top',
+        at: 'center top'
+    });
+
+    offset1 = p.offset();
+
+    equals(offset1.top, offset2.top, "my: left top; at: center top; top");
+    equals(offset1.left, offset2.left + Math.round(offset2.width/2), "my: left top; at: center top; left");
+
+    p.position({
+    	of: window,
+        my: 'left top',
+        at: 'right top'
+    });
+
+    offset1 = p.offset();
+
+    equals(offset1.top, offset2.top, "my: left top; at: right top; top");
+    equals(offset1.left, offset2.left + offset2.width, "my: left top; at: right top; left");
+
+    p.position({
+    	of: window,
+        my: 'left top',
+        at: 'left center'
+    });
+
+    offset1 = p.offset();
+
+    equals(offset1.top, offset2.top + Math.round(offset2.height/2), "my: left top; at: left center; top");
+    equals(offset1.left, offset2.left, "my: left top; at: left center; left");
+
+
+    p.position({
+    	of: window,
+        my: 'left top',
+        at: 'left bottom'
+    });
+
+    offset1 = p.offset();
+
+    equals(offset1.top, offset2.top + offset2.height, "my: left top; at: left bottom; top");
+    equals(offset1.left, offset2.left, "my: left top; at: left bottom; left");
+
+
+    start();
+});
+
+test("position of=e", function(){
+    expect(10);
+    stop();
+    var p = $('#position'), offset1, offset2;
+    offset2 = {
+    		left: 100,
+    		top: 100
+    }
+
+    $("body").on("touchstart", function(e){
+    	p.position({
+            of: e,
+            my: 'left top',
+            at: 'left top'
+        });
+
+        offset1 = p.offset();
+
+        equals(offset1.top, offset2.top, "my: left top; at: left top; top");
+        equals(offset1.left, offset2.left, "my: left top; at: left top; left");
+
+
+        p.position({
+            of: e,
+            my: 'left top',
+            at: 'center top'
+        });
+
+        offset1 = p.offset();
+
+        equals(offset1.top, offset2.top, "my: left top; at: center top; top");
+        equals(offset1.left, offset2.left, "my: left top; at: center top; left");
+
+        p.position({
+            of: e,
+            my: 'left top',
+            at: 'right top'
+        });
+
+        offset1 = p.offset();
+
+        equals(offset1.top, offset2.top, "my: left top; at: right top; top");
+        equals(offset1.left, offset2.left, "my: left top; at: right top; left");
+
+        p.position({
+            of: e,
+            my: 'left top',
+            at: 'left center'
+        });
+
+        offset1 = p.offset();
+
+        equals(offset1.top, offset2.top, "my: left top; at: left center; top");
+        equals(offset1.left, offset2.left, "my: left top; at: left center; left");
+
+
+        p.position({
+            of: e,
+            my: 'left top',
+            at: 'left bottom'
+        });
+
+        offset1 = p.offset();
+
+        equals(offset1.top, offset2.top, "my: left top; at: left bottom; top");
+        equals(offset1.left, offset2.left, "my: left top; at: left bottom; left");
+
+        start();
+    });
+    
+    ta.touchstart(document.body, {
+    	touches:[{
+    		clientX: 100,
+    		clientY:100
+    	}]
+    });
+});
+
+test("position custom collision & within", function(){
     stop();
     expect(3);
     var p = $('#position'), o = $('#positionOf'), offset;
 
     p.position({
         of: o,
-        my: 'left top',
+        my: 'center center',
         at: 'left top',
+        within: o,
         collision: function(position, opts){
             ok(opts.elem.is('#position'), "elem元素正确");
             position.left = 50;
@@ -192,24 +344,43 @@ test("position custom collision", function(){
     start();
 });
 
+test("position custom within=window", function(){
+    stop();
+    expect(1);
+    var p = $('#position'), o = $('#positionOf'), offset;
+
+    p.position({
+        of: o,
+        my: 'center center',
+        at: 'left top',
+        within: window,
+        collision: function(position, opts){
+           equals(opts.within.element[0], window, "The within is window");
+        }
+    });
+
+    offset = p.offset();
+    start();
+});
+
 test("position custom using", function(){
-    expect(1)
+    expect(2)
     stop();
     var p = $('#position'), o = $('#positionOf'), offset;
+    offset = o.offset();
 
     p.position({
         of: o,
         my: 'left top',
         at: 'left top',
         using: function(position){
-            ok(true, "using方法执行了");
+        	equals(position.top, offset.top, "my: left top; at: left top; top");
+            equals(position.left, offset.left, "my: left top; at: left top; left");
         }
     });
 
     start();
 });
-
-
 
 test("position 位置offset参数", function(){
     expect(4)
@@ -231,14 +402,14 @@ test("position 位置offset参数", function(){
 
     p.position({
         of: o,
-        my: 'left+20% top+10%',
-        at: 'left top'
+        my: 'left top',
+        at: 'left+20% top+10%'
     });
 
     offset1 = p.offset();
     offset2 = o.offset();
 
-    approximateEqual(offset1.top, offset2.top +0.1*offset1.height, 0.5,  "my: left top; at: left top; top");
-    approximateEqual(offset1.left, offset2.left + 0.2*offset1.width, 0.5, "my: left top; at: left top; left");
+    approximateEqual(offset1.top, offset2.top +0.1*offset2.height, 0.5,  "my: left top; at: left top; top");
+    approximateEqual(offset1.left, offset2.left + 0.2*offset2.width, 0.5, "my: left top; at: left top; left");
     start();
 });
