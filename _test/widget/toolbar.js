@@ -7,7 +7,7 @@ module('plugin/widget/toolbar', {
 	}
 });
 
-var pad = window.screen.width >= 768 && window.screen.width <= 1024;
+var tablet = window.screen.width >= 768 && window.screen.width <= 1024;
 
 test("el(zepto)", function() {
 	expect(15);
@@ -29,7 +29,7 @@ test("el(zepto)", function() {
 			equals(toolbar._el.offset().left, $("body").offset().left, "The left is right");
 			equals(toolbar._el.offset().top, $(".ui-toolbar").offset().top, "The top is right");
 			equals(toolbar._el.offset().width, $("body").offset().width, "The width is right");
-			equals(toolbar._el.offset().height, pad ? 50 : 42, "The height is right");
+			equals(toolbar._el.offset().height, tablet ? 50 : 42, "The height is right");
 
 			equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "返回", "The buttonText is right");
 			equals(toolbar._el.find(".ui-toolbar-title").text(), null, "The title is right");
@@ -102,7 +102,7 @@ test("full setup", function() {
 	equals(toolbar._el.offset().left, $("body").offset().left, "The left is right");
 	equals(toolbar._el.offset().top, $(".ui-toolbar").offset().top, "The top is right");
 	equals(toolbar._el.offset().width, $("body").offset().width, "The width is right");
-	equals(toolbar._el.offset().height, pad ? 50 : 42, "The height is right");
+	equals(toolbar._el.offset().height, tablet ? 50 : 42, "The height is right");
 
 	equals(toolbar._el.find(".ui-toolbar-backbtn").text(), "首页", "The buttonText is right");
 	equals(toolbar._el.find(".ui-toolbar-title").text(), "标题", "The titleText is right");
@@ -194,7 +194,7 @@ test('window scroll(fix)', function() {
 	        setTimeout(function(){
 	            equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	            equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	            equals(toolbar._el.height() , pad ? 50 : 42 , "the height is ok");
+	            equals(toolbar._el.height() , tablet ? 50 : 42 , "the height is ok");
 	            approximateEqual(w.pageYOffset, 0, "The pageYOffset is " + w.pageYOffset);
 	            equals(toolbar._el.offset().left, 0,'the pos is right');
 	            equals(toolbar._el.offset().top, w.pageYOffset, 'the pos is right');
@@ -203,7 +203,7 @@ test('window scroll(fix)', function() {
 	            setTimeout(function(){
 	                equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	                equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	                equals(toolbar._el.height() , pad ? 50 : 42 , "the height is ok");
+	                equals(toolbar._el.height() , tablet ? 50 : 42 , "the height is ok");
 	                approximateEqual(w.pageYOffset, 300, "The pageYOffset is " + w.pageYOffset);
 	                equals(toolbar._el.offset().top, w.pageYOffset, 'the pos is right');
 	                equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -212,7 +212,7 @@ test('window scroll(fix)', function() {
 	                setTimeout(function(){
 	                    equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	                    equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	                    equals(toolbar._el.height() , pad ? 50 : 42 , "the height is ok");
+	                    equals(toolbar._el.height() , tablet ? 50 : 42 , "the height is ok");
 	                    approximateEqual(w.pageYOffset, 0, "The pageYOffset is " + w.pageYOffset);
 	                    equals(toolbar._el.offset().top, 0, 'the pos is right');
 	                    equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -250,7 +250,7 @@ if((!$.os.phone && !$.os.tablet)||($.os.ios && parseFloat($.os.version) > 5)){
 	                setTimeout(function(){
 	                    equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	                    equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	                    equals(toolbar._el.height() , pad ? 50 : 42, "the height is ok");
+	                    equals(toolbar._el.height() , tablet ? 50 : 42, "the height is ok");
 	                    approximateEqual(w.pageYOffset, 500, "The pageYOffset is " + w.pageYOffset);
 	                    equals(toolbar._el.offset().top, w.pageYOffset, 'the pos is right');
 	                    equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -259,7 +259,7 @@ if((!$.os.phone && !$.os.tablet)||($.os.ios && parseFloat($.os.version) > 5)){
 	                    setTimeout(function(){
 	                        equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	                        equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	                        equals(toolbar._el.height() , pad ? 50 : 42, "the height is ok");
+	                        equals(toolbar._el.height() , tablet ? 50 : 42, "the height is ok");
 	                        approximateEqual(w.pageYOffset, 0, "The pageYOffset is " + w.pageYOffset);
 	                        equals(toolbar._el.offset().top, t, 'the pos is right');
 	                        equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -301,7 +301,7 @@ if((!$.os.phone && !$.os.tablet)||($.os.ios && parseFloat($.os.version) > 5)){
 	                setTimeout(function(){
 	                    equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	                    equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	                    equals(toolbar._el.height() , pad ? 50 : 42, "the height is ok");
+	                    equals(toolbar._el.height() , tablet ? 50 : 42, "the height is ok");
 	                    approximateEqual(w.pageYOffset, 500, "The pageYOffset is " + w.pageYOffset);
 	                    equals(toolbar._el.offset().top, w.pageYOffset, 'the pos is right');
 	                    equals(toolbar._el.offset().left, 0,'the pos is right');
@@ -310,7 +310,7 @@ if((!$.os.phone && !$.os.tablet)||($.os.ios && parseFloat($.os.version) > 5)){
 	                    setTimeout(function(){
 	                        equals(toolbar._el.css("display"), "block", "The toolbar is show");
 	                        equals(toolbar._el.width() , w.document.body.offsetWidth , "the width is ok");
-	                        equals(toolbar._el.height() , pad ? 50 : 42, "the height is ok");
+	                        equals(toolbar._el.height() , tablet ? 50 : 42, "the height is ok");
 	                        approximateEqual(w.pageYOffset, 0, "The pageYOffset is " + w.pageYOffset);
 	                        equals(toolbar._el.offset().top, w.pageYOffset, 'the pos is right');
 	                        equals(toolbar._el.offset().left, 0,'the pos is right');
