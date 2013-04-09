@@ -259,28 +259,6 @@ test("parseTpl", function() {
     equal('登录名ajean，密码1234567', $.parseTpl(tpl, obj));
 });
 
-test("offset", function() {
-    expect(6);
-    $('<div id="tt" style="position:absolute;left:10px;top:20px;height:30px;width:40px"></div>').appendTo(document.body);
-    equal($('#tt').offset().left, 10, 'offset is right');
-    equal($('#tt').offset().top, 20, 'offset is right');
-    equal($('#tt').offset().height, 30, 'offset is right');
-    equal($('#tt').offset().width, 40, 'offset is right');
-    equal($('#tt').offset().right, 50, 'offset is right');
-    equal($('#tt').offset().bottom, 50, 'offset is right');
-    $('#tt').remove();
-});
-
-test("offset ignor", function() {
-    expect(2);
-    $('<div style="height:2000px;"></div>').appendTo(document.body);
-    $('<div id="tt" style="position:absolute;left:10px;top:1200px;height:30px;width:40px"></div>').appendTo(document.body);
-    window.scrollTo(0, 1000);
-    equal($('#tt').offset(true).top, $('#tt').offset().top - window.pageYOffset, 'offset is right');
-    equal($('#tt').offset(true).bottom, $('#tt').offset().bottom - window.pageYOffset, 'offset is right');
-    window.scrollTo(0, 0);
-});
-
 test("$.contains", function() {
     expect(3);
     $('<div id="parent"><div><div id="child"></div></div></div>').appendTo(document.body);
