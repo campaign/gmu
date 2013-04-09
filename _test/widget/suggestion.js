@@ -8,6 +8,7 @@ module('plugin/widget/suggestion', {
     }
 });
 
+var pad = window.screen.width >= 768 && window.screen.width <= 1024;
 
 test('默认参数 & container & source & events', function() {
     stop();
@@ -56,12 +57,12 @@ test('默认参数 & container & source & events', function() {
                 equal(sugg._data.wrapper.offset().left, $(input).parent().offset().left, "The left is same as input");
                 equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
                 approximateEqual(sugg._data.wrapper.offset().height,
-		                (window.screen.width >= 768 ? 40 : 33)+66+3, "The height is right");
+		                (pad ? 40 : 33)+66+3, "The height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
                 equal(sugg._data.wrapper.find(".ui-suggestion-button").height(),
-		                (window.screen.width >= 768 ? 40 : 33)+1, "The button height is right");//根据屏幕宽度获取的button高度值(border)
-                equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
-                ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
+		                (pad ? 40 : 33)+1, "The button height is right");//根据屏幕宽度获取的button高度值(border)
+                approximateEqual(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), 2, $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
+                ta.tap(sugg._data.wrapper.find("ul li")[1].firstChild);
             }, 100);
         });
         sugg.on("hide", function() {
@@ -97,25 +98,42 @@ test('param', function() {
     $(input).focus();
 });
 
-test('height', function() {
+test('useIscroll=true && height', function() {
     stop();
-    expect(8);
+    expect(4);
     var sugg = $.ui.suggestion({
         container: "#sugg-input",
         source: upath + "data/suggestion.php",
-        height: 400
+        height: 300
     });
     sugg.on("show", function() {
         setTimeout(function() {
-            equal(sugg._data.wrapper.css("display"), "block", "The suggestion shows");
-            equal($(".ui-suggestion ul li").length, 9, "The items count");
-            equal(sugg._data.wrapper.offset().width, $(input).parent().offset().width, "The width is same as input");
-            equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is same as input");
-            equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is right");
-            approximateEqual(sugg._data.wrapper.offset().height, 400+3+
-		            (window.screen.width >= 768 ? 40 : 33), "The height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 400, "The content height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
+        	equals(sugg._data.wrapper.find(".ui-suggestion-content").css("overflow"), "hidden", "The iscroll is created");
+            approximateEqual(sugg._data.wrapper.offset().height, 300+3+(pad ? 40 : 33), "The height is right");
+            equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 300, "The content height is right");
+            approximateEqual(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, 2, "The scroller height is right");
+
+            sugg.destroy();
+            start();
+        }, 100);
+    });
+    input.value = "1";
+    $(input).focus();
+});
+
+test('useIscroll=false', function() {
+    stop();
+    expect(3);
+    var sugg = $.ui.suggestion({
+    	useIscroll: false,
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php"
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+        	equals(sugg._data.wrapper.find(".ui-suggestion-content").css("overflow"), "visible", "The iscroll is not created");
+            approximateEqual(sugg._data.wrapper.find(".ui-suggestion-content").height(), $(".ui-suggestion-content ul li").height() * 9, 2, "The scroller height is right");
+            approximateEqual(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, 2, "The scroller height is right");
 
             sugg.destroy();
             start();
@@ -140,7 +158,7 @@ test('width', function() {
             equal(sugg._data.wrapper.offset().left, $(input).offset().left, "The left is right");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height, "The top is same as input");
             approximateEqual(sugg._data.wrapper.offset().height,
-		            window.screen.width >= 768 ? 109 : 102, "The height is right");
+		            pad ? 109 : 102, "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -169,7 +187,7 @@ test('offset', function() {
             equal(sugg._data.wrapper.offset().left, $(input).offset().left + 10, "The left is right");
             equal(sugg._data.wrapper.offset().top, $(input).offset().top + $(input).offset().height + 20, "The top is same as input");
             approximateEqual(sugg._data.wrapper.offset().height, 99+3+
-		            (window.screen.width >= 768 ? 40 : 33) , "The height is right");
+		            (pad ? 40 : 33) , "The height is right");
             sugg.destroy();
             start();
         }, 100);
@@ -782,7 +800,7 @@ test("isStorage = true, 清除历史记录", function() {
     sugg.on("show", function() {
         setTimeout(function() {
             show++;
-            if(show == 1) ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
+            if(show == 1) ta.tap(sugg._data.wrapper.find("ul li")[1].firstChild);
             if(show == 2) {
                 equal(window.localStorage[id], "163邮箱", "存储1个历史记录");
                 equals(sugg._data.wrapper.find("ul li").length, 1, "The pick storage shows");
@@ -839,7 +857,7 @@ test("isStorage = false", function() {
     sugg.on("show", function() {
         setTimeout(function() {
             show++;
-            if(show == 1) ua.click(sugg._data.wrapper.find("ul li")[2].firstChild);
+            if(show == 1) ta.tap(sugg._data.wrapper.find("ul li")[2].firstChild);
             if(show == 2) {
                 ok(true); //no localstorage, The assertion shouldn't run
             }
@@ -866,7 +884,7 @@ test("isStorage = false", function() {
 });
 
 test("isSharing = true", function() {
-    expect(7);
+    expect(5);
     stop();
     var show = 0;
     var hide = 0;
@@ -881,13 +899,11 @@ test("isSharing = true", function() {
     sugg.on("show", function() {
         setTimeout(function() {
             show++;
-            if(show == 1) ua.click(sugg._data.wrapper.find("ul li")[0].firstChild);
+            if(show == 1) ta.tap(sugg._data.wrapper.find("ul li")[0].firstChild);
             if(show == 2) {
                 equal(window.localStorage['SUG-Sharing-History'], "192.168.1.1", "存储1个历史记录");
                 equals(sugg._data.wrapper.find("ul li").length, 1, "The pick storage shows");
                 equals(sugg._data.wrapper.find("ul li")[0].firstChild.innerHTML, "192.168.1.1", "The pick storage is right");
-                equals(sugg._data.wrapper.find(".ui-suggestion-button")[0].children[0].innerHTML, "清除历史记录", "The pick storage is right");
-                equals(sugg._data.wrapper.find(".ui-suggestion-button")[0].children[1].innerHTML, "关闭", "The pick storage is right");
                 setTimeout(function() {
                     sugg.destroy();
                     $(input).remove();
@@ -929,7 +945,7 @@ test("isSharing = true", function() {
 });
 
 test("isSharing = true & shareName", function() {
-    expect(7);
+    expect(5);
     stop();
     var show = 0;
     var hide = 0;
@@ -945,14 +961,12 @@ test("isSharing = true & shareName", function() {
     sugg.on("show", function() {
         setTimeout(function() {
             show++;
-            if(show == 1) ua.click($(".ui-suggestion ul li")[0].firstChild);
+            if(show == 1) ta.tap($(".ui-suggestion ul li")[0].firstChild);
             if(show == 2) {
                 equal(window.localStorage['my-SUG-Sharing-History'], "192.168.1.1", "my-SUG-Sharing-History");
                 equal(window.localStorage['SUG-Sharing-History'], undefined, "SUG-Sharing-History");
                 equals($(".ui-suggestion ul li").length, 1, "The pick storage shows");
                 equals($(".ui-suggestion ul li")[0].firstChild.innerHTML, "192.168.1.1", "The pick storage is right");
-                equals($(".ui-suggestion-button")[0].children[0].innerHTML, "清除历史记录", "The pick storage is right");
-                equals($(".ui-suggestion-button")[0].children[1].innerHTML, "关闭", "The pick storage is right");
                 setTimeout(function() {
                     delete window.localStorage['my-SUG-Sharing-History'];
                     sugg.destroy();
@@ -974,6 +988,106 @@ test("isSharing = true & shareName", function() {
     equals(sugg._data.shareName, "my", "The shareName is true");
     input.value = "1";
     $(input).focus();
+});
+
+test("status = true", function() {
+    expect(1);
+    stop();
+    var sugg = new $.ui.suggestion({
+    	container: "#sugg-input",
+        source: upath + "data/suggestion.php",
+        submit: function() {
+        	
+        }
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+        	ok(true,"The suggestion shows");
+        	ua.click(sugg._data.wrapper.find(".ui-suggestion-button")[0].children[1]);
+        }, 100);
+    });
+    sugg.on("close", function() {
+    	this.data('status', false);
+    	input.value = "1";
+        $(input).focus();
+        setTimeout(function(){
+        	sugg.destroy();
+            start();
+        }, 410);
+    });
+    input.value = "1";
+    $(input).focus();
+});
+
+test("status = false", function() {
+    expect(1);
+    stop();
+    var sugg = new $.ui.suggestion({
+    	container: "#sugg-input",
+    	status: false,
+        source: upath + "data/suggestion.php",
+        submit: function() {
+        	
+        }
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+        	ok(true,"The suggestion shows");
+        }, 100);
+    });
+    equals(sugg._data.status, false, "The status is true");
+    input.value = "1";
+    $(input).focus();
+    setTimeout(function(){
+    	sugg.destroy();
+        start();
+    }, 200);
+});
+
+test("formID", function() {
+    expect(2);
+    stop();
+    var subBtn = $('<input id="input"/>').attr('type', 'submit'),
+        form = $('<form id="form"></form>').attr({
+        method: 'get',
+        action: 'http://www.baidu.com/s'
+    }).append(subBtn),
+        input = $('#sugg-input');
+    var subBtn1 = $('<input id="input1"/>').attr('type', 'submit'),
+	    form1 = $('<form id="form1"></form>').attr({
+	    method: 'get',
+	    action: 'http://www.baidu.com/s'
+	}).append(subBtn1).appendTo(document.body);
+    input = $('#sugg-input');
+    input.attr('name', 'wd').wrapAll(form);
+    var sugg = new $.ui.suggestion({
+        container: "#sugg-input",
+        formID: "#form1",
+        source: upath + "data/suggestion.php"
+    });
+    form.on('submit', function (e) {
+    	equals(window.localStorage[id], undefined, '点击提交按钮不存储历史记录');
+        e.preventDefault();
+    });
+    form1.on('submit', function (e) {
+    	equals(window.localStorage[id], 'test', '点击提交按钮存储1个历史记录');
+        e.preventDefault();
+    });
+    var id = sugg._data.wrapper.attr('id');
+    delete window.localStorage[id];
+
+    input[0].value = 'test';
+    ua.click(subBtn[0]);
+    
+    ua.click(subBtn1[0]);
+
+    setTimeout(function () {
+    	delete window.localStorage[id];
+        sugg.destroy();
+        form.remove();
+        form1.remove();
+        start();
+    }, 300);
 });
 
 test("hide()", function() {
@@ -1069,7 +1183,7 @@ test("add & delete", function() {
             }
             if(show == 3) {
                 equals(sugg._data.wrapper.find("ul li")[1].firstChild.innerHTML, "<span>19</span>12年", "The items are right");
-                ua.click(sugg._data.wrapper.find("ul li")[1]);
+                ta.tap(sugg._data.wrapper.find("ul li")[1]);
             }
             if(show == 4) {
                 equals(sugg._data.wrapper.find("ul li")[1].firstChild.innerHTML, "<span>19</span>12年", "The items are right");
@@ -1103,6 +1217,9 @@ test("add & delete", function() {
             }
         }, 200);
     });
+    
+    for(var i in window.localStorage)
+    	delete window.localStorage[i];
     input.value = "1";
     $(input).focus();
 });
@@ -1163,12 +1280,12 @@ test('setup', function() {
             equal(sugg._data.wrapper.offset().left, $("#inputId").offset().left, "The left is same as input");
             equal(sugg._data.wrapper.offset().top, $("#inputId").offset().top + $("#inputId").offset().height, "The top is right");
             approximateEqual(sugg._data.wrapper.offset().height,
-		            (window.screen.width >= 748 ? 40 : 33)+66+3, "The height is right");
+		            (pad ? 40 : 33)+66+3, "The height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-content").height(), 66, "The content height is right");
             equal(sugg._data.wrapper.find(".ui-suggestion-button").height(),
-		            (window.screen.width >= 748 ? 40 : 33)+1, "The button height is right");
-            equal(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, "The scroller height is right");
-            ua.click(sugg._data.wrapper.find("ul li")[1].firstChild);
+		            (pad ? 40 : 33)+1, "The button height is right");
+            approximateEqual(sugg._data.wrapper.find(".ui-suggestion-content .ui-suggestion-scroller").height(), $(".ui-suggestion-content ul li").height() * 9, 2, "The scroller height is right");
+            ta.tap(sugg._data.wrapper.find("ul li")[1].firstChild);
         }, 200);
     });
 
@@ -1249,4 +1366,36 @@ test("词条中包含',' & 点击搜索按钮保存历史记录", function() {
             start();
         }, 300)
     }, 300);
+});
+
+test("防止脚本注入", function() {
+    expect(1);
+    stop();
+    var show = 0;
+    var hide = 0;
+    var sugg = new $.ui.suggestion({
+        container: "#sugg-input",
+        source: upath + "data/suggestion.php",
+        submit: function() {
+
+        }
+    });
+    sugg.on("show", function() {
+        setTimeout(function() {
+        	ta.tap($(".ui-suggestion ul li")[0].firstChild);
+        }, 100);
+    });
+    sugg.on("hide", function() {
+    	setTimeout(function() {
+    		ok(true, "脚本没有被执行");
+            delete window.localStorage[id];
+            sugg.destroy();
+            start();
+        }, 30);
+    });
+    
+    var id = sugg._data.wrapper.attr('id');
+    window.localStorage[id] = "<script>alert();</script>";
+
+    $(input).focus();
 });
