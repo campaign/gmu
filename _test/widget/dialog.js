@@ -5,7 +5,7 @@ module("webapp - dialog",{
 test("默认配置项，在什么都不传的情况下是否正确",function(){
     expect(10);
     stop();
-    ua.loadcss(["reset.css", "widget/dialog/dialog.css"], function(){
+    ua.loadcss(["reset.css", "widget/dialog/dialog.css", "widget/dialog/dialog.default.css","widget/button/button.css","widget/button/button.default.css"], function(){
         var dialog = $.ui.dialog();
         strictEqual(dialog.data('autoOpen'), true, '默认配置中autoOpen为true');
         strictEqual(dialog.data('buttons'), null, '默认配置中buttons为null');
@@ -164,15 +164,13 @@ test("close() ", function () {
 });
 
 test('open()', function(){
-    expect(4);
+    expect(2);
     stop();
     var d = $.ui.dialog({
         title: '标题',
         content: '内容',
         autoOpen:false
     });
-    ok(!ua.isShown(d._data._wrap[0]),"dialog hidden");
-    ok(!ua.isShown(d._data._mask[0]),"mask hidden");
     d.open();
     setTimeout(function(){
 
@@ -180,19 +178,9 @@ test('open()', function(){
         var left = ($(window).width() - d.data('_wrap').width()) / 2;
         approximateEqual(d.data('_wrap').offset().top, top, 0.5, "The top is right");
         approximateEqual(d.data('_wrap').offset().left, left, 0.5, "The left is right");
-
-        var d1 = $.ui.dialog({
-            title: '标题',
-            content: '内容',
-            mask: false
-        }).open(100, 100);
-        setTimeout(function(){
-            //equals(d1.data('_wrap').offset().top, 100, "The top is right");
-            //equals(d1.data('_wrap').offset().left, 100, "The left is right");
-            d.destroy();
-            d1.destroy();
-            start();
-        }, 300);
+        
+        d.destroy();
+        start();
     }, 300);
 });
 
@@ -298,26 +286,6 @@ test('window resize', function(){
     });
 });
 
-test("destroy",function(){
-    ua.destroyTest(function(w,f){
-        w.$('body').highlight();//由于highlight在调用的时候会注册全局事件，以便多次其他实例使用，所以这里先让hightlight把全局事件注册以后再来对比。
-        var dl1 = w.dt.domLength(w);
-        var el1= w.dt.eventLength();
-
-        var dialog =  w.$.ui.dialog();
-        dialog.destroy();
-
-        var el2= w.dt.eventLength();
-        var ol = w.dt.objLength(dialog);
-        var dl2 =w.dt.domLength(w);
-
-        equal(dl1,dl2,"The dom is ok");   //测试结果不是100%可靠，可忽略
-        equal(el1,el2,"The event is ok");
-        ok(ol==0,"The dialog is destroy");
-        this.finish();
-    })
-}) ;
-
 test('autoOpen', function(){
     expect(2);
     var d = $.ui.dialog({
@@ -401,7 +369,8 @@ test('多实例', function(){
     stop();
     var d = $.ui.dialog({
         title: '标题',
-        content: '内容'
+        content: '内容',
+        height: 300
     }).open();
     setTimeout(function(){
         var top = ($(window).height() - d.data('_wrap').height()) / 2;
@@ -435,7 +404,6 @@ test('多实例', function(){
     }, 300);
 });
 
-
 test('container', function(){
     expect(3);
     stop();
@@ -457,7 +425,22 @@ test('container', function(){
     start();
 });
 
-
+test('带mask的dialog不改变页面scrollHeight', function(){
+    expect(1);
+    stop();
+    var h = window.innerHeight > document.body.clientHeight ? window.innerHeight - document.body.clientHeight + 10 : undefined;
+    var s = document.body.scrollHeight;
+    var d = $.ui.dialog({
+        title: '标题',
+        content: '内容',
+        height: h
+    }).open();
+    setTimeout(function(){
+        equals(document.body.scrollHeight, s, "页面scrollHeight没变");
+        d.destroy();
+        start();
+    }, 300);
+});
 
 test("destroy",function(){
     ua.destroyTest(function(w,f){
