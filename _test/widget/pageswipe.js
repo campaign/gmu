@@ -2,7 +2,7 @@ module('webapp.pageswipe', {
     setup: function() {
         $('body').append('<div id="toolbar"><div><span class="switch">切换</span></div></div><div id="pageswipe"><div><p style="height: 400px;">内容部分</p></div><div style="height: 400px;">索引</div></div> ')
         //切换按钮事件
-        $('.switch').tap(function() {
+        $('.switch').click(function() {
             $('#pageswipe').pageswipe('toggle');
         });
     },
@@ -55,15 +55,15 @@ test("点击切换按钮", function() {
     var pageswipe = $('#pageswipe').pageswipe({
         toolbar:'#toolbar'
     }).pageswipe('this');
-    ta.tap($('.switch')[0]);
+    ua.click($('.switch')[0]);
     setTimeout(function(){
         equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 55),"The picture slide");
         equals($('.ui-pageswipe-index').offset().left, 55,"The picture slide");
-        ta.tap($('.switch')[0]);
+        ua.click($('.switch')[0]);
         setTimeout(function(){
             equals($('.ui-pageswipe-content').offset().left, 0,"The picture slide");
             equals($('.ui-pageswipe-index').offset().left, window.innerWidth,"The picture slide");
-            ta.tap($('.switch')[0]);
+            ua.click($('.switch')[0]);
             setTimeout(function(){
                 equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 55),"The picture slide");
                 equals($('.ui-pageswipe-index').offset().left, 55,"The picture slide");
@@ -76,6 +76,29 @@ test("点击切换按钮", function() {
                 }, 550);
             }, 550);
         }, 550);
+    }, 550);
+});
+
+test("full setup", function() {
+    stop();
+    expect(2);
+    $("#pageswipe").remove();
+    $("#toolbar").remove();
+    $('body').append('<div id="toolbar" style="top: 0px; position: fixed;" isfixed="true"><div><span class="switch">切换</span></div></div>');
+    $('body').append('<div id="pageswipe" class="ui-pageswipe" data-mode="true"><div class="ui-pageswipe-wheel"><div class="ui-pageswipe-content"><p style="height: 400px;">内容部分</p></div><div style="height: 400px; width: 1311px;" class="ui-pageswipe-index">索引</div></div></div>')
+    $('.switch').click(function() {
+            $('#pageswipe').pageswipe('toggle');
+        });
+    
+    var pageswipe = $('#pageswipe').pageswipe({
+        toolbar:'#toolbar'
+    }).pageswipe('this');
+    ua.click($('.switch')[0]);
+    setTimeout(function(){
+        equals($('.ui-pageswipe-content').offset().left, -(window.innerWidth - 55),"The picture slide");
+        equals($('.ui-pageswipe-index').offset().left, 55,"The picture slide");
+        pageswipe.destroy();
+        start();
     }, 550);
 });
 
