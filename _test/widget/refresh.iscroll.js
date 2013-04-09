@@ -23,6 +23,8 @@ module("widget/refresh.iscroll",{
     }
 });
 
+var tablet = window.screen.width >= 768 && window.screen.width <= 1024;
+
 function createDom (dir, $wrapper, w) {
     var w = w || window,
     	$wrapper = $wrapper || w.$('.wrapper'),
@@ -306,7 +308,7 @@ test("参数options - statechange", function(){
         target = $wrapper.get(0);
 
     var l = $(target).offset().left + 10;
-    var t = $(target).offset().bottom -10;
+    var t = $(target).offset().top + $(target).offset().height -10;
     ta.touchstart(target, {
         touches:[{
             pageX: l,
@@ -709,7 +711,7 @@ test('参数threshold-传20, 下拉, 小于阈值', function () {
 
 test("公共方法 － enable&disable", function(){
     createDom('down');
-    expect(2);
+    expect(1);
     stop();
 
     var $wrapper = $('.wrapper'),
@@ -725,92 +727,63 @@ test("公共方法 － enable&disable", function(){
         target = $wrapper.get(0);
 
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
-    target.scrollTop = 0;
+    var t = $(target).offset().top + $(target).offset().height-10;
+    
+	refresh.disable('down');
     ta.touchstart(target, {
         touches:[{
-            pageX: l,
-            pageY: t
+            pageX: 0,
+            pageY: 0
         }]
     });
     ta.touchmove(target, {
         touches:[{
-            pageX: l,
-            pageY: t -300
+            pageX: 0,
+            pageY: 0 -300
         }]
     });
     ta.touchend(target);
 
     ua.mousedown(target, {
-        clientX: l,
-        clientY: t
+        clientX: 0,
+        clientY: 0
     });
     ua.mousemove(target, {
-        clientX: l,
-        clientY: t - 300
+        clientX: 0,
+        clientY: 0 - 300
     });
     ua.mouseup(target);
+	setTimeout(function(){
+		refresh.enable();
 
-    setTimeout(function(){
-    	refresh.disable('down');
-        setTimeout(function(){
-	        ta.touchstart(target, {
-	            touches:[{
-	                pageX: l,
-	                pageY: t
-	            }]
-	        });
-	        ta.touchmove(target, {
-	            touches:[{
-	                pageX: l,
-	                pageY: t -300
-	            }]
-	        });
-	        ta.touchend(target);
+	    ta.touchstart(target, {
+	        touches:[{
+	            pageX: 0,
+	            pageY: 0
+	        }]
+	    });
+	    ta.touchmove(target, {
+	        touches:[{
+	            pageX: 0,
+	            pageY: 0 -300
+	        }]
+	    });
+	    ta.touchend(target);
 
-	        ua.mousedown(target, {
-	            clientX: l,
-	            clientY: t
-	        });
-	        ua.mousemove(target, {
-	            clientX: l,
-	            clientY: t - 300
-	        });
-	        ua.mouseup(target);
+	    ua.mousedown(target, {
+	        clientX: 0,
+	        clientY: 0
+	    });
+	    ua.mousemove(target, {
+	        clientX: 0,
+	        clientY: 0 - 300
+	    });
+	    ua.mouseup(target);
 
-        },200);
-    	setTimeout(function(){
-   		refresh.enable();
-
-    	    ta.touchstart(target, {
-    	        touches:[{
-    	            pageX: l,
-    	            pageY: t
-    	        }]
-    	    });
-    	    ta.touchmove(target, {
-    	        touches:[{
-    	            pageX: l,
-    	            pageY: t -300
-    	        }]
-    	    });
-    	    ta.touchend(target);
-
-    	    ua.mousedown(target, {
-    	        clientX: l,
-    	        clientY: t
-    	    });
-    	    ua.mousemove(target, {
-    	        clientX: l,
-    	        clientY: t - 300
-    	    });
-    	    ua.mouseup(target);
-
-    	    setTimeout(function(){
-    	    	start();
-    	    }, 10);
-    	}, 10);
-    },10);
+	    setTimeout(function(){
+	    	start();
+	    }, 100);
+	}, 100);
 });
 
 test('显示 - topOffset', function () {
@@ -823,7 +796,7 @@ test('显示 - topOffset', function () {
         refresh = $wrapper.refresh().refresh('this');
 
     setTimeout(function(){
-    	equals($wrapper.height(), window.screen.width>=768? 306:298, "iscroll高度正确");
+    	equals($wrapper.height(), tablet? 306:298, "iscroll高度正确");
         equals($wrapper.parent().height(), 150, "容器高度正确");
         equals($wrapper.find(".ui-refresh-up").offset().top, $wrapper.parent().offset().top - $wrapper.find(".ui-refresh-up").height(), "topOffset正确");
         start();
@@ -845,7 +818,7 @@ test("交互 － 加载过程中不响应滑动动作", function(){
         target = $wrapper.get(0);
 
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
+    var t = $(target).offset().top + $(target).offset().height-10;
 
     ta.touchstart(target, {
         touches:[{

@@ -72,7 +72,7 @@ test('down-上拉加载', function () { //refresh_lite只支持上拉
         target = $wrapper.get(0);
 
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
+    var t = $(target).offset().top + $(target).offset().height -10;
 
     equals($wrapper.find('.ui-refresh-down').find('.ui-refresh-label').text(), "加载更多", "label元素的文字内容正确");
     
@@ -129,7 +129,7 @@ test("参数options - statechange", function(){
         target = $wrapper.get(0);
 
     var l = $(target).offset().left + 10;
-    var t = $(target).offset().bottom -10;
+    var t = $(target).offset().top + $(target).offset().height -10;
     ta.touchstart(target, {
         touches:[{
             pageX: l,
@@ -347,7 +347,7 @@ test("公共方法 － enable&disable", function(){
         target = $wrapper.get(0);
     
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
+    var t = $(target).offset().top + $(target).offset().height-10;
     target.scrollTop = 0;
     ta.touchstart(target, {
         touches:[{
@@ -423,7 +423,7 @@ test("交互 － 加载过程中不响应滑动动作", function(){
         target = $wrapper.get(0);
     
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
+    var t = $(target).offset().top + $(target).offset().height-10;
 
     ta.touchstart(target, {
         touches:[{
@@ -481,7 +481,7 @@ test("交互 － 滑动距离小于10px不响应", function(){
         target = $wrapper.get(0);
     
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
+    var t = $(target).offset().top + $(target).offset().height-10;
 
     ta.touchstart(target, {
         touches:[{
@@ -535,7 +535,7 @@ test('参数disablePlugin:true', function () {
         target = $wrapper.get(0);
    
     var l = $(target).offset().left+10;
-    var t = $(target).offset().bottom-10;
+    var t = $(target).offset().top + $(target).offset().height-10;
 
     ta.touchstart(target, {
         touches:[{
