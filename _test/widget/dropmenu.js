@@ -70,9 +70,10 @@ test("参数 － btn", function(){
     }, '$.ui.button', 'widget/dropmenu');
 });
 
-test("参数 － align", function(){
-    expect(14);
+test("参数 － align=left/right/center & arrowPos不传", function(){
+    expect(9);
     stop();
+    var dpos, bpos, apos;
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
         items: [
@@ -83,8 +84,12 @@ test("参数 － align", function(){
         container: '#container',
         btn: '#btn'
     }).show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu默认为align center');
-	approximateEqual(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, 1,"dropmenu位置居中");
+	approximateEqual(dpos.left + dpos.width / 2, bpos.left + bpos.width / 2, 1,"dropmenu位置居中");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width / 2, 1, "arrow位置居中");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -97,22 +102,12 @@ test("参数 － align", function(){
         btn: '#btn',
         align: 'left'
     }).show();
-    ok(obj.root().hasClass('ui-alignleft'), 'dropmenu被设置成左对齐');
-    equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
-    obj.destroy();
-
-    obj = $.ui.dropmenu({
-        items: [
-            {
-                text: 'test'
-            }
-        ],
-        container: '#container',
-        btn: '#btn',
-        align: 'center'
-    }).show();
-    ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu被设置成居中对齐');
-	approximateEqual(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2,1, "dropmenu位置居中");
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
+    ok(obj.root().hasClass('ui-alignleft'), 'dropmenu默认为align left');
+	approximateEqual(dpos.left, bpos.left, 1,"dropmenu位置居左");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width * 0.25, 1, "arrow位置居左");
     obj.destroy();
 
     obj = $.ui.dropmenu({
@@ -125,10 +120,96 @@ test("参数 － align", function(){
         btn: '#btn',
         align: 'right'
     }).show();
-    ok(obj.root().hasClass('ui-alignright'), 'dropmenu被设置成居右对齐');
-	approximateEqual(obj._el.offset().right, $(btn).offset().right,1, "dropmenu位置居右");
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
+    ok(obj.root().hasClass('ui-alignright'), 'dropmenu默认为align right');
+	approximateEqual(dpos.left + dpos.width, bpos.left + bpos.width, 1,"dropmenu位置居右");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width * 0.75, 1, "arrow位置居右");
+
+    obj.destroy();
+    start();
+});
+
+test("参数 － align=left/right/center & arrowPos传值", function(){
+    expect(9);
+    stop();
+    var dpos, bpos, apos;
+    $('<a id="btn">btn</a>').appendTo('#container');
+    var obj = $.ui.dropmenu({
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        container: '#container',
+        btn: '#btn',
+        arrowPos:{
+        	left: '10%',
+        	right: 'auto'
+        }
+    }).show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
+    ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu默认为align center');
+	approximateEqual(dpos.left + dpos.width / 2, bpos.left + bpos.width / 2, 1,"dropmenu位置居中");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width * 0.1, 1, "arrow位置正确");
     obj.destroy();
 
+    obj = $.ui.dropmenu({
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        container: '#container',
+        btn: '#btn',
+        align: 'left',
+        arrowPos:{
+        	left: 10,
+        	right: 'auto'
+        }
+    }).show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
+    ok(obj.root().hasClass('ui-alignleft'), 'dropmenu默认为align left');
+	approximateEqual(dpos.left, bpos.left, 1,"dropmenu位置居左");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + 10, 1, "arrow位置正确");
+    obj.destroy();
+
+    obj = $.ui.dropmenu({
+        items: [
+            {
+                text: 'test'
+            }
+        ],
+        container: '#container',
+        btn: '#btn',
+        align: 'right',
+        arrowPos:{
+        	left: 'auto',
+        	right: '10px'
+        }
+    }).show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
+    ok(obj.root().hasClass('ui-alignright'), 'dropmenu默认为align right');
+	approximateEqual(dpos.left + dpos.width, bpos.left + bpos.width, 1,"dropmenu位置居右");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width - 10, 1, "arrow位置正确");
+
+    obj.destroy();
+    start();
+});
+
+test("参数 － align=auto & arrowPos不传", function(){
+    expect(9);
+    stop();
+    var dpos, bpos, apos;
+    $('<a id="btn">btn</a>').appendTo('#container');
+    
     $('#container').css({
         position:'relative'
     });
@@ -146,22 +227,35 @@ test("参数 － align", function(){
         btn: '#btn',
         align: 'auto'
     }).show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
     ok(obj.root().hasClass('ui-aligncenter'), 'dropmenu被当前为居中对齐');
     equals(obj._el.offset().left + obj._el.width() / 2, $(btn).offset().left + $(btn).width() / 2, "dropmenu位置居中");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width / 2, 1, "arrow位置正确");
+    
     $('#btn').css({
         left: 0
     });
     obj.hide().show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
     ok(obj.root().hasClass('ui-alignleft'), 'dropmenu被当前为居左对齐');
     equals(obj._el.offset().left, $(btn).offset().left, "dropmenu位置居左");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width * 0.25, 1, "arrow位置正确");
 
     $('#btn').css({
         left: 'auto',
         right: 0
     });
     obj.hide().show();
+    dpos = obj.root().offset(),
+    apos = obj.root().find('.ui-dropmenu-arrow').offset();
+    bpos = $(btn).offset(),
     ok(obj.root().hasClass('ui-alignright'), 'dropmenu被当前为居右对齐');
     equals(obj._el.offset().right, $(btn).offset().right, "dropmenu位置居右");
+    approximateEqual(apos.left + apos.width / 2, dpos.left + dpos.width * 0.75, 1, "arrow位置正确");
 
     obj.destroy();
     start();
@@ -361,8 +455,6 @@ test("参数 － pos", function(){
     start();
 });
 
-
-
 test("参数 － direction", function(){
     expect(2);
     stop();
@@ -442,35 +534,6 @@ test("参数 － arrow", function(){
     }).show();
 
     equals(obj.root().find('.ui-dropmenu-arrow').length, 0, "此dropmenu被设置成没有arrow");
-    obj.destroy();
-    start();
-});
-
-test("参数 － arrowpos", function(){
-    expect(1);
-    stop();
-    $('<a id="btn">btn</a>').appendTo('#container');
-    var obj = $.ui.dropmenu({
-        items: [
-            {
-                text: 'test'
-            }
-        ],
-        container: '#container',
-        align: 'left',
-        btn: '#btn',
-        arrowPos: {
-            left:'auto',
-            right: 0
-        }
-    }).show();
-
-    var $arrow = obj.root().find('.ui-dropmenu-arrow'),
-        pos1 = obj.root().offset(),
-        pos2 = $arrow.offset();
-
-    approximateEqual(pos1.right, pos2.right, 1, "arrow被设置到了dropmenu的最右边。");
-    //lili 用例不够
     obj.destroy();
     start();
 });
@@ -863,7 +926,7 @@ test("方法 － destroy",function(){
 }) ;
 
 test("事件", function(){
-    expect(5);
+    expect(6);
     stop();
     $('<a id="btn">btn</a>').appendTo('#container');
     var obj = $.ui.dropmenu({
@@ -882,10 +945,11 @@ test("事件", function(){
                 }
             }
         ],
-        itemClick: function(e, data){
+        itemClick: function(e, data, match){
             switch(data.text){
                 case 'test1':
                     ok(true, 'item1的itemClick触发了');
+                    equals(match.textContent, "test1", "The match is right");
                     break;
                 case 'test2':
                     ok(false, 'item2的itemClick不应该被触发，因为在item的click里面已经e.preventDefault了');

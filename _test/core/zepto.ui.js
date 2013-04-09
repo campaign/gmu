@@ -37,14 +37,6 @@ test('plugin', function() {
     $.ui.klass($('<div></div>'), {a: 1}).test().destroy();
 });
 
-test('component', function() {
-    var ins = $.ui.klass($("<div></div>")).component(function() {
-        return $.ui.klass($("<div></div>"));
-    });
-    equal(ins.data('components').length, 1, 'one component is add');
-    ins.destroy();
-});
-
 test('on trigger', function() {
     expect(3);
     stop();
@@ -55,8 +47,6 @@ test('on trigger', function() {
     $('#test').trigger('click');
     ins.destroy();
 });
-
-
 
 test('$.ui.isWidget', function() {
     expect(5);
@@ -88,6 +78,128 @@ test('$.ui.isWidget', function() {
     obj1.destroy();
     obj2.destroy();
 
+    start();
+});
+
+test('_zeptoLize zepto对象调用getter或setter类型的方法', function() {
+    expect(54);
+    stop();
+
+    $.ui.define('klass1', {
+    	_create: function() {
+            ok(1, '_create被执行');
+        },
+        _init: function() {
+            ok(1, '_init被执行');
+        },
+        single: function(value) {
+            var data = this._data, setter = value !== undefined;
+            if(setter)
+            	data.single = value;
+            return setter ? this : data.single;
+        }
+    });
+    
+    $('<div id="klass1"></div>').appendTo(document.body);
+
+    //一个参数的方法，返回值为""
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: ""
+    });
+    equals(klass1.single(), "", "The result is right");
+    equals($("#klass1").klass1("single"), "", "The result is right");
+    
+   //一个参数的方法，返回值为null
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: null
+    });
+    equals(klass1.single(), null, "The result is right");
+    equals($("#klass1").klass1("single"), null, "The result is right");
+    
+    //一个参数的方法，返回值为字符串
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: "1"
+    });
+    equals(klass1.single(), "1", "The result is right");
+    equals($("#klass1").klass1("single"), "1", "The result is right");
+    
+    //一个参数的方法，返回值为数字
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: 0
+    });
+    equals(klass1.single(), 0, "The result is right");
+    equals($("#klass1").klass1("single"), 0, "The result is right");
+    
+    //一个参数的方法，返回值为Object
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: {}
+    });
+    ok($.isObject(klass1.single()), "The result is right");
+    ok($.isObject($("#klass1").klass1("single")), "The result is right");
+    
+    //一个参数的方法，返回值为数组
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: []
+    });
+    ok($.isArray(klass1.single()), "The result is right");
+    equals(klass1.single().length, 0, "The result is right");
+    ok($.isArray($("#klass1").klass1("single")), "The result is right");
+    equals($("#klass1").klass1("single").length, 0, "The result is right");
+    
+    //一个参数的方法，返回值为true
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: true
+    });
+    equals(klass1.single(), true, "The result is right");
+    equals($("#klass1").klass1("single"), true, "The result is right");
+    
+    //一个参数的方法，返回值为false
+    var klass1 = $.ui.klass1("#klass1", {
+    	single: false
+    });
+    equals(klass1.single(), false, "The result is right");
+    equals($("#klass1").klass1("single"), false, "The result is right");
+   
+    
+    //两个参数的方法
+    var klass1 = $.ui.klass1("#klass1", {
+    });
+    //返回值为""
+    $("#klass1").klass1("data", "test", "");
+    equals(klass1.data("test"), "", "The result is right");
+    equals($("#klass1").klass1("data", "test"), "", "The result is right");
+    //返回值为null
+    $("#klass1").klass1("data", "test", null);
+    equals(klass1.data("test"), null, "The result is right");
+    equals($("#klass1").klass1("data", "test"), null, "The result is right");
+    //返回值为字符串
+    $("#klass1").klass1("data", "test", "1");
+    equals(klass1.data("test"), "1", "The result is right");
+    equals($("#klass1").klass1("data", "test"), "1", "The result is right");
+    //返回值为数字
+    $("#klass1").klass1("data", "test", 1);
+    equals(klass1.data("test"), 1, "The result is right");
+    equals($("#klass1").klass1("data", "test"), 1, "The result is right");
+    //返回值为Object
+    $("#klass1").klass1("data", "test", {});
+    ok($.isObject(klass1.data("test")), "The result is right");
+    ok($.isObject($("#klass1").klass1("data", "test")), "The result is right");
+    //返回值为数组
+    $("#klass1").klass1("data", "test", []);
+    ok($.isArray(klass1.data("test")), "The result is right");
+    equals(klass1.data("test").length, 0, "The result is right");
+    ok($.isArray($("#klass1").klass1("data", "test")), "The result is right");
+    equals($("#klass1").klass1("data", "test").length, 0, "The result is right");
+    //返回值为true
+    $("#klass1").klass1("data", "test", true);
+    equals(klass1.data("test"), true, "The result is right");
+    equals($("#klass1").klass1("data", "test"), true, "The result is right");
+    //返回值为false
+    $("#klass1").klass1("data", "test", false);
+    equals(klass1.data("test"), false, "The result is right");
+    equals($("#klass1").klass1("data", "test"), false, "The result is right");
+    
+    klass1.destroy();
     start();
 });
 
