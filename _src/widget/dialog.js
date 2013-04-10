@@ -185,9 +185,13 @@
                 }
 
                 //如果有键盘在，需要多加延时
-                if( document.activeElement && /input|textarea|select/i.test(document.activeElement.tagName)){
+                if( $.os.ios &&
+                    document.activeElement &&
+                    /input|textarea|select/i.test(document.activeElement.tagName)){
+
                     document.body.scrollLeft = 0;
                     $.later(action, 200);//do it later in 200ms.
+
                 } else {
                     action();//do it now
                 }
