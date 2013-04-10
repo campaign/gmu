@@ -109,7 +109,12 @@
                 this.close();
             }
         }
-    }).dialog('data', '_wrap').addClass('login-dialog');
+    }).dialog('data', '_wrap')
+            .addClass('login-dialog')
+            .find('input')
+            .on('focus', function(){
+                document.body.scrollLeft = 0;
+            });
 
     $('#dialog3').dialog({
         autoOpen: false,

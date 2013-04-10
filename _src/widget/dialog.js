@@ -151,7 +151,7 @@
                 ret = {}, isBody = data._cIsBody, round = Math.round;
 
             data.mask && (ret.mask = isBody ? {
-                width:  root.clientWidth,
+                width:  '100%',
                 height: Math.max(root.scrollHeight, root.clientHeight)-1//不减1的话uc浏览器再旋转的时候不触发resize.奇葩！
             }:{
                 width: '100%',
@@ -175,11 +175,22 @@
          * @desc 用来更新弹出框位置和mask大小。如父容器大小发生变化时，可能弹出框位置不对，可以外部调用refresh来修正。
          */
         refresh: function(){
-            var me = this, data = me._data, ret;
+            var me = this, data = me._data, ret, action;
             if(data._isOpen) {
-                ret = this._calculate();
-                ret.mask && data._mask.css(ret.mask);
-                data._wrap.css(ret.wrap);
+
+                action = function(){
+                    ret = me._calculate();
+                    ret.mask && data._mask.css(ret.mask);
+                    data._wrap.css(ret.wrap);
+                }
+
+                //如果有键盘在，需要多加延时
+                if( document.activeElement && /input|textarea|select/i.test(document.activeElement.tagName)){
+                    document.body.scrollLeft = 0;
+                    $.later(action, 200);//do it later in 200ms.
+                } else {
+                    action();//do it now
+                }
             }
             return me;
         },
