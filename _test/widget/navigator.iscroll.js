@@ -218,12 +218,12 @@ test("setShadow: shadowleft & shadowright & shadowall", function(){
     var width = $("body").css("width");
     $("body").css("width", 640);
     var nav = $('#nav-shadowTest').navigator({
-            defTab: 3
+            defTab: 0
         }).navigator('this'),
         scroller = $(".ui-navigator-list")[0],
         $wrapper = $('.ui-navigator-wrapper');
     setTimeout(function () {
-        equals(nav._data.defTab, 3, 'The defTab is right');
+        equals(nav._data.defTab, 0, 'The defTab is right');
         equals($wrapper.hasClass('ui-navigator-shadowr'), true, 'The shadow right shows');
         ua.click($(scroller).find('a')[3]);
         setTimeout(function () {
