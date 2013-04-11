@@ -572,7 +572,7 @@ test("destroy", function(){
         var ol = w.dt.objLength(refresh);
         var dl2 =w.dt.domLength(w);
 
-        equal(dl1,dl2 - 1,"The dom is ok");
+        equal(dl1,dl2,"The dom is ok");
         equal(el1,el2,"The event is ok");
         ok(ol==0,"The gotop is destroy");
         this.finish();

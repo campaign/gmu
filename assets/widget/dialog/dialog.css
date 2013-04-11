@@ -9,6 +9,8 @@
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     background-color: white;
     -webkit-transform: translateZ(0);
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
 /** mask */
 .ui-mask{
@@ -21,6 +23,8 @@
 	z-index: 1001;
     -webkit-transform: translateZ(0);
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
 .ui-dialog .ui-dialog-title {
     position: relative;
