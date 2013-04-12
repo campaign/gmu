@@ -108,7 +108,7 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
 ###版本说明###
 1. 2.0.3，基于[zepto 1.0rc1](http://zeptojs.com/)开发，包括14个通用UI组件及各组件相关插件   **latest version**
 
-##反馈bug##
+###反馈bug###
 如果您有任何关于GMU或移动前端开发中的问题，可以在QQ群中讨论，也可以通过[git issue](https://github.com/campaign/gmu/issues)给我们反馈bug，我们会尽快解决。
 当然，我们更欢迎您的fork，为GMU添砖加瓦。
 
