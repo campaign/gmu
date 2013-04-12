@@ -16,7 +16,6 @@
      * **Options**
      * - ''toolbar'' {selector}: (可选) 要随页面左右滑动且位置属性为position：fixed的工具栏
      * - ''iconWidth'' {Number}: (可选，默认：50) 侧边栏按钮的宽度
-     * - ''springBackDis'' {Number}: (可选，默认：15) 滑动较小时的回弹的阀值
      * **Demo**
      * <codepreview href="../gmu/_examples/widget/pageswipe/pageswipe.html">
      * ../gmu/_examples/widget/pageswipe/pageswipe.html
@@ -37,10 +36,12 @@
         },
 
         _setup: function(mode) {
-            var me = this,
-                root = me.root(),
-                children = root.children('div');
-            root.addClass('ui-pageswipe').append($('<div class="ui-pageswipe-wheel"></div>').append(children.first().addClass('ui-pageswipe-content')).append(children.last().addClass('ui-pageswipe-index')));
+            if(!mode) {
+                var me = this,
+                    root = me.root(),
+                    children = root.children('div');
+                root.addClass('ui-pageswipe').append($('<div class="ui-pageswipe-wheel"></div>').append(children.first().addClass('ui-pageswipe-content')).append(children.last().addClass('ui-pageswipe-index')));
+            }
         },
 
         _init: function() {
@@ -172,7 +173,6 @@
          * @desc 组件内部触发的事件
          * ^ 名称 ^ 处理函数参数 ^ 描述 ^
          * | init | event | 组件初始化的时候触发 |
-         * | afterScroll | event | 返回顶部后触发的事件 |
          * | show | event | 显示时触发的事件 |
          * | hide | event | 隐藏时触发的事件 |
          * | destory | event | 组件在销毁的时候触发 |

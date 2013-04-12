@@ -14,6 +14,8 @@
      * css选择器, 或者zepto对象
      * **Options**
      * - ''container'' {selector}: (可选,默认：body) 组件容器
+     * - ''useFix'' {Boolean}: (可选, 默认为true), 是否使用固顶效果
+     * - ''useHide'' {Boolean}: (可选, 默认为true), 是否在touchmove的时候隐藏gotop图标
      * - ''useAnimation'' {Boolean}: (可选, 默认为true), 返回顶部时是否使用动画,在使用iScroll时,返回顶部的动作由iScroll实例执行,此参数无效
      * - ''position'' {Object}: (可选, 默认为{bottom:10, right:10}), 使用fix效果时，要用的位置参数
      * - ''afterScroll'' {function}: (可选,默认：null) 返回顶部后执行的回调函数
@@ -29,6 +31,7 @@
         _data: {
             container:          '',
             useFix:             true,
+            useHide:            true,
             useAnimation:       false,
             position:           {bottom: 10, right: 10},
         	afterScroll:        null,
@@ -52,7 +55,8 @@
             var me = this,
                 root = me.root(),
                 _eventHandler = $.proxy(me._eventHandler, me);
-            $(document).on('touchmove touchend touchcancel scrollStop', _eventHandler);
+            me.data('useHide') && $(document).on('touchmove', _eventHandler);
+            $(document).on('touchend touchcancel scrollStop', _eventHandler);
             $(window).on('scroll ortchange', _eventHandler);
             root.on('click', _eventHandler);
             me.on('destroy', function() {

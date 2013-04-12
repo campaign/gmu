@@ -338,7 +338,7 @@
                 renderEvent ? renderEvent.apply(me) : me._bindSuggestionListEvent();
                 me._bindCloseEvent()._show();
                 if (me.data('useIscroll')) {
-                    data.s.length >= 2 ? $content.css('height', me.data('height') || 66) : $content.css('height', 33);
+                    data.s.length >= 2 ? $content.css('height', me.data('height') || 66) : $content.css('height', 38);
                     var iscroll = (me.data('iScroll') || me.data('iScroll', new iScroll($content.get(0), {
                         topOffset: 0,
                         hScroll: false,
@@ -369,13 +369,19 @@
                 return;
             }
             sugs = sugs.slice(0, listCount);
+            query = this._htmlEncode(query);
             $.each(sugs, function(index, item) {
+                item = me._htmlEncode(item);
                 var str = $.trim(item).replace(query, '<span>' + query + '</span>');
                 if (usePlus) str += '<div class="ui-suggestion-plus" data-item="' + item + '"></div>';
                 html += '<li><div class="ui-suggestion-result">' + str + '</div></li>';
             });
             return html + '</ul>';
-        },  
+        },
+
+        _htmlEncode: function(str){
+            return $('<div></div>').text(str).html();
+        },
         
         /** 
          * 提交搜索提示

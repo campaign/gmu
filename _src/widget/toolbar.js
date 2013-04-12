@@ -86,10 +86,10 @@
                 backbtn = root.find('.ui-toolbar-backbtn');
             if(me.data('useFix')){
                 var placeholder = $('<div class="ui-toolbar-placeholder"></div>').height(root.offset().height).
-                    insertBefore(root).append(root).append(root.clone().css({'z-index': -1, position: 'absolute',top: 0})),
+                    insertBefore(root).append(root).append(root.clone().css({'z-index': 1, position: 'absolute',top: 0})),
                     top = root.offset(true).top,
                     check = function() {
-                        document.body.scrollTop > top ? root.css({position:'fixed', top: 0}) : root.css('position', 'static');
+                        document.body.scrollTop > top ? root.css({position:'fixed', top: 0}) : root.css('position', 'absolute');
                     },
                     offHandle;
                 $(window).on('touchmove touchend touchcancel scroll scrollStop', check);

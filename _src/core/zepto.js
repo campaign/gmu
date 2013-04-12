@@ -1306,7 +1306,9 @@ window.Zepto = Zepto
 
   $.ajax = function(options){
     var settings = $.extend({}, options || {})
-    for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
+    //modified by gmu, fix ajax issue in android2.3/4.0
+    //orignal: for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
+    for (key in $.ajaxSettings) if (typeof settings[key] === "undefined") settings[key] = $.ajaxSettings[key]
 
     ajaxStart(settings)
 
@@ -1542,6 +1544,4 @@ window.Zepto = Zepto
   ;['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m){
     $.fn[m] = function(callback){ return this.bind(m, callback) }
   })
-})(Zepto)
-
-exports = Zepto;
+})(Zepto);

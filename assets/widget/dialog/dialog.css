@@ -30,3 +30,6 @@
     right: 5px;
     cursor: pointer;
 }
+.ui-dialog-container {
+    position: relative;
+}
