@@ -3,8 +3,8 @@ GMU是基于zepto的轻量级mobile UI组件库，符合jquery ui使用规范，
 GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业用户的免费使用和任意修改，您可以通过[get started](http://gmu.baidu.com/getstarted)快速了解。
 
 ###Quick Start###
-+ **[官网]：**http://gmu.baidu.com/
-+ **[API]：**http://gmu.baidu.com/doc
++ **官网：**http://gmu.baidu.com/
++ **API：**http://gmu.baidu.com/doc
 
 ###GMU组件###
 1. **扩展在zepto上的公用方法**
@@ -59,36 +59,36 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
         <td>快速删除</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/tabs.js">tabs（包括插件tabs.swipe和tabs.ajax）</a></td>
-        <td>tab切换</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/tabs.js">tabs</a></td>
+        <td>tab切换（包括插件tabs.swipe和tabs.ajax）</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/slider.js">slider（包括插件slider.dynamic）</a></td>
-        <td>图片轮播</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/slider.js">slider</a></td>
+        <td>图片轮播（包括插件slider.dynamic）</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/navigator.js">navigator（包括插件navigator.iscroll）</a></td>
-        <td>导航栏</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/navigator.js">navigator</a></td>
+        <td>导航栏（包括插件navigator.iscroll）</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dialog.js">dialog（包括插件dialog.position）</a></td>
-        <td>对话框</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dialog.js">dialog</a></td>
+        <td>对话框（包括插件dialog.position）</td>
     </tr>
     <tr>
         <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/panel.js">panel</a></td>
         <td>面板切换</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/refresh.js">refresh（包括插件refresh.iscroll,refresh.iOS5,refresh.lite）</a></td>
-        <td>点击刷新，拉动刷新</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/refresh.js">refresh</a></td>
+        <td>点击刷新，拉动刷新（包括插件refresh.iscroll,refresh.iOS5,refresh.lite）</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dropmenu.js">dropmenu（包括插件dropmenu.iscroll）</a></td>
-        <td>下拉框</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dropmenu.js">dropmenu</a></td>
+        <td>下拉框（包括插件dropmenu.iscroll）</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/gotop.js">gotop（包括插件gotop.iscroll）</a></td>
-        <td>返回顶部</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/gotop.js">gotop</a></td>
+        <td>返回顶部（包括插件gotop.iscroll）</td>
     </tr>
     <tr>
         <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/progressbar.js">progressbar</a></td>
@@ -99,8 +99,8 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
         <td>日历</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/button.js">button（包括插件button.input）</a></td>
-        <td>按钮</td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/button.js">button</a></td>
+        <td>按钮（包括插件button.input）</td>
     </tr>
     </tbody>
 </table>
@@ -114,5 +114,5 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
 
 ###联系我们###
 + QQ：127405799
-+ [Email]：gmu@baidu.com
++ Email：gmu@baidu.com
 
