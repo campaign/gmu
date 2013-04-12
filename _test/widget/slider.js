@@ -234,6 +234,29 @@ test("content", function() {
     start();
 });
 
+test("itemRender", function() {
+    stop();
+    expect(6);
+    var slider = $.ui.slider("#ui-slider-test", {
+        itemRender: function(index){
+        	if(index == 0)
+        		return '<a href="http://www.baidu.com"><img lazyload="../../widget/css/slider/image1.png" src="../../widget/css/slider/image1.png"></a><p>图片1</p>';
+        	if(index == 1)
+        		return '<a href="undefined"><img lazyload="../../widget/css/slider/image2.png" src="../../widget/css/slider/image2.png"></a>';
+        },
+        autoPlay: false
+    });
+    var bottom = $("#ui-slider-test .ui-slider-wheel .ui-slider-group .ui-slider-item");
+    equals(bottom[0].childNodes[0].tagName.toLowerCase(), "a", "The link is right");
+    equals(bottom[0].childNodes[0].href, "http://www.baidu.com/", "The link is right");
+    equals(bottom[0].childNodes[0].childNodes[0].tagName.toLowerCase(), "img", "The pic is right");
+    equals(bottom[0].childNodes[0].childNodes[0].getAttribute("src"), "../../widget/css/slider/image1.png", "The pic is right");
+    equals(bottom[0].childNodes[1].tagName.toLowerCase(), "p", "The title is right");
+    equals(bottom[1].childNodes[0].href.substr(-9), 'undefined', "No href");
+    slider.destroy();
+    start();
+});
+
 
 test("viewNum = 3", function() {
     stop();
@@ -884,7 +907,7 @@ test("事件 & 点击图片(点击链接和触发事件) ",function(){
     setTimeout(function(){
         slider.destroy();
         start();
-    },slider_time+100);
+    },slider_time);
 });
 
 test("基本操作( 滑动图片，点击前进后退按钮, 文字/小图片/页码相应翻页 )", function() {

@@ -68,7 +68,6 @@ test("no el & create mode", function(){
         equals(nav._el.attr("class"), "ui-navigator", "The class is right");
         equals(nav._el.parent().attr("tagName").toLowerCase(), "body", "The container is right");
         equals(nav._el.width(), $("body").width(), "The width is right");
-        equals(nav._el.height(), 44, "The height is right");
         equals(nav._el.children()[0].tagName.toLowerCase(), "a", "The fix tab is right");
         equals(nav._el.children()[0].href, 'http://www.baidu.com/', "The fix tab is right");
         equals(nav._el.children()[0].className, "ui-navigator-fix ui-navigator-fixleft cur", "The fix tab is right");
@@ -76,7 +75,6 @@ test("no el & create mode", function(){
         equals(nav._el.find('ul li a').length, 5, "The li number is right");
         equals(nav._el.find('ul li a').get(0).textContent, "首页", "The a is right");
         equals(nav._el.find('ul li a').get(0).href.split('#')[1], 'test1', "The a is right");
-        equals(nav._el.find('ul li a').height(), 42, "The a is right");
         nav.destroy();
         start();
 	});
@@ -98,8 +96,7 @@ test("el zepto & container & create mode", function(){
 	equals(nav._el.parent().attr("id"), "container", "The container is right");
 
 	equals(nav._el.width(), $("body").width(), "The width is right");
-	equals(nav._el.height(), 44, "The height is right");
-
+	
 	nav.destroy();
 	$("#container").remove();
 });
@@ -121,8 +118,7 @@ test("el selector & no container & className & create mode", function(){
 	equals(nav._el.parent().attr("id"), "test1", "The container is right");
 
 	equals(nav._el.width(), $("body").width(), "The width is right");
-	equals(nav._el.height(), 44, "The height is right");
-
+	
 	nav.destroy();
 	$("#test1").remove();
 });
@@ -143,7 +139,6 @@ test("full setup", function(){
     equals(_el.attr("class"), "ui-navigator", "The class is right");
     equals(_el.parent().attr("tagName").toLowerCase(), "body", "The container is right");
     equals(_el.width(), $("body").width(), "The width is right");
-    equals(_el.height(), 44, "The height is right");
     equals(_el.children()[0].tagName.toLowerCase(), "a", "The fix tab is right");
     equals(_el.children()[0].href, 'http://www.baidu.com/', "The fix tab is right");
     equals(_el.children()[0].className, "ui-navigator-fix", "The fix tab is right");
@@ -151,8 +146,7 @@ test("full setup", function(){
     equals(_el.find('ul li a').length, 5, "The li number is right");
     equals(_el.find('ul li a').get(0).textContent, "首页", "The a is right");
     equals(_el.find('ul li a').get(0).href, l + '#test1', "The a is right");
-    equals(_el.find('ul li a').height(), 42, "The a is right");
-
+    
     equals(_el.find('ul li a').get(3).className, "cur", "The defTab is right");
     nav.destroy();
     $("#nav-fullsetup").remove();
@@ -177,7 +171,6 @@ test("smart setup", function(){
     equals(nav._el.attr("class"), "ui-navigator", "The class is right");
     equals(nav._el.parent().attr("tagName").toLowerCase(), "body", "The container is right");
     equals(nav._el.width(), $("body").width(), "The width is right");
-    equals(nav._el.height(), 44, "The height is right");
     equals(nav._el.children()[0].tagName.toLowerCase(), "a", "The fix tab is right");
     equals(nav._el.children()[0].href, l + '#test1', "The fix tab is right");
     equals(nav._el.children()[0].className, "ui-navigator-fix", "The fix tab is right");
