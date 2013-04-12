@@ -36,7 +36,7 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
     <td>类似于jquery position，处理元素定位，支持at,my,of,with等参数</td>
   </tr>
   <tr>
-      <th><a href="https://github.com/campaign/gmu/blob/master/_src/core/zepto.location.js">zepto.location</a></td>
+      <td><a href="https://github.com/campaign/gmu/blob/master/_src/core/zepto.location.js">zepto.location</a></td>
       <td>基于百度定位接口，获取当前坐标</td>
     </tr>
 </tbody>
@@ -59,19 +59,19 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
         <td>快速删除</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/tabs.js">Tabs</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/tabs.js">tabs（包括插件tabs.swipe和tabs.ajax）</a></td>
         <td>tab切换</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/slider.js">slider</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/slider.js">slider（包括插件slider.dynamic）</a></td>
         <td>图片轮播</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/navigator.js">navigator</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/navigator.js">navigator（包括插件navigator.iscroll）</a></td>
         <td>导航栏</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dialog.js">dialog</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dialog.js">dialog（包括插件dialog.position）</a></td>
         <td>对话框</td>
     </tr>
     <tr>
@@ -79,15 +79,15 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
         <td>面板切换</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/refresh.js">refresh</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/refresh.js">refresh（包括插件refresh.iscroll,refresh.iOS5,refresh.lite）</a></td>
         <td>点击刷新，拉动刷新</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dropmenu.js">dropmenu</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/dropmenu.js">dropmenu（包括插件dropmenu.iscroll）</a></td>
         <td>下拉框</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/gotop.js">gotop</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/gotop.js">gotop（包括插件gotop.iscroll）</a></td>
         <td>返回顶部</td>
     </tr>
     <tr>
@@ -99,7 +99,7 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
         <td>日历</td>
     </tr>
     <tr>
-        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/button.js">button</a></td>
+        <td><a href="https://github.com/campaign/gmu/blob/master/_src/widget/button.js">button（包括插件button.input）</a></td>
         <td>按钮</td>
     </tr>
     </tbody>
@@ -110,7 +110,7 @@ GMU由百度GMU小组开发，基于开源BSD协议，支持商业和非商业�
 
 ##反馈bug##
 如果您有任何关于GMU或移动前端开发中的问题，可以在QQ群中讨论，也可以通过[git issue](https://github.com/campaign/gmu/issues)给我们反馈bug，我们会尽快解决。
-当然，我们更欢迎你的fork，为GMU添砖加瓦。
+当然，我们更欢迎您的fork，为GMU添砖加瓦。
 
 ###联系我们###
 + QQ：127405799
