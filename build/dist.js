@@ -3,19 +3,8 @@
 
 	var Q = require('q'),
 		file = require("./util/file"),
-		config = {
-			zepto: {
-				path: '_src/core/zepto/',
-				files: 'polyfill zepto detect event ajax form fx',
-				dest: 'dist/zepto.js',
-				banner: '/* Zepto v1.0-1-ga3cab6c - polyfill zepto detect event ajax form fx - zeptojs.com/license */'
-			},
-			gmu: {
-				path: '_src',
-				src: ['core/*.js', 'widget/**.js'],
-				dest: 'dist/gmu.js'
-			}
-		};
+		helper = require("./util/helper"),
+		config = require("./config").dist;
 
 	function concatZepto() {
 		var opt = config.zepto,
@@ -41,11 +30,18 @@
 		console.log('生成' + minDest + '成功。 大小：' + file.caculateSize(minDest));
 	}
 
+	function exportZepto( exclude ){
+		
+	}
+
 	//提供直接调用
 	var run = exports.run = function() {
+		var exclude = this.exclude;
+
 		return Q
 			.try(concatZepto)
-			.then(minifyZepto);
+			.then(minifyZepto)
+			.then(helper.curry(exportZepto, exclude));
 	};
 
 	//标记是一个task
@@ -53,6 +49,8 @@
 
 
 	exports.init = function(cli) {
+		cli.option('-X, --exclude <files...>', '在打包GMU的时候，可以通过此Option来过滤掉不需要的文件，格式与glob一致');
+
 		cli.command('dist')
 			.description('合并代码并采用uglify压缩代码')
 			.action(run.bind(cli));

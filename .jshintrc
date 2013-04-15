@@ -18,9 +18,9 @@
     "dojo": false,
 
     "predef": [ // Custom globals.
-    //"exampleVar",
-    //"anotherCoolGlobal",
-    //"iLoveDouglas"
+        //"exampleVar",
+        //"anotherCoolGlobal",
+        //"iLoveDouglas"
     ],
 
 
