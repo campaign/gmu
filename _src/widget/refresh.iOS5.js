@@ -133,7 +133,7 @@
                     }, 800));
                 }
 
-                if (actDir) {
+                if (actDir && me._status(actDir)) {
                     me._setStyle(actDir, 'loading');
                     me._loadingAction(actDir, 'pull');
                 }
