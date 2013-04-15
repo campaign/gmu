@@ -2,3 +2,5 @@
 .idea/*
 gmu_webapp2.0.0.zip
 .DS_Store
+node_moudules
+dist
