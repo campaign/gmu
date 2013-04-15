@@ -30,7 +30,7 @@
             var me = this;                      //如果一个集合中的第一元素已fix，则认为这个集合的所有元素已fix，
             if(me.attr('isFixed')) return me;   //这样在操作时就可以针对集合进行操作，不必单独绑事件去操作
             me.css(opts).css('position', 'fixed').attr('isFixed', true);
-            var buff = $('<div style="position:fixed;top:10px;" id="test"></div>').appendTo('body'),
+            var buff = $('<div style="position:fixed;top:10px;"></div>').appendTo('body'),
                 top = buff[0].getBoundingClientRect().top,
                 checkFixed = function() {
                     if(window.pageYOffset > 0) {
