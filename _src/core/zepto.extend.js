@@ -341,9 +341,6 @@
             },
             lastOrt = getOrt(),
             handler = function(e) {
-                if(e.type == 'orientationchange'){
-                    return $(window).trigger('ortchange');
-                }
                 maxTry = 20;
                 clearInterval(timer);
                 timer = $.later(function() {
