@@ -333,9 +333,7 @@
 (function($) {
     /** detect orientation change */
     $(document).ready(function () {
-        var getOrt = "matchMedia" in window ? function(){
-                return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
-            }:function(){
+        var getOrt = function(){
                 var elem = document.documentElement;
                 return elem.clientWidth / Math.max(elem.clientHeight, 320) < 1.1 ? "portrait" : "landscape";
             },
@@ -348,6 +346,7 @@
                     if (lastOrt !== curOrt) {
                         lastOrt = curOrt;
                         clearInterval(timer);
+                        $(document.body).append(curOrt);
                         $(window).trigger('ortchange');
                     } else if(--maxTry){//最多尝试20次
                         clearInterval(timer);
