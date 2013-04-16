@@ -265,13 +265,16 @@
          * @private
          */
         _bindCloseEvent: function() {
-            var me = this;
-            $('.ui-suggestion-button span:first-child').on('click', function() {
+            var me = this,
+                $wrapper = me.data('wrapper');
+
+            $wrapper.find('span:first-child').on('click', function() {
                 $.later(function(){
                     me.clearHistory();
                 }, $.os.android?200:0);
             });
-            $('.ui-suggestion-button span:last-child').on('click', function() {
+
+            $wrapper.find('span:last-child').on('click', function() {
                 me.hide().leaveInput().trigger('close');
             });
             return me;
