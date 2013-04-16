@@ -60,16 +60,32 @@
         requires: {
             css: ['icons.default.css', 'widget/button/button.css', 'widget/button/button.default.css', 'widget/dropmenu/dropmenu.css',
                 'widget/dropmenu/dropmenu.default.css', 'widget/toolbar/toolbar.css', 'widget/toolbar/toolbar.default.css'],
-            js: ['core/zepto.highlight.js', 'core/zepto.fix.js', 'widget/button.js', 'widget/dropmenu.js', 'widget/toolbar.js']
+            js: ['core/touch.js', 'core/zepto.highlight.js', 'core/zepto.fix.js', 'widget/button.js', 'widget/dropmenu.js', 'widget/toolbar.js']
         },
         initHeader: function () {
-            var that = this;
+            var that = this,
+                jss = that.requires.js,
+                loaded =  {},
+                i = 0,
+                len = jss.length,
+                path;
+
+            //收集已经加载进来的js
+            $('script').each(function(){
+                if(/([^\/]+\/[^\/]+\.js)$/i.test(this.src)){
+                    loaded[RegExp.$1] = true;
+                }
+            });
+
             $.each(that.requires['css'], function (i, path) {
                 that.addResource(that.basePath['css'] + path, 'css')
-            })
-            $.each(that.requires['js'], function (i, path) {
-                that.sendRequest(that.basePath['js'] + path, that.addResource);
             });
+
+            for( ; i < len; i++) {
+                path = jss[i];
+                loaded[path] ? jss.splice((len--, i--), 1) :
+                    that.sendRequest(that.basePath['js'] + path, that.addResource);
+            }
         },
         addResource: function (text, type, done) {
             var head = document.head || document.getElementsByTagName('head')[0],
@@ -136,6 +152,7 @@
                     container: $header.find('.ui-toolbar').first(),
                     cacheParentOffset: false
                 }).bindButton(btn);
+
             }
             $(document.body).trigger('pageready');
         }
