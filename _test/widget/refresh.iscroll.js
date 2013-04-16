@@ -796,7 +796,7 @@ test('显示 - topOffset', function () {
         refresh = $wrapper.refresh().refresh('this');
 
     setTimeout(function(){
-    	equals($wrapper.height(), tablet? 306:298, "iscroll高度正确");
+    	equals($wrapper.height(), tablet? 316:298, "iscroll高度正确");
         equals($wrapper.parent().height(), 150, "容器高度正确");
         equals($wrapper.find(".ui-refresh-up").offset().top, $wrapper.parent().offset().top - $wrapper.find(".ui-refresh-up").height(), "topOffset正确");
         start();

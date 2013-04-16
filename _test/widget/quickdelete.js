@@ -26,7 +26,7 @@ test("container", function(){
 			var show = 0, hide = 0;
 			var qd = new $.ui.quickdelete({
 				container: "#text",
-				delete: function(){
+				'delete': function(){
 					equals(input.value, "", "The content in input is deleted");
 				}
 			});

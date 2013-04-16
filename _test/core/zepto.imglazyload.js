@@ -70,7 +70,7 @@ test("初始状态:图片进入可视区能正确加载 & threshold", function()
         window.scrollTo(0,0);
         $(window).off('scrollStop');
         start();
-    }, 100);
+    }, 300);
 });
 
 test("scrollStop:图片进入可视区能正确加载 & loadcomplete", function(){
@@ -96,12 +96,13 @@ test("scrollStop:图片进入可视区能正确加载 & loadcomplete", function(
     
     setTimeout(function(){
     	window.scrollTo(0, n*itemH);
+    	ta.scrollStop();
         setTimeout(function () {
             window.scrollTo(0,0);
             $(window).off('scrollStop');
             start();
-        }, 100);
-    }, 100);
+        }, 200);
+    }, 200);
 });
 
 test("scroll:图片进入可视区能正确加载 & startLoad", function(){
@@ -131,19 +132,21 @@ test("scroll:图片进入可视区能正确加载 & startLoad", function(){
     setTimeout(function(){
     	dis = n*itemH;
         window.scrollTo(0, dis);
+        ta.scroll();
         
         setTimeout(function(){
         	dis = (n - 3)*itemH;
             window.scrollTo(0, dis);    //两次滑动，触发scroll效果
+            ta.scroll();
 
             setTimeout(function () {
                 window.scrollTo(0,0);
                 $(window).off('scrollStop');
                 $(window).off('scroll');
                 start();
-            }, 100);
-        }, 100);
-    }, 100);
+            }, 200);
+        }, 200);
+    }, 200);
 });
 
 test("iscroll:初始状态图片在iscroll wrapper区域内能正确加载", function(){
@@ -173,7 +176,7 @@ test("iscroll:初始状态图片在iscroll wrapper区域内能正确加载", fun
         setTimeout(function () {
             $wrapper.remove();
             start();
-        }, 100);
+        }, 200);
     }, 'window.iScroll', 'core/zepto.imglazyload');
 });
 
@@ -186,7 +189,7 @@ test("iscroll:滚动过程中在iscroll wrapper区域内能正确加载", functi
             n = 3,$wrapper;    //滚动加载的张数
         expect(n * 2);
 
-        $scroller.wrap($wrapper = $('<div id="wrapper"></div>').height(n*itemH));
+        $scroller.wrap($wrapper = $('<div id="wrapper"></div>').height(n*itemH + 20));
         viewImages = getImgsInWrapper($('.ui-imglazyload'),$wrapper, 0);
         $wrapper.iScroll({
             hScroll: false,
@@ -231,9 +234,9 @@ test("iscroll:滚动过程中在iscroll wrapper区域内能正确加载", functi
                 setTimeout(function () {
                     $wrapper.remove();
                     start();
-                }, 100);
+                }, 500);
             }, 300);   
-        }, 100);
+        }, 200);
     }, 'window.iScroll', 'core/zepto.imglazyload');
 });
 
@@ -281,19 +284,23 @@ test("refresh:增加图片后能正确加载 & error", function(){
     setTimeout(function(){
     	dis = n*itemH;
         window.scrollTo(0, dis);
+        ta.scroll();
 
         setTimeout(function () {
             $btn.trigger('click');
             equal($('.ui-imglazyload').length + sucImages.length, 25, '点击按钮后，图片添加进来了');
 
-            dis = 2*n*itemH;
-            window.scrollTo(0, dis);
-            setTimeout(function () {
-                window.scrollTo(0,0);
-                $(window).off('scrollStop');
-                $(window).off('scroll');
-                start();
-            }, 100);
-        }, 100);
-    }, 100);
+            setTimeout(function(){
+            	dis = 2*n*itemH;
+                window.scrollTo(0, dis);
+                ta.scroll();
+                setTimeout(function () {
+                    window.scrollTo(0,0);
+                    $(window).off('scrollStop');
+                    $(window).off('scroll');
+                    start();
+                }, 200);
+            }, 200);
+        }, 200);
+    }, 200);
 });
