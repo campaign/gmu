@@ -81,7 +81,7 @@ module('widget/navigator.iscroll', {
     }
 });
 
-var tablet = tablet && window.screen.width <= 1024;
+var tablet = window.screen.width >= 768 && window.screen.width <= 1024;
 
 test("只为加载css用",function(){
     expect(1);
@@ -108,7 +108,7 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals(nav._data._$navWrapper.hasClass("ui-navigator-shadowr"), list.offset().right > $(window).width ? true : false, "The _data is right");
     equals(nav._data._$navList.length, 5, "The _data is right");
     equals(nav._data._scrollerNum, 5, "The _data is right");
-    equals(nav._data._scrollerSumWidth[0], tablet?67:62, "The _data is right");
+    equals(nav._data._scrollerSumWidth[0], tablet?68:62, "The _data is right");
 
     ok(ua.isShown(nav._el[0]), "The navigator shows");
     equals(nav._el.attr("class"), "ui-navigator", "The class is right");
@@ -118,8 +118,8 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals($('.ui-navigator-wrapper').next().hasClass('ui-navigator-fix'), true, 'The fix right is right');
     equals($('.ui-navigator-list').find('a').length, 5, 'The scroller number is right');
     equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller style is right');
-    equals(li.width(), tablet ? 67 : 62, "The li widht is right");
-    equals(list.width(), tablet ? 353 : 326, "The list widht is right");
+    equals(li.width(), tablet ? 68 : 62, "The li widht is right");
+    equals(list.width(), tablet ? 359 : 326, "The list widht is right");
     nav.destroy();
 
     smartSetup();
@@ -137,7 +137,7 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals(nav2._data._$navWrapper.hasClass("ui-navigator-wrapper"), true, "The _data is right");
     equals(nav2._data._$navList.length, 9, "The _data is right");
     equals(nav2._data._scrollerNum, 9, "The _data is right");
-    equals(nav2._data._scrollerSumWidth[0], tablet ? 67 : 62, "The _data is right");
+    equals(nav2._data._scrollerSumWidth[0], tablet ? 68 : 62, "The _data is right");
 
     ok(ua.isShown(nav2._el[0]), "The navigator shows");
     equals(nav2._el.attr("class"), "ui-navigator", "The class is right");
@@ -147,8 +147,8 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals($('.ui-navigator-wrapper').prev().prev().hasClass('ui-navigator-fix'), true, 'The fix left2 is right');
     equals($('.ui-navigator-list').find('a').length, nav2._data._scrollerNum, 'The scroller number is right');
     equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller number is right');
-    equals(li.width(), tablet ? 67 : 62, "The li widht is right");
-    equals(list.width(), tablet ? 621 : 574, "The list widht is right");
+    equals(li.width(), tablet ? 68 : 62, "The li widht is right");
+    equals(list.width(), tablet ? 631 : 574, "The list widht is right");
     nav2.destroy();
 
     start();
