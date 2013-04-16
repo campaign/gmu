@@ -183,6 +183,7 @@
                 lazyImgs:       lazyImgs,
                 allImgs:        allImgs,
                 length:         length,
+                imgCountPerItem: allImgs.length/length,
                 width:          width,
                 height:         height,
                 dots:           dots,
@@ -327,7 +328,7 @@
                 o = me._data;
             me.trigger('slideend', o.dotIndex[o.index]);
             if(o.lazyImgs.length){
-                for(var length = o._stepLength, i = 0; i< length; i++) {
+                for(var length = o._stepLength * o.imgCountPerItem, i = 0; i< length; i++) {
                     var j = o.lazyImgs.shift();
                     j && (j.src = j.getAttribute('lazyload'));
                     if(o.loop) {
