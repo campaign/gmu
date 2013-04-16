@@ -96,11 +96,11 @@
                     data.iScroll.deltaY = scrollY - lastMoveY;    //每次在touchmove时更新偏移量的值
                     if (downStatus && down && !downRefreshed && -scrollY < (maxScrollY - threshold)) {      //下边按钮，上拉加载
                         me._setMoveState('down', 'beforeload', 'pull');
-                    } else if (downStatus && down && downRefreshed && -scrollY > (maxScrollY - threshold)) {   //下边按钮，上拉恢复
+                    } else if (downStatus && down && downRefreshed && -scrollY > (maxScrollY - threshold) && -scrollY !== maxScrollY) {   //下边按钮，上拉恢复  -scrollY !== maxScrollY for trace784
                         me._setMoveState('down', 'loaded', 'restore');
                     } else if (upStatus && up && !upRefreshed && -scrollY > threshold ) {      //上边按钮，下拉加载
                         me._setMoveState('up', 'beforeload', 'pull');
-                    } else if (upStatus && up && upRefreshed && -scrollY < threshold) {       //上边按钮，下拉恢复
+                    } else if (upStatus && up && upRefreshed && -scrollY < threshold && scrollY) {       //上边按钮，下拉恢复，scrollY !== 0  for trace784
                         me._setMoveState('up', 'loaded', 'restore');
                     }
 
