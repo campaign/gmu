@@ -79,7 +79,7 @@
                                 upStatus = me._status('up'),
                                 downStatus = me._status('down');
 
-                            if (up && !upStatus && down && !downStatus) return;
+                            if (up && !upStatus || down && !downStatus) return;    //上下不能同时加载 trace:FEBASE-775
                             if (downStatus && down && !downRefreshed && this.y < (this.maxScrollY - threshold)) {    //下边按钮，上拉加载
                                 me._setMoveState('down', 'beforeload', 'pull');
                             } else if (upStatus && up && !upRefreshed && this.y > threshold) {     //上边按钮，下拉加载
