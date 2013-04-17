@@ -41,7 +41,6 @@
         _data:{
             active: 0,
             items:null,//[{title:'', content:'', href: ''}] href可以用来设置连接，表示为ajax内容, 需要引入tabs.ajax插件
-            swipe: false,//需要引入tabs.swipe插件才有效
             transition: 'slide',//目前只支持slide动画，或无动画
             activate: null,// events
             beforeActivate: null, //event
