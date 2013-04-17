@@ -197,23 +197,25 @@
 <script type="text/javascript">
     $(function () {
         /*组件初始化js begin*/
-        $('.ui-refresh').css('height', window.innerHeight - 42).refresh({
-            ready: function (dir, type) {
-                var me = this;
-                $.getJSON('../../data/refresh.php', function (data) {
-                    var $list = $('.data-list'),
-                        html = (function (data) {      //数据渲染
-                            var liArr = [];
-                            $.each(data, function () {
-                                liArr.push(this.html);
-                            });
-                            return liArr.join('');
-                        })(data);
+        $(document).on('headready', function () {//公共头部加载完成后
+            $('.ui-refresh').css('height', window.innerHeight - ($('header').height() || 42)).refresh({
+                ready: function (dir, type) {
+                    var me = this;
+                    $.getJSON('../../data/refresh.php', function (data) {
+                        var $list = $('.data-list'),
+                            html = (function (data) {      //数据渲染
+                                var liArr = [];
+                                $.each(data, function () {
+                                    liArr.push(this.html);
+                                });
+                                return liArr.join('');
+                            })(data);
 
-                    $list[dir == 'up' ? 'prepend' : 'append'](html);
-                    me.afterDataLoading(dir);    //数据加载完成后改变状态
-                });
-            }
+                        $list[dir == 'up' ? 'prepend' : 'append'](html);
+                        me.afterDataLoading(dir);    //数据加载完成后改变状态
+                    });
+                }
+            });
         });
         /*组件初始化js end*/
     })

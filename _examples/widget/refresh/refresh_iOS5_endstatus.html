@@ -195,29 +195,29 @@
 
 <script type="text/javascript">
     $(function () {
-        /*组件初始化js begin*/
-        var countUp = 0, countDown = 0;     //demo演示使用变量
-        $('.ui-refresh').css('height', window.innerHeight - 42).refresh({
-            ready: function (dir, type) {
-                var me = this;
-                $.getJSON('../../data/refresh.php', function (data) {
-                    var $list = $('.data-list'),
-                        html = (function (data) {      //数据渲染
-                            var liArr = [];
-                            $.each(data, function () {
-                                liArr.push(this.html);
-                            });
-                            return liArr.join('');
-                        })(data);
+        $(document).on('headready', function () {//公共头部加载完成后
+            var countUp = 0, countDown = 0;     //demo演示使用变量
+            $('.ui-refresh').css('height', window.innerHeight - ($('header').height() || 42)).refresh({
+                ready: function (dir, type) {
+                    var me = this;
+                    $.getJSON('../../data/refresh.php', function (data) {
+                        var $list = $('.data-list'),
+                            html = (function (data) {      //数据渲染
+                                var liArr = [];
+                                $.each(data, function () {
+                                    liArr.push(this.html);
+                                });
+                                return liArr.join('');
+                            })(data);
 
-                    $list[dir == 'up' ? 'prepend' : 'append'](html);
-                    me.afterDataLoading(dir);    //数据加载完成后改变状态
-                    dir == 'up' && ++countUp > 1 && me.disable(dir);     //上边refresh加载两次后不再加载，并且显示没有更多内容的文案
-                    dir == 'down' && ++countDown > 1 && me.disable(dir, true);     //下边refresh加载两次后不再加载，并隐藏
-                });
-            }
+                        $list[dir == 'up' ? 'prepend' : 'append'](html);
+                        me.afterDataLoading(dir);    //数据加载完成后改变状态
+                        dir == 'up' && ++countUp > 1 && me.disable(dir);     //上边refresh加载两次后不再加载，并且显示没有更多内容的文案
+                        dir == 'down' && ++countDown > 1 && me.disable(dir, true);     //下边refresh加载两次后不再加载，并隐藏
+                    });
+                }
+            });
         });
-        /*组件初始化js end*/
     })
 </script>
 

@@ -128,7 +128,7 @@
     $(function () {
         $(document).on('headready', function () {
             var $wrapper = $('.lazyload-wrapper');
-            $wrapper.css('height', window.innerHeight - $('header').height() || 42).iScroll({
+            $wrapper.css('height', window.innerHeight - ($('header').height() || 42)).iScroll({
                 onScrollEnd: function () {
                     $.fn.imglazyload.detect();
                 }
@@ -139,7 +139,6 @@
             }).on('loadcomplete', function () {
                 $wrapper.iScroll('refresh');
                 });
-
         })
     });
 

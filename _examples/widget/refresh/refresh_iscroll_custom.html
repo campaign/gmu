@@ -214,32 +214,36 @@
 <script type="text/javascript">
     $(function () {
         /*组件初始化js begin*/
-        $('.ui-refresh').css('height', window.innerHeight - 42).refresh({
-            statechange: function (e, $elem, state, dir) {
-                if (state == 'loading') {   //只修改loading的状态
-                    e.preventDefault();
-                    var refreshInfo = this._data.refreshInfo[dir];
-                    refreshInfo['$icon'].removeClass().addClass('ui-loading');
-                    refreshInfo['$label'].html(dir == 'up' ? '正在刷新中...' : '数据加载中...');
-                }
-            },
-            ready: function (dir, type) {
-                var me = this;
-                $.getJSON('../../data/refresh.php', function (data) {
-                    var $list = $('.data-list'),
-                            html = (function (data) {      //数据渲染
-                                var liArr = [];
-                                $.each(data, function () {
-                                    liArr.push(this.html);
-                                });
-                                return liArr.join('');
-                            })(data);
+        $(document).on('headready', function () {  //公共头部加载完成后
+            $('.ui-refresh').css('height', window.innerHeight - ($('header').height() || 42)).refresh({
+                statechange: function (e, $elem, state, dir) {
+                    if (state == 'loading') {   //只修改loading的状态
+                        e.preventDefault();
+                        var refreshInfo = this._data.refreshInfo[dir];
+                        refreshInfo['$icon'].removeClass().addClass('ui-loading');
+                        refreshInfo['$label'].html(dir == 'up' ? '正在刷新中...' : '数据加载中...');
+                    }
+                },
+                ready: function (dir, type) {
+                    var me = this;
+                    $.getJSON('../../data/refresh.php', function (data) {
+                        var $list = $('.data-list'),
+                                html = (function (data) {      //数据渲染
+                                    var liArr = [];
+                                    $.each(data, function () {
+                                        liArr.push(this.html);
+                                    });
+                                    return liArr.join('');
+                                })(data);
 
-                    $list[dir == 'up' ? 'prepend' : 'append'](html);
-                    me.afterDataLoading(dir);    //数据加载完成后改变状态
-                });
-            }
+                        $list[dir == 'up' ? 'prepend' : 'append'](html);
+                        me.afterDataLoading(dir);    //数据加载完成后改变状态
+                    });
+                }
+            });
+
         });
+
         /*组件初始化js end*/
     })
 </script>
