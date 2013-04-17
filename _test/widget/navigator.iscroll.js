@@ -397,11 +397,11 @@ test("isScrollToNext: false", function(){
 
         ua.click($navList[2]); 
         setTimeout(function () {
-            equals(nav._data.iScroll.x, 0, 'Dosn\'t move when click the last elem');
+            equals(nav._data.iScroll.x, 0, 'Dosen\'t move when clicking the last elem');
 
             ua.click($navList[0]); 
             setTimeout(function () {
-            	equals(nav._data.iScroll.x, 0, 'Dosn\'t move when click the first elem');
+            	equals(nav._data.iScroll.x, 0, 'Dosen\'t move when clicking the first elem');
                 nav.destroy();
                 $('#nav-shadowTest').remove();
                 $("body").css("width", width);
