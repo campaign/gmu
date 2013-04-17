@@ -9,6 +9,7 @@
     /**
      * @name 说明
      * @desc 在使用iScroll的页面上使用gotop组件时，需要加入该插件
+     * @desc 使用iscroll后useAnimation参数不起作用
      * **Options**
      * - ''iScrollInstance'' {Object}: (必选)创建好的iScroll实例,使用iscroll时需要传入iScroll实例,用来判定显示与隐藏【useAnimation参数会失效】
      *
