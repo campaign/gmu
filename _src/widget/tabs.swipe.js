@@ -58,7 +58,10 @@
     }
 
     /**
-     * @name 说明
+     * @name tabs
+     * @desc
+     * **在Tabs基础上新增的Options**
+     * ''swipe'' {Boolean} (可选，默认：true) 加入swipe的插件后，需配置swipe为true
      * @desc tabs插件, 添加 swipe功能，zepto的swipeLeft, swipeRight不太准，所以在这另外实现了一套。
      */
     $.ui.tabs.register(function () {

@@ -27,7 +27,7 @@
         }
     });
     /**
-     * @name 说明
+     * @name dropmenu
      * @desc 此插件使dropmenu带有内滚功能。
      *
      * 在初始化时需要传入iScroll参数才能启用此功能，如传入true，也可以传入对象，此对象在初始化 iScroll的时候可以将传入

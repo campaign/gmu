@@ -28,8 +28,7 @@
      * @grammar tabs(options) ⇒ self
      * @desc **Options**
      * - ''active'' {Number}: (可选，默认：0) 初始时哪个为选中状态，如果时setup模式，如果第2个li上加了ui-state-active样式时，active值为1
-     * - ''items'' {Array}: 在render模式下需要必须设置 格式为\[{title:\'\', content:\'\', href:\'\'}\]
-     *   href可以不设，可以用来设置ajax内容。
+     * - ''items'' {Array}: 在render模式下需要必须设置 格式为\[{title:\'\', content:\'\', href:\'\'}\], href可以不设，可以用来设置ajax内容。
      * - ''transition'' {\'\'|\'slide\'}: 设置切换动画
      * - ''events'' 所有[Trigger Events](#tabs_triggerevents)中提及的事件都可以在此设置Hander, 如init: function(e){}。
      *
