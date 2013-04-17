@@ -102,8 +102,8 @@
                         e.preventDefault();
                         e.formDelete = true; // suggestion解决删除问题
                         $input.val('');
-                        me._hide().trigger('delete'); 
-                        $input.get(0).focus();                                                                   
+                        me._hide().trigger('delete');
+                        $input.blur().focus();      //中文输入时，focus失效 trace:FEBASE-779
                     }
                     break;
                 case 'blur':
