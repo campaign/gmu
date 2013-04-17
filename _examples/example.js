@@ -154,7 +154,9 @@
                 }).bindButton(btn);
 
             }
-            $(document.body).trigger('pageready');
+            setTimeout(function () {
+                $(document).trigger('headready');
+            }, 0);
         }
     }).initHeader();
 
