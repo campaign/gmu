@@ -15,7 +15,7 @@
      * - ''threshold''       {Array|Selector}:      (可选, 默认值:0)阀值，为正值则提前加载
      * - ''urlName''         {String}:              (可选, 默认值:data-url)图片url名称
      * - ''eventName''       {String}:              (可选, 默认值:scrollStop)绑定事件方式
-     * - ''refresh''         {Boolean}              (可选, 默认值:false)是否是更新操作，若是页面追加图片，可以将该参数设为false
+     * - ''refresh''         {Boolean}              (可选, 默认值:false)是否是更新操作，若是页面追加图片，可以将该参数设为true
      * - ''innerScroll''     {Boolean}              (可选, 默认值:false)是否是内滚，若内滚，则不绑定eventName事件，用户需在外部绑定相应的事件，可调$.fn.imglazyload.detect去检测图片是否出现在container中
      * - ''isVertical''      {Boolean}              (可选, 默认值:true)是否竖滚
      * - ''startload''       {Function}             (可选, 默认值:null)开始加载前的事件，该事件作为参数，不是trigger的
