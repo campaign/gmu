@@ -346,7 +346,6 @@
                     if (lastOrt !== curOrt) {
                         lastOrt = curOrt;
                         clearInterval(timer);
-                        $(document.body).append(curOrt);
                         $(window).trigger('ortchange');
                     } else if(--maxTry){//最多尝试20次
                         clearInterval(timer);
