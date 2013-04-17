@@ -156,7 +156,7 @@
             }
             setTimeout(function () {
                 $(document).trigger('headready');
-            }, 0);
+            }, 100);
         }
     }).initHeader();
 
