@@ -68,7 +68,7 @@
             var $div = $(div), $img;
             $.isFunction(opts.startload) && opts.startload.call($div);
             $img = $('<img />').on('load',function () {
-                $div.trigger('loadcomplete').replaceWith($img);
+                $div.replaceWith($img).trigger('loadcomplete');
                 $img.off('load');
             }).on('error',function () {     //图片加载失败处理
                 var errorEvent = $.Event('error');       //派生错误处理的事件
