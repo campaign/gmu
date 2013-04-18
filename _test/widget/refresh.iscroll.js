@@ -271,6 +271,21 @@ test('both-下拉加载', function () {
     ua.mouseup(target);
 });
 
+test("参数options - iScrollOpts", function(){
+    createDom('down');
+    expect(1);
+
+    var $wrapper = $('.wrapper'),
+        lis = $wrapper.find('li'),
+        count = 0,
+        refresh = $wrapper.refresh({
+        	iScrollOpts: {
+        		hScroll: false
+        	}
+        }).refresh('this');
+    equals(refresh._data.iScroll.options.hScroll, false, "The iScrollOpts is right");
+});
+
 test("参数options - statechange", function(){
     createDom('down');
     expect(4);

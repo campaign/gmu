@@ -33,7 +33,6 @@ test("左右滑动无动画", function(){
     var tabs = $.ui.tabs({
             container: '#container',
             active: 1,
-            swipe: true,
             items: getItems(),
             transition:''
     })
@@ -133,7 +132,6 @@ test("左右滑动有动画", function(){
     stop()
     var tabs = $.ui.tabs({
         container: '#container',
-        swipe: true,
         items: getItems()
     })
     ta.touchstart($(".ui-panel")[0], {
@@ -217,7 +215,6 @@ test("destroy",function(){
         var el1= w.dt.eventLength();
 
         var tabs =  w.$.ui.tabs({
-        	 swipe: true,
              items: getItems()
         });
         ta.touchstart(w.$(".ui-panel")[0], {

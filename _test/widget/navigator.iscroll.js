@@ -340,6 +340,76 @@ test('defTab: in the viewport & not in the viewport', function () {
     }, 600);
 });
 
+test("iScrollOpts", function(){
+    expect(1);
+    fullSetup();
+    var count = 0, time = 0.
+        nav = $('#nav-fullsetup').navigator({
+        	iScrollOpts: {
+        		hScroll: false
+        	}
+        }).navigator('this');
+    equals(nav._data.iScroll.options.hScroll, false, "The iScrollOpts is right");
+    nav.destroy();
+});
+
+test("isShowShadow: false", function(){
+    expect(3);
+    stop();
+    shadowTest();
+    var width = $("body").css("width");
+    $("body").css("width", 640);
+    var nav = $('#nav-shadowTest').navigator({
+            defTab: 3,
+            isShowShadow: false
+        }).navigator('this'),
+        scroller = $(".ui-navigator-list")[0],
+        $wrapper = $('.ui-navigator-wrapper');
+    setTimeout(function () {
+        equals($wrapper.attr("class"), "ui-navigator-wrapper", 'No shadow');
+        ua.click($(scroller).find('a')[3]);
+        setTimeout(function () {
+        	equals($wrapper.attr("class"), "ui-navigator-wrapper", 'No shadow');
+            ua.click($(scroller).find('a')[22]);
+            setTimeout(function () {
+            	equals($wrapper.attr("class"), "ui-navigator-wrapper", 'No shadow');
+                $('#nav-shadowTest').navigator('destroy');
+                $('#nav-shadowTest').remove();
+                $("body").css("width", width);
+                start();
+            }, 600);
+        }, 600);
+    }, 100)
+});
+
+test("isScrollToNext: false", function(){
+    stop();
+    shadowTest();
+    var width = $("body").css("width");
+    $("body").css("width", 600);
+    var nav = $('#nav-shadowTest').navigator({
+    	defTab: 5,
+    	isScrollToNext: false
+    }).navigator('this'),
+        $scroller = $('.ui-navigator-list'),
+        $navList = $scroller.find('a'),
+        length = $navList.length;
+
+        ua.click($navList[2]); 
+        setTimeout(function () {
+            equals(nav._data.iScroll.x, 0, 'Dosen\'t move when clicking the last elem');
+
+            ua.click($navList[0]); 
+            setTimeout(function () {
+            	equals(nav._data.iScroll.x, 0, 'Dosen\'t move when clicking the first elem');
+                nav.destroy();
+                $('#nav-shadowTest').remove();
+                $("body").css("width", width);
+                start();
+            }, 600)
+        }, 600)
+});
+
 test("_scrollToNext: last & first & mid & scroll the distance", function(){
     stop();
     shadowTest();
