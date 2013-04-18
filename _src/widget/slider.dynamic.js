@@ -97,7 +97,7 @@
 
                     data.index -= delta;
                     data.items = group.children().each(function (i) {
-                        this.style.cssText += 'width:' + (width+1) + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
+                        this.style.cssText += 'width:' + width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
                 }
                 
@@ -170,7 +170,7 @@
                 this._renderItems(data.content = content, index, group, data);
                 data.items = group.children()
                     .each(function (i) {
-                        this.style.cssText += 'width:' + (width+1) + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
+                        this.style.cssText += 'width:' + width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                     });
 
                 this._adjustPos();
