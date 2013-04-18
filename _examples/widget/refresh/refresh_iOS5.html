@@ -129,33 +129,97 @@
                 </dl>
             </a>
         </li>
+        <li>
+            <a href="http://www.baidu.com">
+                <img src="images/pdf.png"/>
+                <dl>
+                    <dt>英国地标“大本钟”用女王名</dt>
+                    <dd class="content">新华网深圳3月23日电（记者 赵瑞西）23日，深圳市南山区西里医院的大楼</dd>
+                    <dd class="source">来源：新浪</dd>
+                </dl>
+            </a>
+        </li>
+        <li>
+            <a href="http://www.baidu.com">
+                <img src="images/xls.png"/>
+                <dl>
+                    <dt>英国地标“大本钟”用女王名</dt>
+                    <dd class="content">新华网深圳3月23日电（记者 赵瑞西）23日，深圳市南山区西里医院的大楼</dd>
+                    <dd class="source">来源：新浪</dd>
+                </dl>
+            </a>
+        </li>
+        <li>
+            <a href="http://www.baidu.com">
+                <img src="images/ufo.png"/>
+                <dl>
+                    <dt>英国地标“大本钟”用女王名</dt>
+                    <dd class="content">新华网深圳3月23日电（记者 赵瑞西）23日，深圳市南山区西里医院的大楼</dd>
+                    <dd class="source">来源：新浪</dd>
+                </dl>
+            </a>
+        </li>
+        <li>
+            <a href="http://www.baidu.com">
+                <img src="images/pdf.png"/>
+                <dl>
+                    <dt>英国地标“大本钟”用女王名</dt>
+                    <dd class="content">新华网深圳3月23日电（记者 赵瑞西）23日，深圳市南山区西里医院的大楼</dd>
+                    <dd class="source">来源：新浪</dd>
+                </dl>
+            </a>
+        </li>
+        <li>
+            <a href="http://www.baidu.com">
+                <img src="images/xls.png"/>
+                <dl>
+                    <dt>英国地标“大本钟”用女王名</dt>
+                    <dd class="content">新华网深圳3月23日电（记者 赵瑞西）23日，深圳市南山区西里医院的大楼</dd>
+                    <dd class="source">来源：新浪</dd>
+                </dl>
+            </a>
+        </li>
+        <li>
+            <a href="http://www.baidu.com">
+                <img src="images/ufo.png"/>
+                <dl>
+                    <dt>英国地标“大本钟”用女王名</dt>
+                    <dd class="content">新华网深圳3月23日电（记者 赵瑞西）23日，深圳市南山区西里医院的大楼</dd>
+                    <dd class="source">来源：新浪</dd>
+                </dl>
+            </a>
+        </li>
     </ul>
     <div class="ui-refresh-down"></div>      <!--setup方式带有class为ui-refresh-down或ui-refresh-up的元素必须加上，用于放refresh按钮-->
 </div>
 
 <script type="text/javascript">
-    (function () {
-        /*组件初始化js begin*/
-        $('.ui-refresh').refresh({
-            ready: function (dir, type) {
-                var me = this;
-                $.getJSON('../../data/refresh.php', function (data) {
-                    var $list = $('.data-list'),
-                            html = (function (data) {      //数据渲染
-                                var liArr = [];
-                                $.each(data, function () {
-                                    liArr.push(this.html);
-                                });
-                                return liArr.join('');
-                            })(data);
+    $(function () {
+        $(document).on('headready', function () {//公共头部加载完成后
+            $('.ui-refresh').css('height', window.innerHeight - ($('header').height() || 42)).refresh({
+                ready: function (dir, type) {
+                    var me = this;
+                    $.getJSON('../../data/refresh.php', function (data) {
+                        var $list = $('.data-list'),
+                                html = (function (data) {      //数据渲染
+                                    var liArr = [];
+                                    $.each(data, function () {
+                                        liArr.push(this.html);
+                                    });
+                                    return liArr.join('');
+                                })(data);
 
-                    $list[dir == 'up' ? 'prepend' : 'append'](html);
-                    me.afterDataLoading(dir);    //数据加载完成后改变状态,dir可传可不传，不传则为当前加载的refresh按钮
-                });
-            }
+                        $list[dir == 'up' ? 'prepend' : 'append'](html);
+                        me.afterDataLoading(dir);    //数据加载完成后改变状态,dir可传可不传，不传则为当前加载的refresh按钮
+                    });
+                }
+            });
+
         });
-        /*组件初始化js end*/
-    })();
+
+
+
+    })
 </script>
 
 <!--demo公用头部展示所用js，可以不用加载 begin-->

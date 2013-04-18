@@ -8,10 +8,11 @@
 
 (function($, undefined) {
     /**
-     * @name 说明
+     * @name refresh
      * @desc Refresh iOS5插件，支持iOS5和以上设备，使用系统自带的内滚功能。
      * @desc **Options** 在refresh的基础上增加参数
      * - ''threshold'' {Number}: (可选) 加载的阀值，默认向上或向下拉动距离超过5px，即可触发拉动操作，该值只能为正值，若该值是10，则需要拉动距离大于15px才可触发加载操作
+     * - ''topOffset'' {Number}: (可选) 上边缩进的距离，默认为refresh按钮的高度，建议不要修改
      */
     $.ui.refresh.register(function () {
         return {
@@ -92,15 +93,15 @@
                         upStatus = me._status('up'),
                         downStatus = me._status('down');
 
-                    if ((up && !upStatus) && (down && !downStatus)) return;    //处于数据正在加载中，即上次加载还未完成，直接返回, 增加上下按钮的同时加载处理 traceID:FEBASE-569
+                    if (up && !upStatus || down && !downStatus) return;    //处于数据正在加载中，即上次加载还未完成，直接返回, 增加上下按钮的同时加载处理 traceID:FEBASE-569, trace:FEBASE-775
                     data.iScroll.deltaY = scrollY - lastMoveY;    //每次在touchmove时更新偏移量的值
                     if (downStatus && down && !downRefreshed && -scrollY < (maxScrollY - threshold)) {      //下边按钮，上拉加载
                         me._setMoveState('down', 'beforeload', 'pull');
-                    } else if (downStatus && down && downRefreshed && -scrollY > (maxScrollY - threshold)) {   //下边按钮，上拉恢复
+                    } else if (downStatus && down && downRefreshed && -scrollY > (maxScrollY - threshold) && -scrollY !== maxScrollY) {   //下边按钮，上拉恢复  -scrollY !== maxScrollY for trace784
                         me._setMoveState('down', 'loaded', 'restore');
                     } else if (upStatus && up && !upRefreshed && -scrollY > threshold ) {      //上边按钮，下拉加载
                         me._setMoveState('up', 'beforeload', 'pull');
-                    } else if (upStatus && up && upRefreshed && -scrollY < threshold) {       //上边按钮，下拉恢复
+                    } else if (upStatus && up && upRefreshed && -scrollY < threshold && scrollY) {       //上边按钮，下拉恢复，scrollY !== 0  for trace784
                         me._setMoveState('up', 'loaded', 'restore');
                     }
 

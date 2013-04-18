@@ -271,6 +271,21 @@ test('both-下拉加载', function () {
     ua.mouseup(target);
 });
 
+test("参数options - iScrollOpts", function(){
+    createDom('down');
+    expect(1);
+
+    var $wrapper = $('.wrapper'),
+        lis = $wrapper.find('li'),
+        count = 0,
+        refresh = $wrapper.refresh({
+        	iScrollOpts: {
+        		hScroll: false
+        	}
+        }).refresh('this');
+    equals(refresh._data.iScroll.options.hScroll, false, "The iScrollOpts is right");
+});
+
 test("参数options - statechange", function(){
     createDom('down');
     expect(4);
@@ -796,7 +811,7 @@ test('显示 - topOffset', function () {
         refresh = $wrapper.refresh().refresh('this');
 
     setTimeout(function(){
-    	equals($wrapper.height(), tablet? 306:298, "iscroll高度正确");
+    	equals($wrapper.height(), tablet? 316:298, "iscroll高度正确");
         equals($wrapper.parent().height(), 150, "容器高度正确");
         equals($wrapper.find(".ui-refresh-up").offset().top, $wrapper.parent().offset().top - $wrapper.find(".ui-refresh-up").height(), "topOffset正确");
         start();

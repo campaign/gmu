@@ -10,7 +10,8 @@
      * @name 说明
      * @desc Refresh iscroll插件，支持拉动加载，内滚采用iscroll方式，体验更加贴近native。
      * @desc **Options** 在refresh的基础上增加参数
-     * - ''threshold'' {Number}: (可选) 加载的阀值，默认向上或向下拉动距离超过5px，即可触发拉动操作，该值只能为正值，若该值是10，则需要拉动距离大于15px才可触发加载操作
+     * - ''threshold''   {Number}: (可选) 加载的阀值，默认向上或向下拉动距离超过5px，即可触发拉动操作，该值只能为正值，若该值是10，则需要拉动距离大于15px才可触发加载操作
+     * - ''iScrollOpts'' {Object}: (可选) iScroll的配置项
      * **Demo**
      * <codepreview href="../gmu/_examples/widget/refresh/refresh_iscroll.html">
      * ../gmu/_examples/widget/refresh/refresh_iscroll.html
@@ -79,7 +80,7 @@
                                 upStatus = me._status('up'),
                                 downStatus = me._status('down');
 
-                            if (up && !upStatus && down && !downStatus) return;
+                            if (up && !upStatus || down && !downStatus || this.maxScrollY >= 0) return;    //上下不能同时加载 trace:FEBASE-775，当wrapper > scroller时，不进行加载 trace:FEBASE-774
                             if (downStatus && down && !downRefreshed && this.y < (this.maxScrollY - threshold)) {    //下边按钮，上拉加载
                                 me._setMoveState('down', 'beforeload', 'pull');
                             } else if (upStatus && up && !upRefreshed && this.y > threshold) {     //上边按钮，下拉加载

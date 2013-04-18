@@ -10,14 +10,14 @@
     /**
      * @name navigator
      * @grammar navigator(options)  ⇒ self
-     * @grammar $.ui.navigator([el [,options]])  ⇒ self
+     * @grammar $.ui.navigator([el [,options]])  ⇒ instance
      * @desc
      * **Options**
      * navigator iscroll插件在原来options基础上增加以下参数
-     * - ''pluginName''       {Boolean|String}:    (可选, 默认false)是否禁用插件，加载了该插件，若需要禁用，可直接设为true
+     * - ''disablePlugin''    {Boolean|String}:    (可选, 默认false)是否禁用插件，加载了该插件，若需要禁用，可直接设为true
      * - ''isScrollToNext''   {Boolean}:           (必选, 默认true)是否启用点击可视范围内第一个或最后一个跳动
      * - ''isShowShadow''     {Boolean}:           (可选, 默认true)是否启用阴影
-     * - ''iScrollOpts        {Object}             (可选)配置iScroll中的参数，其中scrollstart,scrollmove,scrollend做为单独事件在组件中派生，可直接绑相应事件
+     * - ''iScrollOpts''      {Object}:            (可选)配置iScroll中的参数，其中scrollstart,scrollmove,scrollend做为单独事件在组件中派生，可直接绑相应事件
      * - ''scrollstart''      {Function}:          (可选)滑动前触发的事件，对应iScroll中的onScrollStart
      * - ''scrollmove''       {Function}:          (可选)滑动中触发的事件，对应iScroll中的onScrollMove
      * - ''scrollend''        {Function}:          (可选)滑动后触发的事件，对应iScroll中的onScrollEnd
@@ -35,7 +35,7 @@
      * </div>
      * </code>
      * **full setup方式html规则**
-     * <code type="html">        //需将所有的class都写全
+     * <code type="html">        <!--需将所有的class都写全-->
      * <div id="nav-smartSetup">
      *     <a class="ui-navigator-fixleft ui-navigator-fix" href="#test1">fixleft</a>       <!--固定元素，若没有，则不写，可写多个，左边加class="ui-navigator-fixleft"-->
      *     <div class="ui-navigator-wrapper" style="overflow:hidden;">

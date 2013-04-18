@@ -333,17 +333,12 @@
 (function($) {
     /** detect orientation change */
     $(document).ready(function () {
-        var getOrt = "matchMedia" in window ? function(){
-                return window.matchMedia("(orientation: portrait)").matches?'portrait':'landscape';
-            }:function(){
+        var getOrt = function(){
                 var elem = document.documentElement;
                 return elem.clientWidth / Math.max(elem.clientHeight, 320) < 1.1 ? "portrait" : "landscape";
             },
             lastOrt = getOrt(),
             handler = function(e) {
-                if(e.type == 'orientationchange'){
-                    return $(window).trigger('ortchange');
-                }
                 maxTry = 20;
                 clearInterval(timer);
                 timer = $.later(function() {

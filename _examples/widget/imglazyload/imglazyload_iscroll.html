@@ -1,17 +1,12 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>图片延迟加载demo</title>
+    <title>在iScroll中使用图片懒加载</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <!--demo展示所用css，不用关心 begin-->
     <link rel="stylesheet" type="text/css" href="../../../assets/reset.css" />
     <style>
-        .des{
-            height: 50px;
-            line-height: 50px;
-            text-align: center;
-        }
         .ui-imglazyload{
             border: 1px solid #ccc;
             width: 100px;
@@ -47,7 +42,6 @@
 </head>
 
 <body>
-<h2 class="des">在iScroll中使用图片懒加载</h2>
 <div class="lazyload-wrapper">
     <div class="lazyload-scroller">
         <p>
@@ -131,21 +125,22 @@
     </div>
 </div>
 <script>
-    (function () {
-        var $wrapper = $('.lazyload-wrapper');
-
-        $wrapper.css('height', window.innerHeight - $wrapper.offset().top).iScroll({
-            onScrollEnd: function () {
-                $.fn.imglazyload.detect();
-            }
-        });
-        $('.ui-imglazyload').imglazyload({
-            container: $('.lazyload-wrapper'),
-            innerScroll: true
-        }).on('loadcomplete', function () {
-            $wrapper.iScroll('refresh');
-        });
-    })();
+    $(function () {
+        $(document).on('headready', function () {
+            var $wrapper = $('.lazyload-wrapper');
+            $wrapper.css('height', window.innerHeight - ($('header').height() || 42)).iScroll({
+                onScrollEnd: function () {
+                    $.fn.imglazyload.detect();
+                }
+            });
+            $('.ui-imglazyload').imglazyload({
+                container: $('.lazyload-wrapper'),
+                innerScroll: true
+            }).on('loadcomplete', function () {
+                $wrapper.iScroll('refresh');
+                });
+        })
+    });
 
 </script>
 <!--demo公用头部展示所用js，可以不用加载 begin-->

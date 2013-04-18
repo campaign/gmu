@@ -58,7 +58,9 @@
     }
 
     /**
-     * @name 说明
+     * @name tabs
+     * @desc
+     * **在Tabs基础上新增的Options**
      * @desc tabs插件, 添加 swipe功能，zepto的swipeLeft, swipeRight不太准，所以在这另外实现了一套。
      */
     $.ui.tabs.register(function () {

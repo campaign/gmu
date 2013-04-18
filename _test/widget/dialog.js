@@ -22,6 +22,8 @@ test("默认配置项，在什么都不传的情况下是否正确",function(){
     });
 });
 
+var tablet = window.screen.width >= 768 && window.screen.width <= 1024;
+
 test("no el & no container & 默认配置项 ", function(){
     expect(21);
     stop();
@@ -46,7 +48,7 @@ test("no el & no container & 默认配置项 ", function(){
         equals(dialog.data('_mask').parent()[0].tagName.toLowerCase(), "body", "The mask is right");
         ok(dialog.data('_wrap').hasClass("ui-dialog"), "The wrap is right");
         ok(ua.isShown(dialog.data('_wrap')[0]), 'The dialog is show');
-        equals(dialog.data('_wrap').width(), 300, "The width is right");
+        equals(dialog.data('_wrap').width(), tablet? 500 : 300, "The width is right");
         equals(dialog.data('_wrap').css('height'), 'auto', "The height is right");
         approximateEqual(dialog.data('_wrap').offset().left, ($(window).width() - dialog.data('_wrap').width()) / 2, 0.5, "The left is right");
         approximateEqual(dialog.data('_wrap').offset().top , ($(window).height() - dialog.data('_wrap').height()) / 2, 0.5, "The top is right");
@@ -348,7 +350,7 @@ test('Setup模式', function(){
         equals(dialog.data('_mask').parent()[0].tagName.toLowerCase(), "body", "The mask is right");
         ok(dialog.data('_wrap').hasClass("ui-dialog"), "The wrap is right");
         equals(dialog.data('_wrap').css("display"), "block", "The dialog is show");
-        equals(dialog.data('_wrap').width(), 300, "The width is right");
+        equals(dialog.data('_wrap').width(), tablet? 500 : 300, "The width is right");
         equals(dialog.data('_wrap').css('height'), 'auto', "The height is right");
         approximateEqual(dialog.data('_wrap').offset().left, ($(window).width() - dialog.data('_wrap').width()) / 2, 0.5, "The left is right");
         approximateEqual(dialog.data('_wrap').offset().top , ($(window).height() - dialog.data('_wrap').height()) / 2, 0.5, "The top is right");

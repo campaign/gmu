@@ -68,7 +68,7 @@
     //上一个group
     preGroup = getNextGroup();
 
-    $(document).one('pageready', function(){//等demo的公共头部完工了
+    $(document).one('headready', function(){//等demo的公共头部完工了
         slider = $.ui.slider('#slider', {
             showDot: false,
             index: preGroup.length,//当前group中的第一个

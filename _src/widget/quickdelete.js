@@ -12,7 +12,7 @@
      * @desc   快速删除组件
      * **Options**
      * - ''container''     {Selector}: (必选)父元素
-     * - ''ondelete''      {Function}: (可选)点击close按钮时触发
+     * - ''delete''        {Function}: (可选)点击close按钮时触发
      * - ''size''          {Number}: (可选，默认: 20)close按钮的大小
      * - ''offset''        {Object}: (可选，默认: {x:0, y:0})close按钮偏移量
      *
@@ -102,8 +102,8 @@
                         e.preventDefault();
                         e.formDelete = true; // suggestion解决删除问题
                         $input.val('');
-                        me._hide().trigger('delete'); 
-                        $input.get(0).focus();                                                                   
+                        me._hide().trigger('delete');
+                        $input.blur().focus();      //中文输入时，focus失效 trace:FEBASE-779
                     }
                     break;
                 case 'blur':

@@ -81,7 +81,7 @@ module('widget/navigator.iscroll', {
     }
 });
 
-var tablet = tablet && window.screen.width <= 1024;
+var tablet = window.screen.width >= 768 && window.screen.width <= 1024;
 
 test("只为加载css用",function(){
     expect(1);
@@ -108,7 +108,7 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals(nav._data._$navWrapper.hasClass("ui-navigator-shadowr"), list.offset().right > $(window).width ? true : false, "The _data is right");
     equals(nav._data._$navList.length, 5, "The _data is right");
     equals(nav._data._scrollerNum, 5, "The _data is right");
-    equals(nav._data._scrollerSumWidth[0], tablet?67:62, "The _data is right");
+    equals(nav._data._scrollerSumWidth[0], tablet?68:62, "The _data is right");
 
     ok(ua.isShown(nav._el[0]), "The navigator shows");
     equals(nav._el.attr("class"), "ui-navigator", "The class is right");
@@ -118,8 +118,8 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals($('.ui-navigator-wrapper').next().hasClass('ui-navigator-fix'), true, 'The fix right is right');
     equals($('.ui-navigator-list').find('a').length, 5, 'The scroller number is right');
     equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller style is right');
-    equals(li.width(), tablet ? 67 : 62, "The li widht is right");
-    equals(list.width(), tablet ? 353 : 326, "The list widht is right");
+    equals(li.width(), tablet ? 68 : 62, "The li widht is right");
+    equals(list.width(), tablet ? 359 : 326, "The list widht is right");
     nav.destroy();
 
     smartSetup();
@@ -137,7 +137,7 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals(nav2._data._$navWrapper.hasClass("ui-navigator-wrapper"), true, "The _data is right");
     equals(nav2._data._$navList.length, 9, "The _data is right");
     equals(nav2._data._scrollerNum, 9, "The _data is right");
-    equals(nav2._data._scrollerSumWidth[0], tablet ? 67 : 62, "The _data is right");
+    equals(nav2._data._scrollerSumWidth[0], tablet ? 68 : 62, "The _data is right");
 
     ok(ua.isShown(nav2._el[0]), "The navigator shows");
     equals(nav2._el.attr("class"), "ui-navigator", "The class is right");
@@ -147,8 +147,8 @@ test("create html: create or setup fix and scroll navigator", function(){
     equals($('.ui-navigator-wrapper').prev().prev().hasClass('ui-navigator-fix'), true, 'The fix left2 is right');
     equals($('.ui-navigator-list').find('a').length, nav2._data._scrollerNum, 'The scroller number is right');
     equals($('.ui-navigator-list').css('-webkit-transition'), '-webkit-transform 0ms', 'The scroller number is right');
-    equals(li.width(), tablet ? 67 : 62, "The li widht is right");
-    equals(list.width(), tablet ? 621 : 574, "The list widht is right");
+    equals(li.width(), tablet ? 68 : 62, "The li widht is right");
+    equals(list.width(), tablet ? 631 : 574, "The list widht is right");
     nav2.destroy();
 
     start();
@@ -338,6 +338,76 @@ test('defTab: in the viewport & not in the viewport', function () {
             }, 600)
         }, 600)
     }, 600);
+});
+
+test("iScrollOpts", function(){
+    expect(1);
+    fullSetup();
+    var count = 0, time = 0.
+        nav = $('#nav-fullsetup').navigator({
+        	iScrollOpts: {
+        		hScroll: false
+        	}
+        }).navigator('this');
+    equals(nav._data.iScroll.options.hScroll, false, "The iScrollOpts is right");
+    nav.destroy();
+});
+
+test("isShowShadow: false", function(){
+    expect(3);
+    stop();
+    shadowTest();
+    var width = $("body").css("width");
+    $("body").css("width", 640);
+    var nav = $('#nav-shadowTest').navigator({
+            defTab: 3,
+            isShowShadow: false
+        }).navigator('this'),
+        scroller = $(".ui-navigator-list")[0],
+        $wrapper = $('.ui-navigator-wrapper');
+    setTimeout(function () {
+        equals($wrapper.attr("class"), "ui-navigator-wrapper", 'No shadow');
+        ua.click($(scroller).find('a')[3]);
+        setTimeout(function () {
+        	equals($wrapper.attr("class"), "ui-navigator-wrapper", 'No shadow');
+            ua.click($(scroller).find('a')[22]);
+            setTimeout(function () {
+            	equals($wrapper.attr("class"), "ui-navigator-wrapper", 'No shadow');
+                $('#nav-shadowTest').navigator('destroy');
+                $('#nav-shadowTest').remove();
+                $("body").css("width", width);
+                start();
+            }, 600);
+        }, 600);
+    }, 100)
+});
+
+test("isScrollToNext: false", function(){
+    stop();
+    shadowTest();
+    var width = $("body").css("width");
+    $("body").css("width", 600);
+    var nav = $('#nav-shadowTest').navigator({
+    	defTab: 5,
+    	isScrollToNext: false
+    }).navigator('this'),
+        $scroller = $('.ui-navigator-list'),
+        $navList = $scroller.find('a'),
+        length = $navList.length;
+
+        ua.click($navList[2]); 
+        setTimeout(function () {
+            equals(nav._data.iScroll.x, 0, 'Dosen\'t move when clicking the last elem');
+
+            ua.click($navList[0]); 
+            setTimeout(function () {
+            	equals(nav._data.iScroll.x, 0, 'Dosen\'t move when clicking the first elem');
+                nav.destroy();
+                $('#nav-shadowTest').remove();
+                $("body").css("width", width);
+                start();
+            }, 600)
+        }, 600)
 });
 
 test("_scrollToNext: last & first & mid & scroll the distance", function(){
