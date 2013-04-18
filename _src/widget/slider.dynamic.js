@@ -127,7 +127,7 @@
 
             _touchStart: function (e) {
                 var data = this._data,
-                    target, current, matrix;
+                    target, current;
 
                 this._touchStartOrg.apply(this, arguments);
                 target = -data.index * data.width;

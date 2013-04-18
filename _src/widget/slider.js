@@ -164,7 +164,7 @@
                 this.onload = null;
             });
             for(i = 0; i < length; i++) {
-                items[i].style.cssText += 'width:'+ (width+1) + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
+                items[i].style.cssText += 'width:'+ width + 'px;position:absolute;-webkit-transform:translate3d(' + i * width + 'px,0,0);z-index:' + (900 - i);
                 dotIndex[i] = loop ? (i > length/2 - 1 ? i - length/2 : i) : i;
                 if(i < l) {
                     j = lazyImgs.shift();
@@ -364,7 +364,7 @@
             if(!width) return me;
             o.width = width;
             clearTimeout(o.play);
-            for(var i = 0; i < length; i++) items[i].style.cssText += 'width:' + (width+1) + 'px;-webkit-transform:translate3d(' + i * width + 'px,0,0);';
+            for(var i = 0; i < length; i++) items[i].style.cssText += 'width:' + width + 'px;-webkit-transform:translate3d(' + i * width + 'px,0,0);';
             o.wheel.style.removeProperty('-webkit-transition');
             o.wheel.style.cssText += 'width:' + width * length + 'px;-webkit-transform:translate3d(-' + o.index * width + 'px,0,0);';
             o._direction = 1;
