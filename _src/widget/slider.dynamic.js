@@ -65,7 +65,7 @@
 
             _transitionEnd: function () {
                 this._transitionEndOrg();
-                this._adjustPos();
+                $.later($.proxy(this._adjustPos, this), 100);
             },
 
             _adjustPos: function () {
@@ -129,8 +129,7 @@
 
                 this._touchStartOrg.apply(this, arguments);
                 target = -data.index * data.width;
-                matrix = getComputedStyle(data.wheel, null)['webkitTransform'].replace(/[^0-9\-.,]/g, '').split(',');
-                current = +matrix[4];
+                current = data.wheel.getBoundingClientRect().left;
                 if (target !== current) {
                     this._adjustPos();
                 }
@@ -164,7 +163,7 @@
                     active,
                     index = $.inArray(active = this._active, content);
 
-                ~index || (index = data._direction > 0 ? 0 : content.length - 1);
+                ~index || (index = content[this._index] ? this._index : data._direction > 0 ? 0 : content.length - 1);
                 group = this.root().find('.ui-slider-group').empty();
                 this._renderItems(data.content = content, index, group, data);
                 data.items = group.children()
